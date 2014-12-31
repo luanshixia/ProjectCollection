@@ -1,0 +1,16 @@
+﻿<Window x:Class="BlackWhite.NewGameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
+        Title="New Game" Height="253" Width="220" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" FontFamily="Segoe UI" Loaded="Window_Loaded" Background="#FFF0F0F0">
+    <Grid>
+        <RadioButton Content="Single player game" Height="16" HorizontalAlignment="Left" Margin="29,34,0,0" Name="rbSingle" VerticalAlignment="Top" IsChecked="True" />
+        <RadioButton Content="Two player game" Height="16" HorizontalAlignment="Left" Margin="29,56,0,0" Name="rbTwo" VerticalAlignment="Top" />
+        <WindowsFormsHost Height="40" HorizontalAlignment="Left" Margin="29,112,0,0" Name="windowsFormsHost1" VerticalAlignment="Top" Width="156">
+            <wf:NumericUpDown x:Name="num1" Minimum="6" Maximum="20" Value="8" />
+        </WindowsFormsHost>
+        <Button Content="OK" Height="23" HorizontalAlignment="Left" Margin="29,183,0,0" Name="btnOK" VerticalAlignment="Top" Width="75" Click="btnOK_Click" />
+        <Button Content="Cancel" Height="23" Margin="110,183,0,0" Name="btnCancel" VerticalAlignment="Top" Click="btnCancel_Click" HorizontalAlignment="Left" Width="75" />
+        <TextBlock Height="23" HorizontalAlignment="Left" Margin="29,90,0,0" Name="textBlock1" Text="Size of board" VerticalAlignment="Top" />
+    </Grid>
+</Window>

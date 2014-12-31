@@ -1,0 +1,13 @@
+﻿<Window x:Class="Dreambuild.Games.BraveBoom.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <TextBlock x:Name="txt1" HorizontalAlignment="Left" Margin="88,38,0,0" TextWrapping="Wrap" Text="1000000" VerticalAlignment="Top" FontSize="24"/>
+        <TextBlock x:Name="txt2" HorizontalAlignment="Left" Margin="324,41,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top" FontSize="24"/>
+        <Button x:Name="btn1" Content="Hold then release" HorizontalAlignment="Left" Margin="139,176,0,0" VerticalAlignment="Top" Width="209" Height="62" MouseLeftButtonDown="btn1_MouseLeftButtonDown" MouseLeftButtonUp="btn1_MouseLeftButtonUp" />
+        <Button x:Name="btn2" Content="Reset" HorizontalAlignment="Left" Margin="353,176,0,0" VerticalAlignment="Top" Width="83" Height="62" Click="btn2_Click"/>
+        <TextBlock x:Name="txt3" HorizontalAlignment="Left" Margin="88,282,0,0" TextWrapping="Wrap" Text="0" VerticalAlignment="Top"/>
+
+    </Grid>
+</Window>

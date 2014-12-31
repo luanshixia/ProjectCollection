@@ -1,0 +1,28 @@
+﻿<Window x:Class="BlackWhite.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BnW" Height="500" Width="500" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" SizeChanged="Window_SizeChanged" MinHeight="300" MinWidth="300" FontFamily="Segoe UI">
+    
+    <DockPanel>
+        <Menu DockPanel.Dock="Top" FontFamily="Segoe UI">
+            <MenuItem Header="Game">
+                <MenuItem Header="New..." Click="New_Clicked" />
+                <MenuItem Header="Quick New" Click="QuickNew_Clicked" />
+                <Separator />
+                <MenuItem Header="Exit" Click="Exit_Clicked" />
+            </MenuItem>
+            <MenuItem Header="Help">
+                <MenuItem Header="About" Click="About_Clicked" />
+            </MenuItem>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Name="info" Text="Welcome to BnW! " FontFamily="Segoe UI" />
+        </StatusBar>
+        <Grid Name="root" Background="Tan">
+            <Grid Name="boardGrid">
+
+            </Grid>
+        </Grid>        
+    </DockPanel>
+    
+</Window>

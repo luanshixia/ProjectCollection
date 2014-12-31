@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTKFramework", "OpenTKFramework\OpenTKFramework.csproj", "{F7A5E674-CD10-4255-B5DD-C7E42453FEEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpDXFramework", "SharpDXFramework\SharpDXFramework.csproj", "{83338535-59FE-4501-8A1C-162EAB3D5D7A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpGLFramework", "SharpGLFramework\SharpGLFramework.csproj", "{E4C6E08B-432C-44B7-A9A8-4738A2B39410}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F7A5E674-CD10-4255-B5DD-C7E42453FEEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7A5E674-CD10-4255-B5DD-C7E42453FEEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7A5E674-CD10-4255-B5DD-C7E42453FEEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7A5E674-CD10-4255-B5DD-C7E42453FEEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83338535-59FE-4501-8A1C-162EAB3D5D7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83338535-59FE-4501-8A1C-162EAB3D5D7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83338535-59FE-4501-8A1C-162EAB3D5D7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83338535-59FE-4501-8A1C-162EAB3D5D7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4C6E08B-432C-44B7-A9A8-4738A2B39410}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4C6E08B-432C-44B7-A9A8-4738A2B39410}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4C6E08B-432C-44B7-A9A8-4738A2B39410}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4C6E08B-432C-44B7-A9A8-4738A2B39410}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

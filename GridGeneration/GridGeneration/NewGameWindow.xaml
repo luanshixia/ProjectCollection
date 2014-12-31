@@ -1,0 +1,13 @@
+﻿<Window x:Class="GridGeneration.NewGameWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="New City" Height="200" Width="220" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" FontFamily="Segoe UI" Loaded="Window_Loaded" Background="#FFF0F0F0">
+    <Grid>
+        <Button Content="OK" Margin="0,0,90,10" Name="btnOK" Click="btnOK_Click" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" />
+        <Button Content="Cancel" Margin="0,0,10,10" Name="btnCancel" Click="btnCancel_Click" HorizontalAlignment="Right" Width="75" Height="23" VerticalAlignment="Bottom" />
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="Number of columns" VerticalAlignment="Top"/>
+        <TextBox Name="NCol" Height="23" Margin="10,31,10,0" VerticalAlignment="Top" Text="20"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,59,0,0" TextWrapping="Wrap" Text="Number of rows" VerticalAlignment="Top"/>
+        <TextBox Name="NRow" Height="23" Margin="10,80,10,0" VerticalAlignment="Top" Text="20"/>
+    </Grid>
+</Window>
