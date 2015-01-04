@@ -1,0 +1,51 @@
+﻿@model IEnumerable<TongJi.Web.Flow.FlowListItem>
+@{
+    var grid = new WebGrid(Model, canPage: false, canSort: true);
+}
+<h2>
+    流程管理 - 流程列表
+</h2>
+<p>
+    这里是系统中定义的所有流程。
+</p>
+<p>
+    @MyHelpers.NavButton("新建流程", Url.Action("FlowEditor"))
+    @MyHelpers.NavButton("流程实例列表", Url.Action("FlowInstanceList"))
+</p>
+<div>
+    @grid.GetHtml(
+        columns: grid.Columns(
+            grid.Column("ID", "ID"),
+            grid.Column("FlowName", "流程名称", format: @<a href="NodeListOfFlow/@item.ID">@item.FlowName</a>),
+            grid.Column("CreateTime", "创建时间"),
+            grid.Column("Group", "类别", format: item => MyHelpers.Anchor(item.Group, string.Format("javascript:modGroup('{0}')", item.ID))),
+            grid.Column("NodeCount", "结点数"),
+            grid.Column("InstanceCount", "实例数"),
+            grid.Column("ActiveInstanceCount", "活动实例数"),
+            grid.Column("", "操作", format: item => Operations(item))
+        ),
+        headerStyle: "header", rowStyle: "odd", alternatingRowStyle: "even", htmlAttributes: new { id = "theTable" }
+    )
+</div>
+
+@helper Operations(dynamic record)
+{
+    @: @Html.ActionLink("编辑", "FlowModify", new { id = record.ID }) | @MyHelpers.Anchor("表单", string.Format("javascript:bindForm('{0}')", record.ID)) | @Html.ActionLink("实例", "FlowInstanceList", new { id = record.ID })
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        
+        var bindForm = function (id) {
+            tj.showDialog('表单绑定', '@Url.Action("SetForm")/' + id);
+        };
+
+        var modGroup = function (id) {
+            tj.showDialog('流程分类', '@Url.Action("GroupModify")/' + id);
+        };
+
+        $(document).ready(function () {
+            tj.setTableColumnGroupStarWidth('#theTable', [3, 4, 2, 2, 1, 1, 1, 1.5]);
+        });
+    </script>
+}

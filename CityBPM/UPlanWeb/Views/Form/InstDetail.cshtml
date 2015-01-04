@@ -1,0 +1,27 @@
+﻿@model Dictionary<string, string>
+
+@section Styles {
+    <style type="text/css">
+        
+    </style>
+}
+
+<h2>表单管理 - 表单实例详情</h2>
+<p>查看表单实例的详情。</p>
+
+@if (Model != null)
+{
+    <table style="max-width: 800px">
+        @MyHelpers.TableColumnGroupStarWidth(1, 2, 4)
+        @MyHelpers.TableThRow("header", "Number", "字段", "值")
+        @{
+            int i = 1;
+        }
+        @foreach (var row in Model)
+        {
+            string style = i % 2 == 0 ? "even" : "odd";
+            @MyHelpers.TableTdRow(style, i, row.Key, row.Value)
+            i++;
+        }
+    </table>
+}

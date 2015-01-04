@@ -1,0 +1,122 @@
+﻿@using TongJi.Web.Forms
+@model Dictionary<string, string>
+@{
+    if (ViewBag.partial)
+    {
+        Layout = null;
+    }
+    Form form = ViewBag.Form;
+    var data = Model;
+}
+
+@*<h2>填写表单 - @form.Name</h2>
+<p>为定义好的表单填写数据。</p>*@
+
+@if (form.DisplayType == FormManager.DisplayType_Standard || form.DisplayType == FormManager.DisplayType_Mixed) // 用标准布局填写表单
+{
+    <style type="text/css">
+        input[type=text], select {
+            width: 400px;
+        }
+
+        textarea {
+            width: 400px;
+            height: 250px;
+        }
+
+        label {
+            vertical-align: top;
+        }
+    </style>
+    var fields = form.Fields.OrderBy(x => x.Order).ToList();
+    <form action="" method="post" enctype="multipart/form-data">
+        @Html.ValidationSummary(true)
+        @foreach (var field in fields)
+        {
+            string name = field.Name;
+            string value = data != null ? data[name] : null;
+            <div>
+                @Html.Label(name, name)
+                @if (field.DataType == "Enum")
+                {
+                    var options = field.Options.Split('|');
+                    @Html.DropDownList(name, FormManager.SelectList(options, value))
+                }
+                else if (field.DataType == "Boolean")
+                {
+                    @Html.CheckBox(name, value == "true", new { value = "true" })
+                }
+                else if (field.DataType == "Text")
+                {
+                    @Html.TextArea(name, value)
+                }
+                else if (field.DataType == "Number")
+                {
+                    <input type="number" name="@name" value="@value" />
+                }
+                else if (field.DataType == "Date")
+                {
+                    <input type="date" name="@name" value="@value" />
+                }
+                else if (field.DataType == "Time")
+                {
+                    <input type="time" name="@name" value="@value" />
+                }
+                else if (field.DataType == "DateTime")
+                {
+                    <input type="datetime" name="@name" value="@value" />
+                }
+                else if (field.DataType == "Image")
+                {
+                    <img src="@value" alt="" />
+                    <input type="file" name="@name" />
+                }
+                else if (field.DataType == "File")
+                {
+                    @MyHelpers.Anchor("文件", value)
+                    <input type="file" name="@name" />
+                }
+                else
+                {
+                    @Html.TextBox(name, value, new Dictionary<string, object> { { "data-tjform-datatype", field.DataType } })
+                }
+                @Html.ValidationMessage(name)
+            </div>
+        }
+        <div>
+            <input type="submit" value="提交" />
+            <input type="reset" value="重置" />
+        </div>
+    </form>
+}
+else // form.DisplayType == FormManager.DisplayType_Custom 用自定义布局填写表单
+{
+    <form action="" method="post" enctype="multipart/form-data">
+        @Html.ValidationSummary(false)
+        @Html.Raw(form.Layout)
+
+        @if (ViewBag.showButton)
+        {
+            <div>
+                <input type="submit" value="提交" />
+                <input type="reset" value="重置" />
+            </div>
+        }
+    </form>
+        if (data != null)
+        {
+    <script type="text/javascript">
+
+@*        var data = { @Html.Raw(string.Join(", ", data.Select(x => string.Format("'{0}': '{1}'", x.Key, x.Value)))) };*@
+
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+            $.get('@Url.Action("Data", "Form", new { id = ViewBag.Inst.ID })', function (data) {
+                for (var key in data) {
+                    $('form [name=' + key + ']').val(data[key]);
+                }
+            });
+        });
+    </script>
+        }
+}

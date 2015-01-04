@@ -1,0 +1,30 @@
+﻿@model TongJi.Web.Flow.Workflow
+@using TongJi.Web.Forms
+@{
+    List<string> groups = ViewBag.groupList;
+}
+
+@*<h2>编辑流程分类 - @Model.Name</h2>
+<p>
+    
+</p>*@
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>流程分类</legend>
+        @Html.HiddenFor(model => model.ID)
+        <div>
+            @Html.DropDownList("group", FormManager.SelectList(groups, Model.Group), new { id = "group" })
+        </div>
+        <div>
+            <input type="submit" value="保存" />
+        </div>
+    </fieldset>
+}
+
+@*<div>
+    @Html.ActionLink("返回项目流程列表", "FlowList")
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}*@

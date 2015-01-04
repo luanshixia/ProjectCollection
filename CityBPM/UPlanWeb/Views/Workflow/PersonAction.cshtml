@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TongJi.Web.Flow.TrackBackListItem>
+@{
+    var grid = new WebGrid(Model, rowsPerPage: 30, canSort: false, ajaxUpdateContainerId: "ajax1");
+}
+<h2>个人操作记录
+</h2>
+<p>
+    这里是所有您操作过的所有记录。
+</p>
+<p>
+    @MyHelpers.NavButton("待办事项", Url.Action("TodoList"))
+    @MyHelpers.NavButton("活动经办事项", Url.Action("ActiveDoneList"))
+    @MyHelpers.NavButton("已结束经办事项", Url.Action("CompletedDoneList"))
+    @MyHelpers.Button("本人操作历史", "","b2")
+</p>
+<div>
+    <div id="ajax1">
+        @grid.GetHtml(
+            mode: WebGridPagerModes.All,
+            firstText: "第一页",
+            lastText: "最后页",
+            columns: grid.Columns(
+                grid.Column("ID", "序号"),
+                grid.Column("InstName", "事项"),
+                grid.Column("FlowName", "流程"),
+                grid.Column("PerformTime", "操作时间"),
+                grid.Column("FromNodeName", "操作位置"),
+                grid.Column("ToNodeName", "流转到")
+            ),
+            tableStyle: "t2", headerStyle: "header", rowStyle: "odd", alternatingRowStyle: "even", htmlAttributes: new { id = "theTable" }
+        )
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            tj.setTableColumnGroupStarWidth('#theTable', [1, 3, 3, 2, 2, 2]);
+        });
+    </script>
+}

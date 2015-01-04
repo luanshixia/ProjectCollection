@@ -1,0 +1,76 @@
+﻿@model TongJi.Web.Security.UserProfile
+
+@section Styles {
+    <style type="text/css">
+        form input[type=text], form select {
+            width: 300px;
+        }
+
+        form textarea {
+            width: 300px;
+            height: 250px;
+        }
+
+        form label {
+            vertical-align: top;
+        }
+    </style>
+}
+
+<h2>用户管理 - 完善用户信息</h2>
+<p>编辑用户的详细信息。</p>
+<p>
+    @MyHelpers.NavButton("返回用户列表", Url.Action("List"))
+</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary()
+    @Html.AntiForgeryToken()
+    <fieldset>
+        <legend>用户个人信息</legend>
+        <div>
+            @Html.LabelFor(model => model.RealName)
+            @Html.TextBoxFor(model => model.RealName)
+            @Html.ValidationMessageFor(model => model.RealName)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.Gender)
+            @Html.DropDownListFor(model => model.Gender, TongJi.Web.Forms.FormManager.SelectList(new string[] { "男", "女" }, Model.Gender))
+            @Html.ValidationMessageFor(model => model.Gender)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.Birthday)
+            @Html.TextBoxFor(model => model.Birthday)
+            @Html.ValidationMessageFor(model => model.Birthday)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.Phone)
+            @Html.TextBoxFor(model => model.Phone)
+            @Html.ValidationMessageFor(model => model.Phone)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.Email)
+            @Html.TextBoxFor(model => model.Email)
+            @Html.ValidationMessageFor(model => model.Email)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.Address)
+            @Html.TextBoxFor(model => model.Address)
+            @Html.ValidationMessageFor(model => model.Address)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.Hobby)
+            @Html.TextBoxFor(model => model.Hobby)
+            @Html.ValidationMessageFor(model => model.Hobby)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.PersonalStatement)
+            @Html.TextAreaFor(model => model.PersonalStatement)
+            @Html.ValidationMessageFor(model => model.PersonalStatement)
+        </div>
+        <div>
+            @MyHelpers.SubmitButton("保存")
+        </div>
+    </fieldset>
+}

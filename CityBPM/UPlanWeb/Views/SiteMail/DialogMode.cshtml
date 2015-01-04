@@ -1,0 +1,36 @@
+﻿@model IEnumerable<TongJi.Web.Communication.SiteMail>
+
+<h2>站内信 - 您与 @ViewBag.with 的对话</h2>
+<p>以对话模式查看您与某人的站内信。</p>
+<p>
+    @MyHelpers.NavButton("收件箱", Url.Action("ReceiveBox"))
+    @MyHelpers.NavButton("已发送", Url.Action("SendBox"))
+    @MyHelpers.NavButton("+写新站内信", Url.Action("New"))
+</p>
+<div style="float: left; width: 75%; max-width: 800px; background-color: #EEEEEE; padding: 10px">
+    @foreach (var mail in Model)
+    {
+        if (mail.Sender == WebSecurity.CurrentUserName)
+        {
+            <div class="dialog-left">
+                <div class="dialog-role bottomMargin">
+                    我 [@mail.SendTime]
+                </div>
+                <div class="dialog-say">
+                    @Html.Raw(Server.UrlDecode(mail.Content))
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="dialog-right">
+                <div class="dialog-role bottomMargin">
+                    @mail.Sender [@mail.SendTime]
+                </div>
+                <div class="dialog-say">
+                    @Html.Raw(Server.UrlDecode(mail.Content))
+                </div>
+            </div>
+        }
+    }
+</div>

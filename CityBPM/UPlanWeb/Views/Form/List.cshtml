@@ -1,0 +1,46 @@
+﻿@model IEnumerable<TongJi.Web.Forms.Form>
+
+<h2>表单管理 - 列表</h2>
+<p>创建、编辑、删除表单。</p>
+<p>
+    @MyHelpers.Button("新建表单", "openDialog('Create')")
+    @MyHelpers.NavButton("表单实例列表", Url.Action("InstList"))
+</p>
+<table>
+    @MyHelpers.TableColumnGroupStarWidth(4, 5, 2, 2, 2, 2, 2)
+    @MyHelpers.TableThRow("header", "ID", "名称", "字段数", "编组", "创建人", "创建时间", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in Model)
+    {
+        string style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, row.ID.ToString().ToUpper(), row.Name, row.Fields.Count, row.Group, row.CreateUser, row.CreateTime, Operations(row))
+        i++;
+    }
+</table>
+
+@helper Operations(TongJi.Web.Forms.Form record)
+{
+    @: @Html.ActionLink("编辑", "Edit", new { id = record.ID }) | @Html.ActionLink("字段", "FieldList", new { id = record.ID }) | @Html.ActionLink("实例", "InstList", new { id = record.ID }) | @MyHelpers.Anchor("删除", string.Format("javascript:tryDel('{0}')", record.ID))
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var confirmGoTo = function (msg, url) {
+            if (confirm(msg)) {
+                location = url;
+            }
+        };
+
+        var tryDel = function (id) {
+            confirmGoTo('确实要删除吗？', '@Url.Action("Delete")/' + id);
+        };
+
+        var openDialog = function (url) {
+            //showModalDialog(url);
+            location = url;
+        };
+    </script>
+}

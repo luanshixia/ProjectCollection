@@ -1,0 +1,26 @@
+﻿@model IEnumerable<TongJi.Web.Security.UserProfile>
+
+<h2>用户管理 - 用户列表</h2>
+<p>查看并管理系统中的用户。</p>
+<p>
+    @MyHelpers.NavButton("创建新用户", Url.Action("Create"))
+</p>
+
+<table>
+    @MyHelpers.TableColumnGroupStarWidth(1, 2, 3, 2, 1, 2)
+    @MyHelpers.TableThRow("header", "序号", "用户名", "真实姓名", "创建时间", "允许登录", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in Model)
+    {
+        string style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, i, row.UserName, row.RealName, row.CreateTime, row.IsForbidden == true ? "禁止" : "允许", Operation(row))
+        i++;
+    }
+</table>
+
+@helper Operation(dynamic record)
+{
+    @: @Html.ActionLink("完善资料", "EditInfo", new { id = record.UserName }) | @Html.ActionLink("封禁/解封", "ToggleForbidden", new { id = record.UserName })
+}

@@ -1,0 +1,144 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace TongJi.Web.Forms
+{
+    /// <summary>
+    /// 表示一个字段。
+    /// </summary>
+    public class Field
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+        public string Description { get; set; }
+        public string DataType { get; set; }
+        public string DataTypeParams { get; set; }
+        public int FieldSetID { get; set; }
+        public int EnumTypeID { get; set; }
+        public string Validation { get; set; }
+    }
+
+    /// <summary>
+    /// 表示字段集。简单情况下，一个字段集对应一个流程。复杂情况下，字段集之间还可以有主从关系。一个字段集可生成多个表单，而单个表单只能从单个字段集中选择字段。
+    /// </summary>
+    public class FieldSet
+    {
+        public int ID { get; set; }
+        public bool IsSubSet { get; set; }
+        public int WorkflowID { get; set; }
+        public int ParentID { get; set; }
+        public List<Field> Fields { get; set; }
+    }
+
+    /// <summary>
+    /// 表示表单。
+    /// </summary>
+    public class Form
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public int FieldSetID { get; set; }
+        public string Layout { get; set; }
+    }
+
+    /// <summary>
+    /// 表示表单中的字段定义，包括为字段指定在表单中的控件样式等。
+    /// </summary>
+    public class FormField
+    {
+        public int ID { get; set; }
+        public int FormID { get; set; }
+        public int FieldID { get; set; }
+        public bool IsHidden { get; set; }
+        public int Order { get; set; }
+        public string Style { get; set; }
+    }
+
+    /// <summary>
+    /// 表示自动页面。对应一个流程结点。
+    /// </summary>
+    public class Page
+    {
+        public int ID { get; set; }
+        public int Name { get; set; }
+        public int FlowNodeID { get; set; }
+        public List<Field> Fields { get; set; }
+    }
+
+    /// <summary>
+    /// 表示自动页面的表单定义。
+    /// </summary>
+    public class PageForm
+    {
+        public int ID { get; set; }
+        public int PageID { get; set; }
+        public int FormID { get; set; }
+        public bool IsHidden { get; set; }
+        public int Order { get; set; }
+        public string Style { get; set; }
+    }
+
+    /// <summary>
+    /// 表示枚举类型。
+    /// </summary>
+    public class EnumType
+    {
+        public int ID { get; set; }
+        public int Name { get; set; }
+    }
+
+    /// <summary>
+    /// 表示枚举成员。
+    /// </summary>
+    public class EnumMember
+    {
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public int EnumTypeID { get; set; }
+    }
+
+    /// <summary>
+    /// 表示字段集实例，是数据的存储空间。对应一个流程实例。
+    /// </summary>
+    public class FieldSetInstance
+    {
+        public int ID { get; set; }
+        public int FieldSetID { get; set; }
+        public int FlowInstanceID { get; set; }
+        public string Data { get; set; }
+    }
+}
+
+
+
+<table>
+    <colgroup>
+        <col style="width: 200px" />
+        <col style="width: 200px" />
+        <col style="width: 200px" />
+    </colgroup>
+    <tr>
+        <th>姓名</th>
+        <th>性别</th>
+        <th>年龄</th>
+    </tr>
+    <tr>
+        <td>
+            <input type="text" name="姓名" />
+        </td>
+        <td>
+            <select name="性别">
+                <option value="男">男</option>
+                <option value="女">女</option>
+            </select>
+        </td>
+        <td>
+            <input type="text" name="年龄" />
+        </td>
+    </tr>
+</table>

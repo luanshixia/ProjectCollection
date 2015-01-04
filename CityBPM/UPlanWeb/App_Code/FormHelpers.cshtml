@@ -1,0 +1,59 @@
+﻿@helper LinearForm(TongJi.Web.Forms.Form form, Dictionary<string, string> data = null)
+{
+    var fields = form.Fields.OrderBy(x => x.Order).ToList();
+    <form action="" method="post">
+        @Html.ValidationSummary()
+        @foreach (var field in fields)
+        {
+            string name = field.Name;
+            string value = data != null ? data[name] : null;
+            <div>
+                @Html.Label(name, name)
+                @if (field.DataType == "Enum")
+                {
+                    var options = field.Options.Split('|');
+                    @Html.DropDownList(name, options.Select(x => new SelectListItem { Text = x, Value = x, Selected = x == value }))
+                }
+                else if (field.DataType == "Boolean")
+                {
+                    @Html.CheckBox(name, value == "true", new { value = "true" })
+                }
+                else if (field.DataType == "Text")
+                {
+                    @Html.TextArea(name, value)
+                }
+                else
+                {
+                    @Html.TextBox(name, value, new { dataTjformDatatype = field.DataType })
+                }
+                @Html.ValidationMessage(name)
+            </div>
+        }
+        <div>
+            <input type="submit" value="提交" />
+            <input type="reset" value="重置" />
+        </div>
+    </form>
+}
+
+@helper MailListItem(dynamic mail, int type)
+{
+    <div class="mail-list-item">
+        <div class="mail-title">
+            <a href="Detail/@mail.ID?type=@type" style="text-decoration: none">@mail.Title</a>
+            @if (!mail.IsRead)
+            {
+                @: [未读]
+            }
+        </div>
+        @if (type == 1)
+        {
+            <div class="mail-info">@mail.SendTime 由 <a href="DialogMode?with=@mail.Sender" title="点击进入对话模式">@mail.Sender</a> 发给 @mail.Receiver</div>
+        }
+        else
+        {
+            <div class="mail-info">@mail.SendTime 由 @mail.Sender 发给 <a href="DialogMode?with=@mail.Receiver" title="点击进入对话模式">@mail.Receiver</a></div>
+        }
+        <div class="mail-summary">@TongJi.Web.Communication.SiteMailManager.GetContentSummary(mail.Content, 100)</div>
+    </div>
+}

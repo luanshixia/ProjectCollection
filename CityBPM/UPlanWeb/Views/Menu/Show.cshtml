@@ -1,0 +1,21 @@
+﻿@model IEnumerable<TongJi.Web.Models.MenuItemJsonObject>
+@{
+    Layout = null;
+}
+
+<ul>
+    @foreach (var leve11 in Model)
+    {
+        <li>
+            @leve11.Name
+            <ul>
+                @foreach (var leve12 in leve11.Children)
+                {
+                    <li>
+                        <a href="@Href(leve12.Action)">@leve12.Name</a>
+                    </li>
+                }
+            </ul>
+        </li>
+    }
+</ul>

@@ -1,0 +1,30 @@
+﻿@{
+    string id = ViewBag.id.ToString();
+    string flowName = ViewBag.flowName;
+}
+<h2>
+    流程管理 - 更改流程 - @flowName
+</h2>
+<p>
+    在流程编辑器中以可视化的方式更改流程。可对流程图进行结点移动、编辑操作。
+</p>
+<p>
+    @MyHelpers.NavButton("返回", Url.Action("FlowList"))
+</p>
+<div>
+    @MyHelpers.Silverlight(Href("~/ClientBin/FlowEditor.xap"))
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var onSilverlightLoad = function () {
+            var flowEditor = document.getElementById('slCtl').Content.flowEditor;
+            $.ajaxSetup({ cache: false });
+            flowEditor.InitToolbarForModify();
+            $.get('@Url.Action("GetFlowJson", new { id = id })', function (data) {
+                flowEditor.SetFlow(JSON.stringify(data));
+            });
+        };
+    </script>
+}

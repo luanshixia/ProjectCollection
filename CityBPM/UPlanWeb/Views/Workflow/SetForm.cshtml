@@ -1,0 +1,56 @@
+﻿@model IEnumerable<TongJi.Web.Forms.Form>
+@{
+    List<TongJi.Web.Forms.Form> forms = ViewBag.forms;
+    string form = ViewBag.form;
+}
+
+@*<h2>表单列表</h2>
+<p>
+    这里是指定流程绑定的所有表单。
+</p>
+<p>
+    @MyHelpers.NavButton("返回流程管理", Url.Action("FlowList"))
+</p>
+<table>
+    @MyHelpers.TableColumnGroupStarWidth(2, 3, 1, 1, 1)
+    @MyHelpers.TableThRow("header", "ID", "名称", "类型", "分组", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in Model)
+    {
+        string style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, row.ID, row.Name, row.Type, row.Group,
+                              MyHelpers.Anchor("删除", string.Format("javascript:tryDel({0})", row.ID))
+             )
+        i++;
+    }
+
+</table>*@
+
+<p>
+    当前绑定到：@form
+</p>
+
+@using (Html.BeginForm("SetForm", "Workflow"))
+{
+    <fieldset>
+        <legend>表单绑定</legend>
+        @Html.Hidden("id")
+        <div>
+            @Html.DropDownList("formID", TongJi.Web.Forms.FormManager.SelectList(forms.ToDictionary(x => x.ID.ToString(), x => x.Name), form))
+        </div>
+        <div>
+            <input type="submit" value="绑定" />
+        </div>
+    </fieldset>
+}
+
+@*@section Scripts {
+    <script type="text/javascript">
+
+        var tryDel = function (id) {
+            confirmGoTo('确实要删除吗？', '@Url.Action("FormDelete")/' + id);
+        };
+    </script>
+}*@

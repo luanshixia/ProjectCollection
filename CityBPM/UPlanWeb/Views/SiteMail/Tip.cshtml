@@ -1,0 +1,5 @@
+﻿@Html.ActionLink("站内信", "ReceiveBox", "SiteMail")
+@if (ViewBag.UnreadCount > 0)
+{
+    @: (@ViewBag.UnreadCount)
+}

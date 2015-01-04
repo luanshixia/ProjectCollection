@@ -1,0 +1,30 @@
+﻿<h2>
+    流程图 - @ViewBag.instName
+</h2>
+<p>
+    查看流程图。可对图片进行鼠标放缩拖移操作来查看。
+</p>
+<p>
+    @if (ViewBag.nodeName != "结束")
+    {
+        @MyHelpers.NavButton("进入当前结点（仅限责任用户）", Url.Action("FlowStepJump", new { id = ViewBag.id }))
+    }
+    @MyHelpers.NavButton("返回待办事项", Url.Action("TodoList"))
+</p>
+<div>
+    @MyHelpers.Silverlight(Href("~/ClientBin/FlowViewer.xap"))
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var onSilverlightLoad = function () {
+            var flowViewer = document.getElementById('slCtl').Content.flowViewer;
+            $.ajaxSetup({ cache: false });
+            $.get('@Url.Action("GetInstJson", new { id = ViewBag.id })', function (data) {
+                flowViewer.SetFlow(JSON.stringify(data));
+            });
+        };
+
+    </script>
+}

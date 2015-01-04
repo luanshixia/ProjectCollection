@@ -1,0 +1,34 @@
+﻿@model IEnumerable<string>
+
+<h2>新站内信</h2>
+<p>写一封新的站内信并发送给指定用户。</p>
+
+<form action="@Url.Action("SendMail")" method="post">
+    <div>
+        <label for="title">标题</label><br />
+        <input type="text" id="title" name="title" value="新的站内信" style="width: 400px" />
+    </div>
+    <div>
+        <label for="sendto">收件人</label><br />
+        <select id="sendto" name="sendto" style="width: 400px">
+            @foreach (var user in Model)
+            {
+                if (user == ViewBag.to)
+                {
+                    <option selected="selected">@user</option>
+                }
+                else
+                {
+                    <option>@user</option>
+                }
+            }
+        </select>
+    </div>
+    <div>
+        <textarea id="content" name="content" rows="8" cols="40" style="width: 400px"></textarea>
+    </div>
+    <div>
+        @MyHelpers.SubmitButton("发送")
+        @MyHelpers.NavButton("取消", Url.Action("SendBox"), "b2")
+    </div>
+</form>

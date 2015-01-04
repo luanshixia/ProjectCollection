@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TongJi.Web.Flow.NodeListItem>
+@{
+    var grid = new WebGrid(Model, canPage: false, canSort: false);
+}
+<h2>流程管理 - 结点列表 - @ViewBag.flow.Name
+</h2>
+<p>
+    这里是指定流程的所有结点。
+</p>
+<p>
+    @MyHelpers.NavButton("返回流程管理", Url.Action("FlowList"))
+</p>
+<div>
+    @grid.GetHtml(
+        columns: grid.Columns(
+            grid.Column("ID", "ID"),
+            grid.Column("NodeName", "结点名称"),
+            grid.Column("FromNodes", "左结点"),
+            grid.Column("ToNodes", "右结点"),
+            grid.Column("Users", "责任用户"),
+            grid.Column("Roles", "责任角色"),
+            grid.Column("", "操作", format: item => Operations(item))
+        ),
+        headerStyle: "header", rowStyle: "odd", alternatingRowStyle: "even"
+    )
+</div>
+
+@helper Operations(dynamic record)
+{
+    @: @Html.ActionLink("权限", "SetNodeRoles", new { id = record.ID }) | @MyHelpers.Anchor("布局", string.Format("javascript:bindLayout('{0}')", record.ID))
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var bindLayout = function (id) {
+            tj.showDialog('布局绑定', '@Url.Action("SetNodeLayout")/' + id);
+        };
+
+    </script>
+}

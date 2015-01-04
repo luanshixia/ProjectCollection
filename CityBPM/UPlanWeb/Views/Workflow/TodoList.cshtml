@@ -1,0 +1,47 @@
+﻿@model IEnumerable<TongJi.Web.Flow.TodoListItem>
+@{
+    var grid = new WebGrid(Model, canSort: false, canPage: false);
+}
+<h2>待办事项
+</h2>
+<p>
+    这里是所有等待您处理的事项。
+</p>
+<p>
+    @MyHelpers.Button("待办事项", "","b2")
+    @MyHelpers.NavButton("活动经办事项", Url.Action("ActiveDoneList"))
+    @MyHelpers.NavButton("已结束经办事项", Url.Action("CompletedDoneList"))
+    @MyHelpers.NavButton("本人操作历史", Url.Action("PersonAction"))
+</p>
+<div>
+    @grid.GetHtml(
+        columns: grid.Columns(
+            grid.Column("ID", "序号"),
+            grid.Column("InstNumber", "事项编号"),
+            grid.Column("InstName", "事项名称", format: @<a href="@Url.Action("FlowStepJump", new { id = item.InstID })">@item.InstName</a>),
+            grid.Column("FlowName", "流程名称"),
+            grid.Column("CurrentNode", "当前结点"),
+            grid.Column("StartTime", "开始时间"),
+            grid.Column("EndTime", "最后操作时间"),
+            grid.Column("InstComment", "备注"),
+            grid.Column("", "操作", format: item => Operations(item))
+        ),
+        tableStyle: "t2", headerStyle: "header", rowStyle: "odd", alternatingRowStyle: "even", htmlAttributes: new { id = "theTable" }
+    )
+</div>
+
+@helper Operations(dynamic record)
+{
+    @: @Html.ActionLink("流程图", "FlowChart", new { id = record.InstID }) | @Html.ActionLink("追踪", "FlowTracking", new { id = record.InstID })
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            tj.setTableColumnGroupStarWidth('theTable', [1, 2, 3, 3, 2, 2, 2, 2, 1.5]);
+            setInterval(function () {
+                location.reload();
+            }, 60000);
+        });
+    </script>
+}

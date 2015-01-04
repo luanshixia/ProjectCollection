@@ -1,0 +1,41 @@
+﻿<h2>流程步骤 - @ViewBag.flow.Name - @ViewBag.inst.Name - @ViewBag.node.Name
+</h2>
+<p>
+    流程执行过程中的一个处理结点。
+</p>
+<p>
+    @MyHelpers.NavButton("待办事项", Url.Action("TodoList"))
+    @if (ViewBag.allowed && !ViewBag.completed)
+    {
+        @MyHelpers.NavButton("向下流转", Url.Action("FlowGoOn", new { id = ViewBag.inst.ID, returnUrl = Request.RawUrl }))
+    }
+    @MyHelpers.NavButton("流程回退", Url.Action("FlowGoBack", new { id = ViewBag.inst.ID, returnUrl = Request.RawUrl }))
+    @MyHelpers.NavButton("流程文件", Url.Action("List", "File", new { id = string.Format("inst{0}", ViewBag.inst.ID) }))
+</p>
+<div>
+    @if (ViewBag.allowed && !ViewBag.completed)
+    {
+        @: 您是当前结点的责任用户，可使流程向下流转。
+    }
+    else if (ViewBag.completed)
+    {
+        @: 流程已结束。
+    }
+    else
+    {
+        @: 您并非当前结点的责任用户，不具有操作权限。
+    }
+</div>
+<div>
+    @if (ViewBag.allowed)
+    {
+        if (ViewBag.hasLayout)
+        {
+            @Html.Action("ShowByFlowInst", "Layout", new { id = ViewBag.inst.ID, partial = true })
+        }
+        else
+        {
+            @Html.Action("Modify", "Form", new { id = ViewBag.formInstID, partial = true })
+        }
+    }
+</div>

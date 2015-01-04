@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>控规单元控制系统</title>
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryval", "~/bundles/tj")
+    @Styles.Render("~/Content/css")
+    @RenderSection("Styles", false)
+</head>
+<body>
+    <div id="frame-banner">
+        <div class="header">
+            <div class="title">
+                <h1>
+                    <br />
+                    <a href="@Href("~")" style="color: White; text-decoration: none">控规单元控制系统</a>
+                </h1>
+            </div>
+            @if (ViewBag.NoLogin != true)
+            {
+                <div class="loginDisplay">
+                    @Html.Partial("_LoginPartial")
+                    @Html.Action("Tip", "SiteMail")
+                </div>
+            }
+        </div>
+    </div>
+    <div id="frame-sidebar">
+        <div id="frame-date">
+            @DateTime.Now.ToLongDateString() - @DateTime.Now.ToString("dddd")
+        </div>
+        @Html.Action("Show", "Menu")
+    </div>
+    <div id="frame-content">
+        @RenderBody()
+        <div class="clear">
+        </div>
+        <div class="footer">
+            XX市规划局版权所有<br />
+            地址：XXXXXXXXXX 电话：XXXX-XXXXXXXX<br />
+            本站使用 CityGIS Web 网络地理信息系统建立<br />
+            技术支持：上海同城信息科技有限公司<br />
+            <br />
+        </div>
+    </div>
+    <div id="frame-dim">
+
+    </div>
+    <div id="frame-dialog">
+        <div id="dialog-inner">
+            <div id="dialog-title">
+                网页对话框
+            </div>
+            <div id="dialog-content">
+                对话框内容
+            </div>
+            @MyHelpers.Button("关闭", "tj.hideDialog()", "b2")
+        </div>
+    </div>
+    @RenderSection("Scripts", false)
+    @MyHelpers.MessagePopupScript(Url.Action("GetMessages", "Services"), "message-popup")
+</body>
+</html>

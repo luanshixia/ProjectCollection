@@ -1,0 +1,2823 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ArrayOfFlowNode xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <FlowNode>
+    <ID>d53ec695-12a9-4eb1-923e-00018cc68ebb</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>bc402253-0318-46b8-a4d2-3cb221536ce7</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>370</FlowChartPositionX>
+    <FlowChartPositionY>140</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d04de659-3429-4ea6-855b-00403ceff91d</ID>
+    <Name>核发《建设用地审查意见通知书》</Name>
+    <WorkflowID>877ddb69-c314-48dc-8240-68c3bca5b964</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>770</FlowChartPositionX>
+    <FlowChartPositionY>190</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>9947f077-d45b-416b-8465-021839f25b66</ID>
+    <Name>核发《建设工程规划许可证办理通知书》</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>1280</FlowChartPositionX>
+    <FlowChartPositionY>200</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>641bcd84-0306-44c5-9a3c-02a81a7cf6c6</ID>
+    <Name>核发《建设工程规划许可证办理通知书》</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>1230</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>15d44aa2-a863-47c6-bcab-053e1b2ccadc</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>470b0586-2c0e-4467-8aed-8677f24ca57f</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>780</FlowChartPositionX>
+    <FlowChartPositionY>180</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b2559b76-70ac-4690-9ad7-0595b305c489</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>bc402253-0318-46b8-a4d2-3cb221536ce7</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>500</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>806733ee-d01e-4f41-8474-0675463cf407</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>290</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3abf054f-73a0-4606-beb4-067a5d89514a</ID>
+    <Name>开始</Name>
+    <WorkflowID>37e6dcc3-52c3-418b-a41c-798a625e3dd9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>140</FlowChartPositionX>
+    <FlowChartPositionY>320</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>7c2886b7-15a5-43ab-b744-06ebd3e511ba</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>3c07f125-9308-416d-ae88-575b95337f95</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>450</FlowChartPositionX>
+    <FlowChartPositionY>370</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3eea3bdd-3d01-4a45-8497-070e9a6288d4</ID>
+    <Name>核发《建设工程规划合格证办理通知书》</Name>
+    <WorkflowID>2f02cec7-7e6c-497c-8fc8-cbbc82f693b3</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>771</FlowChartPositionX>
+    <FlowChartPositionY>191</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>52f2985e-a1e9-4302-bf79-0721263425e7</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>37e6dcc3-52c3-418b-a41c-798a625e3dd9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>320</FlowChartPositionX>
+    <FlowChartPositionY>320</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>11bd2a1c-45f8-4348-8e13-076d65862e26</ID>
+    <Name>输出规划条件</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>790</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>78fcd9cd-9cc1-46eb-8d23-083100c3f706</ID>
+    <Name>证书待领取</Name>
+    <WorkflowID>9a5f4dfe-ce23-48f6-b9ed-58cecac2dbac</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>1020</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3cae114c-2ec9-4dd2-b8c8-0854c44200d5</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>7f468878-1c2c-4354-8e9f-6c7582ad3321</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>460</FlowChartPositionX>
+    <FlowChartPositionY>190</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>82a3acd7-2f14-4620-8e52-0864438377f2</ID>
+    <Name>出具不予受理决定书</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>870</FlowChartPositionX>
+    <FlowChartPositionY>80</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>9baf0f85-943e-46fc-b01a-09644697d87f</ID>
+    <Name>开始</Name>
+    <WorkflowID>87c57133-4627-4b4c-b7b2-e7d7f2d1a1a8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>100</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0d39d25a-2a73-4b25-af45-09786b7a49a5</ID>
+    <Name>核查报告</Name>
+    <WorkflowID>976db0af-4916-4bb6-83d7-330e85d890d6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>851</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>272aeeef-b73c-4f4c-bd31-09fcf1982d38</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>b326ea79-5a85-4a17-ab29-68e030f1f7bc</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>420</FlowChartPositionX>
+    <FlowChartPositionY>220</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>da1aacf2-c0d6-4566-8cae-0a9902883a6e</ID>
+    <Name>提出书面审查意见</Name>
+    <WorkflowID>d94af2da-0e9c-498c-a9d4-3b4a90c53ab8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>730</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>62191227-b895-46a7-8a5a-0bf1d1f340d0</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>0075e4df-a609-45d5-8df6-8558de4d166d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>340</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a051c070-99e8-4771-80a2-0c4873ea8f56</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>410</FlowChartPositionX>
+    <FlowChartPositionY>180</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>560c343d-96e3-4357-843c-0c588af116c4</ID>
+    <Name>开始</Name>
+    <WorkflowID>bc402253-0318-46b8-a4d2-3cb221536ce7</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>50</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>fa6d00fe-7ab8-4aa5-8e17-0c7bbc38d377</ID>
+    <Name>结束</Name>
+    <WorkflowID>316b7284-ce54-4709-867d-fa61754d1dc5</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>711</FlowChartPositionX>
+    <FlowChartPositionY>161</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>c858eb0c-8408-4269-8635-0d023ed403a3</ID>
+    <Name>核发《建设工程规划许可证办理通知书》</Name>
+    <WorkflowID>7f468878-1c2c-4354-8e9f-6c7582ad3321</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>770</FlowChartPositionX>
+    <FlowChartPositionY>200</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3b6a60e1-9b81-45a4-a1cb-0d413eae451f</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>f1182861-fa78-4e3e-8b14-ba115c168654</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>560</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d916ef45-1c5a-478f-a9db-0d50c5077d92</ID>
+    <Name>结束</Name>
+    <WorkflowID>bc402253-0318-46b8-a4d2-3cb221536ce7</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>820</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>bd81f874-9097-4515-97e9-0fe0aa284758</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>720</FlowChartPositionX>
+    <FlowChartPositionY>200</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>ec1bcb03-1a24-4f97-b6fe-10627bfff996</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>877ddb69-c314-48dc-8240-68c3bca5b964</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>480</FlowChartPositionX>
+    <FlowChartPositionY>180</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b034500d-f88e-4981-97df-10dec0bd89a6</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>470b0586-2c0e-4467-8aed-8677f24ca57f</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>290</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>5279c518-be25-40aa-a3ce-10faa9664d7e</ID>
+    <Name>开始</Name>
+    <WorkflowID>71282cee-8084-4054-9e95-f4be8df19b69</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>120</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0ba997da-98f7-44d2-977e-1183897906c7</ID>
+    <Name>核发《乡村建设规划技术审查意见通知书》</Name>
+    <WorkflowID>7f468878-1c2c-4354-8e9f-6c7582ad3321</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>770</FlowChartPositionX>
+    <FlowChartPositionY>350</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>bd165cde-2f15-4ebb-a496-1238ec8dacad</ID>
+    <Name>证书待领取</Name>
+    <WorkflowID>3c07f125-9308-416d-ae88-575b95337f95</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>1230</FlowChartPositionX>
+    <FlowChartPositionY>370</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8c29bde2-0571-46d4-85e2-1450cb8b6e1a</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>410</FlowChartPositionX>
+    <FlowChartPositionY>160</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0caf4e6e-868b-4782-9c1e-148be38747a7</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>959018a5-dbc9-4438-bf69-f24f34675670</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>390</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>9d7bb7a2-8847-434c-b93e-15e446fa97a1</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>470b0586-2c0e-4467-8aed-8677f24ca57f</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>611</FlowChartPositionX>
+    <FlowChartPositionY>251</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>67f84a25-0bc4-4032-8d37-19bb7e9e4c2c</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>71282cee-8084-4054-9e95-f4be8df19b69</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>501</FlowChartPositionX>
+    <FlowChartPositionY>281</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8f774cb6-8e21-4a33-b7d5-1ac3cdfaed48</ID>
+    <Name>科长审批</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科科长</AllowedRoles>
+    <FlowChartPositionX>950</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>188d323b-3e96-481b-bbff-1b8e67f68ec6</ID>
+    <Name>审核不通过并书面回复</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>940</FlowChartPositionX>
+    <FlowChartPositionY>360</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>29be4907-3915-4ad6-aa83-1cd9804b0ad7</ID>
+    <Name>对外发文</Name>
+    <WorkflowID>959018a5-dbc9-4438-bf69-f24f34675670</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>990</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>f0be4251-5229-4091-9eb6-1f6dfdcbde9b</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>c69ec19d-3700-45f6-bdab-11f3eb847414</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>621</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>39d7f501-326f-4ca1-a344-20322676ff08</ID>
+    <Name>开始</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>130</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>11286997-9846-44a7-a1c3-20e741b6ce6b</ID>
+    <Name>内审测绘成果深度</Name>
+    <WorkflowID>d94af2da-0e9c-498c-a9d4-3b4a90c53ab8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>380</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>c06a9e1e-3342-4c52-b3ab-213128193d68</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>f7be1db7-38d7-4f0c-b84e-431840e30ab0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>630</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>9c3b2fe4-0278-437d-8725-223e7c865b6e</ID>
+    <Name>结束</Name>
+    <WorkflowID>37e6dcc3-52c3-418b-a41c-798a625e3dd9</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>920</FlowChartPositionX>
+    <FlowChartPositionY>320</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>275b6dc0-4c6f-406d-a9b0-25528f623a8b</ID>
+    <Name>结束</Name>
+    <WorkflowID>7f468878-1c2c-4354-8e9f-6c7582ad3321</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>930</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d356a942-5c09-4eed-ac63-27901b7d7d3c</ID>
+    <Name>开始</Name>
+    <WorkflowID>3eb302ca-10e7-4480-b30c-f95287827cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>boss</AllowedRoles>
+    <FlowChartPositionX>120</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>bf26baf6-2186-48ca-bd50-288f183851b7</ID>
+    <Name>结束</Name>
+    <WorkflowID>3eb302ca-10e7-4480-b30c-f95287827cba</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>680</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>4e4a3bf0-aab9-4eb3-b9f8-28d2a9b16cc8</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>e2b2388a-3c3c-4e43-84f4-6bd63d1723a2</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>320</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>339514ea-5c6d-4904-8a5b-29ed186c4c49</ID>
+    <Name>开始</Name>
+    <WorkflowID>c69ec19d-3700-45f6-bdab-11f3eb847414</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>201</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>4b81396a-5e03-42b8-a8b6-2a2b55fbfca4</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>7f1c3b8e-0f9b-4e0b-9ef2-dd1c7cd0d7a0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>601</FlowChartPositionX>
+    <FlowChartPositionY>281</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>48c61dfc-941b-4240-a2ad-2aabc0ccd32d</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>550</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3638f001-eefe-49ee-8e6f-2ab33d82e61d</ID>
+    <Name>办理建设工程项目坐标放线</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>900</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b74d43c8-7c06-40fe-af57-2ba3b02152b1</ID>
+    <Name>结束</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1310</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>6e4de3b2-e886-491f-9732-2c0398d85c91</ID>
+    <Name>核发《建设工程市政总平规划条件审查意见通知书》</Name>
+    <WorkflowID>37e6dcc3-52c3-418b-a41c-798a625e3dd9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>760</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>7d1dcba7-4c7b-4d8d-b1bc-2ce6fa320730</ID>
+    <Name>结束</Name>
+    <WorkflowID>af16e7a6-0eb8-43e7-8549-775daac5ddb6</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1330</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>abceddc9-fd99-453c-a6cd-2f920b46efd4</ID>
+    <Name>开始</Name>
+    <WorkflowID>0d8dd4ba-8222-4232-8a8c-ae5f24b91532</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>70</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>7a430ddc-941b-4543-8a5e-310ac779525c</ID>
+    <Name>核发方案修改通知书</Name>
+    <WorkflowID>0d8dd4ba-8222-4232-8a8c-ae5f24b91532</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>670</FlowChartPositionX>
+    <FlowChartPositionY>370</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>be303e34-8d4b-4c39-b527-312ddfd77dc0</ID>
+    <Name>方案公告并公证公告过程</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>870</FlowChartPositionX>
+    <FlowChartPositionY>190</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>687186cd-fd8d-4ae0-a746-328a290947fa</ID>
+    <Name>结束</Name>
+    <WorkflowID>d94af2da-0e9c-498c-a9d4-3b4a90c53ab8</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1420</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>89dd595a-9f13-4ed5-a487-32b92f02e94d</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>877ddb69-c314-48dc-8240-68c3bca5b964</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>360</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8e1761f5-86f6-49e0-8629-32e2ec015ee6</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>9a5f4dfe-ce23-48f6-b9ed-58cecac2dbac</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>410</FlowChartPositionX>
+    <FlowChartPositionY>160</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>ebfe320e-6472-4d72-b281-33e8c7d88f54</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>490</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>5da7954f-b95f-430d-963d-35ecea6a91da</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>130</FlowChartPositionX>
+    <FlowChartPositionY>240</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3f7e19a6-8303-4020-ae4b-36aa189be48e</ID>
+    <Name>核发规划条件通知书</Name>
+    <WorkflowID>316b7284-ce54-4709-867d-fa61754d1dc5</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>571</FlowChartPositionX>
+    <FlowChartPositionY>71</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0d267977-3bc0-42ab-94a1-38e39aa14898</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>f1182861-fa78-4e3e-8b14-ba115c168654</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>420</FlowChartPositionX>
+    <FlowChartPositionY>210</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a73be94e-f41e-4be3-8bfc-3ac008fa4a85</ID>
+    <Name>结束</Name>
+    <WorkflowID>976db0af-4916-4bb6-83d7-330e85d890d6</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1041</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>cf3ab675-f10f-4471-ae96-3c27739f5ec9</ID>
+    <Name>核发《规划建设方案审查意见通知书》</Name>
+    <WorkflowID>37e6dcc3-52c3-418b-a41c-798a625e3dd9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>760</FlowChartPositionX>
+    <FlowChartPositionY>380</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>c03bf566-f559-410a-8aad-3eb3931938b2</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>87c57133-4627-4b4c-b7b2-e7d7f2d1a1a8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>430</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>228d574b-67ea-4d42-a20e-40ccb14e6480</ID>
+    <Name>核发修改意见通知书</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>1000</FlowChartPositionX>
+    <FlowChartPositionY>330</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>1c0457ec-9b0c-478a-b9c4-41319ed5d355</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>87c57133-4627-4b4c-b7b2-e7d7f2d1a1a8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>290</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>2cb5ccd3-ceb8-4237-8d5d-42441bd4f411</ID>
+    <Name>收集意见核查处理</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>1060</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a83ee239-f2a4-44a6-aa61-44f6d622d74e</ID>
+    <Name>结束</Name>
+    <WorkflowID>0075e4df-a609-45d5-8df6-8558de4d166d</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1270</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>38bc3d37-5256-4595-9db2-4557a7f26416</ID>
+    <Name>开始</Name>
+    <WorkflowID>8f6843bc-eef8-4896-a53e-e79e404d90b5</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>boss</AllowedRoles>
+    <FlowChartPositionX>120</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d70afd3d-89c7-4c03-960b-456e7b7237a4</ID>
+    <Name>核发《建设工程规划技术审查意见通知书》</Name>
+    <WorkflowID>e5a9071c-cd81-4c6d-8eba-7cccca96402d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>750</FlowChartPositionX>
+    <FlowChartPositionY>340</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>7123c321-eb9d-4cba-a7c8-458bd77ad755</ID>
+    <Name>开始</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles />
+    <FlowChartPositionX>40</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>98e8d0bc-3ce9-4c4d-bf2c-47be18254813</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>400</FlowChartPositionX>
+    <FlowChartPositionY>240</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>81ee2bef-c4b7-47da-b2d6-48c1402b3b3a</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>b326ea79-5a85-4a17-ab29-68e030f1f7bc</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>270</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>58e3d908-87c2-4845-a11e-48e17d1f47c1</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>7f468878-1c2c-4354-8e9f-6c7582ad3321</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>600</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b618bcc4-a24e-42fe-861c-491a74e6a773</ID>
+    <Name>审核是否符合地块控制</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>630</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>dd97597a-0b95-4760-89dd-49503a5135e1</ID>
+    <Name>会审</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>局长</AllowedRoles>
+    <FlowChartPositionX>1110</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>2c4ca0dd-26c7-4d29-ab72-4b8c47e61282</ID>
+    <Name>审批</Name>
+    <WorkflowID>3eb302ca-10e7-4480-b30c-f95287827cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>boss</AllowedRoles>
+    <FlowChartPositionX>491</FlowChartPositionX>
+    <FlowChartPositionY>291</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d6c1266b-70f8-4b2c-9774-4c01ff7b855f</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>316b7284-ce54-4709-867d-fa61754d1dc5</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>391</FlowChartPositionX>
+    <FlowChartPositionY>221</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>c378eec8-e14e-408c-8f75-4d8be6bdcd64</ID>
+    <Name>审核不通过并书面回复</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>980</FlowChartPositionX>
+    <FlowChartPositionY>330</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d49e3c10-2308-4b9f-90f8-4ec96d56b3e0</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>11727f02-c14d-4819-8d28-0f4348a45716</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>650</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d835af79-72e1-45ae-842a-4ee8aa130ee8</ID>
+    <Name>意见回复</Name>
+    <WorkflowID>470b0586-2c0e-4467-8aed-8677f24ca57f</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>780</FlowChartPositionX>
+    <FlowChartPositionY>320</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8170de16-59bc-47db-b393-4f10d8699f5e</ID>
+    <Name>结束</Name>
+    <WorkflowID>11727f02-c14d-4819-8d28-0f4348a45716</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>980</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>cbdd4533-1af7-4111-bf68-4fdb21c12479</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>9a5f4dfe-ce23-48f6-b9ed-58cecac2dbac</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>550</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>28dcd99b-7aca-4f89-9dd6-5094a5e818c5</ID>
+    <Name>出具受理通知书</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>520</FlowChartPositionX>
+    <FlowChartPositionY>400</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>2e9592e2-5ab3-4461-9433-510e4da14269</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>3c07f125-9308-416d-ae88-575b95337f95</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>730</FlowChartPositionX>
+    <FlowChartPositionY>370</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>ee9d9946-ba59-4c3e-a13d-53891d14a92a</ID>
+    <Name>核发《市政建设项目选址意见技术审查通知书》及建设项目选址意见书办理通知书</Name>
+    <WorkflowID>f1182861-fa78-4e3e-8b14-ba115c168654</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>730</FlowChartPositionX>
+    <FlowChartPositionY>360</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>1831f404-8ad1-4970-8c12-543cecb316b6</ID>
+    <Name>开始</Name>
+    <WorkflowID>e2b2388a-3c3c-4e43-84f4-6bd63d1723a2</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>150</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e9db1dd1-a86d-4d3c-b01d-547aa505f866</ID>
+    <Name>结束</Name>
+    <WorkflowID>3c07f125-9308-416d-ae88-575b95337f95</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1400</FlowChartPositionX>
+    <FlowChartPositionY>370</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>315a225c-23e2-4587-9f38-55326b562bb5</ID>
+    <Name>建设工程项目坐标放线</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>911</FlowChartPositionX>
+    <FlowChartPositionY>201</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>6b9b514b-a7f3-4fb4-9ee2-558a0d67db11</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>f1182861-fa78-4e3e-8b14-ba115c168654</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>280</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>04cec5d3-4d44-41f4-b3b3-5956b455dfa1</ID>
+    <Name>对外发文</Name>
+    <WorkflowID>0075e4df-a609-45d5-8df6-8558de4d166d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>920</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>bd369066-7550-47e6-a947-59bbf550a102</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>87c57133-4627-4b4c-b7b2-e7d7f2d1a1a8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>571</FlowChartPositionX>
+    <FlowChartPositionY>251</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>eebfc89f-de3f-491c-aa51-5b25d832b78b</ID>
+    <Name>收集意见核查处理</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>890</FlowChartPositionX>
+    <FlowChartPositionY>230</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>c012d775-ff9a-44fe-9d28-5b8a4b7c9b41</ID>
+    <Name>申请</Name>
+    <WorkflowID>3eb302ca-10e7-4480-b30c-f95287827cba</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>310</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>1667d3a3-a891-4544-a55c-5c9e9d5e7b7e</ID>
+    <Name>开始</Name>
+    <WorkflowID>af16e7a6-0eb8-43e7-8549-775daac5ddb6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>150</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>9d3f25b0-0837-4492-8b46-5eb7e2304cea</ID>
+    <Name>结束</Name>
+    <WorkflowID>0d8dd4ba-8222-4232-8a8c-ae5f24b91532</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>830</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>f278228a-62db-41d8-8892-5f91f9c36420</ID>
+    <Name>核发《建设工程规划许可证办理通知书》</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>1160</FlowChartPositionX>
+    <FlowChartPositionY>150</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>cf271310-3d09-462e-b53b-602a7a44cfdc</ID>
+    <Name>核发予以同意通知书</Name>
+    <WorkflowID>11727f02-c14d-4819-8d28-0f4348a45716</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>820</FlowChartPositionX>
+    <FlowChartPositionY>230</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a492ca3c-fd25-4c1a-9193-6069cb9c97db</ID>
+    <Name>窗口接件</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>190</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>4cbb6ab4-9631-4b63-827e-61bf094a1ae0</ID>
+    <Name>方案公告并公证公告过程</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>830</FlowChartPositionX>
+    <FlowChartPositionY>180</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>7f15bd59-40e3-4266-96fa-6233a81161a3</ID>
+    <Name>组织现场验线</Name>
+    <WorkflowID>976db0af-4916-4bb6-83d7-330e85d890d6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>641</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>ae902dcb-83e2-446f-9893-627119a2b9e8</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>87c57133-4627-4b4c-b7b2-e7d7f2d1a1a8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>730</FlowChartPositionX>
+    <FlowChartPositionY>190</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8c3dd1a1-0a8d-4ddd-97cb-628f3d99dfaf</ID>
+    <Name>整理规划条件</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>1480</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>340df2f2-1727-4ca1-982e-646601abbb65</ID>
+    <Name>核发修改意见通知书</Name>
+    <WorkflowID>f7be1db7-38d7-4f0c-b84e-431840e30ab0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>800</FlowChartPositionX>
+    <FlowChartPositionY>350</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>6d974e2b-5f20-40b4-8c82-655f137889da</ID>
+    <Name>发放《建设工程坐标放线测绘报告书》</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>1010</FlowChartPositionX>
+    <FlowChartPositionY>150</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>76970400-b922-4a62-a262-6567d8c51d65</ID>
+    <Name>结束</Name>
+    <WorkflowID>8f6843bc-eef8-4896-a53e-e79e404d90b5</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>750</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>952e0d69-2f65-4dda-ab66-66b232cad8c4</ID>
+    <Name>开始</Name>
+    <WorkflowID>7f1c3b8e-0f9b-4e0b-9ef2-dd1c7cd0d7a0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>180</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>760e383e-ad80-45c5-8792-66e73f973c08</ID>
+    <Name>核发予以同意通知书</Name>
+    <WorkflowID>f7be1db7-38d7-4f0c-b84e-431840e30ab0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>800</FlowChartPositionX>
+    <FlowChartPositionY>200</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>dbf2a1f1-3f90-4bf5-ab98-67265fcdd77d</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>bc402253-0318-46b8-a4d2-3cb221536ce7</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>230</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>fbd8de6c-0d48-4c7f-baa0-6839f68d63d5</ID>
+    <Name>出具《建设项目竣工测绘报告书》</Name>
+    <WorkflowID>d94af2da-0e9c-498c-a9d4-3b4a90c53ab8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>1250</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>7e320dd4-30cd-4723-93f4-6890b740723f</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>230</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>fc18e22f-414c-447b-a997-68dd3ab2f6b9</ID>
+    <Name>方案需修改</Name>
+    <WorkflowID>522f1ad4-5b39-4485-8c23-4a323a6851aa</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>700</FlowChartPositionX>
+    <FlowChartPositionY>350</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0c692c6a-1e73-42cf-9053-68dd467fc1d1</ID>
+    <Name>准备申请单元控制</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>640</FlowChartPositionX>
+    <FlowChartPositionY>520</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e2b4f3c1-4099-4722-923a-6cc5ec054204</ID>
+    <Name>核查情况</Name>
+    <WorkflowID>af16e7a6-0eb8-43e7-8549-775daac5ddb6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>方案审批科</AllowedRoles>
+    <FlowChartPositionX>1160</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>00f1784a-9e67-4457-a607-6e587ba1a901</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>300</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>331aed13-ac04-4f9b-bdda-6f71174e67a4</ID>
+    <Name>开始</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>110</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>79742769-a994-4d08-b166-70f5291aa11c</ID>
+    <Name>开始</Name>
+    <WorkflowID>976db0af-4916-4bb6-83d7-330e85d890d6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>241</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>96eb54c8-266d-41cc-a2be-71ea7b96b004</ID>
+    <Name>对外发文</Name>
+    <WorkflowID>9a5f4dfe-ce23-48f6-b9ed-58cecac2dbac</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>850</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>c6533bcd-f3a6-43b6-8ef7-731f73687c9c</ID>
+    <Name>反馈实地放线情况</Name>
+    <WorkflowID>af16e7a6-0eb8-43e7-8549-775daac5ddb6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>990</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>39849aa3-514a-4c50-8b05-7423933bee35</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>522f1ad4-5b39-4485-8c23-4a323a6851aa</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>701</FlowChartPositionX>
+    <FlowChartPositionY>221</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>4e87593a-ca4b-416e-9405-757187b75b9b</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>71282cee-8084-4054-9e95-f4be8df19b69</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>390</FlowChartPositionX>
+    <FlowChartPositionY>200</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>276675e5-ce56-45b8-8fec-76b9e160ccac</ID>
+    <Name>结束</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1280</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e5ccade0-9bd5-46aa-9f64-774433b57e95</ID>
+    <Name>发放《建设工程坐标放线测绘报告书》</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>1070</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>2dda758c-23b8-42f1-8f8e-79f0829daf32</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>e2b2388a-3c3c-4e43-84f4-6bd63d1723a2</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>430</FlowChartPositionX>
+    <FlowChartPositionY>190</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>9a9a631e-b519-41ee-b2c8-7a38ee7f923b</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>0075e4df-a609-45d5-8df6-8558de4d166d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>580</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e53dc936-ffec-45b6-9c11-7bd31ccf0fbf</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>270</FlowChartPositionX>
+    <FlowChartPositionY>340</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>554525e3-32e8-43ea-bd70-7d34472fc629</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>37e6dcc3-52c3-418b-a41c-798a625e3dd9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>590</FlowChartPositionX>
+    <FlowChartPositionY>320</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e63ed90f-fd31-4f0b-b26a-7d943dba3bff</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>c69ec19d-3700-45f6-bdab-11f3eb847414</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>490</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a209a975-6bf1-4b2c-b122-7e02599f49c7</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>42ef862c-a0b6-424c-9f34-afb1ded437b8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>591</FlowChartPositionX>
+    <FlowChartPositionY>251</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a953e746-f44c-4d01-a8af-7f12046bfbe2</ID>
+    <Name>证书待领取</Name>
+    <WorkflowID>959018a5-dbc9-4438-bf69-f24f34675670</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>1160</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b75cfae0-f34d-4bc8-9034-7f673efc496b</ID>
+    <Name>开始</Name>
+    <WorkflowID>d94af2da-0e9c-498c-a9d4-3b4a90c53ab8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>200</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>f72b42f0-b925-467a-bea1-810951a9cf5b</ID>
+    <Name>开始</Name>
+    <WorkflowID>f7be1db7-38d7-4f0c-b84e-431840e30ab0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>220</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>90ea0fda-3223-48aa-bcfd-8260faa9ba13</ID>
+    <Name>窗口出具准予行政许可决定书与规划条件</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>1640</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>7f9e6857-e13f-4f92-9364-82824fe150fa</ID>
+    <Name>予以同意并核发方案总平面图</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>1060</FlowChartPositionX>
+    <FlowChartPositionY>140</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>1fce02e8-e65e-4cb9-b4da-82d261f62f57</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>9a5f4dfe-ce23-48f6-b9ed-58cecac2dbac</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>280</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>08715c6c-8719-4e58-967d-84a21c507bed</ID>
+    <Name>核发方案修改通知书</Name>
+    <WorkflowID>11727f02-c14d-4819-8d28-0f4348a45716</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>820</FlowChartPositionX>
+    <FlowChartPositionY>360</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d8cfd9ff-ab7c-4635-a283-8559de4563cd</ID>
+    <Name>开始</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>120</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>1d809490-52eb-4d9d-a6c5-894eb9dfd994</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>420</FlowChartPositionX>
+    <FlowChartPositionY>160</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>2ccfb84c-9ff9-4bd1-b800-89527afdbeb1</ID>
+    <Name>局长审批</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>局长</AllowedRoles>
+    <FlowChartPositionX>1280</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>f049c0f4-a8d8-44d5-9d77-89b61644e94a</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>0075e4df-a609-45d5-8df6-8558de4d166d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>460</FlowChartPositionX>
+    <FlowChartPositionY>140</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>be4c28e8-43f2-419a-8fc1-8a28bef4e451</ID>
+    <Name>办理建设工程项目坐标放线</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>860</FlowChartPositionX>
+    <FlowChartPositionY>150</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>eb06ac00-756c-4a11-a8d5-8a826c88bef1</ID>
+    <Name>书面回复</Name>
+    <WorkflowID>42ef862c-a0b6-424c-9f34-afb1ded437b8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>790</FlowChartPositionX>
+    <FlowChartPositionY>330</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>2fc18453-db56-49d0-a850-8b3561384568</ID>
+    <Name>核发证书</Name>
+    <WorkflowID>3c07f125-9308-416d-ae88-575b95337f95</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>综合管理科</AllowedRoles>
+    <FlowChartPositionX>900</FlowChartPositionX>
+    <FlowChartPositionY>370</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>012b8cfd-418c-423c-b76f-8bac0871c617</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>380</FlowChartPositionX>
+    <FlowChartPositionY>180</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>dda80af1-17ef-4174-8e52-8be1134aa7fc</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>2f02cec7-7e6c-497c-8fc8-cbbc82f693b3</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>591</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3f6ba08b-15cb-4800-9ddc-8ceace1dd7f0</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>976db0af-4916-4bb6-83d7-330e85d890d6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>431</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e1b62d75-a751-4a24-a3d5-8de534053877</ID>
+    <Name>结束</Name>
+    <WorkflowID>959018a5-dbc9-4438-bf69-f24f34675670</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1330</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>eb320d41-f398-4a11-a5f3-8e8188e469d4</ID>
+    <Name>审核申请材料</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>410</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0af4bd03-5446-43fa-8cfb-914df8687b8b</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>7f1c3b8e-0f9b-4e0b-9ef2-dd1c7cd0d7a0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>470</FlowChartPositionX>
+    <FlowChartPositionY>210</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>980b2a2c-e7a4-4787-938e-935326e3f9fa</ID>
+    <Name>现场检查</Name>
+    <WorkflowID>d94af2da-0e9c-498c-a9d4-3b4a90c53ab8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>560</FlowChartPositionX>
+    <FlowChartPositionY>190</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8862d4fc-4f0d-4222-b6ed-93843fe7ff6d</ID>
+    <Name>证书待领取</Name>
+    <WorkflowID>0075e4df-a609-45d5-8df6-8558de4d166d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>1090</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>62eed4cc-fd5e-4e73-8ca0-938b36fa68ff</ID>
+    <Name>核发《规划条件审查意见通知书》</Name>
+    <WorkflowID>316b7284-ce54-4709-867d-fa61754d1dc5</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>581</FlowChartPositionX>
+    <FlowChartPositionY>281</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>1408d532-3e50-402b-ada0-94f0e5258bb3</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>b326ea79-5a85-4a17-ab29-68e030f1f7bc</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>580</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>fe51a3ee-961f-414a-8626-952906e5ec69</ID>
+    <Name>结束</Name>
+    <WorkflowID>2f02cec7-7e6c-497c-8fc8-cbbc82f693b3</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>950</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>500372ca-3047-4d30-a700-954f8fd28820</ID>
+    <Name>结束</Name>
+    <WorkflowID>f7be1db7-38d7-4f0c-b84e-431840e30ab0</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>980</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>527ba278-5264-4972-bdd7-95c12b89aac0</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>959018a5-dbc9-4438-bf69-f24f34675670</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>651</FlowChartPositionX>
+    <FlowChartPositionY>271</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8a8eb351-d499-453c-a4bc-96040e4a87bb</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>570</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>157c534f-730d-48d9-88e2-96959b961a31</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>522f1ad4-5b39-4485-8c23-4a323a6851aa</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>380</FlowChartPositionX>
+    <FlowChartPositionY>200</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>925201c5-cfdd-4c31-a2fe-96ab21aba8a5</ID>
+    <Name>查验申请内容</Name>
+    <WorkflowID>2f02cec7-7e6c-497c-8fc8-cbbc82f693b3</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>320</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>57b85285-b54c-4690-8b9a-96c7aaf59ae2</ID>
+    <Name>核发规划建设方案审查意见通知书</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>730</FlowChartPositionX>
+    <FlowChartPositionY>190</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>9fb13b7d-afaa-4275-9299-96cbe83c03ea</ID>
+    <Name>开始</Name>
+    <WorkflowID>2f02cec7-7e6c-497c-8fc8-cbbc82f693b3</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>140</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>08c06412-f1c5-45d0-a0ee-98bef9d79e03</ID>
+    <Name>核发通知书与通知单</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>740</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>dd11dc07-9c3f-4aed-b217-9954ee52b464</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>511</FlowChartPositionX>
+    <FlowChartPositionY>271</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8cb01020-43aa-4638-9525-9a0c6efa0de1</ID>
+    <Name>方案需修改</Name>
+    <WorkflowID>7f1c3b8e-0f9b-4e0b-9ef2-dd1c7cd0d7a0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>791</FlowChartPositionX>
+    <FlowChartPositionY>351</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b7ad00f2-6826-4eca-b268-9a0e55354dd6</ID>
+    <Name>开始</Name>
+    <WorkflowID>f2d3bda1-8176-45d7-a591-f1c7dc2a30cd</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>100</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0025e395-7831-4e87-a578-9a11196a52b3</ID>
+    <Name>核发方案修改通知书</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>760</FlowChartPositionX>
+    <FlowChartPositionY>340</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>4546ed7f-eb4e-4adc-93cb-9aded30e7524</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>f7be1db7-38d7-4f0c-b84e-431840e30ab0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>510</FlowChartPositionX>
+    <FlowChartPositionY>160</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>c54cfad8-9f12-4b96-b084-9c95a02c06cc</ID>
+    <Name>打印道路红线</Name>
+    <WorkflowID>d94af2da-0e9c-498c-a9d4-3b4a90c53ab8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>信息中心</AllowedRoles>
+    <FlowChartPositionX>1080</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>83f7131b-c5e6-49bc-ba96-9eb6d9da02b5</ID>
+    <Name>开始</Name>
+    <WorkflowID>3c07f125-9308-416d-ae88-575b95337f95</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>260</FlowChartPositionX>
+    <FlowChartPositionY>370</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>50b8c7e2-a061-4801-a085-9f6770f4ce4a</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>290</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d27f60e7-1204-483f-8e07-a16ca6d431a8</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>11727f02-c14d-4819-8d28-0f4348a45716</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>520</FlowChartPositionX>
+    <FlowChartPositionY>200</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3b8a64c2-a3f0-46b6-aa57-a2015123731a</ID>
+    <Name>开始</Name>
+    <WorkflowID>f1182861-fa78-4e3e-8b14-ba115c168654</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>100</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>f0958310-b90f-4f4f-8f93-a20aae8fa799</ID>
+    <Name>现场实地放线</Name>
+    <WorkflowID>af16e7a6-0eb8-43e7-8549-775daac5ddb6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>830</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>28ec7083-f3fd-457e-b803-a23440bc0cda</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>0d8dd4ba-8222-4232-8a8c-ae5f24b91532</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>671</FlowChartPositionX>
+    <FlowChartPositionY>231</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8cb86c48-94b8-4039-8ac7-a3053ef56ff7</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>0d8dd4ba-8222-4232-8a8c-ae5f24b91532</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>360</FlowChartPositionX>
+    <FlowChartPositionY>210</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0fca3a0d-cf89-4b41-a46f-a3b82992fd00</ID>
+    <Name>核发修改意见通知书</Name>
+    <WorkflowID>71282cee-8084-4054-9e95-f4be8df19b69</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>680</FlowChartPositionX>
+    <FlowChartPositionY>340</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>5f03f5b9-4376-4700-9ca6-a5a9a865de24</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>540</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>da5ca8d6-d49e-49da-b633-a69556ba8a2c</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>e2b2388a-3c3c-4e43-84f4-6bd63d1723a2</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>730</FlowChartPositionX>
+    <FlowChartPositionY>200</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d99bfd93-a49f-43fc-9853-a6f18c9a7b97</ID>
+    <Name>开始</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>150</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b6ba7f8e-84ba-423e-b8cd-a75de22ad711</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>e5a9071c-cd81-4c6d-8eba-7cccca96402d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>280</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>04f65b4c-0975-4d5f-969d-a949d096a8f4</ID>
+    <Name>开始</Name>
+    <WorkflowID>7f468878-1c2c-4354-8e9f-6c7582ad3321</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>170</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>5eaf23c2-532a-4744-a3d1-aa2e7898f412</ID>
+    <Name>核发证书</Name>
+    <WorkflowID>959018a5-dbc9-4438-bf69-f24f34675670</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>综合管理科</AllowedRoles>
+    <FlowChartPositionX>821</FlowChartPositionX>
+    <FlowChartPositionY>271</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>660fed95-329c-49a6-bc5f-ab19efc93a6f</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>370</FlowChartPositionX>
+    <FlowChartPositionY>190</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d0a841da-a7e5-4b61-a006-ab9ed58a391f</ID>
+    <Name>审核未通过予以书面回复</Name>
+    <WorkflowID>2f02cec7-7e6c-497c-8fc8-cbbc82f693b3</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>771</FlowChartPositionX>
+    <FlowChartPositionY>341</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>95f36de8-5558-485d-8242-ad4c4ed324cb</ID>
+    <Name>开始</Name>
+    <WorkflowID>959018a5-dbc9-4438-bf69-f24f34675670</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>210</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>9650c616-61ad-4acb-8b08-ae1151ca764d</ID>
+    <Name>核发修改意见通知书</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>920</FlowChartPositionX>
+    <FlowChartPositionY>370</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e7977615-a091-4621-8c9d-ae6f82670bf5</ID>
+    <Name>结束</Name>
+    <WorkflowID>e2b2388a-3c3c-4e43-84f4-6bd63d1723a2</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>890</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b7226e15-44ff-410d-b49e-af652cd51353</ID>
+    <Name>结束</Name>
+    <WorkflowID>b326ea79-5a85-4a17-ab29-68e030f1f7bc</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>950</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>c27fb017-b1c0-4a66-8795-afb6f2b41015</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>7f1c3b8e-0f9b-4e0b-9ef2-dd1c7cd0d7a0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>791</FlowChartPositionX>
+    <FlowChartPositionY>221</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>ee39f75d-86eb-4fe8-90c5-b018a61bc3a5</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>f2d3bda1-8176-45d7-a591-f1c7dc2a30cd</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>530</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>caaf6d0a-1d84-44fd-9469-b199ca1ebea9</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>522f1ad4-5b39-4485-8c23-4a323a6851aa</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>260</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8d930934-c9fb-4594-965e-b47e6b895930</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>7f468878-1c2c-4354-8e9f-6c7582ad3321</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>330</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>746ecfd7-e5df-4193-be3e-b4ac5407e5df</ID>
+    <Name>结束</Name>
+    <WorkflowID>71282cee-8084-4054-9e95-f4be8df19b69</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>850</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>6702b478-0c8a-4114-8106-b78372e18f08</ID>
+    <Name>核发《规划条件审查意见通知书》</Name>
+    <WorkflowID>9a5f4dfe-ce23-48f6-b9ed-58cecac2dbac</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>700</FlowChartPositionX>
+    <FlowChartPositionY>330</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>eefa491c-d59e-4fcf-9fff-b7a2984df816</ID>
+    <Name>结束</Name>
+    <WorkflowID>eee0ccc6-e8f1-459d-9ce1-c46a19c68e68</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1410</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a18b622f-a529-4f23-abc4-b7ec88b89783</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>959018a5-dbc9-4438-bf69-f24f34675670</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>520</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>58f5ef3e-6693-4b24-9d5e-b8b69d9959da</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>af16e7a6-0eb8-43e7-8549-775daac5ddb6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>320</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>dc293511-6442-42d2-8309-b9835ae615e7</ID>
+    <Name>结束</Name>
+    <WorkflowID>470b0586-2c0e-4467-8aed-8677f24ca57f</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>951</FlowChartPositionX>
+    <FlowChartPositionY>251</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e4a193b4-3193-4924-a50e-b9b3988bb4ea</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>270</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>fde3a082-4cad-403f-9109-ba539cfb7d0f</ID>
+    <Name>结束</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1090</FlowChartPositionX>
+    <FlowChartPositionY>240</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>290342e6-a0dc-48f5-96e9-bb3c84f545b0</ID>
+    <Name>申请</Name>
+    <WorkflowID>8f6843bc-eef8-4896-a53e-e79e404d90b5</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*,boss</AllowedRoles>
+    <FlowChartPositionX>320</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>cc1dc6ee-06f9-4761-b96d-bb3eca961b19</ID>
+    <Name>核发证书</Name>
+    <WorkflowID>bc402253-0318-46b8-a4d2-3cb221536ce7</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>660</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b3cf3f20-e794-4661-86fa-bb75913a42b6</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>2f02cec7-7e6c-497c-8fc8-cbbc82f693b3</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>460</FlowChartPositionX>
+    <FlowChartPositionY>180</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>560779c1-1c98-47ec-8a86-bbbac7610798</ID>
+    <Name>核发证书</Name>
+    <WorkflowID>f2d3bda1-8176-45d7-a591-f1c7dc2a30cd</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>680</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8488d0d4-1dc6-4ba9-b165-bc06726826d8</ID>
+    <Name>核发通知书与通知单</Name>
+    <WorkflowID>0da6f5b7-3e18-43c5-a050-113c31133ef9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>710</FlowChartPositionX>
+    <FlowChartPositionY>150</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>835f367c-0b75-4593-b4ac-bca7089ed5aa</ID>
+    <Name>审核不通过</Name>
+    <WorkflowID>877ddb69-c314-48dc-8240-68c3bca5b964</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>770</FlowChartPositionX>
+    <FlowChartPositionY>330</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3248a1c4-1983-4504-be41-bcbc2e0742fe</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>71282cee-8084-4054-9e95-f4be8df19b69</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>681</FlowChartPositionX>
+    <FlowChartPositionY>221</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b89cefbb-f360-4de8-ac7b-bea6580b67dd</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>0d8dd4ba-8222-4232-8a8c-ae5f24b91532</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>491</FlowChartPositionX>
+    <FlowChartPositionY>301</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>22c1c2ba-5d04-4b12-92df-c08e796cde7d</ID>
+    <Name>制定建设工程测放示意图</Name>
+    <WorkflowID>af16e7a6-0eb8-43e7-8549-775daac5ddb6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>信息中心</AllowedRoles>
+    <FlowChartPositionX>490</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>43a64154-bd71-4f7a-bad0-c16346f462d5</ID>
+    <Name>核发《建设用地规划技术审查意见通知书》</Name>
+    <WorkflowID>b326ea79-5a85-4a17-ab29-68e030f1f7bc</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>760</FlowChartPositionX>
+    <FlowChartPositionY>360</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e4210e94-62db-4e70-9fb9-c25ae7755e0d</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>83af9a0a-eadf-4c39-9b79-e1f99f79a948</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>531</FlowChartPositionX>
+    <FlowChartPositionY>281</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>5b4d5052-46f3-48a6-89cb-c2f48b16d9ca</ID>
+    <Name>结束</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1470</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>299bf705-3b20-429e-a9fc-c3bba822753f</ID>
+    <Name>开始</Name>
+    <WorkflowID>877ddb69-c314-48dc-8240-68c3bca5b964</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>210</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>16db6e26-0bfa-4646-a239-c510acd3368e</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>e5a9071c-cd81-4c6d-8eba-7cccca96402d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>550</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>72a4b786-c5b2-4d5f-a42a-c6ca7882447d</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>42ef862c-a0b6-424c-9f34-afb1ded437b8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>320</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>47a06723-92a1-4759-ac27-c726fc65cab7</ID>
+    <Name>结束</Name>
+    <WorkflowID>e5a9071c-cd81-4c6d-8eba-7cccca96402d</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>940</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>92889a40-919c-4ecb-a5f8-c757f3557afc</ID>
+    <Name>予以同意并核发方案总平面图</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>1010</FlowChartPositionX>
+    <FlowChartPositionY>120</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b4d22a37-dd33-4c07-9cc0-c7e4be594065</ID>
+    <Name>核发通知书</Name>
+    <WorkflowID>42ef862c-a0b6-424c-9f34-afb1ded437b8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>790</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a7503085-3bfc-4df6-b793-ca62853f3694</ID>
+    <Name>核发规划条件通知书</Name>
+    <WorkflowID>9a5f4dfe-ce23-48f6-b9ed-58cecac2dbac</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>700</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0bd39699-5f40-41f8-8b34-cccc93e5f0ed</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>f7be1db7-38d7-4f0c-b84e-431840e30ab0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>400</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8b494ba0-2455-4416-a601-cee595ab0336</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>e2b2388a-3c3c-4e43-84f4-6bd63d1723a2</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>550</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8b4d7ed1-1512-4385-8223-cf22f2f501e8</ID>
+    <Name>结束</Name>
+    <WorkflowID>f1182861-fa78-4e3e-8b14-ba115c168654</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>890</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>fb881f9a-d6c2-4ab6-9c31-d00a54f6ac43</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>71282cee-8084-4054-9e95-f4be8df19b69</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>280</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>f7530749-a6e8-412f-a03f-d08cde81e131</ID>
+    <Name>结束</Name>
+    <WorkflowID>87c57133-4627-4b4c-b7b2-e7d7f2d1a1a8</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>880</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>6f408e44-fde9-439f-97ec-d0ce726b5d6b</ID>
+    <Name>开始</Name>
+    <WorkflowID>0075e4df-a609-45d5-8df6-8558de4d166d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>160</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a2711431-d455-45ce-ab67-d38642edd9a0</ID>
+    <Name>核发《建设项目选址意见书办理通知书》</Name>
+    <WorkflowID>f1182861-fa78-4e3e-8b14-ba115c168654</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>720</FlowChartPositionX>
+    <FlowChartPositionY>220</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>80032021-2c44-4976-8c0d-d3b5cee84e35</ID>
+    <Name>结束</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1920</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>af94c0ab-8086-4f20-a791-d3db0fb93375</ID>
+    <Name>核发证书</Name>
+    <WorkflowID>b326ea79-5a85-4a17-ab29-68e030f1f7bc</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>760</FlowChartPositionX>
+    <FlowChartPositionY>240</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>dfb24c45-c9d8-46e0-8c56-d427bae06956</ID>
+    <Name>核发证书</Name>
+    <WorkflowID>0075e4df-a609-45d5-8df6-8558de4d166d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>750</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>010a4340-b351-4b95-86d5-d505f54275c3</ID>
+    <Name>示意图签字</Name>
+    <WorkflowID>af16e7a6-0eb8-43e7-8549-775daac5ddb6</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>方案审批科</AllowedRoles>
+    <FlowChartPositionX>660</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>92d16ca2-5c66-4bbf-b95e-d52298d1417f</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>522f1ad4-5b39-4485-8c23-4a323a6851aa</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>511</FlowChartPositionX>
+    <FlowChartPositionY>291</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>ca585933-fca0-4030-b657-d62d9df5a152</ID>
+    <Name>开始</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>60</FlowChartPositionX>
+    <FlowChartPositionY>270</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>5f4b81b9-7428-4023-800f-d7225403a849</ID>
+    <Name>方案公告</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>710</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>83100390-1915-4438-b904-d738a90c4353</ID>
+    <Name>开始</Name>
+    <WorkflowID>9a5f4dfe-ce23-48f6-b9ed-58cecac2dbac</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>100</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>22254f5d-2322-46da-8fb6-d7a2e453edf5</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>7f1c3b8e-0f9b-4e0b-9ef2-dd1c7cd0d7a0</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>350</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>78a63cc7-9e45-46b2-916f-d88ca2fc6600</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>11727f02-c14d-4819-8d28-0f4348a45716</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>380</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>909c5186-1db6-483a-9ee7-dc807c21c2af</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>0d8dd4ba-8222-4232-8a8c-ae5f24b91532</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>240</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>81cb5535-c944-4896-ac77-dd0fba2802aa</ID>
+    <Name>开始</Name>
+    <WorkflowID>e5a9071c-cd81-4c6d-8eba-7cccca96402d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>110</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>db911a84-e18f-46bb-b604-df0a9871fcd9</ID>
+    <Name>出具不予行政许可决定书</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>1450</FlowChartPositionX>
+    <FlowChartPositionY>520</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>fe0cfb6e-e9b1-48c3-ae63-dfe9273f1778</ID>
+    <Name>结束</Name>
+    <WorkflowID>f2d3bda1-8176-45d7-a591-f1c7dc2a30cd</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>830</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>aab4da80-4ddd-4ca9-9875-e00f67349552</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>316b7284-ce54-4709-867d-fa61754d1dc5</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>211</FlowChartPositionX>
+    <FlowChartPositionY>241</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>4380d737-fba1-4f44-85e8-e04c8d78b51a</ID>
+    <Name>结束</Name>
+    <WorkflowID>522f1ad4-5b39-4485-8c23-4a323a6851aa</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>871</FlowChartPositionX>
+    <FlowChartPositionY>291</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>f169a09a-511c-4a37-9754-e28cfc77bc9a</ID>
+    <Name>予以同意书面决定</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>建管科</AllowedRoles>
+    <FlowChartPositionX>890</FlowChartPositionX>
+    <FlowChartPositionY>110</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>068d9187-fbd9-4e3c-b47c-e31af52fac8b</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>3c07f125-9308-416d-ae88-575b95337f95</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>590</FlowChartPositionX>
+    <FlowChartPositionY>240</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>80194b81-4994-4b7d-a981-e417db53bf53</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>42ef862c-a0b6-424c-9f34-afb1ded437b8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>460</FlowChartPositionX>
+    <FlowChartPositionY>130</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>ea5b60d2-793a-4515-808c-e4c6e18ac803</ID>
+    <Name>收集意见核查处理</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>1010</FlowChartPositionX>
+    <FlowChartPositionY>230</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>ba6a3628-41c9-45c2-ad6f-e59d0fc31ec0</ID>
+    <Name>结束</Name>
+    <WorkflowID>c69ec19d-3700-45f6-bdab-11f3eb847414</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1031</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b58543f0-f540-455b-bb93-e5fb2975190a</ID>
+    <Name>复核书面修改意见</Name>
+    <WorkflowID>d94af2da-0e9c-498c-a9d4-3b4a90c53ab8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>900</FlowChartPositionX>
+    <FlowChartPositionY>280</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>668a30e8-45e6-4a07-afaa-ead41d2bd282</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>45f18176-4277-4e29-b826-7b97982eb1b9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>310</FlowChartPositionX>
+    <FlowChartPositionY>480</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>19eed69a-38da-4875-b067-eae0dc7d826f</ID>
+    <Name>结束</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1200</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>353e45c1-fbe2-4c81-9af1-eb73977586b7</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>316b7284-ce54-4709-867d-fa61754d1dc5</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>331</FlowChartPositionX>
+    <FlowChartPositionY>91</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a29b850e-1e6c-4b43-9f39-eb7db544d777</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>c69ec19d-3700-45f6-bdab-11f3eb847414</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>350</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a366975a-0984-4979-9e7e-eb7ec05f19a1</ID>
+    <Name>开始</Name>
+    <WorkflowID>11727f02-c14d-4819-8d28-0f4348a45716</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>240</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>5fc12865-c937-4dcd-aff4-efefd2b657f4</ID>
+    <Name>开始</Name>
+    <WorkflowID>601d04b2-0b41-41d2-98c7-4a70f31898fe</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>-50</FlowChartPositionX>
+    <FlowChartPositionY>240</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>13505c03-3ca1-4750-83bb-f040e282f9bf</ID>
+    <Name>核发方案修改意见通知书</Name>
+    <WorkflowID>87c57133-4627-4b4c-b7b2-e7d7f2d1a1a8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>730</FlowChartPositionX>
+    <FlowChartPositionY>310</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>36ea2146-e7cc-4bb3-93c8-f09469308cc4</ID>
+    <Name>开始</Name>
+    <WorkflowID>b326ea79-5a85-4a17-ab29-68e030f1f7bc</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>100</FlowChartPositionX>
+    <FlowChartPositionY>300</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>4c147589-64c3-49d8-82c6-f0d29e052e46</ID>
+    <Name>核发《建设工程规划许可证办理通知书》</Name>
+    <WorkflowID>e5a9071c-cd81-4c6d-8eba-7cccca96402d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>用地科</AllowedRoles>
+    <FlowChartPositionX>750</FlowChartPositionX>
+    <FlowChartPositionY>180</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>a3bbefc3-1c07-4435-b978-f20a43a5c9fa</ID>
+    <Name>结束</Name>
+    <WorkflowID>7f1c3b8e-0f9b-4e0b-9ef2-dd1c7cd0d7a0</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>951</FlowChartPositionX>
+    <FlowChartPositionY>281</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>3f0dc35b-bc43-42f1-8702-f2ad89c3e1fc</ID>
+    <Name>结束</Name>
+    <WorkflowID>9a5f4dfe-ce23-48f6-b9ed-58cecac2dbac</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>1190</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>b829fa08-443c-4632-847a-f345673d40eb</ID>
+    <Name>开始</Name>
+    <WorkflowID>316b7284-ce54-4709-867d-fa61754d1dc5</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>71</FlowChartPositionX>
+    <FlowChartPositionY>241</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>da1777e6-73cb-40eb-bb16-f38a51e767be</ID>
+    <Name>核发规划建设方案审查意见通知书</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>670</FlowChartPositionX>
+    <FlowChartPositionY>180</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>895c892d-6220-4cf3-a544-f43538356041</ID>
+    <Name>对外发文</Name>
+    <WorkflowID>3c07f125-9308-416d-ae88-575b95337f95</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>行政审批科</AllowedRoles>
+    <FlowChartPositionX>1060</FlowChartPositionX>
+    <FlowChartPositionY>370</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>d813e051-9d06-4e9b-a689-f440beaf9cc8</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>37e6dcc3-52c3-418b-a41c-798a625e3dd9</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>460</FlowChartPositionX>
+    <FlowChartPositionY>230</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>37614c51-994f-4b0a-8c45-f4958b51be26</ID>
+    <Name>结束</Name>
+    <WorkflowID>877ddb69-c314-48dc-8240-68c3bca5b964</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>940</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>2fc28083-7a1f-4d49-a0a8-f523abee880a</ID>
+    <Name>查验申请材料</Name>
+    <WorkflowID>f2d3bda1-8176-45d7-a591-f1c7dc2a30cd</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>270</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>77236c51-565c-4c89-ac8a-f6bd70b3b6cb</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>e5a9071c-cd81-4c6d-8eba-7cccca96402d</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>410</FlowChartPositionX>
+    <FlowChartPositionY>180</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>65ca183b-8008-4e49-998c-f79eee4e8236</ID>
+    <Name>审批</Name>
+    <WorkflowID>8f6843bc-eef8-4896-a53e-e79e404d90b5</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>boss</AllowedRoles>
+    <FlowChartPositionX>530</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>f1f34c91-c157-443d-aeae-f86084cfb03e</ID>
+    <Name>开始</Name>
+    <WorkflowID>522f1ad4-5b39-4485-8c23-4a323a6851aa</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>100</FlowChartPositionX>
+    <FlowChartPositionY>290</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8639e1a8-612c-43ed-8593-f99c3340ba31</ID>
+    <Name>开始</Name>
+    <WorkflowID>470b0586-2c0e-4467-8aed-8677f24ca57f</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>100</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>ce8b2d93-3daa-4377-98d4-fae02119dc09</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>470b0586-2c0e-4467-8aed-8677f24ca57f</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>450</FlowChartPositionX>
+    <FlowChartPositionY>100</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>4b3a612e-6049-4401-acfa-fb6096eb7a8d</ID>
+    <Name>方案需修改</Name>
+    <WorkflowID>e2b2388a-3c3c-4e43-84f4-6bd63d1723a2</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>村镇科</AllowedRoles>
+    <FlowChartPositionX>730</FlowChartPositionX>
+    <FlowChartPositionY>320</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0af26275-a3db-4920-b74c-fbc61d3b23ee</ID>
+    <Name>结束</Name>
+    <WorkflowID>42ef862c-a0b6-424c-9f34-afb1ded437b8</WorkflowID>
+    <AllowedUsers>*</AllowedUsers>
+    <AllowedRoles>*</AllowedRoles>
+    <FlowChartPositionX>971</FlowChartPositionX>
+    <FlowChartPositionY>241</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>0893b602-a443-4073-beb9-fc88de28912c</ID>
+    <Name>发放《建设工程坐标放线测绘报告书》</Name>
+    <WorkflowID>f983cee8-0c66-4e2a-b45d-bcc4a7b6e219</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>测绘科</AllowedRoles>
+    <FlowChartPositionX>1091</FlowChartPositionX>
+    <FlowChartPositionY>201</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>8ccadd2f-9744-44cc-877f-fd2e9b0df2c4</ID>
+    <Name>审核材料</Name>
+    <WorkflowID>877ddb69-c314-48dc-8240-68c3bca5b964</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>600</FlowChartPositionX>
+    <FlowChartPositionY>260</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>f235aee7-1e93-45cb-9fe1-fdb560a58fc5</ID>
+    <Name>核发《建设项目初步选址意见通知书》</Name>
+    <WorkflowID>c69ec19d-3700-45f6-bdab-11f3eb847414</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>831</FlowChartPositionX>
+    <FlowChartPositionY>261</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>e6364160-6ed9-48b5-bcc5-fe70923c6790</ID>
+    <Name>补正材料</Name>
+    <WorkflowID>f2d3bda1-8176-45d7-a591-f1c7dc2a30cd</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>400</FlowChartPositionX>
+    <FlowChartPositionY>170</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>cdcc539a-e567-437b-8089-ff3ddbb478b8</ID>
+    <Name>开始</Name>
+    <WorkflowID>42ef862c-a0b6-424c-9f34-afb1ded437b8</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>窗口办事员</AllowedRoles>
+    <FlowChartPositionX>140</FlowChartPositionX>
+    <FlowChartPositionY>250</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+  <FlowNode>
+    <ID>2ac91261-09f4-4f04-bb2d-ff8b0f4a83f0</ID>
+    <Name>核发修改意见通知书</Name>
+    <WorkflowID>4a8811eb-3c6f-445f-bd46-b035c0d16cba</WorkflowID>
+    <AllowedUsers />
+    <AllowedRoles>市政科</AllowedRoles>
+    <FlowChartPositionX>860</FlowChartPositionX>
+    <FlowChartPositionY>350</FlowChartPositionY>
+    <ToLabels />
+  </FlowNode>
+</ArrayOfFlowNode>

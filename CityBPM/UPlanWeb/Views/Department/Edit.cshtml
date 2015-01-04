@@ -1,0 +1,37 @@
+﻿@using TongJi.Web.Security
+@model Department
+@{
+    List<Department> allDeparts = ViewBag.AllDepartments;
+}
+
+@if (ViewBag.id == 0)
+{
+    @: 无法编辑〈根部门〉。
+}
+else
+{
+    using (Html.BeginForm())
+    {
+    <fieldset>
+        <legend>部门信息</legend>
+        <div>
+            @Html.LabelFor(model => model.Name)
+            @Html.TextBoxFor(model => model.Name)
+            @Html.ValidationMessageFor(model => model.Name)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.Description)
+            @Html.TextBoxFor(model => model.Description)
+            @Html.ValidationMessageFor(model => model.Description)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.ParentID)
+            @Html.DropDownListFor(model => model.ParentID, TongJi.Web.Forms.FormManager.SelectList(allDeparts.ToDictionary(x => x.ID, x => x.Name), Model.ParentID))
+            @Html.ValidationMessageFor(model => model.ParentID)
+        </div>
+        <div>
+            @MyHelpers.SubmitButton("保存")
+        </div>
+    </fieldset>
+    }
+}

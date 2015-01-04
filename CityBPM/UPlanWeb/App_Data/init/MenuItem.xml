@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-16"?>
+<ArrayOfMenuItem xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MenuItem>
+    <ID>1</ID>
+    <Name>流程事项</Name>
+    <Type>Folder</Type>
+    <Action />
+    <Icon />
+    <ParentID>0</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-19T20:56:37.567</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>2</ID>
+    <Name>启动流程</Name>
+    <Type>Folder</Type>
+    <Action />
+    <Icon />
+    <ParentID>0</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:13:12.517</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>3</ID>
+    <Name>系统管理</Name>
+    <Type>Folder</Type>
+    <Action />
+    <Icon />
+    <ParentID>0</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:13:26.117</CreateTime>
+    <AllowedRoles>admin</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>4</ID>
+    <Name>待办事项</Name>
+    <Type>Url</Type>
+    <Action>~/Workflow/TodoList</Action>
+    <Icon />
+    <ParentID>1</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:14:08.28</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>5</ID>
+    <Name>活动经办事项</Name>
+    <Type>Url</Type>
+    <Action>~/Workflow/ActiveDoneList</Action>
+    <Icon />
+    <ParentID>1</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:17:24.023</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>6</ID>
+    <Name>已结束经办事项</Name>
+    <Type>Url</Type>
+    <Action>~/Workflow/CompletedDoneList</Action>
+    <Icon />
+    <ParentID>1</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:19:06.083</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>7</ID>
+    <Name>本人操作历史</Name>
+    <Type>Url</Type>
+    <Action>~/Workflow/PersonAction</Action>
+    <Icon />
+    <ParentID>1</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:19:57.767</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>8</ID>
+    <Name>用户管理</Name>
+    <Type>ActionLink</Type>
+    <Action>~/User/List</Action>
+    <Icon />
+    <ParentID>3</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:20:34.077</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>9</ID>
+    <Name>角色管理</Name>
+    <Type>Url</Type>
+    <Action>~/User/ManageRoles</Action>
+    <Icon />
+    <ParentID>3</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:20:56.077</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>10</ID>
+    <Name>流程管理</Name>
+    <Type>Url</Type>
+    <Action>~/Workflow/FlowList</Action>
+    <Icon />
+    <ParentID>3</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:21:20.737</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>11</ID>
+    <Name>表单管理</Name>
+    <Type>Url</Type>
+    <Action>~/Form/List</Action>
+    <Icon />
+    <ParentID>3</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:21:46.003</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>12</ID>
+    <Name>菜单管理</Name>
+    <Type>Url</Type>
+    <Action>~/Menu/Manage</Action>
+    <Icon />
+    <ParentID>3</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-06-20T17:22:09.593</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>14</ID>
+    <Name>表单布局管理</Name>
+    <Type>Url</Type>
+    <Action>~/Layout/List</Action>
+    <Icon />
+    <ParentID>3</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-07-04T09:17:44.923</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>15</ID>
+    <Name>流程启动中心</Name>
+    <Type>Url</Type>
+    <Action>~/Workflow/NewFlowInst</Action>
+    <Icon />
+    <ParentID>2</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-07-04T19:37:17.837</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+  <MenuItem>
+    <ID>16</ID>
+    <Name>部门管理</Name>
+    <Type>Url</Type>
+    <Action>~/Department/Page</Action>
+    <Icon />
+    <ParentID>3</ParentID>
+    <Order>0</Order>
+    <CreateTime>2013-07-11T10:56:05.123</CreateTime>
+    <AllowedRoles>*</AllowedRoles>
+  </MenuItem>
+</ArrayOfMenuItem>

@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "SetNodeLayout";
+
+    Guid nodeID = ViewBag.nodeID;
+    Guid flowID = ViewBag.flowID;
+    string layoutID = ViewBag.layoutID;
+    List<TongJi.Web.Forms.Layout> layouts = ViewBag.layouts;
+}
+
+@*<h2> 结点的表单布局绑定
+</h2>
+<p>
+    这里是指定流程的所有结点。
+</p>
+<p>
+    @MyHelpers.NavButton("返回流程结点列表", Url.Action("NodeListOfFlow", new { id = flowID }))
+</p>*@
+
+<p>
+    当前绑定到：@layoutID
+</p>
+@using (Html.BeginForm())
+{
+    <fieldset>
+        <legend>表单布局绑定</legend>
+        <div>
+            @Html.DropDownList("layoutID", TongJi.Web.Forms.FormManager.SelectList(layouts.ToDictionary(x => x.ID.ToString(), x => x.Name), layoutID))
+        </div>
+        <div>
+            <input type="submit" value="绑定" />
+        </div>
+    </fieldset>
+}

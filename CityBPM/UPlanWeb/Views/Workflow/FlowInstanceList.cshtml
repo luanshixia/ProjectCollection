@@ -1,0 +1,27 @@
+﻿@model IEnumerable<TongJi.Web.Flow.FlowInstance>
+
+<h2>流程管理 - 流程实例列表</h2>
+<p>
+    查看或编辑流程实例信息。
+</p>
+<p>
+    @MyHelpers.NavButton("返回流程列表", Url.Action("FlowList"))
+</p>
+<table>
+    @MyHelpers.TableColumnGroupStarWidth(1, 2, 2, 2, 1, 1)
+    @MyHelpers.TableThRow("header", "ID", "名称", "开始时间", "所在流程", "当前状态", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in Model)
+    {
+        string style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, row.ID, row.Name, row.StartTime, row.WorkflowID, row.CurrentNodeID, Operations(row))
+        i++;
+    }
+</table>
+
+@helper Operations(dynamic record)
+{
+    @: @Html.ActionLink("状态", "SetCurrentNode", new { id = record.ID }) | @Html.ActionLink("表单", "EditFormContent", new { id = record.ID })
+}

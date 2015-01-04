@@ -1,0 +1,24 @@
+﻿@model IEnumerable<TongJi.Web.Communication.SiteMail>
+
+@{
+    var grid = new WebGrid(Model, ajaxUpdateContainerId: "ajaxContainer");
+}
+
+<h2>站内信 - 收件箱</h2>
+<p>收取您的站内信。</p>
+<p>
+    @MyHelpers.NavButton("收件箱", Url.Action("ReceiveBox"))
+    @MyHelpers.NavButton("已发送", Url.Action("SendBox"))
+    @MyHelpers.NavButton("+写新站内信", Url.Action("New"))
+</p>
+<div id="ajaxContainer" style="width: 75%">
+    @grid.GetHtml(
+        columns: grid.Columns(
+            grid.Column(format: item => FormHelpers.MailListItem(item, 1))
+        ),
+        displayHeader: false,
+        tableStyle: "mail-list-table",
+        rowStyle: "mail-list-row",
+        alternatingRowStyle: "mail-list-row2"
+    )
+</div>

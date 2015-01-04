@@ -1,0 +1,66 @@
+﻿@model IEnumerable<TongJi.Web.CMS.File>
+
+@section Styles {
+    <style type="text/css">
+        #upload-dialog {
+            display: none;
+        }
+    </style>
+}
+
+<h2>文件列表</h2>
+<p>查看或编辑文件。</p>
+<p>
+    @MyHelpers.Button("+上传新文件", "upload()")
+    @MyHelpers.Button("返回前页", "history.back()")
+</p>
+<table class="t2">
+    @MyHelpers.TableColumnGroupStarWidth(1, 6, 1, 2, 2)
+    @MyHelpers.TableThRow("header", "序号", "文件名", "大小", "上传日期", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in Model)
+    {
+        @MyHelpers.TableTdRow(null, i, Html.ActionLink(row.Name, "Detail", new { id = row.ID }), TongJi.Web.CMS.FileManager.GetSizeString(row.Size), row.PostTime, Operations(row))
+        i++;
+    }
+</table>
+<div id="upload-dialog">
+    @using (Html.BeginForm("UploadToGroup", "File", new { id = ViewBag.id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary()
+        <fieldset>
+            <legend>上传新文件</legend>
+            <div>
+                @Html.Label("file", "文件")
+                <input type="file" name="file" />
+            </div>
+            <div>
+                @Html.Label("tags", "标签")
+                @Html.TextBox("tags")
+            </div>
+            <div>
+                @MyHelpers.SubmitButton("提交")
+            </div>
+        </fieldset>
+    }
+</div>
+
+@helper Operations(dynamic row)
+{
+    @: @Html.ActionLink("下载", "Download", new { id = row.ID }) | @MyHelpers.Anchor("删除", string.Format("javascript:tryDel('{0}')", row.ID))
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var upload = function () {
+            tj.showDialogDiv('+上传新文件', 'upload-dialog');
+        };
+
+        var tryDel = function (id) {
+            tj.confirmGoTo('确实要删除吗？', '@Url.Action("Delete")/' + id + '?returnUrl=@Request.RawUrl');
+        };
+    </script>
+}

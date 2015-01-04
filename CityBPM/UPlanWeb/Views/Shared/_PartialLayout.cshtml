@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>控规单元控制系统</title>
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryval", "~/bundles/tj")
+    @Styles.Render("~/Content/css")
+    @RenderSection("Styles", false)
+</head>
+<body>
+    <div class="page">
+        <div class="main">
+            @RenderSection("featured", required: false)
+            @RenderBody()
+        </div>
+        <div class="clear">
+            <br />
+            <br />
+        </div>
+    </div>
+    <div class="footer">
+    </div>
+    @RenderSection("Scripts", false)
+</body>
+</html>

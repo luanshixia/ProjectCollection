@@ -1,0 +1,69 @@
+﻿@using TongJi.Web.Forms
+@model Dictionary<string, string>
+@{
+    Form form = ViewBag.Form;
+    var data = Model;
+}
+
+<h2>查看表单 - @form.Name</h2>
+<p>查看填写好的表单。</p>
+
+@if (form.DisplayType == FormManager.DisplayType_Standard) // 用标准布局填写表单
+{
+    <style type="text/css">
+        span.field-display {
+            display: inline-block;
+            width: 400px;
+        }
+
+        label {
+            vertical-align: top;
+        }
+    </style>
+    var fields = form.Fields.OrderBy(x => x.Order).ToList();
+    <form action="" method="post" enctype="multipart/form-data">
+        @Html.ValidationSummary(true)
+        @foreach (var field in fields)
+        {
+            string name = field.Name;
+            string value = data != null ? data[name] : null;
+            <div>
+                @Html.Label(name, name)
+                @if (field.DataType == "Boolean")
+                {
+                    <span class="field-display">@(value == "true" ? "是" : "否")</span>                    
+                }
+                else if (field.DataType == "Image")
+                {
+                    <img src="@value" alt="" />
+                }
+                else if (field.DataType == "File")
+                {
+                    @MyHelpers.Anchor("文件", value)
+                }
+                else
+                {
+                    <span class="field-display">@value</span>
+                }
+                @Html.ValidationMessage(name)
+            </div>
+        }
+    </form>
+}
+else // form.DisplayType == FormManager.DisplayType_Mixed || FormManager.DisplayType_Custom 用自定义布局填写表单
+{
+    <form action="" method="post" enctype="multipart/form-data">
+        @Html.ValidationSummary(false)
+        @Html.Raw(form.Layout)
+    </form>
+    <script type="text/javascript">
+
+        var data = { @Html.Raw(string.Join(", ", data.Select(x => string.Format("{0}: '{1}'", x.Key, x.Value)))) };
+
+        $(document).ready(function () {
+            for (var key in data) {
+                $('form [name=' + key + ']').replaceWith($('<span>').text(data[key]));
+            }
+        });
+    </script>
+}

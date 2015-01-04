@@ -1,0 +1,20 @@
+﻿<h2>关于</h2>
+<div style="width: 500px">
+    <p>
+        本系统是使用 CityGIS Web 网络地理信息系统搭建的。<br />
+        <span style="font-size: 11px; font-family: Tahoma; color: #999999">This system is powered by CityGIS Web.</span>
+    </p>
+    <p>
+        XXX规划局版权所有。由上海同城信息科技有限公司提供技术支持。<br />
+        <span style="font-size: 11px; font-family: Tahoma; color: #999999">XXX copyright reserved. Technically supported by Tongcheng.</span>
+    </p>
+</div>
+
+@MyHelpers.Button("ArrayPost", "postArray()")
+
+<script type="text/javascript">
+    var postArray = function () {
+        var array = [{ 'UserName': 'aaa', 'RealName': 'bbb' }, { UserName: 'aaa', RealName: 'bbb' }, { UserName: 'aaa', RealName: 'bbb' }];
+        $.post('ArrayPostTest', { users: array });
+    };
+</script>

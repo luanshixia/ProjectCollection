@@ -1,0 +1,94 @@
+﻿@using TongJi.Web.Security
+@model Department
+@{
+    Department parent = ViewBag.Parent;
+    List<Department> subs = ViewBag.Subs;
+    List<PositionViewModel> users = ViewBag.Users;
+}
+
+@section Styles {
+    <style type="text/css">
+        #card {
+            width: 300px;
+            padding: 10px;
+            background-color: lightgray;
+            margin-bottom: 10px;
+        }
+
+        #hierarchy {
+            width: 600px;
+            padding: 10px;
+            border: 1px dashed gray;
+            background-color: whitesmoke;
+            margin-bottom: 10px;
+        }
+    </style>
+}
+
+<h2>部门管理</h2>
+<p>编辑部门组织结构和人员信息。</p>
+<div id="card">
+    <h3>@Model.Name</h3>
+    <p>@Model.Description</p>
+</div>
+<p>
+    @MyHelpers.Button("编辑详情", "editDetail()")
+    @MyHelpers.Button("新下级部门", "newSub()")
+</p>
+<div id="hierarchy">
+    <ul>
+        <li>
+            @Html.ActionLink(parent.Name, "Page", new { id = parent.ID })
+            <ul>
+                <li>
+                    @Model.Name
+                    <ul>
+                        @foreach (var sub in subs)
+                        {
+                            <li>
+                                @Html.ActionLink(sub.Name, "Page", new { id = sub.ID })
+                            </li>
+                        }
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>
+<p>
+    @MyHelpers.Button("添加人员", "addUser()")
+</p>
+<table>
+    @MyHelpers.TableColumnGroupStarWidth(1, 3, 2, 2, 2, 2)
+    @MyHelpers.TableThRow("header", "序号", "姓名", "性别", "职位", "是否负责人", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in users)
+    {
+        string style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, i, row.RealName, row.Gender, row.Title, row.IsInCharge, Operations(row))
+        i++;
+    }
+</table>
+
+@helper Operations(dynamic record)
+{
+    @: @Html.ActionLink("移除", "RemoveUser", new { id = Model.ID, user = record.UserName })
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        var editDetail = function () {
+            tj.showDialog('编辑部门详情', '@Url.Action("Edit", new { id = Model.ID })');
+        };
+
+        var newSub = function () {
+            tj.showDialog('创建部门', '@Url.Action("NewSub", new { id = Model.ID })');
+        };
+
+        var addUser = function () {
+            tj.showDialog('部门添加人员', '@Url.Action("AddUser", new { id = Model.ID })');
+        };
+    </script>
+}

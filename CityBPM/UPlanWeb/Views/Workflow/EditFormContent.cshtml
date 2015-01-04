@@ -1,0 +1,17 @@
+﻿@model TongJi.Web.Flow.FlowInstance
+@{
+    ViewBag.Title = "EditFormContent";
+}
+
+<h2>编辑流程表单信息 - @Model.Name</h2>
+<p>
+    修改当前业务流程表单数据。
+</p>
+<div class="bordered withPadding bottomMargin">
+    <p>
+        @Html.Action("ShowByFlowInst", "Layout", new { id = Model.ID, partial = true,showbutton=false })
+    </p>
+</div>
+<div>
+    @Html.ActionLink("返回项目流程列表", "FlowInstanceList")
+</div>

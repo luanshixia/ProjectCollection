@@ -1,0 +1,42 @@
+﻿@using TongJi.Web.Forms
+@model Dictionary<string, string>
+@{
+    if (ViewBag.partial)
+    {
+        Layout = null;
+    }
+    Form form = ViewBag.Form;
+    var markup = ViewBag.Markup;
+    var data = Model;
+}
+
+<form action="" method="post" enctype="multipart/form-data">
+    @Html.ValidationSummary(false)
+    @Html.Raw(markup)
+
+    @if (ViewBag.showButton)
+    {
+        <div>
+            <input type="submit" value="提交" />
+            <input type="reset" value="重置" />
+        </div>
+    }
+</form>
+@if (data != null)
+{
+    <script type="text/javascript">
+
+        @*        //var data = { @Html.Raw(string.Join(", ", data.Select(x => string.Format("'{0}': '{1}'", x.Key, x.Value)))) };*@
+
+        // 换行符在js对象中合法，但写到json中有问题。
+
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+            $.get('@Url.Action("Data", "Form", new { id = ViewBag.formInstID })', function (data) {
+                for (var key in data) {
+                    $('form [name=' + key + ']').val(data[key]);
+                }
+            });
+        });
+    </script>
+}

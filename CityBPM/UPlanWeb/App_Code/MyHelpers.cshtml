@@ -1,0 +1,504 @@
+﻿@helper AjaxPageLoader(string id, Dictionary<string, string> pages)
+{
+    <script type="text/javascript">
+        var @(id)_load = function (url) {
+            $.ajaxSetup({ cache: false });
+            $('#@(id)_main').load(url);
+        };
+
+        $(document).ready(function () {
+            $('#@id a').click(function (e) {
+                $('#@id a').removeClass('ajaxPageLoader_a_clicked');
+                $(this).addClass('ajaxPageLoader_a_clicked');
+
+                var url = $(this).attr('href');
+                url = encodeURI(url);
+                @(id)_load(url);
+
+                e.preventDefault();
+            });
+
+            $('#@id a:first').click();
+        });
+    </script>
+    <div id="@id" class="ajaxPageLoader" style="overflow:hidden">
+        <div class="ajaxPageLoader_side" style="float: left; width: 25%">
+            <ul>
+                @foreach (var page in pages)
+                {
+                    <li><a href="@page.Value">@page.Key</a></li>
+                }
+            </ul>
+        </div>
+        <div style="float: left; width: 1%">
+            &nbsp;
+        </div>
+        <div id="@(id)_main" class="ajaxPageLoader_main" style="float:left;width:73%;">
+        </div>
+    </div>
+}
+@helper Anchor(string text, string href, string title = null, string target = null)
+{
+    <a href="@href" title="@title" target="@target">@text</a>
+}
+@helper Button(string text, string onclick, string cls = null)
+{
+    <input type="button" value="@text" class="@cls" onclick="@onclick" />
+}
+@helper NavButton(string text, string url, string cls = null)
+{
+    @MyHelpers.Button(text, string.Format("location='{0}'", url), cls)
+}
+@helper SubmitButton(string text, string onclick = null, string cls = null)
+{
+    <input type="submit" value="@text" class="@cls" onclick="@onclick" />
+}
+@helper ResetButton(string text, string onclick = null, string cls = null)
+{
+    <input type="reset" value="@text" class="@cls" onclick="@onclick" />
+}
+@helper RadioButtonGroup(string name, Dictionary<string, string> options, string value = null, bool vertical = false)
+{
+    foreach (var option in options)
+    {
+        string id = string.Format("{0}-{1}", name, option.Key);
+        string check = value == option.Key ? "true" : null;
+    <input id="@id" type="radio" name="@name" value="@option.Key" checked="@check"/>
+    <label for="@id" class="checkbox">@option.Value</label>
+        if (vertical)
+        {
+    <br />
+        }
+    }
+}
+@helper Image(string src, string alt = "", string title = "", string style = "")
+{        
+    <img src="@src" alt="@alt" title="@title" style="@style" />        
+}
+@helper TableTdRow(string style, params object[] cells)
+{
+    <tr class="@style">
+        @foreach (var cell in cells)
+        {
+            <td>@cell
+            </td>
+        }
+    </tr>
+}
+@helper TableTdRecordRow(int recordId, string style, params object[] cells)
+{
+    <tr class="@style" data-record-id="@recordId">
+        @foreach (var cell in cells)
+        {
+            <td>@cell
+            </td>
+        }
+    </tr>
+}
+@helper TableThRow(string style, params object[] cells)
+{
+    <tr class="@style">
+        @foreach (var cell in cells)
+        {
+            <th>@cell
+            </th>
+        }
+    </tr>
+}
+@helper TableColumnGroup(bool lastColumn, params double[] percentageWidths)
+{
+    <colgroup>
+        @foreach (var width in percentageWidths)
+        {
+            <col style="width: @width%" />
+        }
+        @if (lastColumn)
+        {
+            <col />
+        }
+    </colgroup>
+}
+@helper TableColumnGroupStarWidth(params double[] starWidths)
+{
+    double sum = starWidths.Sum();
+    <colgroup>
+        @foreach (var width in starWidths)
+        {
+            <col style="width: @((width / sum * 100).ToString("0.##"))%" />
+        }
+    </colgroup>
+}
+
+@helper TableColumnGroupFixedWidth(params double[] widths)
+{
+    <colgroup>
+        @foreach (var width in widths)
+        {
+            <col style="width: @(width)px; min-width: @(width)px; max-width: @(width)px;" />
+        }
+    </colgroup>
+}
+
+@helper KeyValue(object key, object value)
+{
+    <div class="kv-div">
+        <span class="kv-key">@key</span><span class="kv-value">@value</span>
+    </div>
+}
+
+@helper PropertyTable(Dictionary<string, string> data, string id, double keyColumnPercentageWidth = 50, string tableStyle = null, string keyStyle = null, string valueStyle = null, string rowStyle1 = null, string rowStyle2 = null)
+{
+    <table id="@id" class="@tableStyle">
+        @TableColumnGroup(true, keyColumnPercentageWidth)
+        @{
+            int i = 0;
+        }
+        @foreach (var prop in data)
+        {
+            string rowStyle = i % 2 == 0 ? rowStyle1 : rowStyle2;
+            <tr class="@rowStyle">
+                <td class="@keyStyle">@prop.Key</td>
+                <td id="@(string.Format("{0}-{1}", id, prop.Key))" class="@valueStyle">@prop.Value</td>
+            </tr>
+            i++;
+        }
+    </table>
+}
+@helper ContrastTable(List<string> propNames, List<Tuple<string, Dictionary<string, string>>> data, Dictionary<string, string> propDisplayNames, Dictionary<string, string> propColors, string id, double keyColumnWidth = 200, double dataColumnWidth = 200, string tableStyle = null, string keyStyle = null, string headerStyle = null, string valueStyle = null, string rowStyle1 = null, string rowStyle2 = null)
+{
+    var widths = Enumerable.Repeat(dataColumnWidth, data.Count).ToList();
+    widths.Insert(0, keyColumnWidth);
+    int i = 0;
+    <table id="@id" class="@tableStyle">
+        @TableColumnGroupFixedWidth(widths.ToArray())
+        <tr class="@headerStyle">
+            <th></th>
+            @foreach (var datum in data)
+            {
+                <th>
+                    @datum.Item1
+                </th>
+            }
+        </tr>
+        @foreach (var prop in propNames)
+        {
+            string rowStyle = i % 2 == 0 ? rowStyle1 : rowStyle2;
+            string propColor = string.Empty;
+            string propDisplayName = prop;
+            if (propColors.ContainsKey(prop))
+            {
+                propColor = propColors[prop];
+            }
+            if (propDisplayNames.ContainsKey(prop))
+            {
+                propDisplayName = propDisplayNames[prop];
+            }
+            <tr class="@rowStyle">
+                <td style="background-color: @propColor" class="@keyStyle">@propDisplayName</td>
+                @foreach (var datum in data)
+                {
+                    <td class="@valueStyle">@(new HtmlString(datum.Item2[prop]))</td>
+                }
+            </tr>
+                i++;
+        }
+    </table>
+}
+@helper Silverlight(string source, string divID = "silverlightControlHost", string objectID = "slCtl", string width = "100%", string height = "600px", bool windowless = false, object initParams = null)
+{
+    <div id="@divID">
+        <object id="@objectID" data="data:application/x-silverlight-2," type="application/x-silverlight-2"
+            width="@width" height="@height">
+            <param name="source" value="@source" />
+            <param name="onError" value="onSilverlightError" />
+            <param name="onLoad" value="onSilverlightLoad" />
+            <param name="background" value="white" />
+            <param name="minRuntimeVersion" value="4.0.60310.0" />
+            <param name="autoUpgrade" value="true" />
+            <param name="quality" value="transparent" />
+            <param name="wmode" value="opaque" />
+            @if (windowless)
+            {
+                <param name="windowless" value="true" />
+            }
+            @if (initParams != null)
+            {
+                var props = initParams.GetType().GetProperties().Select(p => Tuple.Create(p.Name, p.GetValue(initParams, null))).ToArray();
+                var propStr = string.Join(",", props.Select(p => p.Item1 + "=" + p.Item2));
+                <param name="initParams" value="@propStr" />
+            }
+            <a href="http://go.microsoft.com/fwlink/?LinkID=149156&v=4.0.60310.0" style="text-decoration: none">
+                <img src="http://go.microsoft.com/fwlink/?LinkId=161376" alt="获取 Microsoft Silverlight"
+                    style="border-style: none" />
+            </a>
+        </object>
+        <iframe id="_sl_historyFrame" style="visibility: hidden; height: 0px; width: 0px; border: 0px"></iframe>
+    </div>
+}
+@using System.Globalization
+@helper MonthCalendar(DateTime date, Func<DateTime, IHtmlString> cellTemplate, string id = null, string tableStyle = null, string headerStyle = null, string rowStyle1 = null, string rowStyle2 = null)
+{
+    DateTime firstDayOfMonth = new DateTime(date.Year, date.Month, 1);
+    DayOfWeek firstDayOfWeek = firstDayOfMonth.DayOfWeek;
+    Calendar myCal = new GregorianCalendar(); //CultureInfo.InvariantCulture.Calendar;
+    int daysInMonth = myCal.GetDaysInMonth(date.Year, date.Month);
+    int startOffset = -(int)firstDayOfWeek;
+    DateTime startDay = myCal.AddDays(firstDayOfMonth, startOffset);
+    int daysInMonthCalendar = (daysInMonth + (-startOffset) > 35) ? 42 : (daysInMonth + (-startOffset) > 28) ? 35 : 28;
+
+    <table id="@id" class="@tableStyle">
+        @MyHelpers.TableColumnGroup(true, 14.2, 14.2, 14.2, 14.2, 14.2, 14.2)
+        <tr class="@headerStyle">
+            <th>星期日</th>
+            <th>星期一</th>
+            <th>星期二</th>
+            <th>星期三</th>
+            <th>星期四</th>
+            <th>星期五</th>
+            <th>星期六</th>
+        </tr>
+        @for (int i = 0; i < daysInMonthCalendar; i += 7)
+        {
+            string rowStyle = (i % 2 == 0) ? rowStyle1 : rowStyle2;
+            <tr class="@rowStyle">
+                @for (int j = 0; j < 7; j++)
+                {
+                    DateTime day = myCal.AddDays(startDay, i + j);
+                    <td title="@day.ToShortDateString()">
+                        <div>@day.Day</div>
+                        <div>@cellTemplate(day)</div>
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+}
+@helper WeekCalendar(DateTime date, Func<DateTime, IHtmlString> cellTemplate, string id = null, string tableStyle = null, string headerStyle = null, string rowStyle1 = null, string rowStyle2 = null)
+{
+    Calendar myCal = new GregorianCalendar();
+    DateTime firstDayOfWeek = myCal.AddDays(date, -(int)date.DayOfWeek);
+
+    <table id="@id" class="@tableStyle">
+        @MyHelpers.TableColumnGroup(true, 9, 13, 13, 13, 13, 13, 13)
+        <tr class="@headerStyle">
+            <th></th>
+            <th>星期日</th>
+            <th>星期一</th>
+            <th>星期二</th>
+            <th>星期三</th>
+            <th>星期四</th>
+            <th>星期五</th>
+            <th>星期六</th>
+        </tr>
+        @for (int i = 0; i < 24; i++)
+        {
+            string rowStyle = (i % 2 == 0) ? rowStyle1 : rowStyle2;
+            <tr class="@rowStyle">
+                <th>@i</th>
+                @for (int j = 0; j < 7; j++)
+                {
+                    DateTime day = myCal.AddDays(firstDayOfWeek, j);
+                    DateTime time = day.Date.AddHours(i);
+                    <td title="@day.ToShortDateString()">
+                        <div>@cellTemplate(time)</div>
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+}
+@helper GanttCalendar(DateTime startDate, DateTime endDate, List<string> tasks, Func<string, DateTime, IHtmlString> cellTemplate, string id = null, string tableStyle = null, string headerStyle = null, string colStyle0 = null, string colStyle1 = null, string colStyle2 = null)
+{
+    string[] dayChars = { "日", "一", "二", "三", "四", "五", "六" };
+    int week = 0;
+
+    <table id="@id" class="@tableStyle">
+        <colgroup>
+            <col class="@colStyle0" />
+            @for (DateTime d = startDate; d <= endDate; d = d.AddDays(1))
+            {
+                if (d.DayOfWeek == DayOfWeek.Sunday)
+                {
+                    week++;
+                }
+                string style = week % 2 == 0 ? colStyle1 : colStyle2;
+                <col class="@style" />
+            }
+        </colgroup>
+        <tr class="@headerStyle">
+            <th></th>
+            @for (DateTime d = startDate; d <= endDate; d = d.AddDays(1))
+            {
+                <th>@dayChars[(int)d.DayOfWeek]</th>
+            }
+        </tr>
+        <tr class="@headerStyle">
+            <th></th>
+            @for (DateTime d = startDate; d <= endDate; d = d.AddDays(1))
+            {
+                if (d.Day == 1)
+                {
+                <th>@d.Month 月</th>
+                }
+                else
+                {
+                <th>@d.Day</th>
+                }
+            }
+        </tr>
+        @foreach (var task in tasks)
+        {
+            <tr>
+                <td>@task</td>
+                @for (DateTime d = startDate; d <= endDate; d = d.AddDays(1))
+                {
+                    <td title="@d.ToShortDateString()">@cellTemplate(task, d)</td>
+                }
+            </tr>
+        }
+    </table>
+}
+
+@helper RatingBar(int rating, string param)
+{
+    <span data-rating-group="@param">
+        @for (int i = 0; i < 5; i++)
+        {
+            string cls = i < rating ? "rating-dot-on" : "rating-dot-off";
+            int newRating = i + 1;
+            <span onclick="tjRate('@param', @newRating)" class="@cls" title="@newRating"></span>
+        }
+    </span>
+}
+
+@helper RatingBarStyle()
+{
+    <style type="text/css">
+        .rating-dot-on {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            margin: 1px;
+            background-color: green;
+            cursor: pointer;
+        }
+
+        .rating-dot-off {
+            display: inline-block;
+            width: 9px;
+            height: 9px;
+            margin: 1px;
+            background-color: lightgray;
+            cursor: pointer;
+        }
+    </style>
+}
+
+@helper RatingBarScript(string url)
+{
+    <script type="text/javascript">
+        $.ajaxSetup({ cache: false });
+        var tjRate = function (param, rating) {
+            var group = $('span[data-rating-group=' + param + '] span');
+            var url = '@url/' + param + '?rating=' + rating;
+            $.get(url, function () {
+                group.each(function (i) {
+                    if (i < rating) {
+                        $(this).addClass('rating-dot-on');
+                        $(this).removeClass('rating-dot-off');
+                    } else {
+                        $(this).addClass('rating-dot-off');
+                        $(this).removeClass('rating-dot-on');
+                    }
+                });
+                if (tjRateCallback) {
+                    tjRateCallback(param);
+                }
+            });
+        };
+    </script>
+}
+
+@helper ExpandLink(object text, string content, string type = "id") // type=id|text|url，content 可以分别是id/text/url
+{
+    <span class="expand-link" data-expand-content="@content" data-expand-type="@type">@text</span>
+}
+
+@helper ExpandLinkStyle()
+{
+    <style type="text/css">
+        span.expand-link {
+            color: #CC3300;
+            text-decoration: underline;
+        }
+
+        div.expand-content {
+            display: none;
+        }
+
+        div#expand-container {
+            position: absolute;
+            border: 1px dashed gray;
+            background-color: whitesmoke;
+            padding: 10px;
+            max-width: 300px;
+        }
+    </style>
+}
+
+@helper ExpandLinkScript()
+{
+    <script type="text/javascript">
+        var expandContainerId = 'expand-container';
+
+        $(document).ready(function () {
+            $('<div>').attr('id', expandContainerId).appendTo('body').hide();
+            $('.expand-link').mouseover(function () {
+                var content = $(this).attr('data-expand-content');
+                var type = $(this).attr('data-expand-type');
+                var offset = $(this).offset();
+                if (type == 'id') {
+                    var html = $('#' + content).html();
+                    showExpandContainer(html, offset.top + 35, offset.left);
+                } else if (type == 'text') {
+                    var html = content;
+                    showExpandContainer(html, offset.top + 35, offset.left);
+                } else if (type == 'url') {
+                    $.ajaxSetup({ cache: false });
+                    $.get(content, function (html) {
+                        showExpandContainer(html, offset.top + 35, offset.left);
+                    });
+                }
+            });
+            $('.expand-link').mouseout(function () {
+                hideExpandContainer();
+            });
+        });
+
+        var showExpandContainer = function (html, top, left) {
+            $('#' + expandContainerId).html(html).css('top', top).css('left', left).show();
+        };
+
+        var hideExpandContainer = function () {
+            $('#' + expandContainerId).hide();
+        };
+    </script>
+}
+
+@helper MessagePopupScript(string checkUrl, string id)
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('<div>').attr('id', '@id').attr('class', 'message-popup').appendTo('body');
+            $.ajaxSetup({ cache: false });
+            var checkMessage = function () {
+                $.get('@checkUrl', function (messages) {
+                    var notificator = new tj.Notificator(messages, $('#@id'));
+                    notificator.showAll();
+                });
+            };
+            setInterval(checkMessage, 5000);
+            checkMessage();
+        });
+    </script>
+}

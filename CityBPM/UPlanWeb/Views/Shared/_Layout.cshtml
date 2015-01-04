@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>控规单元控制系统</title>
+    @Scripts.Render("~/bundles/jquery", "~/bundles/jqueryval", "~/bundles/tj")
+    @Styles.Render("~/Content/css")
+    @RenderSection("Styles", false)
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="title">
+                <h1>
+                    <a href="@Href("~")" style="color: White; text-decoration: none">
+                        <br />
+                        控规单元控制系统</a>
+                </h1>
+            </div>
+            @if (ViewBag.NoLogin != true)
+            {
+                <div class="loginDisplay">
+                    @Html.Partial("_LoginPartial")
+                </div>
+            }
+            <div class="clear hideSkiplink">
+            </div>
+        </div>
+        <div style="height: 34px; background-image: url(@Href("~/Images/toolbar.png"));
+            background-repeat: repeat-x;">
+        </div>
+        <div class="main">
+            @RenderSection("featured", required: false)
+            @RenderBody()
+        </div>
+        <div class="clear">
+            <br />
+            <br />
+        </div>
+    </div>
+    <div class="footer">
+        XX市规划局版权所有<br />
+        地址：XXXXXXXXXX 电话：XXXX-XXXXXXXX<br />
+        本站使用 CityGIS Web 网络地理信息系统建立<br />
+        技术支持：上海同城信息科技有限公司
+    </div>
+    <div id="destroy">
+    </div>
+    <div id="fixed-button" style="color: #FF9900; font-size: 15pt">
+        M
+    </div>
+    <div id="notif-history" class="display-none">
+        <div style="color: #FF9900; font-size: 18pt; border-bottom: 2px solid #FF9900">
+            消息中心
+        </div>
+        <div id="notif-history-list" style="overflow-y: auto; height: 240px">
+        </div>
+        <div id="notif-history-close" style="text-align: right; padding: 5px">
+            <a href="#" onclick="javascript:closeMessageHistory()" style="color: #FF9900">关闭</a>
+        </div>
+    </div>
+    <div id="dialog" class="display-none">
+        <div id="dialog-inner">
+            <div id="dialog-title" style="color: #CC3300; font-size: 15pt; border-bottom: 2px solid #CC3300; margin-bottom: 20px">
+                发送站内信
+            </div>
+            <div id="dialog-content" style="overflow-y: auto">
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $.ajaxSetup({ cache: false });
+            var checkMessage = function () {
+                $.get('@Href("~/Services/GetMessages")', function (messages) {
+                    var notificator = new tj.Notificator(messages, $('#destroy'));
+                    notificator.showAll();
+                });
+            }
+            setInterval(checkMessage, 5000);
+            checkMessage();
+
+            $('#fixed-button').mouseover(showMessageHistory);
+        });
+
+        var showMessageHistory = function () {
+            $("#notif-history").removeClass('display-none').stop(true).animate({ 'opacity': '1' }, 400);
+            $("#notif-history-list").load('@Href("~/Services/GetHistoryMessages")');
+        };
+
+        var closeMessageHistory = function () {
+            $("#notif-history").stop(true).animate({ 'opacity': '0' }, 400, function () {
+                $("#notif-history").addClass('display-none');
+            });
+        };
+
+        var showDialog = function (title, url) {
+            $("#dialog").removeClass('display-none');
+            $("#dialog-title").text(title);
+            $.ajaxSetup({ cache: false });
+            $("#dialog-content").load(url);
+        };
+
+        var hideDialog = function () {
+            $("#dialog").addClass('display-none');
+        };
+
+        var sendMail = function () {
+            showDialog('发送站内信', '@Href("~/SiteMail/DivNew")');
+        };
+
+        var send = function () {
+            var title = $('#title').val();
+            var sendto = $('#sendto').val();
+            var content = encodeURI($('#content').val());
+
+            if (title && content) {
+                $.ajaxSetup({ cache: false });
+                $.post('@Href("~/SiteMail/SendMail")', { title: title, sendto: sendto, content: content }, hideDialog);
+            }
+        };
+
+        var readMail = function (id, type) {
+            showDialog('站内信详情', '@Href("~/SiteMail/DivDetail")?id=' + id + '&type=' + type);
+        };
+
+        var replyMail = function (to) {
+            showDialog('发送站内信', '@Href("~/SiteMail/DivNew")?to=' + to);
+        };
+    </script>
+    @RenderSection("Scripts", false)
+</body>
+</html>

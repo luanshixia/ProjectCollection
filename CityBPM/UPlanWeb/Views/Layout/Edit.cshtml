@@ -1,0 +1,66 @@
+﻿@using TongJi.Web.Forms
+@model Layout
+
+@section Styles {
+    <style type="text/css">
+        form input[type=text], form select {
+            width: 800px;
+        }
+
+        form textarea {
+            width: 800px;
+            height: 250px;
+        }
+
+        form label {
+            vertical-align: top;
+        }
+    </style>
+}
+
+<h2>表单布局管理 - 编辑</h2>
+<p>编辑一个现有表单布局。</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    <div>
+        @Html.LabelFor(x => x.Name)
+        @Html.TextBoxFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Markup)
+        @Html.TextAreaFor(x => x.Markup)
+        @Html.ValidationMessageFor(x => x.Markup)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Style)
+        @Html.TextAreaFor(x => x.Style)
+        @Html.ValidationMessageFor(x => x.Style)
+    </div>
+    @Html.HiddenFor(x => x.CreateUser)
+    @Html.HiddenFor(x => x.CreateTime)
+    <div>
+        <input type="submit" value="保存" />
+        @MyHelpers.NavButton("取消", Url.Action("List"), "b2")
+    </div>
+}
+
+<h3>预览区</h3>
+<hr />
+<div id="form-preview">
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#Markup').change(function () {
+                $('#form-preview').html(this.value);
+            });
+            $('#Markup').change();
+        });
+    </script>
+}

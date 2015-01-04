@@ -1,0 +1,44 @@
+﻿<h2>启动流程</h2>
+<p>创建指定工作流的一个新的实例，并启动流程。</p>
+
+@{
+    List<TongJi.Web.Flow.FlowListItem> flows = ViewBag.FlowList;
+}
+
+<form action="" method="post">
+    @Html.ValidationSummary()
+    <fieldset>
+        <legend>启动流程</legend>
+        <div>
+            @Html.Label("id", "工作流")
+            <select id="id" name="id">
+                <option value="@Guid.Empty">-----------------------------------请选择流程业务 -----------------------------------</option>
+                @foreach (var group in flows.Select(x => x.Group).Distinct().OrderBy(x => x))
+                {
+                    var g = group;
+                    <optgroup label="@group" >@group </optgroup>
+                    foreach (var data in flows.Where(x => x.Group == g).OrderBy(x => x.FlowName))
+                    {
+                    <option value="@data.ID">@data.FlowName</option>
+                    }
+                }
+            </select>
+            @*@Html.DropDownList("id", TongJi.Web.Forms.FormManager.SelectList(flows.ToDictionary(x => x.ID, x => x.FlowName), null))*@
+        </div>
+        <div>
+            @Html.Label("number", "事项编号")
+            @Html.TextBox("number")
+        </div>
+        <div>
+            @Html.Label("name", "事项名称")
+            @Html.TextBox("name")
+        </div>
+        <div>
+            @Html.Label("comment", "事项备注")
+            @Html.TextBox("comment")
+        </div>
+    </fieldset>
+    <div>
+        <input type="submit" value="启动" />
+    </div>
+</form>

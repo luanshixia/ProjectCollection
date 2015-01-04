@@ -1,0 +1,33 @@
+﻿@model TongJi.Web.Security.RegisterModel
+
+<h2>用户管理 - 创建用户</h2>
+<p>创建一个新的用户账户。</p>
+<p>
+    @MyHelpers.NavButton("返回用户列表", Url.Action("List"))
+</p>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+
+    <fieldset>
+        <legend>创建用户</legend>
+        <div>
+            @Html.LabelFor(m => m.UserName)
+            @Html.TextBoxFor(m => m.UserName)
+            @Html.ValidationMessageFor(m => m.UserName)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.Password)
+            @Html.PasswordFor(m => m.Password)
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+        <div>
+            @Html.LabelFor(m => m.ConfirmPassword)
+            @Html.PasswordFor(m => m.ConfirmPassword)
+            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+        </div>
+        <input type="submit" value="创建" />
+    </fieldset>
+}

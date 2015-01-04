@@ -1,0 +1,103 @@
+﻿@model Dictionary<string, List<TongJi.Web.Flow.TodoListItem>>
+
+@section Styles {
+    <style type="text/css">
+        h3 {
+            font-weight: bold;
+            font-size: 15px;
+            color: #cc3300;
+        }
+
+        #search {
+            position: absolute;
+            top: 30px;
+            right: 10px;
+        }
+
+        #searchbox {
+            width: 300px;
+        }
+
+        #search-tip {
+            font-style: italic;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+}
+
+<h2>已结束经办事项
+</h2>
+<p>
+    这里是所有您曾经参与处理，并且已经完成的事项。
+</p>
+<p>
+    @MyHelpers.NavButton("待办事项", Url.Action("TodoList"))
+    @MyHelpers.NavButton("活动经办事项", Url.Action("ActiveDoneList"))
+    @MyHelpers.Button("已结束经办事项", "", "b2")
+    @MyHelpers.NavButton("本人操作历史", Url.Action("PersonAction"))
+</p>
+<div id="search">
+    <input id="searchbox" type="text" placeholder="键入以筛选" onkeyup="doFilter()" />
+    <div id="search-tip">事项编号/事项名称/流程名称/备注等</div>
+</div>
+@foreach (var group in Model)
+{
+    <div>
+        <h3>@group.Key</h3>
+        @{
+    var grid = new WebGrid(group.Value, canSort: false, canPage: false);
+        }
+        @grid.GetHtml(
+            columns: grid.Columns(
+                grid.Column("ID", "序号"),
+                grid.Column("InstNumber", "事项编号"),
+                grid.Column("InstName", "事项名称", format: @<a href="@Url.Action("FlowStepJump", new { id = item.InstID })">@item.InstName</a>),
+                grid.Column("FlowName", "流程名称"),
+                grid.Column("StartTime", "开始时间"),
+                grid.Column("EndTime", "结束时间"),
+                grid.Column("InstComment", "备注"),
+                grid.Column("", "操作", format: item => Operations(item))
+            ),
+            tableStyle: "t2", headerStyle: "header", rowStyle: "odd", alternatingRowStyle: "even"
+        )
+    </div>
+}
+
+@helper Operations(dynamic record)
+{
+    @: @Html.ActionLink("流程图", "FlowChart", new { id = record.InstID }) | @Html.ActionLink("追踪", "FlowTracking", new { id = record.InstID })
+}
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            tj.setTableColumnGroupStarWidth('table.t2', [1, 2, 3, 3, 2, 2, 2, 1.5]);
+        });
+
+        var filterRow = function (tr, str) {
+            str = str.toUpperCase();
+            if ($(tr.cells[1]).text().toUpperCase().indexOf(str) > -1 ||
+            $(tr.cells[2]).text().toUpperCase().indexOf(str) > -1 ||
+            $(tr.cells[3]).text().toUpperCase().indexOf(str) > -1 ||
+            $(tr.cells[6]).text().toUpperCase().indexOf(str) > -1) {
+                return true;
+            }
+            return false;
+        }
+
+        var filterTable = function (str) {
+            $('tr:not(:first)').each(function (i, tr) {
+                if (filterRow(tr, str)) {
+                    $(tr).fadeIn('fast');
+                } else {
+                    $(tr).fadeOut('fast');
+                }
+            });
+        }
+
+        var doFilter = function () {
+            filterTable($('#searchbox').val());
+        }
+    </script>
+}

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<TongJi.Web.Forms.FormInstance>
+
+@section Styles {
+    @MyHelpers.ExpandLinkStyle()
+}
+
+<h2>表单管理 - 表单实例列表</h2>
+<p>
+    查看或编辑表单实例信息。
+</p>
+<p>
+    @MyHelpers.NavButton("返回表单列表", Url.Action("List"))
+</p>
+<table>
+    @MyHelpers.TableColumnGroupStarWidth(1, 3, 1, 2, 1, 3, 1)
+    @MyHelpers.TableThRow("header", "ID", "所在表单", "流程实例", "时间", "用户", "数据", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in Model)
+    {
+        string style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, row.ID, row.FormID, row.FlowInstanceID, row.PostTime, row.Username, MyHelpers.ExpandLink(TongJi.Web.Forms.FormManager.StringSummary(row.Data, 40), row.Data, "text"), Operations(row))
+        i++;
+    }
+</table>
+
+@helper Operations(dynamic record)
+{
+    @: @Html.ActionLink("详情", "InstDetail", new { id = record.ID })
+}
+
+@section Scripts {
+    @MyHelpers.ExpandLinkScript()
+}

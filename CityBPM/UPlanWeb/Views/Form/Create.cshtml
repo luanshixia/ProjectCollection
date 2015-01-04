@@ -1,0 +1,79 @@
+﻿@using TongJi.Web.Forms
+@model Form
+@{
+    //Layout = "~/Views/Shared/_PartialLayout.cshtml";
+}
+
+@section Styles {
+    <style type="text/css">
+        form input[type=text], form select {
+            width: 800px;
+        }
+
+        form textarea {
+            width: 800px;
+            height: 250px;
+        }
+
+        form label {
+            vertical-align: top;
+        }
+    </style>
+}
+
+<h2>表单管理 - 创建</h2>
+<p>创建一个新的表单。</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    <div>
+        @Html.LabelFor(x => x.Name)
+        @Html.TextBoxFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Type)
+        @Html.DropDownListFor(x => x.Type, FormManager.SelectList(FormManager.FormTypes, null, false))
+        @Html.ValidationMessageFor(x => x.Type)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.DisplayType)
+        @Html.DropDownListFor(x => x.DisplayType, FormManager.SelectList(FormManager.DisplayTypes, null, true))
+        @Html.ValidationMessageFor(x => x.DisplayType)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Layout)
+        @Html.TextAreaFor(x => x.Layout)
+        @Html.ValidationMessageFor(x => x.Layout)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Style)
+        @Html.TextAreaFor(x => x.Style)
+        @Html.ValidationMessageFor(x => x.Style)
+    </div>
+    @Html.Hidden("CreateUser", WebSecurity.CurrentUserName)
+    @Html.Hidden("CreateTime", DateTime.Now)
+    <div>
+        <input type="submit" value="创建" />
+        @Html.ActionLink("取消", "List")
+    </div>
+}
+
+<h3>预览区</h3>
+<hr />
+<div id="form-preview">
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#Layout').change(function () {
+                $('#form-preview').html(this.value);
+            });
+        });
+    </script>
+}
+

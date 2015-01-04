@@ -1,0 +1,69 @@
+﻿@{
+    List<string> users = ViewBag.users;
+    List<string> roles = ViewBag.roles;
+    Dictionary<string, List<string>> roleUsers = ViewBag.roleUsers;
+}
+
+<h2>角色管理</h2>
+<p>创建角色，并管理角色中的用户。</p>
+
+<table>
+    @MyHelpers.TableColumnGroup(false, 30, 70)
+    @MyHelpers.TableThRow("header", "角色", "用户")
+    @{
+        int i = 1;
+    }
+    @foreach (var role in roleUsers)
+    {
+        var style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, role.Key, string.Join(", ", role.Value))
+        i++;
+    }
+</table>
+
+<section id="createRole">
+    @using (Html.BeginForm("NewRole", "User"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <fieldset>
+            <legend>创建角色</legend>
+            <div>输入角色名以创建。</div>
+            @Html.TextBox("roleName")
+            <input type="submit" value="创建" />
+        </fieldset>
+    }
+</section>
+
+<section id="addUserToRole">
+    @using (Html.BeginForm("AddUserToRole", "User"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <fieldset>
+            <legend>向角色添加用户</legend>
+            <div>选择用户名和角色。</div>
+            @Html.DropDownList("user", users.Select(x => new SelectListItem { Text = x, Value = x }).ToList())
+            @Html.DropDownList("role", roles.Select(x => new SelectListItem { Text = x, Value = x }).ToList())
+            <input type="submit" value="添加" />
+        </fieldset>
+    }
+</section>
+
+<section id="removeUserFromRole">
+    @using (Html.BeginForm("RemoveUserFromRole", "User"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary()
+
+        <fieldset>
+            <legend>从角色移除用户</legend>
+            <div>选择用户名和角色。</div>
+            @Html.DropDownList("user", users.Select(x => new SelectListItem { Text = x, Value = x }).ToList())
+            @Html.DropDownList("role", roles.Select(x => new SelectListItem { Text = x, Value = x }).ToList())
+            <input type="submit" value="移除" />
+        </fieldset>
+    }
+</section>

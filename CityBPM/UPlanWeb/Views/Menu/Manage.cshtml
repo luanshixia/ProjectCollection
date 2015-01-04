@@ -1,0 +1,124 @@
+﻿@model IEnumerable<TongJi.Web.Models.MenuItem>
+@{
+    int id = ViewBag.id;
+    string name = ViewBag.name;
+    int pid = ViewBag.pid;
+    string pname = ViewBag.pname;
+    TongJi.Web.Models.MenuItem record = ViewBag.record;
+}
+
+<h2>菜单管理</h2>
+<p>创建或编辑菜单项。</p>
+<p>
+    [当前菜单项] @name (ID=@id)<br />
+    [上级菜单项] @Html.ActionLink(pname, "Manage", new { id = pid }) (ID=@pid)
+</p>
+
+<table>
+    @MyHelpers.TableColumnGroupStarWidth(1, 3, 1, 3, 3, 1)
+    @MyHelpers.TableThRow("header", "ID", "名称", "类型", "动作", "图标", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in Model)
+    {
+        string style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, row.ID, Html.ActionLink(row.Name, "Manage", new { id = row.ID }), row.Type, row.Action, row.Icon,
+                MyHelpers.Anchor("删除", string.Format("javascript:tryDel('{0}')", row.ID))
+             )
+        i++;
+    }
+</table>
+
+@if (id > 0)
+{
+    using (Html.BeginForm("EditMenuItem", "Menu", new { id }))
+    {
+    @Html.ValidationSummary()
+    <fieldset>
+        <legend>编辑当前菜单项</legend>
+        <div>
+            @Html.Label("name", "名称")
+            @Html.TextBox("name", record.Name)
+        </div>
+        <div>
+            @Html.Label("type", "类型")
+            @Html.DropDownList("type", TongJi.Web.Forms.FormManager.SelectList(TongJi.Web.Models.MenuManager.MenuItemTypes, record.Type))
+        </div>
+        <div>
+            @Html.Label("action", "动作")
+            @Html.TextBox("action", record.Action)
+        </div>
+        <div>
+            @Html.Label("icon", "图标")
+            @Html.TextBox("icon", record.Icon)
+        </div>
+        <div>
+            @Html.Label("parentID", "上级")
+            @Html.DropDownList("parentID", TongJi.Web.Forms.FormManager.SelectList(TongJi.Web.Models.MenuManager.GetAllOtherMenuItemNames(id), record.ParentID))
+        </div>
+        <div>
+            @Html.Label("order", "顺序")
+            @Html.TextBox("order", record.Order)
+        </div>
+        <div>
+            @Html.Label("allowdRoles", "允许角色")
+            @Html.TextBox("allowedRoles", record.AllowedRoles)
+        </div>
+        <div>
+            @MyHelpers.SubmitButton("提交")
+        </div>
+    </fieldset>
+    }
+}
+
+@using (Html.BeginForm("NewMenuItem", "Menu"))
+{
+    @Html.ValidationSummary()
+    @Html.Hidden("parentID", id)
+    <fieldset>
+        <legend>新建下级菜单项</legend>
+        <div>
+            @Html.Label("name", "名称")
+            @Html.TextBox("name", "新菜单项")
+        </div>
+        <div>
+            @Html.Label("type", "类型")
+            @Html.DropDownList("type", TongJi.Web.Forms.FormManager.SelectList(TongJi.Web.Models.MenuManager.MenuItemTypes, null))
+        </div>
+        <div>
+            @Html.Label("action", "动作")
+            @Html.TextBox("action", "~/Home/Index")
+        </div>
+        <div>
+            @Html.Label("icon", "图标")
+            @Html.TextBox("icon")
+        </div>
+        <div>
+            @Html.Label("order", "顺序")
+            @Html.TextBox("order", 0)
+        </div>
+        <div>
+            @Html.Label("allowdRoles", "允许角色")
+            @Html.TextBox("allowedRoles", "*")
+        </div>
+        <div>
+            @MyHelpers.SubmitButton("提交")
+        </div>
+    </fieldset>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var confirmGoTo = function (msg, url) {
+            if (confirm(msg)) {
+                window.location = url;
+            }
+        };
+
+        var tryDel = function (id) {
+            confirmGoTo('确实要删除吗？', '@Url.Action("DeleteMenuItem")/' + id);
+        };
+    </script>
+}

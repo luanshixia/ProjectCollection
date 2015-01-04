@@ -1,0 +1,53 @@
+﻿@model IEnumerable<TongJi.Web.Forms.Layout>
+
+@section Styles {
+    @MyHelpers.ExpandLinkStyle()
+}
+
+<h2>表单布局管理 - 列表</h2>
+<p>创建、编辑、删除表单布局。</p>
+<p>
+    @MyHelpers.Button("新建表单布局", "openDialog('Create')")
+</p>
+<table>
+    @MyHelpers.TableColumnGroupStarWidth(3, 4, 2, 2, 1, 1)
+    @MyHelpers.TableThRow("header", "ID", "名称", "创建人", "创建时间", "详情", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in Model)
+    {
+        string style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, row.ID.ToString().ToUpper(), row.Name, row.CreateUser, row.CreateTime,
+            MyHelpers.ExpandLink("绑定的结点", "Hello", "text"),
+            Operations(row)
+        )
+        i++;
+    }
+</table>
+
+@helper Operations(TongJi.Web.Forms.Layout record)
+{
+    @: @Html.ActionLink("编辑", "Edit", new { id = record.ID }) | @MyHelpers.Anchor("删除", string.Format("javascript:tryDel('{0}')", record.ID))
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var confirmGoTo = function (msg, url) {
+            if (confirm(msg)) {
+                location = url;
+            }
+        };
+
+        var tryDel = function (id) {
+            confirmGoTo('确实要删除吗？', '@Url.Action("Delete")/' + id);
+        };
+
+        var openDialog = function (url) {
+            //showModalDialog(url);
+            location = url;
+        };
+    </script>
+    @MyHelpers.ExpandLinkScript()
+}

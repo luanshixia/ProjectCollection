@@ -1,0 +1,73 @@
+﻿@using TongJi.Web.Forms
+@model Field
+@{
+    //Layout = "~/Views/Shared/_PartialLayout.cshtml";
+    
+    string formID = ViewBag.FormID.ToString();
+}
+
+@section Styles {
+    <style type="text/css">
+        input[type=text], select {
+            width: 400px;
+        }
+
+        textarea {
+            width: 400px;
+            height: 250px;
+        }
+
+        label {
+            vertical-align: top;
+        }
+    </style>
+}
+
+<h2>表单管理 - 字段创建</h2>
+<p>创建一个新的表单字段。</p>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+    @Html.AntiForgeryToken()
+    @Html.Hidden("FormID", formID)
+    <div>
+        @Html.LabelFor(x => x.Name)
+        @Html.TextBoxFor(x => x.Name)
+        @Html.ValidationMessageFor(x => x.Name)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Description)
+        @Html.TextBoxFor(x => x.Description)
+        @Html.ValidationMessageFor(x => x.Description)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.DataType)
+        @Html.DropDownListFor(x => x.DataType, FormManager.SelectList(FormManager.DataTypes, null))
+        @Html.ValidationMessageFor(x => x.DataType)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Options)
+        @Html.TextBoxFor(x => x.Options)
+        @Html.ValidationMessageFor(x => x.Options)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Validation)
+        @Html.TextBoxFor(x => x.Validation)
+        @Html.ValidationMessageFor(x => x.Validation)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Order)
+        @Html.TextBoxFor(x => x.Order)
+        @Html.ValidationMessageFor(x => x.Order)
+    </div>
+    <div>
+        @Html.LabelFor(x => x.Style)
+        @Html.TextAreaFor(x => x.Style)
+        @Html.ValidationMessageFor(x => x.Style)
+    </div>
+    <div>
+        <input type="submit" value="创建" />
+        @MyHelpers.Button("取消", "location='" + Url.Action("FieldList", new { id = ViewBag.FormID }) + "'")
+    </div>
+}

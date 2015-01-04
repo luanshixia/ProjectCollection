@@ -1,0 +1,83 @@
+﻿@model TongJi.Web.CMS.File
+
+@section Styles {
+    <style type="text/css">
+        #card {
+            width: 400px;
+            padding: 10px;
+            background-color: lightgray;
+            margin-bottom: 10px;
+        }
+
+        #card-title {
+            font-size: large;
+            font-weight: bold;
+            margin-bottom: 20px;
+            border-bottom: 2px solid gray;
+        }
+
+        #upload-dialog {
+            display: none;
+        }
+
+        .kv-key {
+            display: inline-block;
+            font-weight: bold;
+            width: 100px;
+        }
+    </style>
+}
+
+<h2>文件</h2>
+<p>查看或编辑文件。</p>
+<div id="card">
+    @if (Model != null)
+    {
+        <div id="card-title">@Model.Name</div>
+        @MyHelpers.KeyValue("大小", TongJi.Web.CMS.FileManager.GetSizeString(Model.Size))
+        @MyHelpers.KeyValue("上传者", Model.PostUser)
+        @MyHelpers.KeyValue("上传时间", Model.PostTime)
+    }
+    else
+    {
+        <p>（等待上传文件）</p>
+    }
+</div>
+<p>
+    @MyHelpers.Button("上传文件", "upload()")
+    @MyHelpers.Button("删除文件", string.Format("tryDel('{0}')", ViewBag.id))
+    @MyHelpers.Button("返回前页", "history.back()")
+</p>
+<div id="upload-dialog">
+    @using (Html.BeginForm("Upload", "File", new { id = ViewBag.id }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.ValidationSummary()
+        <fieldset>
+            <legend>上传文件</legend>
+            <div>
+                @Html.Label("file", "文件")
+                <input type="file" name="file" />
+            </div>
+            <div>
+                @Html.Label("tags", "标签")
+                @Html.TextBox("tags")
+            </div>
+            <div>
+                @MyHelpers.SubmitButton("提交")
+            </div>
+        </fieldset>
+    }
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var upload = function () {
+            tj.showDialogDiv('上传文件', 'upload-dialog');
+        };
+
+        var tryDel = function (id) {
+            tj.confirmGoTo('确实要删除吗？', '@Url.Action("Delete")/' + id + '?returnUrl=@Request.RawUrl');
+        };
+    </script>
+}

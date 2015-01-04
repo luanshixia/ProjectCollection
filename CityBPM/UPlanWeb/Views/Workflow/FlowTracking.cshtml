@@ -1,0 +1,31 @@
+﻿@model IEnumerable<TongJi.Web.Flow.TrackBackListItem>
+@{
+    var grid = new WebGrid(Model, canPage: false, canSort: false);
+}
+<h2>流程追踪 - @ViewBag.inst.Name
+</h2>
+<p>
+    回溯流程执行过程中的每一个处理步骤。
+</p>
+<p>
+    @MyHelpers.NavButton("待办事项", Url.Action("TodoList"))
+    @MyHelpers.NavButton("活动经办事项", Url.Action("ActiveDoneList"))
+    @MyHelpers.NavButton("已结束经办事项", Url.Action("CompletedDoneList"))
+</p>
+<div>
+    @grid.GetHtml(
+        columns: grid.Columns(
+            grid.Column("ID", "序号"),
+            grid.Column("PerformTime", "操作时间"),
+            grid.Column("Performer", "操作人"),
+            grid.Column("FlowName", "流程"),
+            grid.Column("InstName", "实例"),
+            grid.Column("FromNodeName", "操作位置"),
+            grid.Column("ToNodeName", "流转到")
+        ),
+        tableStyle: "t2",
+        rowStyle: "odd",
+        alternatingRowStyle: "even",
+        headerStyle: "header"
+    )
+</div>

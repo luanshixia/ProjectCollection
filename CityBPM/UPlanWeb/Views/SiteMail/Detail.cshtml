@@ -1,0 +1,18 @@
+﻿@model TongJi.Web.Communication.SiteMail
+
+<h2>邮件详情：@Model.Title</h2>
+<p>@Model.SendTime 由 @Model.Sender 发给 @Model.Receiver</p>
+
+<div>
+    <div id="content" class="bottomMargin" style="overflow-y: auto; min-height: 200px">
+        @Html.Raw(Server.UrlDecode(Model.Content).Replace("\n", "<br />"))
+    </div>
+    <div class="bottomMargin">
+        @if (ViewBag.type == 1)
+        {
+            @MyHelpers.NavButton("回复", Url.Action("New", new { to = Model.Sender }))
+        }
+        @MyHelpers.NavButton("收件箱", Url.Action("ReceiveBox"), "b2")
+        @MyHelpers.NavButton("已发送", Url.Action("SendBox"), "b2")
+    </div>
+</div>

@@ -1,0 +1,41 @@
+﻿@model TongJi.Web.Forms.Form
+
+<h2>表单管理 - 字段列表</h2>
+<p>为指定的表单增加、编辑或删除字段。</p>
+<p>
+    @MyHelpers.NavButton("新建字段", Url.Action("FieldCreate", new { id = Model.ID }))
+    @MyHelpers.NavButton("返回表单列表", Url.Action("List"))
+</p>
+<table>
+    @MyHelpers.TableColumnGroupStarWidth(1, 3, 3, 2, 2, 1)
+    @MyHelpers.TableThRow("header", "ID", "名称", "描述", "数据类型", "顺序", "操作")
+    @{
+        int i = 1;
+    }
+    @foreach (var row in Model.Fields)
+    {
+        string style = i % 2 == 0 ? "even" : "odd";
+        @MyHelpers.TableTdRow(style, row.ID, row.Name, row.Description, row.DataType, row.Order, Operations(row))
+        i++;
+    }
+</table>
+
+@helper Operations(dynamic record)
+{
+    @: @Html.ActionLink("编辑", "FieldEdit", new { id = record.ID }) | @MyHelpers.Anchor("删除", string.Format("javascript:tryDel({0})", record.ID))
+}
+
+@section Scripts {
+    <script type="text/javascript">
+
+        var confirmGoTo = function (msg, url) {
+            if (confirm(msg)) {
+                location = url;
+            }
+        };
+
+        var tryDel = function (id) {
+            confirmGoTo('确实要删除吗？', '@Url.Action("FieldDelete")/' + id);
+        };
+    </script>
+}

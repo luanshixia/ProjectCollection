@@ -1,0 +1,7 @@
+﻿@helper FlowGoBack(int flowInstID)
+{
+    if (TongJi.Web.Flow.FlowInstanceManager.CanBack(flowInstID))
+    {
+    @MyHelpers.NavButton("流程回退", Href(string.Format("~/Workflow/FlowGoBack/{0}?returnUrl={1}", flowInstID, HttpUtility.UrlEncode(Href("~/Workflow/TodoList")))))
+    }
+}

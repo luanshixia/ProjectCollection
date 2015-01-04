@@ -1,0 +1,38 @@
+﻿@{
+    TongJi.Web.Flow.FlowNode node = ViewBag.node;
+}
+
+<h2>流程结点操作角色管理 - @node.Name
+</h2>
+<p>
+    修改流程结点操作角色。
+</p>
+<p>
+    @MyHelpers.NavButton("返回流程结点列表", Url.Action("NodeListOfFlow", new { id = node.WorkflowID }))
+</p>
+<div>
+    <form action="" method="post">
+        现已分配的角色：
+        <input type="text" value="@node.AllowedRoles" style="width:350px" disabled="disabled"/><br />
+        <select name="role">
+            @foreach (var r in ViewBag.roles)
+            {
+                <option value="@r">@r</option>
+            }
+        </select>
+        <input name="submit" type="submit" value="添加角色" />
+        <input name="submit" type="submit" value="删除角色" />
+        <br />
+        <br />
+        现已分配的用户：
+        <input type="text" value="@node.AllowedUsers" style="width:350px" disabled="disabled"/><br />
+        <select name="user">
+            @foreach (var u in ViewBag.users)
+            {
+                <option value="@u">@u</option>
+            }
+        </select>
+        <input name="submit" type="submit" value="添加用户" />
+        <input name="submit" type="submit" value="删除用户" />
+    </form>
+</div>
