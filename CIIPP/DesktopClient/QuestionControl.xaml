@@ -1,0 +1,27 @@
+﻿<UserControl x:Class="DesktopClient.QuestionControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="800" Width="800" Loaded="UserControl_Loaded">
+    
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFFFE3BA"/>
+            <GradientStop Color="#FFFDAF3E" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="{x:Static SystemColors.ControlBrushKey}" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="#FFFFE3BA"/>
+            <GradientStop Color="#FFFDAF3E" Offset="1"/>
+        </LinearGradientBrush>
+        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+    </UserControl.Resources>
+    
+    <StackPanel TextElement.FontSize="20" TextElement.FontFamily="Georgia,微软雅黑">
+        <TextBlock Text="{Binding Name}" />
+        <TextBlock Text="{Binding GroupName}" Foreground="Maroon" />
+        <TextBlock x:Name="tbQuestion" Text="{Binding English}" TextWrapping="Wrap" />
+        <ListBox x:Name="lstOptions" ItemsSource="{Binding Options}" DisplayMemberPath="English" Height="250" Margin="0,20,0,0" />
+    </StackPanel>
+</UserControl>

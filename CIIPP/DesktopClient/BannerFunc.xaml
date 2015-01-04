@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="DesktopClient.BannerFunc"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Height="160" Width="1024">
+    
+    <Grid Background="{StaticResource gray_banner}">
+        <Button x:Name="btnNav" Content="导航" Height="23" HorizontalAlignment="Left" Margin="31,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource magic_button}" Opacity="0" />
+        <Button x:Name="btnFunc" Content="功能" Height="23" HorizontalAlignment="Left" Margin="112,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource magic_button}" Background="Red" />
+        
+        <Grid Height="100" HorizontalAlignment="Left" Margin="112,48,0,0" Name="grid1" VerticalAlignment="Top" Width="800">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="文件" Foreground="Gray" />
+                <Button x:Name="btnNew" Content="新建一个城市文档" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnNew_Click" />
+                <Button x:Name="btnOpen" Content="打开一个城市文档" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnOpen_Click" />
+                <Button x:Name="btnSave" Content="保存对本文档的修改" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnSave_Click" />
+                <Button x:Name="btnSaveAs" Content="将本文档另存为..." Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnSaveAs_Click" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="项目" Foreground="Gray" />
+                <Button x:Name="btnNewProj" Content="创建一个新项目..." Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnNewProj_Click" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="3">
+                <TextBlock Text="帮助" Foreground="Gray" />
+                <Button x:Name="btnHelp" Content="使用说明" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnHelp_Click" />
+                <Button x:Name="btnAbout" Content="关于本程序" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnAbout_Click" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="工具" Foreground="Gray" />
+                <Button x:Name="btnFullscreen" Content="全屏演示(按Esc退出)" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnFullscreen_Click" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

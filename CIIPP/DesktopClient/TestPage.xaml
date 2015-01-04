@@ -1,0 +1,33 @@
+﻿<Page x:Class="DesktopClient.TestPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DesktopClient"
+      mc:Ignorable="d" 
+       d:DesignWidth="800"
+	Title="TestPage" Loaded="Page_Loaded" >
+
+    <StackPanel Background="#FFA3A1A1">
+        <local:Banner />
+        <local:YearwiseTable HorizontalAlignment="Left" Margin="37,41,0,0" x:Name="yearwiseTable1" VerticalAlignment="Top" />
+        <local:CoolListBox x:Name="testList" Height="200" Width="960">
+            <local:ThumbnailControl />
+            <local:ThumbnailControl />
+            <local:ThumbnailControl />
+            <local:ThumbnailControl />
+            <local:ThumbnailControl />
+            <local:ThumbnailControl />
+            <local:ThumbnailControl />
+            <!--<TextBlock Text="This is a text item. " FontSize="20" />-->
+        </local:CoolListBox>
+        <!--<local:NavPoints x:Name="NavBar" />-->
+        <local:PagerPresenter x:Name="pager" Height="300" />
+        <local:StackedChart Width="600">
+            <local:StackedChart.Effect>
+                <DropShadowEffect BlurRadius="10" ShadowDepth="3" />
+            </local:StackedChart.Effect>
+        </local:StackedChart>
+        <local:TileGridControl x:Name="tileGridControl1" Width="800" />
+    </StackPanel>
+</Page>

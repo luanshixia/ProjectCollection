@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="DesktopClient.Banner"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DesktopClient"
+             mc:Ignorable="d" 
+             Height="200" Width="1024">
+
+    <StackPanel>
+        <Grid x:Name="grid1" Height="160" Width="1024">
+            <Grid.Background>
+                <ImageBrush ImageSource="title.jpg" />
+            </Grid.Background>
+
+            <Button x:Name="btnNav" Content="导航" Height="23" HorizontalAlignment="Left" Margin="31,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource magic_button}" MouseEnter="btnNav_MouseEnter" />
+            <Button x:Name="btnFunc" Content="功能" Height="23" HorizontalAlignment="Left" Margin="112,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource magic_button}" MouseEnter="btnFunc_MouseEnter" />
+            <Button x:Name="btnProj" Content="项目" Height="23" HorizontalAlignment="Left" Margin="193,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource magic_button}" MouseEnter="btnProj_MouseEnter" />
+
+            <Popup x:Name="popNav" PlacementTarget="{Binding ElementName=grid1}" Placement="Relative" AllowsTransparency="True" PopupAnimation="Fade">
+                <local:BannerNav />
+            </Popup>
+
+            <Popup x:Name="popFunc" PlacementTarget="{Binding ElementName=grid1}" Placement="Relative" AllowsTransparency="True" PopupAnimation="Fade">
+                <local:BannerFunc />
+            </Popup>
+
+            <Popup x:Name="popProj" PlacementTarget="{Binding ElementName=grid1}" Placement="Relative" AllowsTransparency="True" PopupAnimation="Fade">
+                <local:BannerProj />
+            </Popup>
+
+        </Grid>
+
+        <Grid Background="{StaticResource orange_banner}" Height="40">
+            <StackPanel Orientation="Horizontal">
+                <Border Background="{StaticResource orange_banner_0}">
+                    <TextBlock x:Name="tbTitle0" Text="测试" FontSize="16" FontWeight="Bold" Margin="30,0" VerticalAlignment="Center" Foreground="White">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="Black" />
+                    </TextBlock.Effect>
+                    </TextBlock>
+                </Border>
+                
+                <Border Width="10">
+                    <Border.Background>
+                        <ImageBrush ImageSource="Resources/caption_splitter.png" />
+                    </Border.Background>
+                </Border>
+                
+                <TextBlock x:Name="tbTitle" Text="" FontSize="16" FontWeight="Bold" Margin="30,10" Foreground="White">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="2" Color="Black" />
+                    </TextBlock.Effect>
+                </TextBlock>
+            </StackPanel>
+
+            <local:ImageButton NormalImage="Resources/home_button.png" HoverImage="Resources/home_button_hover.png" DownImage="Resources/home_button_down.png"  Height="24" HorizontalAlignment="Right" Margin="0,9,34,0" VerticalAlignment="Top" Width="30" Click="ImageButton_Click" ToolTip="首页"/>
+            <local:ImageButton NormalImage="Resources/fullscreen_button.png" HoverImage="Resources/fullscreen_button_hover.png" DownImage="Resources/fullscreen_button_down.png"  Height="24" HorizontalAlignment="Right" Margin="0,9,70,0" VerticalAlignment="Top" Width="30" Click="ImageButton_Click_1" ToolTip="全屏"/>
+        </Grid>
+    </StackPanel>
+</UserControl>

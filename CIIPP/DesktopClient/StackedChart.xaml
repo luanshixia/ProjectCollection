@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="DesktopClient.StackedChart"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="600" Height="400" Width="600" Background="White">
+    
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="gradient" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="White" Offset="0.5" />
+            <GradientStop Color="Silver" Offset="1.2" />
+        </LinearGradientBrush>
+    </UserControl.Resources>
+    
+    <DockPanel>
+        <TextBlock x:Name="txtTitle" Text="X.X 图表" DockPanel.Dock="Top" HorizontalAlignment="Center" Margin="20" FontWeight="Bold" FontSize="14" />
+        <Border DockPanel.Dock="Right" VerticalAlignment="Center" Margin="10" BorderBrush="Silver" BorderThickness="0.5">
+            <Border.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="White"/>
+                    <GradientStop Color="Silver" Offset="1.2"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel x:Name="Legend" Width="80" Margin="10" />
+        </Border>
+        <Canvas x:Name="ChartArea" />
+    </DockPanel>
+</UserControl>

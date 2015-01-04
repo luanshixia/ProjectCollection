@@ -1,0 +1,68 @@
+﻿<Page x:Class="DesktopClient.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="1024"
+	Title="MainPage">
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" Padding="20,90,20,30" Background="Orange">
+            <TextBlock Name="TxtTitle" FontFamily="Myriad Pro" FontSize="20" Foreground="Black" FontStyle="Normal" TextAlignment="Left">
+                <Run Text="Cities Development Initiative for Asia (CDIA)" FontWeight="Bold" />
+                <LineBreak />
+                <Run Text="Project Programming &amp; Prioritisation Toolkit" FontSize="16" />
+            </TextBlock>
+        </Border>
+
+        <Grid Background="DarkGray">
+            <StackPanel Width="352" Background="DimGray" Margin="651,27,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                <TextBlock Text="国家" Padding="5" Foreground="White" FontStyle="Normal" />
+                <TextBox x:Name="txtCountry" Text="中国" Background="GreenYellow" LostFocus="txtCountry_LostFocus"/>
+                <TextBlock Text="城市" Padding="5" Foreground="White" FontStyle="Normal"/>
+                <TextBox x:Name="txtCity" Text="上海" Background="GreenYellow" LostFocus="txtCity_LostFocus"/>
+                <TextBlock Text="发展愿景" Padding="5" Foreground="White" FontStyle="Normal"/>
+                <TextBox x:Name="txtIntro" Text="" Background="GreenYellow" Height="200" LostFocus="txtIntro_LostFocus" AcceptsReturn="True" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto"/>
+            </StackPanel>
+
+            <StackPanel Width="200" Background="GreenYellow" Margin="21,27,0,0" VerticalAlignment="Top" HorizontalAlignment="Left">
+                <TextBlock Text="前往" Padding="5" Foreground="White" Background="DimGray" />
+                <Button x:Name="BtnCityAssess" Content="城市评估" Width="120" Click="CityAssess_Click" Margin="5" />
+                <Button x:Name="BtnFinancialAssess" Content="财力评估" Width="120" Click="FinancialAssess_Click" Margin="5" />
+                <Button x:Name="BtnSummaarizeTable" Content="总结表单" Width="120" Click="SummaarizeTable_Click" Margin="5" />
+                <Button x:Name="BtnGroupTable" Content="分类汇总" Width="120" Click="BtnGroupTable_Click" Margin="5" />
+                <Button x:Name="BtnAddProject" Content="优先投资规划(PIP)" Width="120" Click="AddProject_Click" Margin="5" />
+            </StackPanel>
+
+            <StackPanel Width="200" Background="GreenYellow" Margin="21,226,0,0" HorizontalAlignment="Left" Height="122" VerticalAlignment="Top">
+                <TextBlock Text="全局设定" Padding="5" Foreground="White" Background="DimGray" />
+                <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                    <TextBlock Text="货币种类" FontSize="12" TextAlignment="Center" Margin="5"/>
+                    <ComboBox Name="comboBox1" Height="22" Width="132" SelectedIndex="{Binding Currency}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="计量单位" FontSize="12" TextAlignment="Center" Margin="5"/>
+                    <ComboBox Name="comboBox2" Height="22" Width="132" SelectedIndex="{Binding Multiple}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="当前年份" FontSize="12" TextAlignment="Center" Margin="5"/>
+                    <TextBox Width="132" Height="22" Text="{Binding C02}"/>
+                </StackPanel>
+            </StackPanel>
+
+            <DockPanel Background="GreenYellow" Height="321" Margin="244,27,0,0" HorizontalAlignment="Left" Width="385" VerticalAlignment="Top">
+                <TextBlock Text="项目" Padding="5" Foreground="White" FontStyle="Normal" DockPanel.Dock="Top" Background="DimGray"/>
+                <StackPanel Orientation="Horizontal" Margin="10,10,10,5" DockPanel.Dock="Top">
+                    <Button x:Name="btnNewProj" Width="50" Content="新建" Click="btnNewProj_Click" />
+                    <Button x:Name="btnViewProj" Width="50" Content="查看" Click="btnViewProj_Click" />
+                    <Button x:Name="btnDelProj" Width="50" Content="删除" Click="btnDelProj_Click" />
+                </StackPanel>
+                <ListBox x:Name="listProjects" Margin="10,0,10,10" MouseDoubleClick="listProjects_MouseDoubleClick">
+
+                </ListBox>
+            </DockPanel>
+
+        </Grid>
+    </DockPanel>
+</Page>

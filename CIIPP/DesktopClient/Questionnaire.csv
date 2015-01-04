@@ -1,0 +1,228 @@
+CQ01,A,信用评级,当地政府是否拥有国际信用评级机构（标准普尔、穆迪、惠誉或相关附属公司）提供的信用评级或银行提供的内部风险评估？,Does the local government have credit rating by international credit rating agency (Standard & Poor，Moody’s，Fitch or affiliate) or internal risk assessment by banks?
+,0,,,The local government has no credit rating or the local government has risk rating (BB，B or C) rating 
+,2,,,The local government has a moderate (BBB) rating
+,3,,,The local government has a safe  (AAA，AA，A) rating
+,1,,,Rating by local/national bank
+CQ02,B,资本预算,当地政府运用那种资本预算方法,Capital Budgeting 
+,0,,,Annual bugeting 
+,1,,,Partial multi-year budgeting
+,2,,,Multi-Year Capital Investment Plans are available on project basis
+CQ03,C,当地财政收入的征收能力（服务费、关税、税收等）,什么是征管效率：=所征缴收入/应征缴收入总额？,What is the  efficiency  of revenue collection?
+,0,,,<75%
+,1,,,75-90%
+,2,,,>90%
+CQ04,C,当地财政收入的征收能力（服务费、关税、税收等）,如无确切数据：当地政府收入征管能力的发展状况如何？,If no exact figure is available，How well developed is the collection capacity of local government
+,0,,,Capacity to collect local revenues needs significant improvement
+,1,,,Capacity to collect local revenues could be improved
+,2,,,Capacity to collect local revenues functions is optimal
+CQ05,D,法律和行政框架质量,法律法规在形成有效的行政框架方面起到什么作用？,To what degree do legal and financial regulations create an efficient and effective administrative framework for revenue collection and expenditure
+,0,,,Basic financial procedures and control mechanism are in place 
+,1,,,The system works with reasonable efficiency 
+,2,,,Financial procedures and control mechanism are well developed
+CQ06,E,信息技术能力,信息技术利用在当地政府发挥的作用,How important is the use of Information Technology in the local government
+,0,,,IT skills of staff and availability of computers are limited
+,1,,,Computers are available and staff have basic level of IT skills 
+,2,,,Computers are widely available and IT skills of staff are well developed
+,3,,,Advanced IT system used in budgetary，financial and strategic management
+CQ07,F,工作人员的能力, 财务和内部审计部门员工的能力如何,What is the capacity of staff in financial and internal audit divisions，also in terms of capacity to undertake multi-year budgeting
+,0,,,Too few in number and limited skill set
+,1,,,Adequate in number but skills need to be improved
+,2,,,Adequate and sufficiently skilled people，including qualified accounting staff
+PQ01,A,Purpose of the Project/ 项目目的,处理这个问题的现有服务处于什么状况,What is the status of the existing services dealing with the problem 
+,1,,现有设施负担过重。需要额外设施。,
+,2,,设施可用，但服务不属最优之列（有待改善或扩展）,
+,3,,目前没有处理该问题的设施,
+PQ02,B,Purpose of the Project/ 项目目的,新设施服务人数占所在地区人口总数的百分比约为多少,What is a rough estimation of the population served by the new facility within the project catchment area
+,1,,<25% ,
+,2,,25%-50% ,
+,3,,>50% ,
+PQ03,C,Purpose of the Project/ 项目目的,与城市发展计划下提议的其他项目相比，该项目处于什么优先级别,What is the priority of this project compared to other proposed projects according to city development goals
+,0,,低优先级,
+,1,,优先项目,
+,2,,高优先级,
+,3,,最高优先级,
+PQ04,D,Purpose of the Project/ 项目目的,项目对实现地区发展目标有什么贡献,What is the contribution of the project to regional development goals
+,0,,没有贡献,
+,1,,间接贡献,
+,2,,直接贡献,
+,3,,对实现关键发展目标具有重大贡献,
+PQ05,E,Purpose of the Project/ 项目目的,推迟项目将在市民健康、财产、安全、繁荣等方面产生什么影响,What are the consequences of deferring the project in terms of citizens’ health，safety，property，prosperity etc.
+,0,,无不良影响,
+,1,,次要的不良影响,
+,2,,重大的未来不良影响,
+,3,,重大的直接不良影响,
+PQ06,F,Purpose of the Project/ 项目目的,项目在更广泛的服务提供系统中是否填补空白,Does the project fill in a gap in a wider system of service delivery
+,0,,与其他设施无关,
+,1,,其他设施将长期受益于该项目,
+,2,,其他设施将立即受益于该项目,
+,3,,其他设施依赖该项目,
+PQ07,A,Public Response/ 公众反应,项目在当地是否有“拥护者”（拥护该项目的人）,Does the project have a local 'champion'  or where did the project idea originate from
+,1,,社区发起者,
+,2,,城市管理部门内部发起者,
+,3,,市领导发起者,
+,3,,市级以上部门发起者,
+PQ08,B,Public Response/ 公众反应,项目是否获得当地或更广泛的政治支持,Is the project likley to get support from municipal leadership 
+,0,,零星支持者,
+,1,,少数支持,
+,2,,多数支持,
+,3,,绝大多数支持,
+PQ09,C,Public Response/ 公众反应,项目是否获得城市管理部门的支持,Is the project likely to get approval from related sectors/other deaprtments
+,0,,零星支持者,
+,1,,少数支持,
+,2,,多数支持,
+,3,,绝大多数支持,
+PQ10,D,Public Response/ 公众反应,是否有非政府组织、社会团体、网络组织、媒体或商业机构支持或反对该项目, What is the response to the project from NGO’s，community groups，network organisations，media or business organizations
+,0,,零星支持者,
+,1,,少数支持,
+,2,,多数支持,
+,3,,绝大多数支持,
+PQ11,E,Public Response/ 公众反应,是否有来自新设施周边地区居民的支持或反对意见,Is there support or opposition from residents in the immediate vicinity of the new facility  
+,0,,零星支持者,
+,1,,少数支持,
+,2,,多数支持,
+,3,,绝大多数支持,
+PQ12,F,Public Response/ 公众反应,是否就该项目与市民代表进行过任何形式的公众 /社区咨询,Has there been any form of public/community consultation on this project
+,0,,尚未进行，项目理念仍在完善中,
+,1,,未进行正式咨询，但公众已知情,
+,2,,计划已提交社区代表，以获得相关信息,
+,3,,社区组织积极参与制订计划,
+PQ13,G,Public Response/ 公众反应,项目是否涉及重新安置社区住户和/或企业,Does the project involve resettlement of communities households and/or businesses
+,-2,,是的，大规模（>100户须搬迁）,
+,-1,,是的，小规模（50 -100户）住户须搬迁,
+,0,,涉及少于10户居民的搬迁和/或物业边界的重新协商,
+,1,,不涉及搬迁,
+PQ14,H,Public Response/ 公众反应,公众或私营企业是否愿意贡献自身资源（资金或劳动力）,Will private enterprises be willing to invest and/or people ready to contribute their own resources (money or labour)
+,0,,未准备做出贡献,
+,1,,需要额外努力以调动资源,
+,2,,有意向时准备做出贡献,
+,3,,已承诺做出贡献,
+PQ15,A,Environmental Impact of Project/环境影响,是否会直接影响当地环境质量，例如空气或水污染物、废弃物等,Are there direct effects to the quality of the local environment，e.g. air or water pollutants，waste，etc.
+,-2,,对当地环境质量有显著的直接负面影响,
+,-1,,对当地环境质量有直接负面影响,
+,0,,没有影响,
+,2,,对当地环境质量有一定的直接正面影响,
+,3,,对当地环境质量有显著的直接正面影响,
+PQ16,B,Environmental Impact of Project/环境影响,该项目是否有利于长期可持续发展，例如可再生能源、洁净水供应、回收利用等,Does the project contribute towards long term sustainable development，e.g. renewable energy，clean water supply，waste treatment，recycling，etc.
+,-1,,不利于长期可持续发展,
+,1,,对长期可持续发展没有影响,
+,2,,对长期可持续发展有一定贡献,
+,3,,对长期可持续发展有重大贡献,
+PQ17,C,Environmental Impact of Project/环境影响,是否有具体的健康效益（尤其对当地而言）,Are there any specific public health benefits，especially at local level?
+,-2,,对总体健康状况有显著的负面影响,
+,-1,,对总体健康状况有负面影响,
+,1,,没有影响,
+,2,,对总体健康状况有一定的积极影响 ,
+,3,,对总体健康状况有重大益处，因为当地生活状况得到改善,
+PQ18,D,Environmental Impact of Project/环境影响,是否能够减轻环境危害或减少人类脆弱性,Is this project an example for climate change adaptation (reduce impact of environmental hazards or reduce human vulnerability)
+,-1,,项目位于环境承受力脆弱的地点，但未纳入缓解措施,
+,1,,不相关,
+,2,,项目纳入缓解措施,
+,3,,项目旨在减轻环境危害,
+PQ19,E,Environmental Impact of Project/环境影响,项目是否有助于减轻气候变化（减少环境有害物质的产生或者减少温室气体的排放）,Does the project contribute to mitigation of climate change (reduce occurrence of environmental hazards or curtail greenhouse gas emissions)
+,-1,,新设施会增加温室气体排放,
+,1,,不相关,
+,2,,新设施在一定程度上会减少温室气体排放,
+,3,,新设施将显著减少温室气体排放,
+PQ20,F,Environmental Impact of Project/环境影响,是否有益于城市自然空间质量，例如公园、绿色植物、露天场所等,Are there any benefits to the quality of public spaces in the city，e.g. parks，green infrastructure，water bodies，boulevards，public squares，open spaces，etc.
+,-1,,对自然空间的质量有负面影响,
+,1,,没有影响,
+,2,,对自然空间的质量有一定益处,
+,3,,对自然空间的质量有重大益处,
+PQ21,A,Socio-Economic Impact of Project/社会经济影响,预计项目对当地经济发展产生什么直接影响,What is the expected impact of the project on the development of the local economy  
+,-1,,当地商业 /工业实体减少,
+,0,,没有（重大）影响,
+,1,,小企业数量小幅增加、规模略有扩大,
+,2,,小企业数量大幅增加、规模大幅扩大,
+,3,,可能吸引新的大型商业 /工业实体迁入,
+PQ22,B,Socio-Economic Impact of Project/社会经济影响,是否有间接的长期经济效益，例如提升土地/财产价格、减少市民支出等,Are there indirect economic benefits from this project in the long term，e.g. employment created，investment generated，increase in land/property prices，reduction to citizens expenditures，etc.
+,-1,,对当地经济有负面影响,
+,0,,对长期经济发展有极少好处或没有好处,
+,1,,产生下游业务，可能会给市民带来经济效益和价值转移,
+,2,,该地区获得额外投资，增加市民财富,
+,3,,为产业带来显著竞争优势，促进当地经济发展,
+PQ23,C,Socio-Economic Impact of Project/社会经济影响,项目是否利用当地可用资源,Does the project make use of locally available resources
+,0,,多数材料和劳动力将需从外部引进,
+,1,,所有劳动力均可在当地招聘，但部分材料必须从外部引进,
+,2,,所有材料均可在本地采购，但部分劳动力必须从外部引进,
+,3,,所有材料和劳动力均将在当地得到解决,
+PQ24,D,Socio-Economic Impact of Project/社会经济影响,项目是否能为经济贫困地区带来改善,Does the project bring improvements to economically distressed areas
+,0,,没有效果/没有显著效果,
+,1,,没有具体目标，但对生活质量有积极影响,
+,2,,没有具体目标，但对投资有积极影响,
+,3,,特别针对经济贫困地区,
+PQ25,E,Socio-Economic Impact of Project/社会经济影响,项目是否以低收入群体为对象,Does the project target lower income groups
+,0,,新设施不惠及低收入群体,
+,1,,没有具体益贫重点，但会提高低收入群体的生活质量,
+,2,,没有具体益贫重点，但会增加低收入群体的就业机会,
+,3,,该项目专门针对低收入阶层,
+PQ26,F,Socio-Economic Impact of Project/社会经济影响,需要缴费的人员是否能够负担提议的费用,Are the proposed charges affordable for those who need to pay them
+,0,,中等收入群体能够负担提议的费用,
+,1,,中低收入群体能够负担提议的费用,
+,2,,贫困人口能够负担提议的费用,
+,3,,使用设施不收费,
+PQ27,G,Socio-Economic Impact of Project/社会经济影响,项目是否有助于构建和谐社会,Does the project contribute to a more harmonious society
+,-1,,不，该项目将会把某些群体排除在外,
+,0,,没有影响,
+,2,,是的，该项目将惠及大多数群体,
+PQ28,H,Socio-Economic Impact of Project/社会经济影响,项目是否有助于建设更具活力的城市中心,Does the project contribute to revitalisation of an urban district 
+,0,,没有效果/没有显著效果,
+,1,,没有具体重点，但对市中心居民生活质量有积极影响,
+,2,,没有具体重点，但会为市中心带来一些投资,
+,3,,专门针对振兴城市中心,
+PQ29,I,Socio-Economic Impact of Project/社会经济影响,项目是否有助于提升市民的城市自豪感,Does the project make citizens feel more proud of their city  
+,0,,没有影响,
+,1,,是的,
+,3,,是的，非常有助,
+PQ30,A,Feasibility of Project Implementation / 项目实施的可行性,当地政府的项目预算是否已落实资金保障,Has funding been secured/allocated within the local government budget for this project
+,0,,当地政府预算未对该项目分配资金,
+,1,,不需要，所有费用均由国家 /地区预算承担,
+,2,,是的，当地政府预算将承担项目部分费用,
+,3,,是的，当地政府预算将承担项目全部费用,
+PQ31,B,Feasibility of Project Implementation / 项目实施的可行性,资金是否通过外部融资渠道得到保障，以及/或者是否有外部融资潜力,Have external sources of funding been secured
+,0,,无需外部融资来源,
+,1,,有可能获得国家/地区拨款,
+,1,,有可能获得优惠贷款,
+,2,,有可能获得私营部门投资,
+,3,,已获得国家/地区拨款,
+,3,,已获得优惠贷款,
+,3,, 私营部门已承诺提供资金承诺,
+PQ32,C,Feasibility of Project Implementation / 项目实施的可行性,项目能否带来直接收入,Will the project bring in direct revenue
+,0,,没有直接收入,
+,1,,直接收入可忽略不计,
+,2,,收入能够承担运营和维护成本,
+,3,,收入超过运营和维护成本,
+PQ33,D,Feasibility of Project Implementation / 项目实施的可行性,项目能否带来间接收入,Will the project generate revenue indirectly (increase in local tax base)
+,0,,无间接收入,
+,1,,较少（当地税基至多增加4％）,
+,2,,中度（当地税基增加5-7％）,
+,3,,显著（当地税基增加>8％）,
+PQ34,E,Feasibility of Project Implementation / 项目实施的可行性,项目是否降低目前的预算成本,Will the project decrease current budget costs
+,-1,,增加现有成本,
+,0,,无成本节约,
+,1,,长期节约成本,
+,2,,立即节约成本,
+PQ35,F,Feasibility of Project Implementation / 项目实施的可行性,提议费用征收系统的合理程度,To what extent is the system in place for collecting the proposed charges so they will actually be paid
+,1,,将征收<60％的费用,
+,2,,将征收60-90％的费用,
+,3,,将征收>90％的费用,
+,0,,该设施不收费,
+PQ36,G,Feasibility of Project Implementation / 项目实施的可行性,确保项目实施和运营的有力制度是否到位，或者是否需要外部支持,Is there a capable system in place to implement and operate this project or is external support needed
+,0,,建设施工和运营维护需要外部专业知识,
+,1,,仅建设施工阶段需要外部专业知识,
+,2,,筹备阶段（即可行性研究）需要外部专业知识,
+,3,,不需要外部专业知识,
+PQ37,H,Feasibility of Project Implementation / 项目实施的可行性,金融/经济因素是否会对项目的完成/可持续性构成风险,Could financial/economic factors (incl. land acquisition) pose a risk to this project's completion/sustainability
+,-1,,高风险,
+,0,,中等风险,
+,1,,低风险,
+,3,,无风险,
+PQ38,I,Feasibility of Project Implementation / 项目实施的可行性,政治因素是否会对项目的完成构成风险,Could political factors pose a risk to this project's completion/sustainability
+,-1,,高风险,
+,0,,中等风险,
+,1,,低风险,
+,3,,无风险,
+PQ39,J,Feasibility of Project Implementation / 项目实施的可行性,如果存在风险，项目设计是否包括风险缓解策略,If there is risk，does the project design include a risk mitigation strategy
+,-1,,尚未制定策略,
+,0,,正在制定策略,
+,2,,是的，已制定策略,
+,3,,无风险,

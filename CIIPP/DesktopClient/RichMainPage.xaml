@@ -1,0 +1,16 @@
+﻿<Page x:Class="DesktopClient.RichMainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DesktopClient"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
+	Title="RichMainPage" Loaded="Page_Loaded">
+
+    <DockPanel>
+        <local:Banner DockPanel.Dock="Top" Caption0="CIIPP" Caption="首页" />
+
+        <local:PagerPresenter x:Name="Pager" />
+    </DockPanel>
+</Page>

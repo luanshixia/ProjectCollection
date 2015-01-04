@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="DesktopClient.BannerNav"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             Height="300" Width="1024">
+    
+    <Grid Background="{StaticResource gray_banner}">
+        <Button x:Name="btnNav" Content="导航" Height="23" HorizontalAlignment="Left" Margin="31,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource magic_button}" Background="Red" />
+        <Button x:Name="btnFunc" Content="功能" Height="23" HorizontalAlignment="Left" Margin="112,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource magic_button}" Opacity="0" />
+
+        <Button x:Name="btnBack" Content="后退" Height="23" HorizontalAlignment="Left" Margin="336,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource menu_button}" Click="btnBack_Click" />
+        <Button x:Name="btnForward" Content="前进" Height="23" HorizontalAlignment="Left" Margin="417,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource menu_button}" Click="btnForward_Click" />
+        <Button x:Name="btnHome" Content="首页" Height="23" HorizontalAlignment="Left" Margin="498,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource menu_button}" Click="btnHome_Click" />
+        <Button x:Name="btnRefresh" Content="刷新" Height="23" HorizontalAlignment="Left" Margin="579,12,0,0" VerticalAlignment="Top" Width="75" Style="{StaticResource menu_button}" Click="btnRefresh_Click" />
+
+        <Grid HorizontalAlignment="Left" Margin="112,48,0,0" Name="grid1" VerticalAlignment="Top" Width="800">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+                <TextBlock Text="城市与财力评估" Foreground="Gray" />
+                <Button x:Name="btnA1" Content="当地政府收入" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA1_Click" />
+                <Button x:Name="btnA2" Content="当地政府支出" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA2_Click" />
+                <Button x:Name="btnA3" Content="当地政府资产" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA3_Click" />
+                <Button x:Name="btnA4" Content="当地政府债务" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA4_Click" />
+                <Button x:Name="btnA5" Content="城市问卷" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA5_Click" />
+                <Button x:Name="btnA6" Content="总投资能力" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA6_Click" />
+                <Button x:Name="btnA7" Content="宏观经济数据假设" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA7_Click" />
+                <Button x:Name="btnA8" Content="贷款条件假设" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA8_Click" />
+                <Button x:Name="btnA9" Content="其他条件假设" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA9_Click" />
+                <Button x:Name="btnA10" Content="图表：预算预测" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnA10_Click" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="城市项目分析" Foreground="Gray" />
+                <Button x:Name="btnB1" Content="项目基本信息" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnB1_Click" />
+                <Button x:Name="btnB3" Content="投资成本和资金来源" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnB3_Click" />
+                <Button x:Name="btnB4" Content="资金来源情况" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnB4_Click" />
+                <Button x:Name="btnB5" Content="项目问卷" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnB5_Click" />
+                <Button x:Name="btnB6" Content="项目附加信息" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnB6_Click" />
+                <Button x:Name="btnB7" Content="项目对城市经济的影响" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnB7_Click" />
+                <Button x:Name="btnB8" Content="图表：项目对投资总量的影响" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnB8_Click" />
+                <Button x:Name="btnB9" Content="图表：所需投资vs支出上限" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnB9_Click" />
+                <Button x:Name="btnB10" Content="图表：所需贷款vs偿还能力" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnB10_Click" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="3">
+                <TextBlock Text="优先投资规划" Foreground="Gray" />
+                <Button x:Name="btnC1" Content="图表" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnC1_Click" />
+                <Button x:Name="btnC2" Content="总体情况" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnC2_Click" />
+                <Button x:Name="btnC3" Content="项目详情" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnC3_Click" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="2">
+                <TextBlock Text="总结表单" Foreground="Gray" />
+                <Button x:Name="btnD1" Content="项目整体评估" Style="{StaticResource menu_button}" HorizontalAlignment="Left" Click="btnD1_Click" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</UserControl>

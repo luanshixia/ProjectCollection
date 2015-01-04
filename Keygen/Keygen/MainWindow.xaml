@@ -1,0 +1,12 @@
+﻿<Window x:Class="Keygen.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="CIIPP Keygen" Height="200" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" Background="WhiteSmoke">
+    <Grid>
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="12,31,0,0" Name="txtRequestCode" VerticalAlignment="Top" Width="254" />
+        <TextBlock HorizontalAlignment="Left" Margin="12,12,0,0" Name="textBlock1" Text="Request code" Height="23" VerticalAlignment="Top" />
+        <TextBox Height="23" HorizontalAlignment="Left" Margin="12,79,0,0" Name="txtKey" VerticalAlignment="Top" Width="254" IsReadOnly="True" />
+        <TextBlock HorizontalAlignment="Left" Margin="12,60,0,0" Name="textBlock2" Text="Key" VerticalAlignment="Top" />
+        <Button Content="Generate" Height="23" HorizontalAlignment="Left" Margin="164,126,0,0" Name="button1" VerticalAlignment="Top" Width="102" Click="button1_Click" />
+    </Grid>
+</Window>

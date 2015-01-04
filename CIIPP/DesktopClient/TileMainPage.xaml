@@ -1,0 +1,25 @@
+﻿<Page x:Class="DesktopClient.TileMainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DesktopClient"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
+	Title="TileMainPage" Loaded="Page_Loaded">
+    
+    <!--<Page.Resources>
+        <Style TargetType="local:IntroPage">
+            <Setter Property="ControlBack" Value="Black" />
+        </Style>
+    </Page.Resources>-->
+        <StackPanel x:Name="StackPanel1">
+            <!--<StackPanel.Background>
+            <ImageBrush ImageSource="Resources/底图.jpg" />
+        </StackPanel.Background>-->
+
+            <local:TileBanner />
+
+            <local:PagerPresenter x:Name="Pager" Height="600" />
+        </StackPanel>
+</Page>

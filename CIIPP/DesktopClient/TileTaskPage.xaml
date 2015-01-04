@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="DesktopClient.TileTaskPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DesktopClient"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800">
+    
+    <UserControl.Resources>
+        <StackPanel x:Key="overlay1" Margin="20">
+            <TextBlock Text="1.本年收入预期"/>
+            <TextBlock Text="2.本年支出预期"/>
+            <TextBlock Text="3.当地政府债务"/>
+            <TextBlock Text="4.投资能力预期"/>
+            <TextBlock Text="5.城市现有资产"/>
+            <TextBlock Text="6.在建项目汇总"/>
+        </StackPanel>
+
+        <StackPanel x:Key="overlay2" Margin="20">
+            <TextBlock Text="1.未来十年收入预测"/>
+            <TextBlock Text="2.未来十年支出预测"/>
+            <TextBlock Text="3.未来十年债务预测"/>
+            <TextBlock Text="4.未来十年投资能力预测"/>
+            <TextBlock Text="5.经济预测假设"/>
+        </StackPanel>
+
+        <StackPanel x:Key="overlay3" Margin="20,90,0,0">
+            <TextBlock Text="1.分类得分对比"/>
+            <TextBlock Text="2.场景得分对比"/>
+            <TextBlock Text="3.投资金额对比"/>
+            <TextBlock Text="4.投资比重对比"/>
+        </StackPanel>
+
+        <StackPanel x:Key="overlay4" Margin="20,90,0,0">
+            <TextBlock Text="1.总投资各方出资比例分析"/>
+            <TextBlock Text="2.总投资对城市支出的影响分析"/>
+            <TextBlock Text="3.总新增贷款对城市还款的影响"/>
+            <TextBlock Text="4.投资出资比例各项目对比"/>
+        </StackPanel>
+    </UserControl.Resources>
+
+    <Grid x:Name="grid1">
+        <local:RichImageButton x:Name="btn01" Height="196" Width="296" Margin="34,31,0,0" VerticalAlignment="Top" HorizontalAlignment="Left" Click="btn01_Click" Overlay="{StaticResource overlay1}"/>
+        <local:RichImageButton x:Name="btn02" Margin="334,31,0,0" Height="196" VerticalAlignment="Top" HorizontalAlignment="Left" Width="296" Click="btn02_Click" Overlay="{StaticResource overlay2}"/>
+        <local:RichImageButton x:Name="btn03" Margin="34,236,0,0" Height="196" VerticalAlignment="Top" HorizontalAlignment="Left" Width="296" Click="btn03_Click" Overlay="{StaticResource overlay3}"/>
+        <local:RichImageButton x:Name="btn04" Margin="334,236,0,0" Height="196" VerticalAlignment="Top" HorizontalAlignment="Left" Width="296" Click="btn04_Click" Overlay="{StaticResource overlay4}"/>
+
+        <StackPanel x:Name="btn05" Margin="634,31,0,0" Height="196" VerticalAlignment="Top" Width="150" HorizontalAlignment="Left">
+            <TextBlock x:Name="miNew" Text="新建一个城市文档" Margin="20,60,20,0" Cursor="Hand" MouseLeftButtonUp="miNew_MouseLeftButtonUp" />
+            <TextBlock x:Name="miOpen" Text="打开一个城市文档" Margin="20,2,20,0" Cursor="Hand" MouseLeftButtonUp="miOpen_MouseLeftButtonUp"/>
+            <TextBlock x:Name="miSave" Text="保存对本文档的修改" Margin="20,2,20,0" Cursor="Hand" MouseLeftButtonUp="miSave_MouseLeftButtonUp" />
+            <TextBlock x:Name="miSaveAs" Text="将本文档另存为" Margin="20,2,20,0" Cursor="Hand" MouseLeftButtonUp="miSaveAs_MouseLeftButtonUp"/>
+            <TextBlock x:Name="miExit" Text="退出程序" Margin="20,15,20,0" Cursor="Hand" MouseLeftButtonUp="miExit_MouseLeftButtonUp"/>
+        </StackPanel>
+
+        <StackPanel  Margin="634,236,0,0" Name="stackPanel1" Height="84" VerticalAlignment="Top" HorizontalAlignment="Left" Width="150">
+            <TextBlock x:Name="btnFullscreen" Text="进入/退出全屏演示" Margin="20,50,20,0" Cursor="Hand" MouseLeftButtonUp="btnFullscreen_MouseLeftButtonUp" />
+        </StackPanel>
+        
+        <StackPanel Height="104" HorizontalAlignment="Left" Margin="634,328,0,0" Name="stackPanel4" VerticalAlignment="Top" Width="150">
+            <TextBlock x:Name="miHelp" Text="快速指南" Margin="20,42,20,0" Cursor="Hand" MouseLeftButtonUp="miHelp_MouseLeftButtonUp" />
+            <TextBlock x:Name="Help1" Text="详细帮助" Margin="20,2,20,0" Cursor="Hand" MouseLeftButtonUp="Help1_MouseLeftButtonUp" />
+            <TextBlock x:Name="miAbout" Text="关于本程序" Margin="20,2,20,0" Cursor="Hand" MouseLeftButtonUp="miAbout_MouseLeftButtonUp" />
+        </StackPanel>
+    </Grid>
+</UserControl>

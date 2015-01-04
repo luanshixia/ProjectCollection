@@ -1,0 +1,248 @@
+﻿<Page x:Class="DesktopClient.SummaryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DesktopClient"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="800"
+	Title="SummaryPage" Loaded="Page_Loaded">
+
+    <Page.Resources>
+        <local:MultipleConverter x:Key="mc" />
+        <local:PipConverter x:Key="pc" />
+        <local:BumenConverter x:Key="bc" />
+        <local:ZhuangtaiConverter x:Key="zc" />
+        <local:HeaderColorConverter x:Key="hcc" />
+        <local:HeaderTextColorConverter x:Key="htcc" />
+        <local:HeaderTextLayoutConverter x:Key="htlc" />
+        <Style TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="15" Padding="5">
+                            <TextBlock Text="{TemplateBinding Content}" VerticalAlignment="Center" Margin="10,0" TextWrapping="Wrap" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                        <GradientStop Color="Maroon"/>
+                        <GradientStop Color="#400000" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Foreground" Value="White" />
+            <Setter Property="BorderBrush" Value="White" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Width" Value="200" />
+            <Setter Property="Height" Value="80" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" ShadowDepth="3" />
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="Firebrick"/>
+                                <GradientStop Color="#400000" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Width" Value="202" />
+                    <Setter Property="Height" Value="82" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="Firebrick"/>
+                                <GradientStop Color="#400000" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="Width" Value="200" />
+                    <Setter Property="Height" Value="80" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Page.Resources>
+
+    <Grid x:Name="grid1">
+        <StackPanel x:Name="LayoutRoot" Margin="0">
+            <local:Banner HorizontalAlignment="Left" Caption0="总结表单" Caption="项目整体评估" />
+            <Viewbox>
+                <!--<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Margin="20" Width="964">-->
+                <StackPanel>
+                    <StackPanel x:Name="InfoGroup" Background="#C0C0C0">
+                        <DockPanel>
+                            <Border Width="100" DockPanel.Dock="Left" />
+                            <StackPanel Orientation="Horizontal">
+                                <StackPanel>
+                                    <TextBlock Text="Project Prioritisation Exercise" Margin="10,10,10,2" FontWeight="Bold" />
+                                    <TextBlock Margin="10,2">
+                                <Run Text="City: " />
+                                <Run Text="{Binding C01}" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="100,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Investment budget for 2nd to 6th years" Margin="10,10,10,2" FontWeight="Bold" />
+                                    <TextBlock Margin="10,2">
+                                <Run Text="CNY: " />
+                                <Run Text="{Binding InvestimentBudgetForFutureYear2To6CNY, Mode=OneWay, StringFormat={}{0:n}}" />
+                                <Run Text=" | USD: " />
+                                <Run Text="{Binding InvestimentBudgetForFutureYear2To6USD, Mode=OneWay, StringFormat={}{0:n}}" />
+                                    </TextBlock>
+                                </StackPanel>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="10,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding Multiple, Converter={StaticResource mc}}" Margin="10,10,10,2" FontWeight="Bold" />
+                                </StackPanel>
+                            </StackPanel>
+                        </DockPanel>
+
+                        <StackPanel Orientation="Horizontal" Height="20">
+                            <StackPanel.Resources>
+                                <Style TargetType="TextBox">
+                                    <Setter Property="BorderBrush" Value="Silver" />
+                                    <Setter Property="BorderThickness" Value="0.5" />
+                                    <Setter Property="Background" Value="#333333" />
+                                    <Setter Property="Foreground" Value="White" />
+                                    <Setter Property="TextAlignment" Value="Right" />
+                                </Style>
+                            </StackPanel.Resources>
+                            <Border Width="345" />
+                            <TextBox Width="50" Text="{Binding Weight_Necessity, Mode=TwoWay, StringFormat=0.##}" />
+                            <TextBox Width="50" Text="{Binding Weight_PublicResponse, Mode=TwoWay, StringFormat=0.##}" />
+                            <TextBox Width="50" Text="{Binding Weight_Environmental, Mode=TwoWay, StringFormat=0.##}" />
+                            <TextBox Width="50" Text="{Binding Weight_Economic, Mode=TwoWay, StringFormat=0.##}" />
+                            <TextBox Width="50" Text="{Binding Weight_Feasibility, Mode=TwoWay, StringFormat=0.##}" />
+                            <Border Width="650" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <DataGrid x:Name="ProjectGrid" AutoGenerateColumns="False" SelectionUnit="CellOrRowHeader" HorizontalGridLinesBrush="Silver" VerticalGridLinesBrush="Silver" AlternatingRowBackground="WhiteSmoke" RowHeaderWidth="0" BorderBrush="Silver" CanUserReorderColumns="False" CanUserResizeColumns="False">
+                        <DataGrid.Resources>
+                            <LinearGradientBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="#FFFFE3BA"/>
+                                <GradientStop Color="#FFFDAF3E" Offset="1"/>
+                            </LinearGradientBrush>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Brown" />
+                            <LinearGradientBrush x:Key="{x:Static SystemColors.ControlBrushKey}" EndPoint="0.5,1" StartPoint="0.5,0">
+                                <GradientStop Color="Lavender"/>
+                                <GradientStop Color="Silver" Offset="1"/>
+                            </LinearGradientBrush>
+                            <Style TargetType="DataGridColumnHeader">
+                                <Setter Property="Height" Value="200" />
+                                <Setter Property="VerticalContentAlignment" Value="Bottom" />
+                                <Setter Property="HorizontalContentAlignment" Value="Right" />
+                                <Setter Property="ContentTemplate">
+                                    <Setter.Value>
+                                        <DataTemplate>
+                                            <Border>
+                                                <ContentControl Content="{Binding Converter={StaticResource htlc}}" />
+                                                
+                                            </Border>
+                                        </DataTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter Property="Background" Value="{Binding Converter={StaticResource hcc}}" />
+                                <Setter Property="Foreground" Value="{Binding Converter={StaticResource htcc}}" />
+                                <Setter Property="BorderBrush" Value="White" />
+                                <Setter Property="BorderThickness" Value="1,0,0,0" />
+                            </Style>
+                            <Style TargetType="DataGridCell">
+                            </Style>
+                            <Style x:Key="cellMargin" TargetType="TextBlock">
+                                <Setter Property="Margin" Value="2" />
+                                <Setter Property="HorizontalAlignment" Value="Right" />
+                            </Style>
+                            <DataTemplate x:Key="richHeader">
+                                <StackPanel>
+                                    <TextBlock Text="{Binding}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGrid.Resources>
+
+                        <!--列定义-->
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="项目" Width="215" Binding="{Binding P1A}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Margin" Value="2" />
+                                        <Setter Property="ToolTip" Value="{Binding P1A}" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="排序" IsReadOnly="False" Width="30" Binding="{Binding Rank}" ElementStyle="{StaticResource cellMargin}" Foreground="Maroon" />
+                            <DataGridTextColumn Header="状况" Width="50" Binding="{Binding P1E, Converter={StaticResource zc}}">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <!--<Setter Property="TextWrapping" Value="Wrap" />-->
+                                        <Setter Property="Margin" Value="2" />
+                                        <Setter Property="ToolTip" Value="{Binding P1E, Converter={StaticResource zc}}" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="部门" Width="50" Binding="{Binding P1C, Converter={StaticResource bc}}" SortMemberPath="[0]">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Margin" Value="2" />
+                                        <Setter Property="ToolTip" Value="{Binding P1C, Converter={StaticResource bc}}" />
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="目标得分" Width="50" Binding="{Binding Necessity, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="公众意见得分" Width="50" Binding="{Binding PublicResponse, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="环境影响得分" Width="50" Binding="{Binding Environmental, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="社会经济影响得分" Width="50" Binding="{Binding Economic, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="可行性得分" Width="50" Binding="{Binding Feasibility, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="最终得分" Width="50" Binding="{Binding Final, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" Foreground="Maroon" />
+                            <DataGridTextColumn Header="环境场景" Width="45" Binding="{Binding EnvironmentScenario, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="经济场景" Width="45" Binding="{Binding EconomicScenario, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="收入增加场景" Width="45" Binding="{Binding RevenueScenario, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="社区1（生活质素）" Width="45" Binding="{Binding Social, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="社区2（减贫）" Width="45" Binding="{Binding PovertyScenario, StringFormat=0.0}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="资本成本" Width="90" Binding="{Binding ProjectCostsForNext5Years, StringFormat= {}{0:n}}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="成本在预算中的占比" Width="40" Binding="{Binding CostsBudgetRatio, StringFormat=0%}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="自有资源在成本中的占比" Width="40" Binding="{Binding ZiyouCostsRatio, StringFormat=0%}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="国家政府投入在成本中的占比" Width="40" Binding="{Binding ZhengfuCostsRatio, StringFormat=0%}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="私人部门投入在成本中的占比" Width="40" Binding="{Binding SirenCostsRatio, StringFormat=0%}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="贷款在成本中的占比" Width="40" Binding="{Binding DaikuanCostsRatio, StringFormat=0%}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="融资缺口在成本中的占比" Width="40" Binding="{Binding QuekouCostsRatio, StringFormat=0%}" ElementStyle="{StaticResource cellMargin}" />
+                            <DataGridTextColumn Header="包括在PIP中" Width="46" Binding="{Binding PIP, Converter={StaticResource pc}}" ElementStyle="{StaticResource cellMargin}" />
+
+                        </DataGrid.Columns>
+
+                        <DataGrid.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Name="miColumnChart" Header="当前列以柱状图展示" Click="miColumnChart_Click" />
+                            </ContextMenu>
+                        </DataGrid.ContextMenu>
+                        
+                    </DataGrid>
+
+                </StackPanel>
+                <!--</ScrollViewer>-->
+            </Viewbox>
+            <TextBlock Padding="5" Background="Gray" Foreground="White" Margin="0,10">
+                [操作提示] 1. 单击列标题启动按列排序。2. 右击一列可以选择按列查看柱状图。
+            </TextBlock>
+
+            <!--<Button x:Name="btnPrint" Content="打印本页" Width="150" Height="40" HorizontalAlignment="Left" Margin="20,5,0,0" Click="btnPrint_Click" />-->
+            <Button x:Name="btnPip" Content="优先投资规划(PIP)" Width="150" Height="40" HorizontalAlignment="Left" Margin="20,5,0,0" Click="btnPip_Click" />
+            <TextBlock Height ="20" />
+
+        </StackPanel>
+    </Grid>
+</Page>

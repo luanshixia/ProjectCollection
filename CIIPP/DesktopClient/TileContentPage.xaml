@@ -1,0 +1,26 @@
+﻿<Page x:Class="DesktopClient.TileContentPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:DesktopClient"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
+
+	Title="TiltContentPage" Loaded="Page_Loaded">
+
+    <StackPanel >
+        <!--<StackPanel.Background>
+            <ImageBrush ImageSource="Resources/底图.jpg" />
+        </StackPanel.Background>-->
+
+        <local:TileBanner />
+        
+        <Grid Width="1024">
+            <StackPanel x:Name="stack1" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0" MouseMove="stack1_MouseMove" MouseLeave="stack1_MouseLeave" >
+                <local:TileStackControl x:Name="tileStackControl1" Height="400" Width="171" VerticalAlignment="Top" />
+                <local:PagerPresenter x:Name="Pager" Width="1024" Height="600" VerticalAlignment="Top" Background="White" Padding="20,20,20,0" />
+            </StackPanel>
+        </Grid>
+    </StackPanel>
+</Page>

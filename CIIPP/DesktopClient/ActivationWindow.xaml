@@ -1,0 +1,17 @@
+﻿<Window x:Class="DesktopClient.ActivationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="激活产品" Height="300" Width="300" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" ShowInTaskbar="False" Loaded="Window_Loaded">
+    <StackPanel>
+        <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" Name="txtState" Text="需要激活" VerticalAlignment="Top" FontSize="42" />
+        <TextBlock HorizontalAlignment="Center" Margin="0,20,0,0" Text="激活申请码" VerticalAlignment="Top" FontSize="12" Foreground="Gray"></TextBlock>
+        <TextBox BorderBrush="Gray" Background="LightGray" HorizontalAlignment="Center" Margin="0,5,0,0" Name="txtRequestCode" Text="071400307" VerticalAlignment="Top" FontSize="12" Width="250" TextAlignment="Center" IsReadOnly="True" />
+        <TextBlock HorizontalAlignment="Center" Margin="0,5,0,0" Text="激活认证码" VerticalAlignment="Top" FontSize="12" Foreground="Gray"></TextBlock>
+        <TextBox BorderBrush="Gray" HorizontalAlignment="Center" Margin="0,5,0,0" Name="txtKey" Text="" VerticalAlignment="Top" FontSize="12" Width="250" TextAlignment="Center" />
+        <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
+            <Button Content="激活" Height="23" HorizontalAlignment="Center" Name="btnActivate" VerticalAlignment="Top" Width="75" Click="btnActivate_Click" />
+            <Button Content="试用" Margin="5,0,0,0" Height="23" HorizontalAlignment="Center" Name="btnTry" VerticalAlignment="Top" Width="75" Click="btnTry_Click" />
+        </StackPanel>
+        <TextBlock HorizontalAlignment="Center" Margin="0,5,0,0" Text="试用版产品无时间限制，但无法使用某些高级功能。" VerticalAlignment="Top" FontSize="10" Foreground="Gray"></TextBlock>
+    </StackPanel>
+</Window>
