@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B08EE65B-E286-4F1D-BCFA-80AE38FE2F48}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TongJi</RootNamespace>
+    <AssemblyName>CityFoundation</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CDT\Delaunay\DelaunayTriangle.cs" />
+    <Compile Include="CDT\Delaunay\Sweep\AdvancingFront.cs" />
+    <Compile Include="CDT\Delaunay\Sweep\AdvancingFrontNode.cs" />
+    <Compile Include="CDT\Delaunay\Sweep\DTSweep.cs" />
+    <Compile Include="CDT\Delaunay\Sweep\DTSweepConstraint.cs" />
+    <Compile Include="CDT\Delaunay\Sweep\DTSweepContext.cs" />
+    <Compile Include="CDT\Delaunay\Sweep\DTSweepPointComparator.cs" />
+    <Compile Include="CDT\Delaunay\Sweep\PointOnEdgeException.cs" />
+    <Compile Include="CDT\ITriangulatable.cs" />
+    <Compile Include="CDT\Orientation.cs" />
+    <Compile Include="CDT\Polygon\Polygon.cs" />
+    <Compile Include="CDT\Polygon\PolygonPoint.cs" />
+    <Compile Include="CDT\Polygon\PolygonSet.cs" />
+    <Compile Include="CDT\Sets\ConstrainedPointSet.cs" />
+    <Compile Include="CDT\Sets\PointSet.cs" />
+    <Compile Include="CDT\TriangulationConstraint.cs" />
+    <Compile Include="CDT\TriangulationContext.cs" />
+    <Compile Include="CDT\TriangulationMode.cs" />
+    <Compile Include="CDT\TriangulationPoint.cs" />
+    <Compile Include="CDT\TriangulationUtil.cs" />
+    <Compile Include="CDT\Util\FixedArray3.cs" />
+    <Compile Include="CDT\Util\FixedBitArray3.cs" />
+    <Compile Include="CDT\Util\PointGenerator.cs" />
+    <Compile Include="CDT\Util\PolygonGenerator.cs" />
+    <Compile Include="City\TongJi.City.IValueCalculator.cs" />
+    <Compile Include="City\TongJi.City.Framework.cs" />
+    <Compile Include="Geometry\CuttingEarsTriangulator.cs" />
+    <Compile Include="Gis\TongJi.Gis.Gpx.cs" />
+    <Compile Include="Gis\TongJi.Gis.GridAnalysis.cs" />
+    <Compile Include="Gis\TongJi.Gis.Svg.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="City\TongJi.City.IFactor.cs" />
+    <Compile Include="City\TongJi.City.DynamicProperty.cs" />
+    <Compile Include="Languages\TongJi.Functional.Collections.cs" />
+    <Compile Include="Geometry\TongJi.Geometry.cs" />
+    <Compile Include="Geometry\TongJi.Geometry.Spline.cs" />
+    <Compile Include="Geometry3D\TongJi.Geometry3D.Matrix4.cs" />
+    <Compile Include="Gis\TongJi.Gis.Config.cs" />
+    <Compile Include="Gis\TongJi.Gis.QuadTree.cs" />
+    <Compile Include="Gis\TongJi.Gis.Topography.cs" />
+    <Compile Include="IO\TongJi.IO.IniFile.cs" />
+    <Compile Include="IO\TongJi.IO.Packaging.cs" />
+    <Compile Include="IO\TongJi.IO.Serialization.cs" />
+    <Compile Include="Gis\TongJi.Gis.cs" />
+    <Compile Include="Languages\TongJi.Languages.Extensions.cs" />
+    <Compile Include="TongJi.Mathematics.cs" />
+    <Compile Include="Geometry3D\TongJi.Geometry3D.cs" />
+    <Compile Include="TongJi.Network.cs" />
+    <Compile Include="Geometry\TongJi.Geometry.PixelBound.cs" />
+    <Compile Include="City\TongJi.City.UserProperty.cs" />
+    <Compile Include="TongJi.Svg.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Geometry\Geometry.cd" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

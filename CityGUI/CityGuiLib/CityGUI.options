@@ -1,0 +1,9 @@
+﻿ViewportBackground=255,255,255
+ViewportTextColor=0,0,0
+ViewportLineColor=0,0,0
+RoadColor=128,128,128
+MinValueColor=192,192,0
+MinValue=0
+MaxValueColor=192,0,0
+MaxValue=2500
+AggregateType=Sum
