@@ -1,0 +1,308 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+@using TongJi.Web.CMS
+@{
+    var roots = ChannelManager.GetAllRoots();
+
+    ContentListControl list = new ContentListControl();
+    var chn2 = new HtmlString(list.GetHtml(43, 10, true));
+    var chn3 = new HtmlString(list.GetHtml(44, 10, true));
+    var chn4 = new HtmlString(list.GetHtml(30, 10, true));
+    var chn5 = new HtmlString(list.GetHtml(32, 10, true));
+    var chn6 = new HtmlString(list.GetHtml(38, 10, true));
+    var chn7 = new HtmlString(list.GetHtml(ChannelManager.GetContentListIncludingSubChannels(45).ToList(), 10, true));
+    var chn8 = new HtmlString(list.GetHtml(78, 10, true));
+    var chn9 = new HtmlString(list.GetHtml(ChannelManager.GetContentListIncludingSubChannels(6).ToList(), 10, true));
+    var chn10 = new HtmlString(list.GetHtml(ChannelManager.GetContentListIncludingSubChannels(5).ToList(), 10, true));
+    var chn11 = new HtmlString(list.GetHtml(ChannelManager.GetContentListIncludingSubChannels(4).ToList(), 10, true));
+}
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>规划局政务公开平台</title>
+    <script type="text/javascript" src="@Href("~/Scripts/jquery-1.4.1.js")"></script>
+    <link href="@Href("~/Styles/Site.css")" rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        table .layout_table
+        {
+            width: 100%;
+            border: 0px solid #FFFFFF;
+        }
+        .layout_table th, .layout_table td
+        {
+            border: 0px;
+            vertical-align: top;
+        }
+        table .channel_table
+        {
+            width: 100%;
+            border: 1px solid #CFDBE6;
+        }
+        .channel_table th
+        {
+            text-align: left;
+            background-color: #DDDDDD;
+        }
+        .channel_table td
+        {
+            height: 200px;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="title">
+                <h1>
+                    规划局政务公开平台
+                </h1>
+            </div>
+            <div class="clear hideSkiplink">
+                <div class="menu" id="NavigationMenu">
+                    <ul class="level1" style="height: 30px">
+                        @foreach (var root in roots)
+                        {
+                            <li style="float: left"><a class="level1" href="Channel?id=@root.id" style="padding: 10px,20px">@root.name</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            <script type="text/javascript">
+                var images = new Array();
+                images.push('@Href("~/images/img_rotator_01.jpg")');
+                images.push('@Href("~/images/img_rotator_02.jpg")');
+                images.push('@Href("~/images/img_rotator_03.jpg")');
+
+                var hrefs = new Array();
+                hrefs.push('@Href("~/images/img_rotator_01.jpg")');
+                hrefs.push('@Href("~/images/img_rotator_02.jpg")');
+                hrefs.push('@Href("~/images/img_rotator_03.jpg")');
+
+                var image_count = 3;
+                var i = 0;
+                var goNext = function () {
+                    i = i < image_count ? i : 0;
+                    $('#img_rotator').attr('src', images[i]);
+                    $('#img_rotator_anchor').attr('href', hrefs[i]);
+                    i++;
+                };
+
+                $(document).ready(function () {
+                    goNext();
+                    setInterval(goNext, 5000);
+                });
+            </script>
+            <table class="layout_table" style="border: 0px">
+                <colgroup>
+                    <col style="width: 300px; min-width: 300px;" />
+                    <col style="width: 300px; min-width: 300px;" />
+                    <col style="width: 300px; min-width: 300px;" />
+                </colgroup>
+                <tr>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 图片新闻
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn1">
+                                    <a id="img_rotator_anchor" href="images/img_rotator_01.jpg">
+                                        <img id="img_rotator" width="300" height="200" alt="图片新闻" src="images/img_rotator_01.jpg"
+                                            style="border: 0px" /></a>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 本局新闻
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn2">
+                                    @chn2
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 行业动态
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn3">
+                                    @chn3
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 发证信息
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn4">
+                                    @chn4
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 采购公告
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn5">
+                                    @chn5
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 人事任免
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn6">
+                                    @chn6
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <img src="@Href("~/images/banner_to_gis.gif")" alt="电子地图" style="width: 920px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 规划公示
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn7">
+                                    @chn7
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 规划知识
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn8">
+                                    @chn8
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 法律法规
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn9">
+                                    @chn9
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 公众参与
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn10">
+                                    @chn10
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table class="channel_table">
+                            <tr>
+                                <th>
+                                    &nbsp; 网上办事
+                                </th>
+                            </tr>
+                            <tr>
+                                <td id="chn11">
+                                    @chn11
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="clear">
+            <br />
+            <br />
+        </div>
+    </div>
+    <div class="footer">
+        XX市规划局版权所有<br />
+        地址：XXXXXXXXXX 电话：XXXX-XXXXXXXX<br />
+        本站使用 CityCMS 内容管理系统建立<br />
+        技术支持：上海同城信息科技有限公司
+    </div>
+</body>
+</html>

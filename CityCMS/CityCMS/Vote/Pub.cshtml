@@ -1,0 +1,18 @@
+﻿@using TongJi.Web.CMS
+@{
+    int id = Convert.ToInt32(Request.Params["id"]);
+    var record = VoteManager.GetDbRecord(id);
+    string src = null;
+    if (record.can_vote)
+    {
+        //Response.Redirect(string.Format("Post?id={0}", id));
+        src = string.Format("~/Vote/Post?id={0}", id);
+    }
+    else
+    {
+        //Response.Redirect(string.Format("View?id={0}", id));
+        src = string.Format("~/Vote/View?id={0}", id);
+    }
+}
+<iframe src="@Href(src)" frameborder="0" style="width:300px; height:300px;">
+</iframe>

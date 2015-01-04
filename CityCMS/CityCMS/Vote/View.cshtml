@@ -1,0 +1,16 @@
+﻿@using TongJi.Web.CMS
+@{    
+    int id = Convert.ToInt32(Request.Params["id"]);
+    var record = VoteManager.GetDbRecord(id);
+    var options = VoteManager.GetVoteOptions(id).ToList();
+    double total = options.Sum(x => x.votes);
+}
+<div>
+    <p>@record.name</p>
+    @foreach (var option in options)
+    {
+        <div>
+            @option.name： @option.votes 票 （@((option.votes/total).ToString("0.##%"))）
+        </div>
+    }
+</div>

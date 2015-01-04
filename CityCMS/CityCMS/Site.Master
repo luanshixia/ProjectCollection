@@ -1,0 +1,55 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="CityCMS.SiteMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head runat="server">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>CityCMS 内容管理系统</title>
+    <script type="text/javascript" src="/CityCMS/Scripts/jquery-1.4.1.js"></script>
+    <link href="~/Styles/Site.css?load=2302" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('tr:even').css({ 'background-color': '#FEEFD1' });
+            $('tr:odd').css({ 'background-color': '#EEEEEE' });
+            $('th').css({ 'background-color': '#DDDDDD', 'color': '#777777' });
+        });
+    </script>
+
+    <form runat="server">
+    <div class="page">
+        <div class="header">
+            <div class="title">
+                <h1>
+                    CityCMS
+                </h1>
+            </div>
+            <div class="loginDisplay">
+            </div>
+            <div class="clear hideSkiplink">
+                <asp:Menu ID="NavigationMenu" runat="server" CssClass="menu" EnableViewState="false"
+                    IncludeStyleBlock="false" Orientation="Horizontal">
+                    <Items>
+                        <asp:MenuItem NavigateUrl="~/Admin/Default.aspx" Text="后台首页" />
+                        <asp:MenuItem NavigateUrl="~/home.cshtml" Text="返回前台" />
+                        <asp:MenuItem NavigateUrl="~/About.aspx" Text="关于" />
+                    </Items>
+                </asp:Menu>
+            </div>
+        </div>
+        <div class="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>
+        <div class="clear">
+            <br />
+            <br />
+        </div>
+    </div>
+    <div class="footer">
+    </div>
+    </form>
+</body>
+</html>

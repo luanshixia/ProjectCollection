@@ -1,0 +1,81 @@
+﻿@using TongJi.Web.CMS
+@{    
+    var questions = VoteManager.GetAllVotes();
+    var grid = new WebGrid(questions, new string[] { "id", "name", "start_time", "can_vote" }, canSort: false, canPage: false);
+}
+<script type="text/javascript">
+    function tryDelVote(id) {
+        if (confirm('确实要删除吗？')) {
+            location = 'Delete?id=' + id;
+        }
+    }
+</script>
+<div id="ajax_container">
+    <table>
+        <colgroup>
+            <col style="width: 10%; min-width: 10%" />
+            <col style="width: 30%; min-width: 30%" />
+            <col style="width: 20%; min-width: 20%" />
+            <col style="width: 10%; min-width: 10%" />
+            <col style="width: 10%; min-width: 10%" />
+            <col style="width: 10%; min-width: 10%" />
+            <col style="width: 10%; min-width: 10%" />
+        </colgroup>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                问题
+            </th>
+            <th>
+                时间
+            </th>
+            <th>
+                状态
+            </th>
+            <th>
+                转到
+            </th>
+            <th>
+                开关
+            </th>
+            <th>
+                删除
+            </th>
+        </tr>
+        @foreach (var question in questions)
+        {
+            <tr>
+                <td>
+                    @question.id
+                </td>
+                <td>
+                    @question.name
+                </td>
+                <td>
+                    @question.start_time
+                </td>
+                <td>
+                    @(question.can_vote ? "开启" : "关闭")
+                </td>
+                <td>
+                    <a href="@(Request.ApplicationPath)/Vote/Pub?id=@question.id">转到</a>
+                </td>
+                <td>
+                    @if (question.can_vote)
+                    {
+                        <a href="@(Request.ApplicationPath)/Vote/Toggle?id=@question.id">关闭</a>
+                    }
+                    else
+                    {
+                        <a href="@(Request.ApplicationPath)/Vote/Toggle?id=@question.id">开启</a>
+                    }
+                </td>
+                <td>
+                    <a href="javascript:tryDelVote(@question.id)">删除</a>
+                </td>
+            </tr>
+        }
+    </table>
+</div>

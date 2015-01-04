@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<FormInst>
+  <Data>
+    <Item Name="姓名" Value="张三" />
+    <Item Name="性别" Value="男" />
+    <Item Name="年龄" Value="25" />
+    <Item Name="身高" Value="180" />
+    <Item Name="出生日期" Value="1986-3-8" />
+    <Item Name="地址" Value="广州市荔湾区下九路138号" />
+    <Item Name="电话" Value="020-38838884" />
+    <Item Name="领导意见" Value="同意" />
+  </Data>
+</FormInst>

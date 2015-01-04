@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 12, 12.25" name="Workflow">
+  <DataContextMoniker Name="/WorkflowDataContext" />
+  <nestedChildShapes>
+    <classShape Id="545c4430-65bc-4e4c-adcc-4ee48071376c" absoluteBounds="0.75, 0.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_attachment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bfceeac5-f27f-485e-b9f9-bb345ff3aedb" absoluteBounds="0.765, 1.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b6604fb4-33fd-49c8-b17e-e645ec076906" absoluteBounds="3.75, 0.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_data" />
+      <nestedChildShapes>
+        <elementListCompartment Id="88f38b93-e649-4d19-9838-3a6406dafeda" absoluteBounds="3.765, 1.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="3a48cf01-6306-4741-b08b-d90039576edb" absoluteBounds="0.75, 3.75, 2, 1.193992513020834">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_enum" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c4dda5a9-9d38-4780-901c-521fa2c0c2c7" absoluteBounds="0.765, 4.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="463a4e6c-6f98-48ab-b794-4ddf13b6bb75" absoluteBounds="3.75, 3.75, 2, 1.3862939453125005">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_enum_member" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d196e588-fd75-444f-8831-30b917a6d262" absoluteBounds="3.765, 4.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d9a61ed5-c0dc-4feb-9b03-bc2e5de45828" absoluteBounds="6.75, 0.75, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_field" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6a4dc116-5af0-4603-b16a-d2d4e4519aea" absoluteBounds="6.765, 1.21, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="84de5fef-06ce-4b19-bc22-652a01e5cc60" absoluteBounds="0.75, 6.75, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_flow" />
+      <nestedChildShapes>
+        <elementListCompartment Id="daefe108-c221-476c-a49a-919669322ae0" absoluteBounds="0.765, 7.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2f3ef835-51ac-48d5-9b36-88a5cc083b42" absoluteBounds="3.75, 6.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_flow_inst" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7cee8490-0e56-49e5-b27a-563b099fd8e4" absoluteBounds="3.765, 7.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="ea848d3c-7146-462a-aa36-7b60eeed8675" absoluteBounds="6.75, 4.75, 2, 1.3862939453125005">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_form" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d86ac4fa-1b53-41c1-a980-d45d0a2083f0" absoluteBounds="6.765, 5.21, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="2c1a74c1-3cd3-46c1-9fbd-53650da5033b" absoluteBounds="6.75, 7.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_form_inst" />
+      <nestedChildShapes>
+        <elementListCompartment Id="69bbd57c-11a4-486c-8314-6d3f94226e34" absoluteBounds="6.765, 8.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="d4c8d5ed-257a-4afa-909d-230c83b4bf33" absoluteBounds="9.75, 0.75, 2, 1.7708968098958329">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_log" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6216b492-6650-48ce-aea7-bfcfb9d3a033" absoluteBounds="9.765, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="cb76b93c-9a5b-4efd-a836-eb15715cabe7" absoluteBounds="0.75, 9.75, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_operation" />
+      <nestedChildShapes>
+        <elementListCompartment Id="337ef379-d13a-44ac-9b74-2f0117462d37" absoluteBounds="0.765, 10.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="a4a84d0e-7cc0-4483-b4ac-d01762b2579d" absoluteBounds="9.75, 3.75, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_state" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2cf2f31c-960a-4c24-89e7-7a88d9ed7017" absoluteBounds="9.765, 4.21, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4982087c-399f-4188-9bf3-64ac18dfa6ec" absoluteBounds="9.75, 6.75, 2, 1.1939925130208344">
+      <DataClassMoniker Name="/WorkflowDataContext/relation_flow_form" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8065b589-101f-4c62-a04c-4630c5612aa5" absoluteBounds="9.765, 7.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4937f656-3c61-4b3c-a64a-328067ac2e80" absoluteBounds="3.375, 9.75, 2, 1.9631982421874987">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_user" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8b52784c-a9b0-4d68-b973-b0697de2d4fc" absoluteBounds="3.39, 10.21, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="10409120-80bb-43c9-94dc-f23c46b1880b" absoluteBounds="9.375, 8.75, 2, 1.1939925130208344">
+      <DataClassMoniker Name="/WorkflowDataContext/entity_usergroup" />
+      <nestedChildShapes>
+        <elementListCompartment Id="eeaee832-ea4f-4e00-b1e1-eb7cbbfb153a" absoluteBounds="9.39, 9.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="396d1c3e-de9f-42d5-9e5d-4c9b29496d78" absoluteBounds="6.375, 10.75, 2, 1.1939925130208344">
+      <DataClassMoniker Name="/WorkflowDataContext/relation_user_usergroup" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d69a6304-8326-4510-907d-5b91adf65f1f" absoluteBounds="6.39, 11.21, 1.9700000000000002, 0.63399251302083326" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

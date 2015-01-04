@@ -1,0 +1,8 @@
+﻿@{
+    var db = Database.OpenConnectionString("data source=.\\SqlExpress;Integrated Security=SSPI;AttachDBFilename=|DataDirectory|\\Repository.mdf;User Instance=true", "System.Data.SqlClient");
+    var query = "SELECT * FROM cms_channel";
+}
+@foreach (var item in db.Query(query))
+{
+    @item.name<br/>
+}

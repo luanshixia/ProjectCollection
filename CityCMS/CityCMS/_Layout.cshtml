@@ -1,0 +1,56 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>规划局政务公开平台</title>
+    <script type="text/javascript" src="@Href("~/Scripts/jquery-1.4.1.js")"></script>
+    <link href="@Href("~/Styles/Site.css")" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <script type="text/javascript">
+        function setTableStyle() {
+            $('tr:even').css({ 'background-color': '#FEEFD1' });
+            $('tr:odd').css({ 'background-color': '#EEEEEE' });
+            $('th').css({ 'background-color': '#DDDDDD', 'color': '#777777' });
+        }
+
+        $(document).ready(function () {
+            setTableStyle();
+        });
+    </script>
+
+    <div class="page">
+        <div class="header">
+            <div class="title">
+                <h1>
+                    规划局政务公开平台
+                </h1>
+            </div>
+            <div class="loginDisplay">
+                @MembershipHelpers.AccountSummary()
+            </div>
+            <div class="clear hideSkiplink">
+                <div class="menu" id="NavigationMenu">
+                    <ul class="level1" style="height: 30px">
+                        <li style="float: left"><a href="@Href("~/Default.aspx")">主页</a></li>
+                        <li style="float: left"><a href="@Href("~/About")">关于</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="main">
+            @RenderBody()
+        </div>
+        <div class="clear">
+            <br />
+            <br />
+        </div>
+    </div>
+    <div class="footer">
+        XX市规划局版权所有<br />
+        地址：XXXXXXXXXX 电话：XXXX-XXXXXXXX<br />
+        本站使用 CityCMS 内容管理系统建立<br />
+        技术支持：上海同城信息科技有限公司
+    </div>
+</body>
+</html>

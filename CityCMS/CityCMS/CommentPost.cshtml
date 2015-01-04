@@ -1,0 +1,7 @@
+﻿@using TongJi.Web.CMS
+@{
+    if(IsPost)
+    {
+        ContentManager.AddComment(Request["title"], Request["text"], Convert.ToInt32(Request["id"]), Request["author"]);
+    }
+}

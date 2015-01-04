@@ -1,0 +1,86 @@
+﻿@using TongJi.Web.CMS
+@{
+    Layout = "_Layout.cshtml";
+
+    int id = Convert.ToInt32(Request.QueryString["id"]);
+    int channel = ContentManager.GetDbRecord(id).fk_channel_id;
+    NavigationControl nav = new NavigationControl();
+    ContentPresenter cp = new ContentPresenter(id);
+}
+<script type="text/javascript">
+    var width = 600;
+    $(document).ready(function () {
+        // for IE
+        $('img').each(function () {
+            if (this.width > width) {
+                var ratio = this.width / this.height;
+                this.width = width;
+                this.height = this.width / ratio;
+            }
+        });
+        // for Firefox/Chrome/Safari/Opera
+        $('img').load(function () {
+            if (this.width > width) {
+                var ratio = this.width / this.height;
+                this.width = width;
+                this.height = this.width / ratio;
+            }
+        });
+    });
+
+    function loadComments() {
+        $.ajaxSetup({ cache: false }); // 禁止IE缓存
+        $('#comment_list').load('CommentList.cshtml', { id: @id }, function () {
+            $('#comment_list').fadeIn('fast');
+        });
+    }
+
+    function postComment() {
+        if ($('#comment_text').val().length < 6) {
+            $('#comment_submit').parent().append('<span style="color:red">请认真填写评论。</span>');
+        } else {
+            $.post('CommentPost.cshtml', { id: @id, title:$('#comment_title').val(), author:$('#comment_author').val(), text:$('#comment_text').val() }, function () {
+                loadComments();
+            });
+        }        
+    }
+</script>
+<div id="sidebar" style="float: left; width: 200px">
+    @Html.Raw(nav.GetHtml(channel))
+</div>
+<div id="content" style="padding: 20px; margin-left: 200px">
+    @Html.Raw(cp.GetHtml())
+    <br />
+    @* 附件 *@
+    @if (ContentManager.GetAttachments(id).Count() > 0)
+    {
+        AttachmentPresenter ap = new AttachmentPresenter(id);
+        @Html.Raw(ap.GetHtml())
+    }
+    <br />
+    @* 评论 *@
+    @if (ContentManager.GetDbRecord(id).allow_comment)
+    {
+@*        if (ContentManager.GetComments(id).Count() > 0)
+        {
+            CommentPresenter presenter = new CommentPresenter(id);
+        @Html.Raw(presenter.GetHtml())
+        }
+*@      
+        <div id="comment_list">
+        </div>  
+        <script type="text/javascript">
+            $(document).ready(function () {
+                loadComments();
+            });
+        </script>
+        <br />
+        <div>
+            <span>标题</span><input id="comment_title" type="text" value="主题评论" style="width: 500px;" /><br />
+            <span>署名</span><input id="comment_author" type="text" value="匿名用户" style="width: 500px;" /><br />
+            <span>内容</span><textarea id="comment_text" rows="2" cols="20" style="height: 150px;
+                width: 500px;"></textarea><br />
+            <input type="submit" id="comment_submit" value="发表评论" onclick="postComment();" />
+        </div>
+    }
+</div>

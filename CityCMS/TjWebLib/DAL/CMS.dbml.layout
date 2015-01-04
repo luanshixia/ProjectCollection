@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="CMS">
+  <DataContextMoniker Name="/CMSDataContext" />
+  <nestedChildShapes>
+    <classShape Id="23adc83b-7882-4f0c-92bc-872e784939fc" absoluteBounds="0.75, 0.75, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/CMSDataContext/cms_attachment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="51c02140-b4e0-461d-94bb-968ddf29130d" absoluteBounds="0.765, 1.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="47bb1b53-6fe9-4d9a-9ae9-b9e3efc1f054" absoluteBounds="4.625, 4.125, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/CMSDataContext/cms_comment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="af8c16f1-6083-4c09-a381-3c70b5447408" absoluteBounds="4.64, 4.585, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="4e30598f-e21f-42f8-b655-951ca5b4dcdd" absoluteBounds="4.625, 0.75, 2, 2.5401025390625">
+      <DataClassMoniker Name="/CMSDataContext/cms_content" />
+      <nestedChildShapes>
+        <elementListCompartment Id="caf5c91c-b078-4318-9926-14d6fa062ed0" absoluteBounds="4.64, 1.21, 1.9700000000000002, 1.9801025390625" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="76af10ee-7289-4184-8b7e-e258d681a9cd" absoluteBounds="0.75, 3.625, 2, 2.3478011067708335">
+      <DataClassMoniker Name="/CMSDataContext/cms_channel" />
+      <nestedChildShapes>
+        <elementListCompartment Id="8165d8af-dc1a-4af9-876d-2c860402c3d9" absoluteBounds="0.76500000000000012, 4.085, 1.9700000000000002, 1.7878011067708335" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="9af47aa9-b65d-491a-982c-fa7534e33896" absoluteBounds="7.5, 1, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/CMSDataContext/cms_vote" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ee7002d1-67f0-4d96-a234-c80c0eb98ca7" absoluteBounds="7.515, 1.46, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="28bee335-6bdc-40cd-be2b-e2dec586bc09" absoluteBounds="7.5, 3.375, 2, 1.5785953776041666">
+      <DataClassMoniker Name="/CMSDataContext/cms_vote_option" />
+      <nestedChildShapes>
+        <elementListCompartment Id="533fed2e-6007-4899-ad7d-62dd83bb6bae" absoluteBounds="7.515, 3.835, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

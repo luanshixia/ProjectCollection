@@ -1,0 +1,63 @@
+﻿@{
+    Layout = "../_Layout.cshtml";
+
+    var username = "";
+    var password1 = "";
+    var password2 = "";
+
+    if (IsPost)
+    {
+        WebSecurity.Logout();
+
+        username = Request["username"];
+        password1 = Request["password1"];
+        password2 = Request["password2"];
+
+        // Validation
+        if (username.IsEmpty())
+        {
+            ModelState.AddError("username", "Username is required.");
+        }
+        if (password1.IsEmpty())
+        {
+            ModelState.AddError("password1", "Password is required.");
+        }
+        if (WebSecurity.UserExists(username))
+        {
+            ModelState.AddError("username", "An account with this name already exists.");
+        }
+        if (password1 != password2)
+        {
+            ModelState.AddError("password1", "The passwords do not match.");
+        }
+
+        // Create Account
+        if (ModelState.IsValid)
+        {
+            WebSecurity.CreateUserAndAccount(username, password1, null, false);
+            WebSecurity.Login(username, password1);
+            Response.Redirect("default");
+        }
+    }
+}
+<h1>
+    Register</h1>
+<form action="" method="post">
+<div>
+    @Html.Label("Username: ", "username")<br />
+    @Html.TextBox("username", username)
+    @Html.ValidationMessage("username")
+</div>
+<div>
+    @Html.Label("Password: ", "password1")<br />
+    @Html.Password("password1", password1)
+    @Html.ValidationMessage("password1")
+</div>
+<div>
+    @Html.Label("Confirm Password: ", "password2")<br />
+    @Html.Password("password2", password2)
+</div>
+<div>
+    <input type="submit" value="Register" />
+</div>
+</form>

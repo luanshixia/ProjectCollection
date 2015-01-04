@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<FormDef>
+  <Data>
+    <Field Name="姓名" DataType="String" />
+    <Field Name="性别" DataType="Enum" Dictionary="性别" />
+    <Field Name="年龄" DataType="Int32" Range="0,100" />
+    <Field Name="身高" DataType="Double" Range="0,250" />
+    <Field Name="出生日期" DataType="DateTime" />
+    <Field Name="地址" DataType="String" />
+    <Field Name="电话" DataType="String" Regex="" />
+    <Field Name="领导意见" DataType="String" />
+  </Data>
+  <Dictionaries>
+    <Dictionary Name="性别">
+      <Add Key="0" Value="男" />
+      <Add Key="1" Value="女" />
+    </Dictionary>
+  </Dictionaries>
+  <Layout>
+    
+  </Layout>
+</FormDef>

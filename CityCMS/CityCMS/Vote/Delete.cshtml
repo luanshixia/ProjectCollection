@@ -1,0 +1,8 @@
+﻿@using TongJi.Web.CMS
+@{
+    int id = Convert.ToInt32(Request.Params["id"]);
+    var record = VoteManager.GetDbRecord(id);
+    record.enabled = false;
+    VoteManager.SaveChanges();
+    Response.Redirect(string.Format("List"));
+}

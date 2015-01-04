@@ -1,0 +1,5 @@
+﻿@using TongJi.Web.CMS
+@{
+    var channels = ChannelManager.GetAllRoots();
+    Response.Write(Json.Encode(channels));
+}

@@ -1,0 +1,8 @@
+﻿@{
+    var client = new WebClient { Encoding = System.Text.Encoding.UTF8 };
+    string data = client.DownloadString("http://localhost/CityCMS/TechTest/JsonEncode.cshtml");
+}
+@foreach (var item in Json.Decode(data))
+{
+    @item.name<br/>
+}

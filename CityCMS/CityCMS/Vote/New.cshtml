@@ -1,0 +1,59 @@
+﻿@using TongJi.Web.CMS
+@{
+    bool? succeeded = null;
+    Validation.Add("question", Validator.Required("必须输入问题。"));
+
+    if (IsPost)
+    {
+        if (Validation.IsValid())
+        {
+            string question = Request.Form["question"];
+            string[] options = Request.Form["options"].Split('\n').Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
+            if (!string.IsNullOrEmpty(question) && options.Length > 1)
+            {
+                int id = VoteManager.NewVote(question);
+                VoteManager.SetVoteOptions(id, options);
+                succeeded = true;
+            }
+            else
+            {
+                succeeded = false;
+            }
+        }
+    }
+}
+<div>
+    <script type="text/javascript" src="@Href("~/Scripts/jquery-1.4.1.js")"></script>
+    <script type="text/javascript" src="@Href("~/Scripts/jquery.validate.js")"></script>
+    <script type="text/javascript" src="@Href("~/Scripts/jquery.validate.unobtrusive.js")"></script>
+    <form id="new_vote" action="@Href("~/Vote/New")" method="post">
+    <p>
+        发起新投票。</p>
+    <div>
+        @Html.Label("问题", "question")<br />
+        @Html.TextBox("question", "1+1=?", new { style = "width:300px;" })
+        @Html.ValidationMessage("question")
+    </div>
+    <br />
+    <div>
+        @Html.Label("选项", "options")<br />
+        @Html.TextArea("options", "0\n1\n2\n3", 5, 40, null)
+    </div>
+    <br />
+    <div>
+        <input type="submit" value="发起" />
+    </div>
+    </form>
+    @if (succeeded == true)
+    {
+        <p>
+            发起投票成功。
+        </p>
+    }
+    else if (succeeded == false)
+    {
+        <p>
+            发起投票失败。
+        </p>
+    }
+</div>

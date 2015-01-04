@@ -1,0 +1,56 @@
+﻿@using TongJi.Web.CMS
+@{
+    Layout = "_Layout.cshtml";
+
+    int channel = Convert.ToInt32(Request.QueryString["id"]);
+    NavigationControl nav = new NavigationControl();
+    var record = ChannelManager.GetDbRecord(channel);
+    int displayMode = record.display_mode;
+}
+<script type="text/javascript">
+    function loadPage(pageUrl) {
+        $('#content').fadeOut('fast');
+        $.ajaxSetup({ cache: false }); // 禁止IE缓存
+        $('#content').load(pageUrl, function () {
+            $('#content').fadeIn('fast');
+        });
+    }
+</script>
+<div id="sidebar" style="float: left; width: 200px">
+    @Html.Raw(nav.GetHtml(channel))
+</div>
+<div id="content" style="padding: 20px; margin-left: 200px">
+    @if (displayMode == ChannelDisplayMode.MainContent)
+    {
+        int mainContent = ChannelManager.GetContentList(channel).First().id;
+        ContentPresenter cp = new ContentPresenter(mainContent);
+        @Html.Raw(cp.GetHtml())
+    }
+    else if (displayMode == ChannelDisplayMode.ContentList)
+    {
+        ContentListControl list = new ContentListControl();
+        @Html.Raw(list.GetHtml(channel, -1, true))
+    }
+    else if (displayMode == ChannelDisplayMode.LoadPage)
+    {
+@*        int index = record.link.IndexOf('?');
+        string page = record.link;
+        string data = null;
+        string[] dataArr = null;
+        if (index > 0)
+        {
+            page = record.link.Remove(index);
+            data = record.link.Substring(index + 1);
+            dataArr = data.Split('&').Select(x=>x.Split('=')[1]).ToArray();
+        }
+        @RenderPage(page, dataArr)
+*@    
+        <script type="text/javascript">
+            loadPage('@record.link');
+        </script>
+    }
+    else if (displayMode == ChannelDisplayMode.Hyperlink)
+    {
+        Response.Redirect(record.link);
+    }
+</div>

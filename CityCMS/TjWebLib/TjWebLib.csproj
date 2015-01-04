@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BF90407D-9856-4A6D-AB92-D85FBECEEEF1}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>TongJi.Web</RootNamespace>
+    <AssemblyName>TjWebLib</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CMS\AttachmentPresenter.cs" />
+    <Compile Include="CMS\ChannelManager.cs" />
+    <Compile Include="CMS\CommentPoster.cs" />
+    <Compile Include="CMS\CommentPresenter.cs" />
+    <Compile Include="CMS\ContentListControl.cs" />
+    <Compile Include="CMS\ContentManager.cs" />
+    <Compile Include="CMS\ContentPresenter.cs" />
+    <Compile Include="CMS\FullRoutControl.cs" />
+    <Compile Include="CMS\ImageRotator.cs" />
+    <Compile Include="CMS\NavigationControl.cs" />
+    <Compile Include="CMS\VoteManager.cs" />
+    <Compile Include="DAL\CMS.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>CMS.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="DAL\LinqHelper.cs" />
+    <Compile Include="DAL\Workflow.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Workflow.dbml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Security\LoginManager.cs" />
+    <Compile Include="Security\UsergroupManager.cs" />
+    <Compile Include="Security\UserManager.cs" />
+    <Compile Include="System.Json.cs" />
+    <Compile Include="Workflow\FlowInstance.cs" />
+    <Compile Include="Workflow\FlowManager.cs" />
+    <Compile Include="Workflow\FormManager.cs" />
+    <Compile Include="Workflow\ProjectTypeManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DAL\CMS.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>CMS.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="DAL\Workflow.dbml">
+      <Generator>MSLinqToSQLGenerator</Generator>
+      <LastGenOutput>Workflow.designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DAL\Workflow.dbml.layout">
+      <DependentUpon>Workflow.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="DAL\CMS.dbml.layout">
+      <DependentUpon>CMS.dbml</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Documents\FormDefSample.xml">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Documents\FormInstSample.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TjWebLibUI\TjWebLibUI.csproj">
+      <Project>{C74DF6C6-2B83-415B-85BD-461D0D29377F}</Project>
+      <Name>TjWebLibUI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

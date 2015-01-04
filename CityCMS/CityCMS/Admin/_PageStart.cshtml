@@ -1,0 +1,6 @@
+﻿@{
+    if(!WebSecurity .IsAuthenticated)
+    {
+        Response.Redirect("~/About");
+    }
+}
