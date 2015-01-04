@@ -1,0 +1,8 @@
+﻿<Window x:Class="EasyLoad.ResponseDetailWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="响应详情" Height="400" Width="600" WindowStartupLocation="CenterOwner" Background="WhiteSmoke">
+    <Grid>
+        <TextBox Name="TheTextBox" Margin="10" AcceptsReturn="True" IsReadOnly="True" TextWrapping="Wrap" FontFamily="Consolas" VerticalScrollBarVisibility="Visible" />
+    </Grid>
+</Window>
