@@ -1,0 +1,16 @@
+﻿<Window x:Class="CityInfographics.PumpWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:CityInfographics" 
+        xmlns:citygis="clr-namespace:TongJi.Gis.Display;assembly=CityGisDisplayLib"
+        Title="City Infographics" Height="720" Width="960" WindowStartupLocation="CenterScreen" FontFamily="微软雅黑" Loaded="Window_Loaded_1">
+
+    <Window.Resources>
+    </Window.Resources>
+
+    <Grid x:Name="LayoutRoot">
+
+        <citygis:MapControl x:Name="TheCanvas" Background="#FFFFFF"/>
+
+    </Grid>
+</Window>

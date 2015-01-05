@@ -1,0 +1,8 @@
+﻿<Window x:Class="CityInfographics.LaunchWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="LaunchWindow" Height="300" Width="300" Loaded="Window_Loaded" WindowStartupLocation="CenterScreen">
+    <StackPanel Name="LayoutRoot">
+
+    </StackPanel>
+</Window>

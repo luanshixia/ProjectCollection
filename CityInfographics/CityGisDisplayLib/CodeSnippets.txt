@@ -1,0 +1,157 @@
+﻿
+
+        public void RenderLayers(double magFactor)
+        {
+            TranslateTransform translate = new TranslateTransform { X = Origin.X, Y = Origin.Y };
+            ScaleTransform scale = new ScaleTransform { CenterX = 0, CenterY = 0, ScaleX = 1 / Scale, ScaleY = -1 / Scale };
+            MapTransform.Children.Clear();
+            MapTransform.Children.Add(scale);
+            MapTransform.Children.Add(translate);
+
+            foreach (var layer in LabelLayers)
+            {
+                foreach (FrameworkElement tb in layer.Children)
+                {
+                    TextBlock t = tb as TextBlock;
+                    double size = layer.LayerStyle.FontSize * magFactor / 8;
+                    t.FontSize = size;
+                    ElementPositionHelper.CenterElementInCanvas(t);
+
+                    double actualWidth = size * 5;
+                    double actualHeight = size;
+
+                    var pos = ElementPositionHelper.GetElementDesignPosition(tb);
+                    Canvas.SetLeft(tb, pos.X - actualWidth / 2);
+                    Canvas.SetTop(tb, pos.Y - actualHeight / 2);
+
+                    double angle = (double)ElementPositionHelper.GetElementData(t, "Angle");
+                    var trans1 = new ScaleTransform { ScaleX = 1, ScaleY = -1, CenterX = actualWidth / 2, CenterY = actualHeight / 2 };
+                    var trans2 = new RotateTransform { Angle = angle, CenterX = actualWidth / 2, CenterY = actualHeight / 2 };
+                    var trans = new TransformGroup();
+                    trans.Children.Add(trans1);
+                    trans.Children.Add(trans2);
+                    if (ElementPositionHelper.GetElementData(t, "Type").ToString() == "1")
+                    {
+                        trans.Children.Add(new TranslateTransform { X = actualWidth / 1.5 });
+                    }
+                    tb.RenderTransform = trans;
+                }
+            }
+
+            foreach (MapLayer layer in Layers)
+            {
+                layer.RenderTransform = MapTransform;
+
+                //if (layer.Children.Cast<UIElement>().Any(x => x is Ellipse))
+                //{
+                //    foreach (var ep in layer.Children)
+                //    {
+                //        Ellipse e = ep as Ellipse;
+                //        if (e != null)
+                //        {
+                //            double size = layer.LayerStyle.SpotSize * magFactor;
+                //            e.Width = size;
+                //            e.Height = size;
+                //            e.StrokeThickness = layer.LayerStyle.StrokeWeight * magFactor;
+                //            ElementPositionHelper.CenterElementInCanvas(e, size, size);
+                //        }
+                //    }
+                //}
+                //else if (layer.Children.Any(x => x is Polyline))
+                //{
+                //    foreach (var poly in layer.Children)
+                //    {
+                //        Polyline p = poly as Polyline;
+                //        double size = layer.LayerStyle.StrokeWeight * magFactor;
+                //        p.StrokeThickness = size;
+                //    }
+                //}
+                //else if (layer.Children.Any(x => x is Polygon))
+                //{
+                //    foreach (var poly in layer.Children)
+                //    {
+                //        Polygon p = poly as Polygon;
+                //        double size = layer.LayerStyle.StrokeWeight * magFactor;
+                //        p.StrokeThickness = size;
+                //    }
+                //}
+            }
+
+            TempLayers.ForEach(x => x.RenderTransform = MapTransform);
+            LabelLayers.ForEach(x => x.RenderTransform = MapTransform);
+            base.Clip = new RectangleGeometry { Rect = new Rect(0, 0, ActualWidth, ActualHeight) };
+
+            //MainWindow.Current.SRuler.SetScaleRulerValue(Scale);
+            OnViewChanged();
+            ViewerToolManager.Tools.ForEach(t => t.Render());
+        }
+
+		
+
+    // Create a host visual derived from the FrameworkElement class.
+    // This class provides layout, event handling, and container support for
+    // the child visual objects.
+    public class MyVisualHost : FrameworkElement
+    {
+        // Create a collection of child visual objects.
+        private Visual _visual;
+
+        public MyVisualHost(Visual visual)
+        {
+            _visual = visual;
+
+            AddVisualChild(_visual);
+            AddLogicalChild(_visual);
+
+            // Add the event handler for MouseLeftButtonUp.
+            //this.MouseLeftButtonUp += new System.Windows.Input.MouseButtonEventHandler(MyVisualHost_MouseLeftButtonUp);
+        }
+
+        // Provide a required override for the VisualChildrenCount property.
+        protected override int VisualChildrenCount
+        {
+            get { return 1; }
+        }
+
+        // Provide a required override for the GetVisualChild method.
+        protected override Visual GetVisualChild(int index)
+        {
+            if (index != 0)
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
+            return _visual;
+        }
+
+        // Capture the mouse event and hit test the coordinate point value against
+        // the child visual objects.
+        void MyVisualHost_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // Retreive the coordinates of the mouse button event.
+            System.Windows.Point pt = e.GetPosition((UIElement)sender);
+
+            // Initiate the hit test by setting up a hit test result callback method.
+            VisualTreeHelper.HitTest(this, null, new HitTestResultCallback(myCallback), new PointHitTestParameters(pt));
+        }
+
+        // If a child visual object is hit, toggle its opacity to visually indicate a hit.
+        public HitTestResultBehavior myCallback(HitTestResult result)
+        {
+            if (result.VisualHit.GetType() == typeof(DrawingVisual))
+            {
+                if (((DrawingVisual)result.VisualHit).Opacity == 1.0)
+                {
+                    ((DrawingVisual)result.VisualHit).Opacity = 0.4;
+                }
+                else
+                {
+                    ((DrawingVisual)result.VisualHit).Opacity = 1.0;
+                }
+            }
+
+            // Stop the hit test enumeration of objects in the visual tree.
+            return HitTestResultBehavior.Stop;
+        }
+
+    }
