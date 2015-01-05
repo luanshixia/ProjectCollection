@@ -75,10 +75,6 @@
     <Content Include="Admin\Content.aspx" />
     <Content Include="Admin\ContentEdit.aspx" />
     <Content Include="Admin\Default.aspx" />
-    <Content Include="App_Data\account.mdf" />
-    <Content Include="App_Data\account_log.ldf">
-      <DependentUpon>account.mdf</DependentUpon>
-    </Content>
     <Content Include="App_Data\Repository.mdf" />
     <Content Include="App_Data\Repository_log.ldf">
       <DependentUpon>Repository.mdf</DependentUpon>

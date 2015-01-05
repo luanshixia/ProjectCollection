@@ -1,13 +1,14 @@
 ﻿@helper AccountSummary()
 {
     <div id="accountSummary">
-        @if (WebSecurity.IsAuthenticated)
+        @*@if (WebSecurity.IsAuthenticated)
         {
             @:欢迎您， <a href="@Href("~/TechTest/changePassword")">@WebSecurity.CurrentUserName</a> | <a href="@Href("~/Account/logout")">注销</a>
         }
         else
         {
             @:<a href="@Href("~/Account/login")">登录</a> | <a href="@Href("~/Account/register")">注册</a>
-        }
+        }*@
+        Welcome, user!
     </div>
 }

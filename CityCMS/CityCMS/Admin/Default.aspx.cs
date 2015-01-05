@@ -15,10 +15,10 @@ namespace CityCMS.Admin
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            if (!System.Web.Security.Roles.IsUserInRole("Administrators"))
-            {
-                Response.Redirect("~/Account");
-            }
+            //if (!System.Web.Security.Roles.IsUserInRole("Administrators"))
+            //{
+            //    Response.Redirect("~/Account");
+            //}
 
             TjDataTable<cms_channel> table = new TjDataTable<cms_channel>();
             table.Rows = ChannelManager.GetAllRoots();
