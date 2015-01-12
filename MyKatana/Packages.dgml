@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="Microsoft.AspNet.Cors 5.0.0" Category="Package" Bounds="3090.745,223.84,166.406666666667,25.96" Label="Microsoft.AspNet.Cors 5.0.0" />
+    <Node Id="Microsoft.AspNet.SignalR.Core 2.1.2" Category="Package" Bounds="2052.19,111.92,209.516666666667,25.96" Label="Microsoft.AspNet.SignalR.Core 2.1.2" />
+    <Node Id="Microsoft.AspNet.SignalR.JS 2.1.2" Category="Package" Bounds="957.316666666667,167.88,195.263333333333,25.96" Label="Microsoft.AspNet.SignalR.JS 2.1.2" />
+    <Node Id="Microsoft.AspNet.SignalR.SelfHost 2.1.2" Category="Package" Bounds="2570.63333333333,55.96,228.63,25.96" Label="Microsoft.AspNet.SignalR.SelfHost 2.1.2" />
+    <Node Id="Microsoft.AspNet.WebApi.Client 5.2.0" Category="Package" Bounds="0,279.800000000001,217.896666666667,25.96" Label="Microsoft.AspNet.WebApi.Client 5.2.0" />
+    <Node Id="Microsoft.AspNet.WebApi.Core 5.2.0" Category="Package" Bounds="2.73333333333312,223.84,212.43,25.96" Label="Microsoft.AspNet.WebApi.Core 5.2.0" />
+    <Node Id="Microsoft.AspNet.WebApi.Owin 5.2.0" Category="Package" Bounds="1.48000000000002,167.88,214.936666666667,25.96" Label="Microsoft.AspNet.WebApi.Owin 5.2.0" />
+    <Node Id="Microsoft.AspNet.WebApi.OwinSelfHost 5.2.0" Category="Package" Bounds="685.468333333333,111.92,258.96,25.96" Label="Microsoft.AspNet.WebApi.OwinSelfHost 5.2.0" />
+    <Node Id="Microsoft.Owin 2.0.2" Category="Package" Bounds="276.803333333333,223.84,128.29,25.96" Label="Microsoft.Owin 2.0.2" />
+    <Node Id="Microsoft.Owin 3.0.0" Category="Package" Bounds="1858.80333333333,223.84,128.29,25.96" Label="Microsoft.Owin 3.0.0" />
+    <Node Id="Microsoft.Owin.Cors 3.0.0" Category="Package" Bounds="3096.64,167.88,154.616666666667,25.96" Label="Microsoft.Owin.Cors 3.0.0" />
+    <Node Id="Microsoft.Owin.Diagnostics 2.0.1" Category="Package" Bounds="2588.995,167.88,191.906666666667,25.96" Label="Microsoft.Owin.Diagnostics 2.0.1" />
+    <Node Id="Microsoft.Owin.Diagnostics 3.0.0" Category="Package" Bounds="1667.995,167.88,191.906666666667,25.96" Label="Microsoft.Owin.Diagnostics 3.0.0" />
+    <Node Id="Microsoft.Owin.Host.HttpListener 2.0.1" Category="Package" Bounds="2843.37833333333,167.88,223.14,25.96" Label="Microsoft.Owin.Host.HttpListener 2.0.1" />
+    <Node Id="Microsoft.Owin.Host.HttpListener 2.0.2" Category="Package" Bounds="449.378333333334,167.88,223.14,25.96" Label="Microsoft.Owin.Host.HttpListener 2.0.2" />
+    <Node Id="Microsoft.Owin.Host.HttpListener 3.0.0" Category="Package" Bounds="703.378333333334,167.88,223.14,25.96" Label="Microsoft.Owin.Host.HttpListener 3.0.0" />
+    <Node Id="Microsoft.Owin.Host.SystemWeb 3.0.0" Category="Package" Bounds="1182.60166666667,167.88,220.693333333333,25.96" Label="Microsoft.Owin.Host.SystemWeb 3.0.0" />
+    <Node Id="Microsoft.Owin.Hosting 2.0.1" Category="Package" Bounds="2385.76666666667,167.88,172.363333333333,25.96" Label="Microsoft.Owin.Hosting 2.0.1" />
+    <Node Id="Microsoft.Owin.Hosting 2.0.2" Category="Package" Bounds="246.766666666667,167.88,172.363333333333,25.96" Label="Microsoft.Owin.Hosting 2.0.2" />
+    <Node Id="Microsoft.Owin.Hosting 3.0.0" Category="Package" Bounds="1433.76666666667,167.88,172.363333333333,25.96" Label="Microsoft.Owin.Hosting 3.0.0" />
+    <Node Id="Microsoft.Owin.Security 2.0.1" Category="Package" Bounds="1953.535,167.88,172.826666666667,25.96" Label="Microsoft.Owin.Security 2.0.1" />
+    <Node Id="Microsoft.Owin.SelfHost 2.0.1" Category="Package" Bounds="2597.49166666667,111.92,174.913333333333,25.96" Label="Microsoft.Owin.SelfHost 2.0.1" />
+    <Node Id="Microsoft.Owin.SelfHost 3.0.0" Category="Package" Bounds="1549.49166666667,111.92,174.913333333333,25.96" Label="Microsoft.Owin.SelfHost 3.0.0" />
+    <Node Id="MyKatana" Category="Project" Bounds="1018.58833333333,111.92,72.72,25.96" Label="MyKatana" />
+    <Node Id="MyKatanaHost" Category="Project" Bounds="1588.23333333333,55.9600000000003,97.4300000000001,25.96" Label="MyKatanaHost" />
+    <Node Id="MyKatanaNotif" Category="Project" Bounds="1458.22,55.9600000000003,99.4566666666667,25.96" Label="MyKatanaNotif" />
+    <Node Id="Newtonsoft.Json 4.5.11" Category="Package" Bounds="37.9866666666667,335.760000000001,141.923333333333,25.96" Label="Newtonsoft.Json 4.5.11" />
+    <Node Id="Newtonsoft.Json 6.0.4" Category="Package" Bounds="2188.22166666667,167.88,135.453333333333,25.96" Label="Newtonsoft.Json 6.0.4" />
+    <Node Id="Owin 1.0" Category="Package" Bounds="1794.82666666667,279.8,66.2433333333333,25.96" Label="Owin 1.0" />
+    <Node Id="SignalRHost" Category="Project" Bounds="3131.93,0,84.0366666666669,25.96" Label="SignalRHost" />
+    <Node Id="WebApiHost" Category="Project" Bounds="771.473333333333,55.9600000000003,86.95,25.96" Label="WebApiHost" />
+    <Node Id="jQuery 1.6.4" Category="Package" Bounds="1013.5,223.84,82.8966666666668,25.96" Label="jQuery 1.6.4" />
+  </Nodes>
+  <Links>
+    <Link Source="Microsoft.AspNet.SignalR.Core 2.1.2" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1922.94836425781,137.880004882813,159.086303710938,76.9599914550781" />
+    <Link Source="Microsoft.AspNet.SignalR.Core 2.1.2" Target="Microsoft.Owin.Security 2.0.1" Category="Package Dependency" Bounds="2075.20581054688,137.880004882813,54.604248046875,26.11669921875" />
+    <Link Source="Microsoft.AspNet.SignalR.Core 2.1.2" Target="Newtonsoft.Json 6.0.4" Category="Package Dependency" Bounds="2179.91162109375,137.880004882813,45.238525390625,25.5712738037109" />
+    <Link Source="Microsoft.AspNet.SignalR.Core 2.1.2" Target="Owin 1.0" Category="Package Dependency" Bounds="1869.94262695313,137.880004882813,287.005615234375,147.757141113281" />
+    <Link Source="Microsoft.AspNet.SignalR.JS 2.1.2" Target="jQuery 1.6.4" Category="Package Dependency" Bounds="1054.94836425781,193.839996337891,0,21" />
+    <Link Source="Microsoft.AspNet.SignalR.SelfHost 2.1.2" Target="Microsoft.AspNet.SignalR.Core 2.1.2" Category="Package Dependency" Bounds="2270.447265625,80.969856262207,300.99560546875,31.9009704589844" />
+    <Link Source="Microsoft.AspNet.SignalR.SelfHost 2.1.2" Target="Microsoft.Owin.SelfHost 2.0.1" Category="Package Dependency" Bounds="2684.9482421875,81.9199981689453,0,21" />
+    <Link Source="Microsoft.AspNet.WebApi.Client 5.2.0" Target="Newtonsoft.Json 4.5.11" Category="Package Dependency" Bounds="108.948333740234,305.760009765625,0,21" />
+    <Link Source="Microsoft.AspNet.WebApi.Core 5.2.0" Target="Microsoft.AspNet.WebApi.Client 5.2.0" Category="Package Dependency" Bounds="108.948333740234,249.800003051758,0,20.9999847412109" />
+    <Link Source="Microsoft.AspNet.WebApi.Owin 5.2.0" Target="Microsoft.AspNet.WebApi.Core 5.2.0" Category="Package Dependency" Bounds="108.948333740234,193.839996337891,0,21" />
+    <Link Source="Microsoft.AspNet.WebApi.Owin 5.2.0" Target="Microsoft.Owin 2.0.2" Category="Package Dependency" Bounds="162.76106262207,193.839996337891,115.625473022461,27.8896636962891" />
+    <Link Source="Microsoft.AspNet.WebApi.Owin 5.2.0" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="185.737335205078,193.839996337891,1664.78622436523,29.9274749755859" />
+    <Link Source="Microsoft.AspNet.WebApi.Owin 5.2.0" Target="Owin 1.0" Category="Package Dependency" Bounds="143.188568115234,193.839996337891,1642.63967895508,98.1504516601563" />
+    <Link Source="Microsoft.AspNet.WebApi.OwinSelfHost 5.2.0" Target="Microsoft.AspNet.WebApi.Owin 5.2.0" Category="Package Dependency" Bounds="223.990905761719,133.756851196289,461.477416992188,33.754150390625" />
+    <Link Source="Microsoft.AspNet.WebApi.OwinSelfHost 5.2.0" Target="Microsoft.Owin.Host.HttpListener 2.0.2" Category="Package Dependency" Bounds="628.653198242188,137.880004882813,127.379455566406,28.0635986328125" />
+    <Link Source="Microsoft.AspNet.WebApi.OwinSelfHost 5.2.0" Target="Microsoft.Owin.Host.HttpListener 3.0.0" Category="Package Dependency" Bounds="814.948303222656,137.880004882813,0,21" />
+    <Link Source="Microsoft.AspNet.WebApi.OwinSelfHost 5.2.0" Target="Microsoft.Owin.Hosting 2.0.2" Category="Package Dependency" Bounds="427.986145019531,137.880004882813,272.408874511719,31.2433319091797" />
+    <Link Source="Microsoft.AspNet.WebApi.OwinSelfHost 5.2.0" Target="Microsoft.Owin.Hosting 3.0.0" Category="Package Dependency" Bounds="944.428344726563,134.471206665039,482.591552734375,32.5127105712891" />
+    <Link Source="Microsoft.Owin 2.0.2" Target="Owin 1.0" Category="Package Dependency" Bounds="405.093322753906,239.233963012695,1380.73968505859,51.9611053466797" />
+    <Link Source="Microsoft.Owin 3.0.0" Target="Owin 1.0" Category="Package Dependency" Bounds="1857.73840332031,249.800003051758,43.174560546875,25.4321136474609" />
+    <Link Source="Microsoft.Owin.Cors 3.0.0" Target="Microsoft.AspNet.Cors 5.0.0" Category="Package Dependency" Bounds="3173.9482421875,193.839996337891,0,21" />
+    <Link Source="Microsoft.Owin.Cors 3.0.0" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1986.27807617188,193.839996337891,1125.99438476563,28.8760070800781" />
+    <Link Source="Microsoft.Owin.Cors 3.0.0" Target="Owin 1.0" Category="Package Dependency" Bounds="1870.05639648438,193.642440795898,1228.51293945313,96.8183135986328" />
+    <Link Source="Microsoft.Owin.Diagnostics 2.0.1" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1994.23596191406,193.654190063477,596.719604492188,29.3487243652344" />
+    <Link Source="Microsoft.Owin.Diagnostics 2.0.1" Target="Owin 1.0" Category="Package Dependency" Bounds="1869.99426269531,193.235168457031,720.194213867188,94.0538330078125" />
+    <Link Source="Microsoft.Owin.Diagnostics 3.0.0" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1800.82861328125,193.839996337891,76.7498779296875,27.0121154785156" />
+    <Link Source="Microsoft.Owin.Diagnostics 3.0.0" Target="Owin 1.0" Category="Package Dependency" Bounds="1771.37072753906,193.839996337891,44.6875,78.1471862792969" />
+    <Link Source="Microsoft.Owin.Host.SystemWeb 3.0.0" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1402.7607421875,192.548889160156,447.103271484375,35.3626556396484" />
+    <Link Source="Microsoft.Owin.Host.SystemWeb 3.0.0" Target="Owin 1.0" Category="Package Dependency" Bounds="1354.99536132813,193.839996337891,431.02197265625,90.168212890625" />
+    <Link Source="Microsoft.Owin.Hosting 2.0.1" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1995.83679199219,190.959213256836,389.932250976563,33.6822357177734" />
+    <Link Source="Microsoft.Owin.Hosting 2.0.1" Target="Owin 1.0" Category="Package Dependency" Bounds="1869.96325683594,193.839996337891,536.110961914063,92.4090270996094" />
+    <Link Source="Microsoft.Owin.Hosting 2.0.2" Target="Microsoft.Owin 2.0.2" Category="Package Dependency" Bounds="334.803955078125,193.839996337891,3.01507568359375,21.0905914306641" />
+    <Link Source="Microsoft.Owin.Hosting 2.0.2" Target="Owin 1.0" Category="Package Dependency" Bounds="419.102813720703,191.242950439453,1366.72994995117,99.9855346679688" />
+    <Link Source="Microsoft.Owin.Hosting 3.0.0" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1605.45690917969,192.733596801758,244.432006835938,33.9414672851563" />
+    <Link Source="Microsoft.Owin.Hosting 3.0.0" Target="Owin 1.0" Category="Package Dependency" Bounds="1539.66418457031,193.839996337891,246.334350585938,90.622802734375" />
+    <Link Source="Microsoft.Owin.Security 2.0.1" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1958.20581054688,193.839996337891,54.604248046875,26.1167144775391" />
+    <Link Source="Microsoft.Owin.Security 2.0.1" Target="Owin 1.0" Category="Package Dependency" Bounds="1869.83679199219,193.839996337891,165.008666992188,89.2133483886719" />
+    <Link Source="Microsoft.Owin.SelfHost 2.0.1" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1995.33923339844,134.603576660156,602.152465820313,89.1636047363281" />
+    <Link Source="Microsoft.Owin.SelfHost 2.0.1" Target="Microsoft.Owin.Diagnostics 2.0.1" Category="Package Dependency" Bounds="2684.9482421875,137.880004882813,0,21" />
+    <Link Source="Microsoft.Owin.SelfHost 2.0.1" Target="Microsoft.Owin.Host.HttpListener 2.0.1" Category="Package Dependency" Bounds="2747.5751953125,137.880004882813,135.93359375,28.1734771728516" />
+    <Link Source="Microsoft.Owin.SelfHost 2.0.1" Target="Microsoft.Owin.Hosting 2.0.1" Category="Package Dependency" Bounds="2530.05859375,137.880004882813,105.484130859375,27.7130889892578" />
+    <Link Source="Microsoft.Owin.SelfHost 2.0.1" Target="Owin 1.0" Category="Package Dependency" Bounds="1870.05554199219,137.880004882813,941.892700195313,152.50537109375" />
+    <Link Source="Microsoft.Owin.SelfHost 3.0.0" Target="Microsoft.Owin 3.0.0" Category="Package Dependency" Bounds="1720.15063476563,137.880004882813,190.907592773438,78.1471862792969" />
+    <Link Source="Microsoft.Owin.SelfHost 3.0.0" Target="Microsoft.Owin.Diagnostics 3.0.0" Category="Package Dependency" Bounds="1666.40612792969,137.880004882813,59.8485107421875,26.3710021972656" />
+    <Link Source="Microsoft.Owin.SelfHost 3.0.0" Target="Microsoft.Owin.Host.HttpListener 3.0.0" Category="Package Dependency" Bounds="931.596252441406,129.744216918945,617.895446777344,37.3478088378906" />
+    <Link Source="Microsoft.Owin.SelfHost 3.0.0" Target="Microsoft.Owin.Hosting 3.0.0" Category="Package Dependency" Bounds="1555.20581054688,137.880004882813,54.604248046875,26.11669921875" />
+    <Link Source="Microsoft.Owin.SelfHost 3.0.0" Target="Owin 1.0" Category="Package Dependency" Bounds="1636.94836425781,137.880004882813,149.241333007813,142.665374755859" />
+    <Link Source="MyKatana" Target="Microsoft.AspNet.SignalR.JS 2.1.2" Category="Installed Package" Bounds="1054.94836425781,137.880004882813,0,21" />
+    <Link Source="MyKatana" Target="Microsoft.Owin.Host.SystemWeb 3.0.0" Category="Installed Package" Bounds="1091.30834960938,133.449188232422,137.674438476563,32.370849609375" />
+    <Link Source="MyKatanaHost" Target="Microsoft.Owin.SelfHost 3.0.0" Category="Installed Package" Bounds="1636.94836425781,81.9199981689453,0,21" />
+    <Link Source="MyKatanaNotif" Target="Microsoft.AspNet.WebApi.OwinSelfHost 5.2.0" Category="Installed Package" Bounds="953.361694335938,72.9555816650391,504.858276367188,40.7674865722656" />
+    <Link Source="MyKatanaNotif" Target="Microsoft.Owin.SelfHost 3.0.0" Category="Installed Package" Bounds="1537.8701171875,81.9199981689453,60.89990234375,26.4183044433594" />
+    <Link Source="SignalRHost" Target="Microsoft.AspNet.SignalR.SelfHost 2.1.2" Category="Installed Package" Bounds="2806.10546875,17.7884788513184,325.824462890625,37.2865905761719" />
+    <Link Source="SignalRHost" Target="Microsoft.Owin.Cors 3.0.0" Category="Installed Package" Bounds="3173.9482421875,25.9599990844727,0,132.92000579834" />
+    <Link Source="WebApiHost" Target="Microsoft.AspNet.WebApi.OwinSelfHost 5.2.0" Category="Installed Package" Bounds="814.948303222656,81.9199981689453,0,21" />
+  </Links>
+  <Categories>
+    <Category Id="Installed Package" />
+    <Category Id="Package" />
+    <Category Id="Package Dependency" />
+    <Category Id="Project" />
+  </Categories>
+  <Properties>
+    <Property Id="Bounds" DataType="System.Windows.Rect" />
+    <Property Id="Expression" DataType="System.String" />
+    <Property Id="GraphDirection" DataType="Microsoft.VisualStudio.Diagrams.Layout.LayoutOrientation" />
+    <Property Id="GroupLabel" DataType="System.String" />
+    <Property Id="IsEnabled" DataType="System.Boolean" />
+    <Property Id="Label" Label="Label" Description="Displayable label of an Annotatable object" DataType="System.String" />
+    <Property Id="TargetType" DataType="System.Type" />
+    <Property Id="Value" DataType="System.String" />
+    <Property Id="ValueLabel" DataType="System.String" />
+  </Properties>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="Project" ValueLabel="True">
+      <Condition Expression="HasCategory('Project')" />
+      <Setter Property="Background" Value="Blue" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="Package Dependency" ValueLabel="True">
+      <Condition Expression="HasCategory('Package Dependency')" />
+      <Setter Property="Background" Value="Yellow" />
+    </Style>
+  </Styles>
+</DirectedGraph>
