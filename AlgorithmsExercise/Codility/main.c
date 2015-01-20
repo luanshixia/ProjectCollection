@@ -78,6 +78,48 @@ int nailingPlanks(int A[], int B[], int N, int C[], int M) { // xxx
     return step + 1;
 }
 
+int absDistinct(int A[], int N) {
+    int count = 1;
+    int left = 0;
+    int right = N - 1;
+    int cur = max(abs(A[left]), abs(A[right]));
+    while (left <= right) {
+        if (abs(A[left]) == cur) {
+            left++;
+        }
+        else if (abs(A[right]) == cur) {
+            right--;
+        }
+        else {
+            if (abs(A[left]) > abs(A[right])) {
+                cur = abs(A[left]);
+                left++;
+            }
+            else {
+                cur = abs(A[right]);
+                right--;
+            }
+            count++;
+        }
+    }
+    return count;
+}
+
+int countDistinctSlices(int M, int A[], int N) {
+    int ans = 0, pre = -1;
+    int hash[100001];
+    for (int i = 0; i < M; i++) hash[i] = -1;
+    for (int i = 0; i < N; i++) {
+        if (hash[A[i]] > pre) {
+            pre = hash[A[i]];
+        }
+        ans += i - pre;
+        hash[A[i]] = i;
+        if (ans > 1000000000) return 1000000000;
+    }
+    return ans;
+}
+
 int cmpfunc(const void * a, const void * b)
 {
     return (*(int*)a - *(int*)b);
