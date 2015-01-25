@@ -402,4 +402,53 @@ public class Main {
         }
         return count;
     }
+
+    public int countIdenticalPairs(int[] A) {
+        HashMap<Integer, Integer> map = new HashMap<>();
+        int count = 0;
+        for (int i : A) {
+            if (map.containsKey(i)) {
+                map.put(i, map.get(i) + 1);
+            } else {
+                map.put(i, 1);
+            }
+        }
+        Set<Integer> keys = map.keySet();
+        for (int i : keys) {
+            int n = map.get(i);
+            if (n > 1) {
+                count += n * (n - 1) / 2;
+            }
+        }
+        return count;
+    }
+
+    public int frogPond(int[] A, int X, int D) {
+        if (X <= D) {
+            return 0;
+        }
+        int[] hasLeaf = new int[X + 1];
+        int[] canReach = new int[X + 1];
+        for (int i = 1; i <= X - 1; i++) {
+            hasLeaf[i] = Integer.MAX_VALUE;
+        }
+        for (int i = 0; i < A.length; i++) {
+            if (i < hasLeaf[A[i]]) {
+                hasLeaf[A[i]] = i;
+            }
+        }
+        for (int i = 1; i <= X; i++) {
+            int min = Integer.MAX_VALUE;
+            for (int k = 1; k <= D; k++) {
+                if (i - k >= 0 && hasLeaf[i - k] < min) {
+                    min = hasLeaf[i - k];
+                }
+            }
+            canReach[i] = Math.max(min, hasLeaf[i]);
+        }
+        if (canReach[X] < Integer.MAX_VALUE) {
+            return canReach[X];
+        }
+        return -1;
+    }
 }

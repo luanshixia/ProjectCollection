@@ -198,10 +198,50 @@ int maxNonoverlappingSegments(int A[], int B[], int N) { // 90% - empty and sing
     return count;
 }
 
+int monthCode(char *month) {
+    char *months[] = { "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" };
+    for (int i = 0; i < 12; i++) {
+        if (!strcmp(month, months[i])) {
+            return i;
+        }
+    }
+}
+
+int dayCode(char *day) {
+    char *days[] = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
+    for (int i = 0; i < 7; i++) {
+        if (!strcmp(day, days[i])) {
+            return i;
+        }
+    }
+}
+
+int wholeWeeks(int Y, char *A, char *B, char *W) {
+    int daysInMonths[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (Y % 4 == 0 && Y % 100 != 0 || Y % 400 == 0) {
+        daysInMonths[1]++;
+    }
+    int sum[13];
+    sum[0] = 0;
+    for (int i = 1; i <= 12; i++) {
+        sum[i] = sum[i - 1] + daysInMonths[i - 1];
+    }
+    int month1 = monthCode(A);
+    int month2 = monthCode(B);
+    int day0 = dayCode(W);
+    int day1 = (day0 + sum[month1]) % 7;
+    int days = sum[month2 + 1] - sum[month1];
+    int pre = (8 - day1) % 7;
+    return (days - pre) % 7;
+}
+
 int main() {
     /*int arr[] = { 2, 1, 5, 1, 2, 2, 2 };
     int result = minMaxDivision(3, 5, arr, 7);*/
 
-    int arr[] = { -8, 4, 5, -10, 3 };
-    int result = minAbsSumOfTwo(arr, 5);
+    /*int arr[] = { -8, 4, 5, -10, 3 };
+    int result = minAbsSumOfTwo(arr, 5);*/
+
+    int reuslt = wholeWeeks(2014, "April", "May", "Wednesday");
 }
+
