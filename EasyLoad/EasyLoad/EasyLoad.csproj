@@ -53,9 +53,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="TheRightWay\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ResponseDetailWindow.xaml.cs">
       <DependentUpon>ResponseDetailWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TheRightWay\TestManager.cs" />
+    <Page Include="TheRightWay\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
