@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30501.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "MyConnect", "MyConnect\MyConnect.njsproj", "{449693C3-104C-4070-B777-543E2F3DAF1E}"
 EndProject
+Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "MyExpress", "MyExpress\MyExpress.njsproj", "{54F85BCA-49DB-468B-AE23-9D17C030DC0C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{449693C3-104C-4070-B777-543E2F3DAF1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{449693C3-104C-4070-B777-543E2F3DAF1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{449693C3-104C-4070-B777-543E2F3DAF1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{54F85BCA-49DB-468B-AE23-9D17C030DC0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{54F85BCA-49DB-468B-AE23-9D17C030DC0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{54F85BCA-49DB-468B-AE23-9D17C030DC0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{54F85BCA-49DB-468B-AE23-9D17C030DC0C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
