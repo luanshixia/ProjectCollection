@@ -232,7 +232,7 @@ int wholeWeeks(int Y, char *A, char *B, char *W) {
     int day1 = (day0 + sum[month1]) % 7;
     int days = sum[month2 + 1] - sum[month1];
     int pre = (8 - day1) % 7;
-    return (days - pre) % 7;
+    return (days - pre) / 7;
 }
 
 int main() {
