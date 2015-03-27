@@ -1,0 +1,11 @@
+﻿<Window x:Class="MyAsync.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="350" Width="525">
+    
+    <Grid>
+        <Button x:Name="ButtonLongRun" Content="Long Run" HorizontalAlignment="Left" Margin="73,57,0,0" VerticalAlignment="Top" Width="128" Click="ButtonLongRun_Click"/>
+        <Button x:Name="ButtonLoopAwait" Content="Loop Await" HorizontalAlignment="Left" Margin="73,112,0,0" VerticalAlignment="Top" Width="128" Click="ButtonLoopAwait_Click"/>
+        <Label x:Name="Label1" Content="Label" HorizontalAlignment="Left" Margin="249,112,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Window>
