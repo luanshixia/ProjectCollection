@@ -98,6 +98,24 @@ namespace CSharpLeetCode
             }
             return dp[N - 1];
         }
+
+        //
+        // 197 - Number of 1 Bits
+        //
+        public int HammingWeight(uint n)
+        {
+            int ones = 0;
+            while (n > 0)
+            {
+                uint m = n >> 1 << 1;
+                if (m != n)
+                {
+                    ones++;
+                }
+                n = n >> 1;
+            }
+            return ones;
+        }
     }
 
     public class TreeNode
