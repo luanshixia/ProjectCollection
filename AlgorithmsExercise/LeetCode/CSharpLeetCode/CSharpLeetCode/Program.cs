@@ -57,34 +57,6 @@ namespace CSharpLeetCode
         //
         // 199 - Binary Tree Right Side View
         //
-        //public IList<int> RightSideView(TreeNode root)
-        //{
-        //    Dictionary<int, List<int>> rows = new Dictionary<int, List<int>>();
-        //    Traverse(rows, root, 0);
-        //    return rows.Select(r => r.Value.Last()).ToList();
-        //}
-
-        //private static void Traverse(Dictionary<int, List<int>> rows, TreeNode node, int level)
-        //{
-        //    if (node == null)
-        //    {
-        //        return;
-        //    }
-        //    if (!rows.ContainsKey(level))
-        //    {
-        //        rows[level] = new List<int>();
-        //    }
-        //    rows[level].Add(node.val);
-        //    if (node.left != null)
-        //    {
-        //        Traverse(rows, node.left, level + 1);
-        //    }
-        //    if (node.right != null)
-        //    {
-        //        Traverse(rows, node.right, level + 1);
-        //    }
-        //}
-
         public IList<int> RightSideView(TreeNode root)
         {
             Dictionary<int, int> rows = new Dictionary<int, int>();
@@ -107,6 +79,24 @@ namespace CSharpLeetCode
             {
                 Traverse(rows, node.right, level + 1);
             }
+        }
+
+        //
+        // 198 - House Robber
+        //
+        public int Rob(int[] nums)
+        {
+            int N = nums.Length;
+            if (N == 0) return 0;
+            else if (N == 1) return nums[0];
+            int[] dp = new int[N];
+            dp[0] = nums[0];
+            dp[1] = Math.Max(nums[0], nums[1]);
+            for (int i = 2; i < N; i++)
+            {
+                dp[i] = Math.Max(dp[i - 1], dp[i - 2] + nums[i]);
+            }
+            return dp[N - 1];
         }
     }
 
