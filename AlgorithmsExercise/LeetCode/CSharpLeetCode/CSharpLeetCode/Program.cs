@@ -100,7 +100,7 @@ namespace CSharpLeetCode
         }
 
         //
-        // 197 - Number of 1 Bits
+        // 191 - Number of 1 Bits
         //
         public int HammingWeight(uint n)
         {
@@ -115,6 +115,20 @@ namespace CSharpLeetCode
                 n = n >> 1;
             }
             return ones;
+        }
+
+        //
+        // 190 - Reverse Bits
+        //
+        public uint reverseBits(uint n)
+        {
+            uint m = 0;
+            for (int i = 0; i < 32; i++)
+            {
+                m = (m << 1) | (n ^ (n >> 1 << 1));
+                n >>= 1;
+            }
+            return m;
         }
     }
 
