@@ -11,7 +11,10 @@ namespace CSharpLeetCode
         static void Main(string[] args)
         {
             var sol = new Solution();
-            sol.Rotate(new[] { 1, 2 }, 1);
+            //sol.Rotate(new[] { 1, 2 }, 1);
+            for (int i = 2; i < 100; i++)
+                Console.WriteLine(sol.GetHappyListString(i));
+            Console.ReadLine();
         }
     }
 
@@ -36,6 +39,42 @@ namespace CSharpLeetCode
                 }
             }
             return sieve.Count(x => x);
+        }
+
+        //
+        // 202 - Happy Number
+        //
+        public bool IsHappy(int n)
+        {
+            return GetHappyList(n).Last() == 1;
+        }
+
+        public string GetHappyListString(int n)
+        {
+            return string.Join(",", GetHappyList(n));
+        }
+
+        private static int SumSqDigits(int n)
+        {
+            return n.ToString().Sum(c =>
+            {
+                int d = Convert.ToInt32(c.ToString());
+                return d * d;
+            });
+        }
+
+        private static List<int> GetHappyList(int n)
+        {
+            var set = new HashSet<int>();
+            var list = new List<int>();
+            while (!set.Contains(n) && n != 1)
+            {
+                set.Add(n);
+                list.Add(n);
+                n = SumSqDigits(n);
+            }
+            list.Add(n);
+            return list;
         }
 
         //
