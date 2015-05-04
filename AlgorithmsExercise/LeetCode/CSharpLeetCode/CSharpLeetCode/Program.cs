@@ -11,9 +11,21 @@ namespace CSharpLeetCode
         static void Main(string[] args)
         {
             var sol = new Solution();
+
             //sol.Rotate(new[] { 1, 2 }, 1);
-            for (int i = 2; i < 100; i++)
-                Console.WriteLine(sol.GetHappyListString(i));
+
+            //for (int i = 2; i < 100; i++)
+            //    Console.WriteLine(sol.GetHappyListString(i));
+
+            var list = new LinkedList();
+            list.add(1);
+            list.add(2);
+            list.add(2);
+            list.add(1);
+            Console.WriteLine(list);
+            list.head = sol.RemoveElements(list.head, 2);
+            Console.WriteLine(list);
+
             Console.ReadLine();
         }
     }
@@ -39,6 +51,30 @@ namespace CSharpLeetCode
                 }
             }
             return sieve.Count(x => x);
+        }
+
+        //
+        // 203 - Remove Linked List Elements
+        //
+        public ListNode RemoveElements(ListNode head, int val)
+        {
+            while (head != null && head.val == val)
+            {
+                head = head.next;
+            }
+            ListNode cur = head;
+            while (cur != null && cur.next != null)
+            {
+                if (cur.next.val == val)
+                {
+                    cur.next = cur.next.next;
+                }
+                else // !***! "cur = cur.next" should be wrapped in "else"
+                {
+                    cur = cur.next;
+                }
+            }
+            return head;
         }
 
         //
@@ -222,6 +258,50 @@ namespace CSharpLeetCode
                 i0 = (i0 - 1 + N) % N;
             }
         }
+    }
+
+    public class LinkedList
+    {
+        public ListNode head;
+        public ListNode tail;
+
+        public void add(int val)
+        {
+            ListNode node = new ListNode(val);
+            if (head == null)
+            {
+                head = node;
+            }
+            else
+            {
+                tail.next = node;
+            }
+            tail = node;
+        }
+
+        public List<int> ToList()
+        {
+            ListNode cur = head;
+            List<int> list = new List<int>();
+            while (cur != null)
+            {
+                list.Add(cur.val);
+                cur = cur.next;
+            }
+            return list;
+        }
+
+        public override string ToString()
+        {
+            return "{" + string.Join(",", this.ToList()) + "}";
+        }
+    }
+
+    public class ListNode
+    {
+        public int val;
+        public ListNode next;
+        public ListNode(int x) { val = x; }
     }
 
     public class TreeNode
