@@ -10,6 +10,8 @@ namespace CSharpLeetCode
     {
         static void Main(string[] args)
         {
+            var sol = new Solution();
+            sol.Rotate(new[] { 1, 2 }, 1);
         }
     }
 
@@ -129,6 +131,57 @@ namespace CSharpLeetCode
                 n >>= 1;
             }
             return m;
+        }
+
+        //
+        // 189 - Rotate Array
+        //
+        public void Rotate1(int[] nums, int k)
+        {
+            k = k % nums.Length;
+            for (int i = 0; i < k; i++)
+            {
+                ShiftRightOneStep(nums);
+            }
+        }
+
+        private static void ShiftRightOneStep(int[] nums)
+        {
+            int N = nums.Length;
+            int last = nums[N - 1];
+            for (int i = N - 1; i > 0; i--)
+            {
+                nums[i] = nums[i - 1];
+            }
+            nums[0] = last;
+        }
+
+        // In-place with O(1) extra space; O(N) time.
+        public void Rotate(int[] nums, int k)
+        {
+            int N = nums.Length;
+            k = k % N;
+            int count = 0;
+            int i0 = N - 1;
+            int i;
+            int j;
+            int temp;
+            while (count < N)
+            {
+                i = i0;
+                j = (i - k + N) % N;
+                temp = nums[i];
+                while (j != i0)
+                {
+                    nums[i] = nums[j];
+                    count++;
+                    j = (j - k + N) % N;
+                    i = (i - k + N) % N;
+                }
+                nums[i] = temp;
+                count++;
+                i0 = (i0 - 1 + N) % N;
+            }
         }
     }
 
