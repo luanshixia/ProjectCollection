@@ -330,6 +330,50 @@ namespace CSharpLeetCode
                 }
             }
         }
+
+        //
+        // 179 - Largest Number
+        //
+        public string LargestNumber1(int[] nums) // Wrong - suppliment 9s
+        {
+            Array.Sort(nums, (x, y) =>
+            {
+                int digitCountX = (int)Math.Floor(Math.Log10(x) + 1);
+                int digitCountY = (int)Math.Floor(Math.Log10(y) + 1);
+                if (digitCountX > digitCountY)
+                {
+                    y = (y + 1) * (int)Math.Pow(10, digitCountX - digitCountY) - 1;
+                }
+                else if (digitCountY > digitCountX)
+                {
+                    x = (x + 1) * (int)Math.Pow(10, digitCountY - digitCountX) - 1;
+                }
+                return y - x;
+            });
+            return string.Join(string.Empty, nums);
+        }
+
+        public string LargestNumber(int[] nums)
+        {
+            Array.Sort(nums, (x, y) =>
+            {
+                if (x == 0 || y == 0)
+                {
+                    return y - x;
+                }
+                int digitCountX = (int)Math.Floor(Math.Log10(x) + 1);
+                int digitCountY = (int)Math.Floor(Math.Log10(y) + 1);
+                int yx = y * (int)Math.Pow(10, digitCountX) + x;
+                int xy = x * (int)Math.Pow(10, digitCountY) + y;
+                return yx - xy;
+            });
+            var result = string.Join(string.Empty, nums);
+            if (result.All(c => c == '0'))
+            {
+                return "0";
+            }
+            return result;
+        }
     }
 
     public class LinkedList
