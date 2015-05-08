@@ -258,6 +258,78 @@ namespace CSharpLeetCode
                 i0 = (i0 - 1 + N) % N;
             }
         }
+
+        //
+        // 187 - Repeated DNA Sequences
+        //
+        public IList<string> FindRepeatedDnaSequences1(string s)
+        {
+            var set = new HashSet<string>();
+            if (s.Length >= 10)
+            {
+                var store = new[] { 'A', 'C', 'G', 'T' }.ToDictionary(c => c, c => new HashSet<string>());
+                for (int i = 0; i <= s.Length - 10; i++)
+                {
+                    var sub = s.Substring(i, 10);
+                    if (store[sub[0]].Contains(sub))
+                    {
+                        set.Add(sub);
+                    }
+                    store[sub[0]].Add(sub); // too much memory!
+                }
+            }
+            return set.ToList();
+        }
+
+        private static char[] _dnaChars = new[] { 'A', 'C', 'G', 'T' };
+
+        // Divide-and-Conquer
+        public IList<string> FindRepeatedDnaSequences(string s)
+        {
+            var result = new List<string>();
+            if (s.Length >= 10)
+            {
+                var store = _dnaChars.ToDictionary(c => c, c => new List<int>());
+                for (int i = 0; i <= s.Length - 10; i++)
+                {
+                    store[s[i]].Add(i);
+                }
+                foreach (char c in _dnaChars)
+                {
+                    if (store[c].Count > 1)
+                    {
+                        FindRepeatedDnaSequencesWithPrefix(s, c.ToString(), store[c].ToArray(), result);
+                    }
+                }
+            }
+            return result;
+        }
+
+        private static void FindRepeatedDnaSequencesWithPrefix(string s, string prefix, int[] indices, IList<string> result)
+        {
+            if (prefix.Length == 10)
+            {
+                if (indices.Length > 1)
+                {
+                    result.Add(prefix);
+                }
+            }
+            else // prefix.Length < 10
+            {
+                var store = _dnaChars.ToDictionary(c => c, c => new List<int>());
+                foreach (int i in indices)
+                {
+                    store[s[i + prefix.Length]].Add(i);
+                }
+                foreach (char c in _dnaChars)
+                {
+                    if (store[c].Count > 1)
+                    {
+                        FindRepeatedDnaSequencesWithPrefix(s, prefix + c, store[c].ToArray(), result);
+                    }
+                }
+            }
+        }
     }
 
     public class LinkedList
