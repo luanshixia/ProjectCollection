@@ -334,7 +334,7 @@ namespace CSharpLeetCode
         //
         // 179 - Largest Number
         //
-        public string LargestNumber1(int[] nums) // Wrong - suppliment 9s
+        public string LargestNumber1(int[] nums) // Wrong - suppliment '9's
         {
             Array.Sort(nums, (x, y) =>
             {
@@ -367,12 +367,45 @@ namespace CSharpLeetCode
                 int xy = x * (int)Math.Pow(10, digitCountY) + y;
                 return yx - xy;
             });
-            var result = string.Join(string.Empty, nums);
+            string result = string.Join(string.Empty, nums);
             if (result.All(c => c == '0'))
             {
                 return "0";
             }
             return result;
+        }
+
+        //
+        // 174 - Dungeon Game
+        //
+        public int CalculateMinimumHP(int[,] dungeon)
+        {
+            int M = dungeon.GetLength(0);
+            int N = dungeon.GetLength(1);
+            int[,] solution = new int[M, N];
+            for (int i = M - 1; i >= 0; i--)
+            {
+                for (int j = N - 1; j >= 0; j--)
+                {
+                    if (i == M - 1 && j == N - 1)
+                    {
+                        solution[i, j] = Math.Max(1, 1 - dungeon[i, j]);
+                    }
+                    else if (i == M - 1)
+                    {
+                        solution[i, j] = Math.Max(1, solution[i, j + 1] - dungeon[i, j]);
+                    }
+                    else if (j == N - 1)
+                    {
+                        solution[i, j] = Math.Max(1, solution[i + 1, j] - dungeon[i, j]);
+                    }
+                    else
+                    {
+                        solution[i, j] = Math.Max(1, Math.Min(solution[i, j + 1], solution[i + 1, j]) - dungeon[i, j]);
+                    }
+                }
+            }
+            return solution[0, 0];
         }
     }
 
