@@ -17,14 +17,21 @@ namespace CSharpLeetCode
             //for (int i = 2; i < 100; i++)
             //    Console.WriteLine(sol.GetHappyListString(i));
 
-            var list = new LinkedList();
-            list.add(1);
-            list.add(2);
-            list.add(2);
-            list.add(1);
-            Console.WriteLine(list);
-            list.head = sol.RemoveElements(list.head, 2);
-            Console.WriteLine(list);
+            //var list = new LinkedList();
+            //list.add(1);
+            //list.add(2);
+            //list.add(2);
+            //list.add(1);
+            //Console.WriteLine(list);
+            //list.head = sol.RemoveElements(list.head, 2);
+            //Console.WriteLine(list);
+
+            var node = new TreeNode(1);
+            var bsti = new Solution.BSTIterator(node);
+            if (bsti.HasNext())
+            {
+                bsti.Next();
+            }
 
             Console.ReadLine();
         }
@@ -406,6 +413,129 @@ namespace CSharpLeetCode
                 }
             }
             return solution[0, 0];
+        }
+
+        //
+        // 173 - Binary Search Tree Iterator
+        //
+        public class BSTIterator1 // wrong
+        {
+            private Stack<TreeNode> _nodes = new Stack<TreeNode>(); // left parents
+            private TreeNode _current;
+            private TreeNode _root;
+
+            public BSTIterator1(TreeNode root)
+            {
+                //_nodes.Push(root);
+                _current = root;
+                _root = root;
+            }
+
+            /** @return whether we have a next smallest number */
+            public bool HasNext()
+            {
+                if (_current == null)
+                {
+                    return false;
+                }
+                if (_current == _root)
+                {
+                    return true;
+                }
+                if (_current.right != null)
+                {
+                    return true;
+                }
+                foreach (var node in _nodes)
+                {
+                    if (node.right != null)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            /** @return the next smallest number */
+            public int Next()
+            {
+                if (_current == _root)
+                {
+                    while (_current.left != null || _current.right != null)
+                    {
+                        if (_current.left != null)
+                        {
+                            _nodes.Push(_current);
+                            _current = _current.left;
+                        }
+                        else
+                        {
+                            _current = _current.right;
+                        }
+                    }
+                }
+                else
+                {
+                    while (_current.right == null && _nodes.Count > 0)
+                    {
+                        _current = _nodes.Pop();
+                    }
+                    if (_current.right != null)
+                    {
+                        _current = _current.right;
+                        while (_current.left != null || _current.right != null)
+                        {
+                            if (_current.left != null)
+                            {
+                                _nodes.Push(_current);
+                                _current = _current.left;
+                            }
+                            else
+                            {
+                                _current = _current.right;
+                            }
+                        }
+                    }
+                }
+                return _current.val;
+            }
+        }
+
+        public class BSTIterator
+        {
+            private Stack<TreeNode> _nodes = new Stack<TreeNode>(); // left path
+
+            public BSTIterator(TreeNode root)
+            {
+                while (root != null)
+                {
+                    _nodes.Push(root);
+                    root = root.left;
+                }
+            }
+
+            /** @return whether we have a next smallest number */
+            public bool HasNext()
+            {
+                return _nodes.Count > 0;
+            }
+
+            /** @return the next smallest number */
+            public int Next()
+            {
+                var node = _nodes.Pop();
+                var result = node.val;
+                if (node.right != null)
+                {
+                    node = node.right;
+                    while (node != null)
+                    {
+                        _nodes.Push(node);
+                        node = node.left;
+                    }
+                }
+                return result;
+            }
         }
     }
 
