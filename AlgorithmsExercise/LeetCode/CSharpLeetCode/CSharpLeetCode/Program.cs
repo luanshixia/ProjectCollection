@@ -482,6 +482,36 @@ namespace CSharpLeetCode
             }
             return result;
         }
+
+        //
+        // 171 - Excel Sheet Column Number
+        //
+        public int TitleToNumber(string s)
+        {
+            int result = 0;
+            int weight = 1;
+            for (int i = 0; i < s.Length; i++)
+            {
+                result += (s[s.Length - i - 1] - 'A' + 1) * weight;
+                weight *= 26;
+            }
+            return result;
+        }
+
+        //
+        // 168 - Excel Sheet Column Title
+        //
+        public string ConvertToTitle(int n)
+        {
+            string result = string.Empty;
+            while (n > 0)
+            {
+                int remainder = (n - 1) % 26 + 1;
+                result = (char)('A' + remainder - 1) + result;
+                n = (n - remainder) / 26;
+            }
+            return result;
+        }
     }
 
     public class LinkedList
