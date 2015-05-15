@@ -26,12 +26,14 @@ namespace CSharpLeetCode
             //list.head = sol.RemoveElements(list.head, 2);
             //Console.WriteLine(list);
 
-            var node = new TreeNode(1);
-            var bsti = new Solution.BSTIterator(node);
-            if (bsti.HasNext())
-            {
-                bsti.Next();
-            }
+            //var node = new TreeNode(1);
+            //var bsti = new Solution.BSTIterator(node);
+            //if (bsti.HasNext())
+            //{
+            //    bsti.Next();
+            //}
+            
+            Console.WriteLine(sol.TrailingZeroes(2147483647));
 
             Console.ReadLine();
         }
@@ -418,89 +420,6 @@ namespace CSharpLeetCode
         //
         // 173 - Binary Search Tree Iterator
         //
-        public class BSTIterator1 // wrong
-        {
-            private Stack<TreeNode> _nodes = new Stack<TreeNode>(); // left parents
-            private TreeNode _current;
-            private TreeNode _root;
-
-            public BSTIterator1(TreeNode root)
-            {
-                //_nodes.Push(root);
-                _current = root;
-                _root = root;
-            }
-
-            /** @return whether we have a next smallest number */
-            public bool HasNext()
-            {
-                if (_current == null)
-                {
-                    return false;
-                }
-                if (_current == _root)
-                {
-                    return true;
-                }
-                if (_current.right != null)
-                {
-                    return true;
-                }
-                foreach (var node in _nodes)
-                {
-                    if (node.right != null)
-                    {
-                        return true;
-                    }
-                }
-                return false;
-            }
-
-            /** @return the next smallest number */
-            public int Next()
-            {
-                if (_current == _root)
-                {
-                    while (_current.left != null || _current.right != null)
-                    {
-                        if (_current.left != null)
-                        {
-                            _nodes.Push(_current);
-                            _current = _current.left;
-                        }
-                        else
-                        {
-                            _current = _current.right;
-                        }
-                    }
-                }
-                else
-                {
-                    while (_current.right == null && _nodes.Count > 0)
-                    {
-                        _current = _nodes.Pop();
-                    }
-                    if (_current.right != null)
-                    {
-                        _current = _current.right;
-                        while (_current.left != null || _current.right != null)
-                        {
-                            if (_current.left != null)
-                            {
-                                _nodes.Push(_current);
-                                _current = _current.left;
-                            }
-                            else
-                            {
-                                _current = _current.right;
-                            }
-                        }
-                    }
-                }
-                return _current.val;
-            }
-        }
-
         public class BSTIterator
         {
             private Stack<TreeNode> _nodes = new Stack<TreeNode>(); // left path
@@ -536,6 +455,32 @@ namespace CSharpLeetCode
                 }
                 return result;
             }
+        }
+
+        //
+        // 172 - Factorial Trailing Zeroes
+        //
+        public int TrailingZeroes1(int n)
+        {
+            double log = Math.Log(n, 5);
+            int result = 0;
+            int temp = 1;
+            for (int i = 1; i <= log; i++)
+            {
+                temp *= 5;
+                result += n / temp;
+            }
+            return result;
+        }
+
+        public int TrailingZeroes(int n)
+        {
+            int result = 0;
+            for (long temp = 5; temp <= n; temp *= 5) // mind for overflow
+            {
+                result += n / (int)temp;
+            }
+            return result;
         }
     }
 
