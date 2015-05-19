@@ -499,6 +499,15 @@ namespace CSharpLeetCode
         }
 
         //
+        // 169 - Majority Element
+        //
+        public int MajorityElement(int[] nums)
+        {
+            Array.Sort(nums);
+            return nums[nums.Length / 2];
+        }
+
+        //
         // 168 - Excel Sheet Column Title
         //
         public string ConvertToTitle(int n)
