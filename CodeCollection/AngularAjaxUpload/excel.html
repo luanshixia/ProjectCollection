@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Project Penguins Demo Page</title>
+
+    <!-- Styles -->
+    <link href="styles/bootstrap.min.css" rel="stylesheet" />
+    <link href="wijmo/styles/wijmo.css" rel="stylesheet" />
+    <link href="styles/app.css" rel="stylesheet" />
+
+    <!-- jQuery, Angular, Bootstrap-->
+    <script src="scripts/vendor/jquery.min.js"></script>
+    <script src="scripts/vendor/bootstrap.min.js"></script>
+    <script src="scripts/vendor/angular.min.js"></script>
+
+    <!-- Wijmo -->
+    <script src="wijmo/controls/wijmo.js"></script>
+    <script src="wijmo/controls/wijmo.grid.js"></script>
+    <script src="scripts/wijmo.io/ImageExport.js"></script>
+    <script src="scripts/wijmo.io/ExcelExport.js"></script>
+    <script src="wijmo/interop/angular/wijmo.angular.js"></script>
+
+    <!-- app -->
+    <script src="scripts/app/app.js"></script>
+    <script src="scripts/app/services/constants.js"></script>
+    <script src="scripts/app/services/data.js"></script>
+    <script src="scripts/app/controllers/excelCtrl.js"></script>
+
+    <style>
+        .fileUpload {
+            position: relative;
+            overflow: hidden;
+            margin: 10px;
+        }
+
+            .fileUpload input.upload {
+                position: absolute;
+                top: 0;
+                right: 0;
+                margin: 0;
+                padding: 0;
+                font-size: 20px;
+                cursor: pointer;
+                opacity: 0;
+                filter: alpha(opacity=0);
+            }
+    </style>
+</head>
+<body ng-app="app">
+    <header class="header">
+        <div class="container">
+            <img src="resources/wijmo5.png" alt="Wijmo 5" />
+            <h1>
+                Project Penguins
+            </h1>
+            <p>
+                This page demonstrates the Penguins APIs.
+            </p>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <div ng-controller="ExcelCtrl">
+            <h2>Excel Import/Export</h2>
+            <div>
+                <textarea id="txtjson" class="form-control" ng-model="json" style="margin: 10px 0; height: 400px; font-family: Consolas; font-size: small;"></textarea>
+            </div>
+            <div class="fileUpload btn btn-primary">
+                <span>Import</span>
+                <input type="file" id="fileinput" class="upload" onchange="angular.element(this).scope().import()" />
+            </div>
+            <button ng-click="export()" class="btn btn-primary">Export</button>
+        </div>
+
+        <div style="height:300px"></div>
+    </main>
+</body>
+</html>
