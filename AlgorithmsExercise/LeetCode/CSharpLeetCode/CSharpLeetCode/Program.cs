@@ -521,6 +521,45 @@ namespace CSharpLeetCode
             }
             return result;
         }
+
+        //
+        // 165 - Compare Version Numbers
+        //
+        public int CompareVersion(string version1, string version2)
+        {
+            if (version1 == version2)
+            {
+                return 0;
+            }
+            var v1 = version1.Split('.').Select(x => Convert.ToInt32(x)).ToList();
+            var v2 = version2.Split('.').Select(x => Convert.ToInt32(x)).ToList();
+            if (v1.Count > v2.Count)
+            {
+                for (int i = 0; i < v1.Count - v2.Count; i++)
+                {
+                    v2.Add(0);
+                }
+            }
+            else if (v2.Count > v1.Count)
+            {
+                for (int i = 0; i < v2.Count - v1.Count; i++)
+                {
+                    v1.Add(0);
+                }
+            }
+            for (int i = 0; i < Math.Min(v1.Count, v2.Count); i++)
+            {
+                if (v1[i] > v2[i])
+                {
+                    return 1;
+                }
+                if (v1[i] < v2[i])
+                {
+                    return -1;
+                }
+            }
+            return 0;
+        }
     }
 
     public class LinkedList
