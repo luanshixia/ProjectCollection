@@ -547,7 +547,7 @@ namespace CSharpLeetCode
                     v1.Add(0);
                 }
             }
-            for (int i = 0; i < Math.Min(v1.Count, v2.Count); i++)
+            for (int i = 0; i < v1.Count; i++)
             {
                 if (v1[i] > v2[i])
                 {

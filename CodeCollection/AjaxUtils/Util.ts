@@ -109,7 +109,7 @@ module dreambuild {
                     if (settings.postType === 'form') {
                         params = Utils.formEncodedObject(settings.data);
                         settings.contentType = 'application/x-www-form-urlencoded';
-                    } else if (settings.postType === 'json') {
+                    } else if (settings.postType === 'json') { // no CORS support
                         params = JSON.stringify(settings.data);
                         settings.contentType = 'application/json';
                     } else if (settings.postType === 'multipart') {
@@ -117,6 +117,7 @@ module dreambuild {
                         for (dataKey in settings.data) {
                             params.append(dataKey, settings.data[dataKey]);
                         }
+                        settings.contentType = 'multipart/form-data';
                     }
                 }
             }

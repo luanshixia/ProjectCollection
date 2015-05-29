@@ -1,0 +1,10 @@
+{
+  "AppSettings": {
+    "SiteTitle": "UploadFile"
+  },
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-UploadFile-69e7eca7-541d-4f3a-a118-a63cd50934f4;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+  }
+}
