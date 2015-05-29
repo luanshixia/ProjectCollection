@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<TemplateDrawing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <Components>
+        <ComponentDefinition>
+            <ID>tk</ID>
+            <PosX>0</PosX>
+            <PosY>0</PosY>
+            <Align>TopLeft</Align>
+            <Width>0</Width>
+            <Height>0</Height>
+            <Type>Block</Type>
+            <Parameter xsi:type="BlockTemplateParameter">
+                <BlockName>DynamicTK</BlockName>
+            </Parameter>
+        </ComponentDefinition>
+        <ComponentDefinition>
+            <ID>vp1</ID>
+            <PosX>125</PosX>
+            <PosY>169</PosY>
+            <Align>Center</Align>
+            <Width>244</Width>
+            <Height>204</Height>
+            <Type>Viewport</Type>
+            <Parameter />
+        </ComponentDefinition>
+        <ComponentDefinition>
+            <ID>title</ID>
+            <PosX>10</PosX>
+            <PosY>288</PosY>
+            <Align>TopLeft</Align>
+            <Width>0</Width>
+            <Height>0</Height>
+            <Type>Text</Type>
+            <Parameter xsi:type="TextTemplateParameter">
+                <Text>{0}控制性详细规划（单元层面）</Text>
+                <TextHeight>8</TextHeight>
+                <TextStyleName>heiti_title</TextStyleName>
+            </Parameter>
+        </ComponentDefinition>
+        <ComponentDefinition>
+            <ID>type</ID>
+            <PosX>352</PosX>
+            <PosY>289</PosY>
+            <Align>TopLeft</Align>
+            <Width>0</Width>
+            <Height>0</Height>
+            <Type>Text</Type>
+            <Parameter xsi:type="TextTemplateParameter">
+                <Text>动态控规约束体系</Text>
+                <TextHeight>4.5</TextHeight>
+                <TextStyleName>heiti_title</TextStyleName>
+            </Parameter>
+        </ComponentDefinition>
+        <ComponentDefinition>
+            <ID>unit</ID>
+            <PosX>352</PosX>
+            <PosY>279</PosY>
+            <Align>TopLeft</Align>
+            <Width>0</Width>
+            <Height>0</Height>
+            <Type>Text</Type>
+            <Parameter xsi:type="TextTemplateParameter">
+                <Text>{0}单元</Text>
+                <TextHeight>4</TextHeight>
+                <TextStyleName>heiti_title</TextStyleName>
+            </Parameter>
+        </ComponentDefinition>
+        <ComponentDefinition>
+            <ID>owner</ID>
+            <PosX>322</PosX>
+            <PosY>23</PosY>
+            <Align>Center</Align>
+            <Width>0</Width>
+            <Height>0</Height>
+            <Type>Text</Type>
+            <Parameter xsi:type="TextTemplateParameter">
+                <Text>{0}</Text>
+                <TextHeight>3</TextHeight>
+                <TextStyleName>songti_thin</TextStyleName>
+            </Parameter>
+        </ComponentDefinition>
+        <ComponentDefinition>
+            <ID>designer</ID>
+            <PosX>304</PosX>
+            <PosY>10</PosY>
+            <Align>Center</Align>
+            <Width>0</Width>
+            <Height>0</Height>
+            <Type>Text</Type>
+            <Parameter xsi:type="TextTemplateParameter">
+                <Text>{0}</Text>
+                <TextHeight>3</TextHeight>
+                <TextStyleName>songti_thin</TextStyleName>
+            </Parameter>
+        </ComponentDefinition>
+        <ComponentDefinition>
+            <ID>date</ID>
+            <PosX>406</PosX>
+            <PosY>10</PosY>
+            <Align>Center</Align>
+            <Width>0</Width>
+            <Height>0</Height>
+            <Type>Text</Type>
+            <Parameter xsi:type="TextTemplateParameter">
+                <Text>{0}</Text>
+                <TextHeight>3</TextHeight>
+                <TextStyleName>songti_thin</TextStyleName>
+            </Parameter>
+        </ComponentDefinition>
+    </Components>
+</TemplateDrawing>

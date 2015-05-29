@@ -1,0 +1,82 @@
+﻿<UserControl x:Class="TongJi.Drawing.Gallery"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:src="clr-namespace:TongJi.Drawing"
+             mc:Ignorable="d" 
+             Width="200" d:DesignHeight="640" Margin="0" Loaded="UserControl_Loaded">
+
+    <UserControl.Resources>
+        <LinearGradientBrush x:Key="orangeMenu" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="SkyBlue"/>
+            <GradientStop Color="DodgerBlue" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="redMenu" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="Red"/>
+            <GradientStop Color="DarkRed" Offset="1"/>
+        </LinearGradientBrush>
+        <Style TargetType="Expander">
+            <Setter Property="Foreground" Value="SaddleBrown" />
+            <Setter Property="Background" Value="WhiteSmoke" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderBrush" Value="Silver" />
+            <Setter Property="Border.CornerRadius" Value="5" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="DimGray" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" CornerRadius="3" >
+                            <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Background" Value="{StaticResource orangeMenu}" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter Property="Background" Value="{StaticResource redMenu}" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+
+    <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="上海滩涂" Padding="10" FontSize="16" FontWeight="Bold" Background="{StaticResource orangeMenu}" Foreground="White" MouseLeftButtonUp="TextBlock_MouseLeftButtonUp" />
+        
+        <TreeView x:Name="Tree" MouseLeftButtonUp="Tree_MouseLeftButtonUp" MouseDoubleClick="Tree_MouseDoubleClick" Margin="0">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate DataType="{x:Type src:TreeNode}"
+                                      ItemsSource="{Binding Children}">
+                    <TextBlock Text="{Binding Name}" Padding="3">
+                        <TextBlock.ToolTip>
+                            <StackPanel Width="100" Margin="5">
+                                <Image Source="{Binding Data.IconPath}" Width="100" Height="100" />
+                                <TextBlock Text="{Binding Data.Description}" Width="100" TextAlignment="Center" TextWrapping="Wrap" VerticalAlignment="Top" />
+                            </StackPanel>
+                        </TextBlock.ToolTip>
+                    
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter Property="Background" Value="DodgerBlue"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </DockPanel>
+</UserControl>

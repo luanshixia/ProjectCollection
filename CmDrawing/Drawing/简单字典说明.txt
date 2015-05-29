@@ -1,0 +1,9 @@
+﻿[tzInfo]
+KongguiName=控规项目名称
+tzCount=图则计数戳
+
+[DPlan]
+/////RuleFile=规则文件相对路径
+
+[UnitColor]
+单元随机索引颜色

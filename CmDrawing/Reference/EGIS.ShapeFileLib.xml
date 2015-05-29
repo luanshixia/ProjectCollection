@@ -1,0 +1,2261 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>EGIS.ShapeFileLib</name>
+    </assembly>
+    <members>
+        <member name="T:EGIS.ShapeFileLib.CustomRenderSettingsUtil">
+            <summary>
+            Utility factory class which creates ICustomRenderSettings objects
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.CustomRenderSettingsUtil.CreateQuantileCustomRenderSettings(EGIS.ShapeFileLib.RenderSettings,System.Drawing.Color[],System.String)">
+            <summary>
+            Creates an ICustomRenderSettings object which renders shape colors using quantiles
+            </summary>
+            <remarks>
+            <para>
+            QuantileCustomRenderSettings are used to render individual shape colors in a shapefile layer according to a specified range of values. For example,
+            the color of the rendered shape could be green if field1 is between 0 and 100, yellow if field 1 is between 100 and 200, or red if
+            it is greater than 200.
+            </para>
+            </remarks>    
+            <param name="renderSettings"></param>
+            <param name="quantileColors">The colors used for each quantile. If 5 colors are used then 5 quantiles will be setup </param>
+            <param name="shapeFieldName">The field name to use for the quantiles</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.CustomRenderSettingsUtil.CreateRandomColorCustomRenderSettings(EGIS.ShapeFileLib.RenderSettings,System.Int32)">
+            <summary>
+            Creates an ICustomRenderSettings object which renders shapes with a random color
+            </summary>
+            <param name="renderSettings">The shapefile's RenderSettings object</param>
+            <param name="seed">Random seed used to create the colors. By supplying a seed the same colors will be used when rendering the shapefile in successive drawing operations </param>
+            <returns></returns>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.QuantileRenderSettings">
+            <summary>
+            QuantileCustomRenderSettings implements the ICustomRenderSettings interface and is used to 
+            provide dynamic render settings.
+            </summary>
+            <remarks>
+            <para>
+            QuantileCustomRenderSettings is used to render individual shape colors in a shapefile layer according to a specified range of values. For example,
+            the color of the rendered shape could be green if field1 is between 0 and 100, yellow if field 1 is between 100 and 200, or red if
+            it is greater than 200.
+            </para>
+            </remarks>
+            <seealso cref="T:EGIS.ShapeFileLib.ICustomRenderSettings"/>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.ICustomRenderSettings">
+            <summary>
+             The ICustomRenderSettings allows applying custom render settings to a shapefile layer
+            </summary>
+            <remarks>
+            By setting an ICustomRenderSettings object on a shapefile's RenderSettings, you can gain full control
+            over whether indivdual shapes should be rendered and the color to use when rendering the shapes. The ICustomRenderSettings interface also
+            supplies methods to customize any tooltips used by the shapefile layer.
+            </remarks>
+            <seealso cref="T:EGIS.ShapeFileLib.RenderSettings"/>    
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ICustomRenderSettings.GetRecordFillColor(System.Int32)">
+            <summary>
+            Returns the FillColor to use when rendering the specified shape
+            </summary>
+            <param name="recordNumber">zero-based record number of the shape</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ICustomRenderSettings.GetRecordOutlineColor(System.Int32)">
+            <summary>
+            Returns the OutlineColor to use when rendering the specified shape
+            </summary>
+            <param name="recordNumber">zero-based record number of the shape</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ICustomRenderSettings.GetRecordFontColor(System.Int32)">
+            <summary>
+            Returns the Font Color to use when labelling the specified shape
+            </summary>
+            <param name="recordNumber">zero-based record number of the shape</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ICustomRenderSettings.RenderShape(System.Int32)">
+            <summary>
+            Returns whether to render the specified shape
+            </summary>
+            <param name="recordNumber">zero-based record number of the shape</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ICustomRenderSettings.GetRecordToolTip(System.Int32)">
+            <summary>
+            returns the custom tooltip string for the specified shape
+            </summary>
+            <param name="recordNumber">zero-based record number of the shape</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ICustomRenderSettings.GetRecordImageSymbol(System.Int32)">
+            <summary>
+            returns the custom image symbol for the specified symbol.        
+            </summary>
+            <remarks>
+            Implementing classes must ensure that a valid image is returned when this method
+            is called. If a null Image is returned then an error will occur when the shapefile
+            is rendered
+            </remarks>
+            <param name="recordNumber">zero-based record number of the shape</param>
+            <returns></returns>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ICustomRenderSettings.UseCustomTooltips">
+            <summary>
+            returns whether to use custom tooltips
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ICustomRenderSettings.UseCustomImageSymbols">
+            <summary>
+            returns whether custom Image Symbols should be used for shapes. Applys
+            to Point type shapefiles only
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.QuantileRenderSettings.#ctor(EGIS.ShapeFileLib.RenderSettings,System.Drawing.Color[],System.Double[],System.String)">
+            <summary>
+            Constructs a new QuantileCustomRenderSettings instance
+            </summary>
+            <param name="renderSettings">Reference to a ShapeFile RenderSettings</param>
+            <param name="quantileColors">Array of Colors to use. The number of Color elements should be 1 more than the number of quantile elements</param>
+            <param name="quantiles">Array of quantile values. Each successive element must be greater than the previous element. Example - {10, 50, 75}</param>
+            <param name="shapeFieldName">The name of the shapefile dbf field used to determine what color to render a shape </param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.QuantileRenderSettings.GetRecordFillColor(System.Int32)">
+            <summary>
+            Implementation of the ICustomRenderSettings GetRecordFillColor member
+            </summary>
+            <param name="recordNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.QuantileRenderSettings.RenderShape(System.Int32)">
+            <summary>
+            Implementation of the ICustomRenderSettings RenderShape member
+            </summary>
+            <param name="recordNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.QuantileRenderSettings.GetRecordToolTip(System.Int32)">
+            <summary>
+            Implementation of the ICustomRenderSettings GetRecordToolTip member
+            </summary>
+            <param name="recordNumber"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.QuantileRenderSettings.UseCustomTooltips">
+            <summary>
+            Implementation of the ICustomRenderSettings UseCustomTooltips member
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.DbfWriter">
+            <summary>
+            a DBF File Writer class
+            </summary>
+            <remarks>
+            The DbfWriter class can be used to create or edit a DBF file
+            <para>
+            The class is used by the ShapeFileWriter class to create new shapefiles. The class can also be used in conjunction with 
+            a DbfReader to edit a DBF file by filtering required records or adding/removing new columns
+            </para>
+            </remarks>
+            <seealso cref="T:EGIS.ShapeFileLib.DbfReader"/>
+            <seealso cref="T:EGIS.ShapeFileLib.ShapeFileWriter"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfWriter.#ctor(System.String,EGIS.ShapeFileLib.DbfFieldDesc[])">
+            <summary>
+            Creates a new DbfWriter
+            </summary>
+            <param name="filePath">The path to the new DBF file to be created. If filePath does not include the ".dbf" extension it will be added</param>
+            <param name="dataFields">A DbfFieldDesc aray describing the field of the DBF file</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfWriter.WriteRecord(System.String[])">
+            <summary>
+            Adds a new reocrd to the DBF file
+            </summary>
+            <param name="fieldData">strign array containing the data for each field in the record</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfWriter.Close">
+            <summary>
+            Closes the DBF file and the underlying stream used to write the DBF file       
+            </summary>
+            <remarks>
+            The Close method must be called after all records have been added. This method will update the number
+            of records in the file's main header and outputs the end of file marker to the end of the file.
+            <para>Failure to call this method will result in an invalid DBF file being generated</para></remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfWriter.Dispose">
+            <summary>
+            Releases all resources used by the DbfWriter
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.GeometryAlgorithms">
+            <summary>
+            Collection of 2D Geometry algorithms
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.GeometryAlgorithms.PointInPolygon(EGIS.ShapeFileLib.PointD[],System.Double,System.Double,System.Boolean,System.Boolean@)">
+            <summary>
+            Tests whether point is inside a polygon
+            </summary>
+            <param name="points"></param>
+            <param name="x"></param>
+            <param name="y"></param>
+            <param name="ignoreHoles"></param>
+            <param name="isHole"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.GeometryAlgorithms.PolygonCircleIntersects(System.Byte[],System.Int32,System.Int32,EGIS.ShapeFileLib.PointD,System.Double,System.Boolean)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="offset"></param>
+            <param name="numPoints"></param>6
+            +
+            <param name="centre"></param>
+            <param name="radius"></param>
+            <param name="ignoreHoles"></param>
+            <returns></returns>
+            <remarks>Not tested</remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.GeometryAlgorithms.PolylineCircleIntersects(System.Byte[],System.Int32,System.Int32,EGIS.ShapeFileLib.PointD,System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="offset"></param>
+            <param name="numPoints"></param>
+            <param name="centre"></param>
+            <param name="radius"></param>
+            <returns></returns>
+            <remarks>Not tested</remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.GeometryAlgorithms.RectangleCircleIntersects(EGIS.ShapeFileLib.RectangleD@,EGIS.ShapeFileLib.PointD@,System.Double)">
+            <summary>        
+            </summary>
+            <param name="r"></param>
+            <param name="centre"></param>
+            <param name="radius"></param>
+            <returns></returns>
+            <remarks>This method is untested</remarks>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.PolylineDistanceInfo">
+            <summary>
+            Encapsulates point from polyline distance information 
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.PolylineDistanceInfo.PolylinePoint">
+            <summary>
+            The point on the poyline closest to the given point
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.PolylineDistanceInfo.Distance">
+            <summary>
+            The distance from the given point to the polyline
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.PolylineDistanceInfo.PointIndex">
+            <summary>
+            The zero based point index at the start of the line segment in the poyline closest to the given point
+            </summary>
+            <remarks>
+            A polyline of N points has (N-1) line segments. PointIndex will be between 0 to (N-2) inclusive.
+            </remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.PolylineDistanceInfo.TVal">
+            <summary>
+            A value between 0..1 indicating the location within the closest line segment
+            </summary>
+            <remarks>
+            <para>
+            A TVal of 0 indicates the position on the line segment closest the given point is at the start of the line segment <br/>
+            A TVal of 1 indicates the position on the line segment closest the given point is at the end of the line segment <br/>
+            </para>
+            <para>
+            The TVal property is useful when used with polylines containing measures. For example if Segmentindex is N then
+            the dervied measure at the point on the polyline closest to a given point would be measure[N] + tVal x (measure[N+1] - measure[N])
+            </para>
+            </remarks>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.ConversionFunctions">
+            <summary>
+            Utility class containing static methods to calculate the distance between points and convert projections    
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ConversionFunctions.DistanceBetweenLatLongPoints(System.Int32,EGIS.ShapeFileLib.LatLongCoordinate,EGIS.ShapeFileLib.LatLongCoordinate)">
+            <summary>
+            returns the distance in meters between 2 lat/long double-precision points
+            </summary>
+            <param name="referenceEllipsoid"></param>
+            <param name="origin"></param>
+            <param name="destination"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ConversionFunctions.DistanceBetweenLatLongPoints(System.Int32,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            returns the distance in meters between 2 lat/long double-precision points
+            </summary>
+            <param name="referenceEllipsoid"></param>
+            <param name="latOrigin"></param>
+            <param name="longOrigin"></param>
+            <param name="latDestination"></param>
+            <param name="longDestination"></param>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:EGIS.ShapeFileLib.ConversionFunctions.ToLL2(System.Drawing.PointF,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)" -->
+        <!-- Badly formed XML comment ignored for member "M:EGIS.ShapeFileLib.ConversionFunctions.ToLL(System.Drawing.PointF,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double,System.Double)" -->
+        <!-- Badly formed XML comment ignored for member "M:EGIS.ShapeFileLib.ConversionFunctions.ToLL(System.Drawing.PointF,System.Double,System.Double,System.Double,System.Double,System.Double,EGIS.ShapeFileLib.Ellipsoid)" -->
+        <member name="T:EGIS.ShapeFileLib.UtmCoordinate">
+            <summary>
+            struct used to store a UTM Coordinat. Used in ConversionFunctions
+            </summary>
+            <seealso cref="T:EGIS.ShapeFileLib.ConversionFunctions"/>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.LatLongCoordinate">
+            <summary>
+            struct used to store a Lat Long Coordinate. Used in ConversionFunctions
+            </summary>
+            <seealso cref="T:EGIS.ShapeFileLib.ConversionFunctions"/>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.Ellipsoid">
+            <summary>
+            Simple class that encapsulates the parameters defining an Ellipsoid 
+            </summary>
+            <remarks>
+            <para>
+            </para>
+            <para>
+            Note that in most SPHEROID parameters of the WKT format contained in a ".prj" projection file, 
+            the flattening is expressed as 1/f. For example, in 
+            SPHEROID["GRS_1980",6378137.0,298.257222101] 1/f = 298.257222101. 6378137.0 is the EquatorialRadius
+            </para>
+            <para>
+            See remarks on EccentricitySquared for explanation on how to convert "f" to "E^2"
+            </para>
+            </remarks>
+            <seealso cref="P:EGIS.ShapeFileLib.Ellipsoid.EccentricitySquared"/>
+            <seealso cref="P:EGIS.ShapeFileLib.Ellipsoid.EquatorialRadius"/>        
+        </member>
+        <member name="P:EGIS.ShapeFileLib.Ellipsoid.Id">
+            <summary>
+            unique Id of the Ellipsoid 
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.Ellipsoid.EllipsoidName">
+            <summary>
+            The well known name of the Ellipsoid
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.Ellipsoid.EquatorialRadius">
+            <summary>
+            The equatorial radius (semi-major axis) of the ellipsoid
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.Ellipsoid.EccentricitySquared">
+            <summary>
+            Eccentricity of the Ellipsoid squared        
+            </summary>
+            <remarks>
+            E^2 is related to the flattening of the Ellipsoid as follows:
+            <para>
+            E^2 = 1 - (1-f)^2
+            </para>
+            <para>
+            Note that in most SPHEROID parameters of the WKT format the flattening is expressed as 1/f. For example, in 
+            SPHEROID["GRS_1980",6378137.0,298.257222101] 1/f = 298.257222101
+            </para>
+            </remarks>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.PointD">
+            <summary>Represents an ordered pair of double-precision floating-point x- and y-coordinates that defines a point in a two-dimensional plane.</summary>
+            <remarks>
+            This structure is essentially the same as the System.Drawing.PointD structure but uses double-precision floating point numbers, which are
+            needed for accuracy in GIS applications
+            </remarks>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.PointD.Empty">
+            <summary>Represents a new instance of the <see cref="T:EGIS.ShapeFileLib.PointD"></see> class with member data left uninitialized.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.#ctor(System.Double,System.Double)">
+            <summary>Initializes a new instance of the <see cref="T:EGIS.ShapeFileLib.PointD"></see> class with the specified coordinates.</summary>
+            <param name="y">The vertical position of the point. </param>
+            <param name="x">The horizontal position of the point. </param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.op_Addition(EGIS.ShapeFileLib.PointD,System.Drawing.Size)">
+            <summary>Translates a <see cref="T:EGIS.ShapeFileLib.PointD"></see> by a given <see cref="T:System.Drawing.Size"></see>.</summary>
+            <returns>Returns the translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">A <see cref="T:System.Drawing.Size"></see> that specifies the pair of numbers to add to the coordinates of pt. </param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.op_Subtraction(EGIS.ShapeFileLib.PointD,System.Drawing.Size)">
+            <summary>Translates a <see cref="T:EGIS.ShapeFileLib.PointD"></see> by the negative of a given <see cref="T:System.Drawing.Size"></see>.</summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">A <see cref="T:EGIS.ShapeFileLib.PointD"></see> to compare. </param>
+            <param name="pt">A <see cref="T:EGIS.ShapeFileLib.PointD"></see> to compare. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.op_Addition(EGIS.ShapeFileLib.PointD,System.Drawing.SizeF)">
+            <summary>Translates the <see cref="T:EGIS.ShapeFileLib.PointD"></see> by the specified <see cref="T:System.Drawing.SizeF"></see>.</summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">The <see cref="T:System.Drawing.SizeF"></see> that specifies the numbers to add to the x- and y-coordinates of the <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.op_Subtraction(EGIS.ShapeFileLib.PointD,System.Drawing.SizeF)">
+            <summary>Translates a <see cref="T:EGIS.ShapeFileLib.PointD"></see> by the negative of a specified <see cref="T:System.Drawing.SizeF"></see>. </summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">The <see cref="T:System.Drawing.SizeF"></see> that specifies the numbers to subtract from the coordinates of pt.</param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.op_Addition(EGIS.ShapeFileLib.PointD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Translates a <see cref="T:EGIS.ShapeFileLib.PointD"></see> by a given <see cref="T:System.Drawing.Size"></see>.</summary>
+            <returns>Returns the translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">A <see cref="T:System.Drawing.Size"></see> that specifies the pair of numbers to add to the coordinates of pt. </param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.op_Subtraction(EGIS.ShapeFileLib.PointD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Translates a <see cref="T:EGIS.ShapeFileLib.PointD"></see> by the negative of a given <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> that specifies the numbers to subtract from the coordinates of pt.</param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.op_Equality(EGIS.ShapeFileLib.PointD,EGIS.ShapeFileLib.PointD)">
+            <summary>Compares two <see cref="T:EGIS.ShapeFileLib.PointD"></see> structures. The result specifies whether the values of the <see cref="P:System.Drawing.PointD.X"></see> and <see cref="P:System.Drawing.PointD.Y"></see> properties of the two <see cref="T:EGIS.ShapeFileLib.PointD"></see> structures are equal.</summary>
+            <returns>true if the <see cref="P:System.Drawing.PointD.X"></see> and <see cref="P:System.Drawing.PointD.Y"></see> values of the left and right <see cref="T:EGIS.ShapeFileLib.PointD"></see> structures are equal; otherwise, false.</returns>
+            <param name="right">A <see cref="T:EGIS.ShapeFileLib.PointD"></see> to compare. </param>
+            <param name="left">A <see cref="T:EGIS.ShapeFileLib.PointD"></see> to compare. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.op_Inequality(EGIS.ShapeFileLib.PointD,EGIS.ShapeFileLib.PointD)">
+            <summary>Determines whether the coordinates of the specified points are not equal.</summary>
+            <returns>true to indicate the <see cref="P:System.Drawing.PointD.X"></see> and <see cref="P:System.Drawing.PointD.Y"></see> values of left and right are not equal; otherwise, false. </returns>
+            <param name="right">A <see cref="T:EGIS.ShapeFileLib.PointD"></see> to compare.</param>
+            <param name="left">A <see cref="T:EGIS.ShapeFileLib.PointD"></see> to compare.</param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.Add(EGIS.ShapeFileLib.PointD,System.Drawing.Size)">
+            <summary>Translates a given <see cref="T:EGIS.ShapeFileLib.PointD"></see> by the specified <see cref="T:System.Drawing.Size"></see>.</summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">The <see cref="T:System.Drawing.Size"></see> that specifies the numbers to add to the coordinates of pt.</param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.Subtract(EGIS.ShapeFileLib.PointD,System.Drawing.Size)">
+            <summary>Translates a <see cref="T:EGIS.ShapeFileLib.PointD"></see> by the negative of a specified size.</summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">The <see cref="T:System.Drawing.Size"></see> that specifies the numbers to subtract from the coordinates of pt.</param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.Add(EGIS.ShapeFileLib.PointD,System.Drawing.SizeF)">
+            <summary>Translates a given <see cref="T:EGIS.ShapeFileLib.PointD"></see> by a specified <see cref="T:System.Drawing.SizeF"></see>.</summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">The <see cref="T:System.Drawing.SizeF"></see> that specifies the numbers to add to the coordinates of pt.</param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.Subtract(EGIS.ShapeFileLib.PointD,System.Drawing.SizeF)">
+            <summary>Translates a <see cref="T:EGIS.ShapeFileLib.PointD"></see> by the negative of a specified size.</summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">The <see cref="T:System.Drawing.SizeF"></see> that specifies the numbers to subtract from the coordinates of pt.</param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.Add(EGIS.ShapeFileLib.PointD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Translates a given <see cref="T:EGIS.ShapeFileLib.PointD"></see> by a specified <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> that specifies the numbers to add to the coordinates of pt.</param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.Subtract(EGIS.ShapeFileLib.PointD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Translates a <see cref="T:EGIS.ShapeFileLib.PointD"></see> by the negative of a specified size.</summary>
+            <returns>The translated <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <param name="sz">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> that specifies the numbers to subtract from the coordinates of pt.</param>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> to translate.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.Equals(System.Object)">
+            <summary>Specifies whether this <see cref="T:EGIS.ShapeFileLib.PointD"></see> contains the same coordinates as the specified <see cref="T:System.Object"></see>.</summary>
+            <returns>This method returns true if obj is a <see cref="T:EGIS.ShapeFileLib.PointD"></see> and has the same coordinates as this <see cref="T:System.Drawing.Point"></see>.</returns>
+            <param name="obj">The <see cref="T:System.Object"></see> to test. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.GetHashCode">
+            <summary>Returns a hash code for this <see cref="T:EGIS.ShapeFileLib.PointD"></see> structure.</summary>
+            <returns>An integer value that specifies a hash value for this <see cref="T:EGIS.ShapeFileLib.PointD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.ToString">
+            <summary>Converts this <see cref="T:EGIS.ShapeFileLib.PointD"></see> to a human readable string.</summary>
+            <returns>A string that represents this <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PointD.op_Implicit(System.Drawing.PointF)~EGIS.ShapeFileLib.PointD">
+            <summary>
+            converts a PointF structure to a PointD structure
+            </summary>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.PointD.IsEmpty">
+            <summary>Gets a value indicating whether this <see cref="T:EGIS.ShapeFileLib.PointD"></see> is empty.</summary>
+            <returns>true if both <see cref="P:System.Drawing.PointD.X"></see> and <see cref="P:System.Drawing.PointD.Y"></see> are 0; otherwise, false.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.PointD.X">
+            <summary>Gets or sets the x-coordinate of this <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</summary>
+            <returns>The x-coordinate of this <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.PointD.Y">
+            <summary>Gets or sets the y-coordinate of this <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</summary>
+            <returns>The y-coordinate of this <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.RectangleD">
+            <summary>Stores a set of four double-precision floating-point numbers that represent the location and size of a rectangle. </summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.RectangleD.Empty">
+            <summary>Represents an instance of the <see cref="T:System.Drawing.RectangleD"></see> class with its members uninitialized.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.#ctor(System.Double,System.Double,System.Double,System.Double)">
+            <summary>Initializes a new instance of the <see cref="T:System.Drawing.RectangleD"></see> class with the specified location and size.</summary>
+            <param name="y">The y-coordinate of the upper-left corner of the rectangle. </param>
+            <param name="width">The width of the rectangle. </param>
+            <param name="height">The height of the rectangle. </param>
+            <param name="x">The x-coordinate of the upper-left corner of the rectangle. </param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.#ctor(EGIS.ShapeFileLib.PointD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Initializes a new instance of the <see cref="T:System.Drawing.RectangleD"></see> class with the specified location and size.</summary>
+            <param name="size">A <see cref="T:System.Drawing.SizeD"></see> that represents the width and height of the rectangular region. </param>
+            <param name="location">A <see cref="T:System.Drawing.PointD"></see> that represents the upper-left corner of the rectangular region. </param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.FromLTRB(System.Double,System.Double,System.Double,System.Double)">
+            <summary>Creates a <see cref="T:System.Drawing.RectangleD"></see> structure with upper-left corner and lower-right corner at the specified locations.</summary>
+            <returns>The new <see cref="T:System.Drawing.RectangleD"></see> that this method creates.</returns>
+            <param name="right">The x-coordinate of the lower-right corner of the rectangular region. </param>
+            <param name="bottom">The y-coordinate of the lower-right corner of the rectangular region. </param>
+            <param name="left">The x-coordinate of the upper-left corner of the rectangular region. </param>
+            <param name="top">The y-coordinate of the upper-left corner of the rectangular region. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Equals(System.Object)">
+            <summary>Tests whether obj is a <see cref="T:System.Drawing.RectangleD"></see> with the same location and size of this <see cref="T:System.Drawing.RectangleD"></see>.</summary>
+            <returns>This method returns true if obj is a <see cref="T:System.Drawing.RectangleD"></see> and its X, Y, Width, and Height properties are equal to the corresponding properties of this <see cref="T:System.Drawing.RectangleD"></see>; otherwise, false.</returns>
+            <param name="obj">The <see cref="T:System.Object"></see> to test. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.op_Equality(EGIS.ShapeFileLib.RectangleD,EGIS.ShapeFileLib.RectangleD)">
+            <summary>Tests whether two <see cref="T:System.Drawing.RectangleD"></see> structures have equal location and size.</summary>
+            <returns>This operator returns true if the two specified <see cref="T:System.Drawing.RectangleD"></see> structures have equal <see cref="P:System.Drawing.RectangleD.X"></see>, <see cref="P:System.Drawing.RectangleD.Y"></see>, <see cref="P:System.Drawing.RectangleD.Width"></see>, and <see cref="P:System.Drawing.RectangleD.Height"></see> properties.</returns>
+            <param name="right">The <see cref="T:System.Drawing.RectangleD"></see> structure that is to the right of the equality operator. </param>
+            <param name="left">The <see cref="T:System.Drawing.RectangleD"></see> structure that is to the left of the equality operator. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.op_Inequality(EGIS.ShapeFileLib.RectangleD,EGIS.ShapeFileLib.RectangleD)">
+            <summary>Tests whether two <see cref="T:System.Drawing.RectangleD"></see> structures differ in location or size.</summary>
+            <returns>This operator returns true if any of the <see cref="P:System.Drawing.RectangleD.X"></see> , <see cref="P:System.Drawing.RectangleD.Y"></see>, <see cref="P:System.Drawing.RectangleD.Width"></see>, or <see cref="P:System.Drawing.RectangleD.Height"></see> properties of the two <see cref="T:System.Drawing.Rectangle"></see> structures are unequal; otherwise false.</returns>
+            <param name="right">The <see cref="T:System.Drawing.RectangleD"></see> structure that is to the right of the inequality operator. </param>
+            <param name="left">The <see cref="T:System.Drawing.RectangleD"></see> structure that is to the left of the inequality operator. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Contains(System.Double,System.Double)">
+            <summary>Determines if the specified point is contained within this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>This method returns true if the point defined by x and y is contained within this <see cref="T:System.Drawing.RectangleD"></see> structure; otherwise false.</returns>
+            <param name="y">The y-coordinate of the point to test. </param>
+            <param name="x">The x-coordinate of the point to test. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Contains(EGIS.ShapeFileLib.PointD)">
+            <summary>Determines if the specified point is contained within this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>This method returns true if the point represented by the pt parameter is contained within this <see cref="T:System.Drawing.RectangleD"></see> structure; otherwise false.</returns>
+            <param name="pt">The <see cref="T:System.Drawing.PointD"></see> to test. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Contains(EGIS.ShapeFileLib.RectangleD)">
+            <summary>Determines if the rectangular region represented by rect is entirely contained within this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>This method returns true if the rectangular region represented by rect is entirely contained within the rectangular region represented by this <see cref="T:System.Drawing.RectangleD"></see>; otherwise false.</returns>
+            <param name="rect">The <see cref="T:System.Drawing.RectangleD"></see> to test. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.GetHashCode">
+            <summary>Gets the hash code for this <see cref="T:System.Drawing.RectangleD"></see> structure. For information about the use of hash codes, see Object.GetHashCode.</summary>
+            <returns>The hash code for this <see cref="T:System.Drawing.RectangleD"></see>.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Inflate(System.Double,System.Double)">
+            <summary>Inflates this <see cref="T:System.Drawing.RectangleD"></see> structure by the specified amount.</summary>
+            <returns>This method does not return a value.</returns>
+            <param name="y">The amount to inflate this <see cref="T:System.Drawing.RectangleD"></see> structure vertically. </param>
+            <param name="x">The amount to inflate this <see cref="T:System.Drawing.RectangleD"></see> structure horizontally. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Inflate(EGIS.ShapeFileLib.SizeD)">
+            <summary>Inflates this <see cref="T:System.Drawing.RectangleD"></see> by the specified amount.</summary>
+            <returns>This method does not return a value.</returns>
+            <param name="size">The amount to inflate this rectangle. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Inflate(EGIS.ShapeFileLib.RectangleD,System.Double,System.Double)">
+            <summary>Creates and returns an inflated copy of the specified <see cref="T:System.Drawing.RectangleD"></see> structure. The copy is inflated by the specified amount. The original rectangle remains unmodified.</summary>
+            <returns>The inflated <see cref="T:System.Drawing.RectangleD"></see>.</returns>
+            <param name="rect">The <see cref="T:System.Drawing.RectangleD"></see> to be copied. This rectangle is not modified. </param>
+            <param name="y">The amount to inflate the copy of the rectangle vertically. </param>
+            <param name="x">The amount to inflate the copy of the rectangle horizontally. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Intersect(EGIS.ShapeFileLib.RectangleD)">
+            <summary>Replaces this <see cref="T:System.Drawing.RectangleD"></see> structure with the intersection of itself and the specified <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>This method does not return a value.</returns>
+            <param name="rect">The rectangle to intersect. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Intersect(EGIS.ShapeFileLib.RectangleD,EGIS.ShapeFileLib.RectangleD)">
+            <summary>Returns a <see cref="T:System.Drawing.RectangleD"></see> structure that represents the intersection of two rectangles. If there is no intersection, and empty <see cref="T:System.Drawing.RectangleD"></see> is returned.</summary>
+            <returns>A third <see cref="T:System.Drawing.RectangleD"></see> structure the size of which represents the overlapped area of the two specified rectangles.</returns>
+            <param name="a">A rectangle to intersect. </param>
+            <param name="b">A rectangle to intersect. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.IntersectsWith(EGIS.ShapeFileLib.RectangleD)">
+            <summary>Determines if this rectangle intersects with rect.</summary>
+            <returns>This method returns true if there is any intersection.</returns>
+            <param name="rect">The rectangle to test. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Union(EGIS.ShapeFileLib.RectangleD,EGIS.ShapeFileLib.RectangleD)">
+            <summary>Creates the smallest possible third rectangle that can contain both of two rectangles that form a union.</summary>
+            <returns>A third <see cref="T:System.Drawing.RectangleD"></see> structure that contains both of the two rectangles that form the union.</returns>
+            <param name="a">A rectangle to union. </param>
+            <param name="b">A rectangle to union. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Offset(EGIS.ShapeFileLib.PointD)">
+            <summary>Adjusts the location of this rectangle by the specified amount.</summary>
+            <returns>This method does not return a value.</returns>
+            <param name="pos">The amount to offset the location. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.Offset(System.Double,System.Double)">
+            <summary>Adjusts the location of this rectangle by the specified amount.</summary>
+            <returns>This method does not return a value.</returns>
+            <param name="y">The amount to offset the location vertically. </param>
+            <param name="x">The amount to offset the location horizontally. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.op_Implicit(System.Drawing.Rectangle)~EGIS.ShapeFileLib.RectangleD">
+            <summary>Converts the specified <see cref="T:System.Drawing.Rectangle"></see> structure to a <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>The <see cref="T:System.Drawing.RectangleD"></see> structure that is converted from the specified <see cref="T:System.Drawing.Rectangle"></see> structure.</returns>
+            <param name="r">The <see cref="T:System.Drawing.Rectangle"></see> structure to convert. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RectangleD.ToString">
+            <summary>Converts the Location and <see cref="T:System.Drawing.Size"></see> of this <see cref="T:System.Drawing.RectangleD"></see> to a human-readable string.</summary>
+            <returns>A string that contains the position, width, and height of this <see cref="T:System.Drawing.RectangleD"></see> structure緁or example, "{X=20, Y=20, Width=100, Height=50}".</returns>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode" /></PermissionSet>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.Location">
+            <summary>Gets or sets the coordinates of the upper-left corner of this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>A <see cref="T:System.Drawing.PointD"></see> that represents the upper-left corner of this <see cref="T:System.Drawing.RectangleD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.Size">
+            <summary>Gets or sets the size of this <see cref="T:System.Drawing.RectangleD"></see>.</summary>
+            <returns>A <see cref="T:System.Drawing.SizeD"></see> that represents the width and height of this <see cref="T:System.Drawing.RectangleD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.X">
+            <summary>Gets or sets the x-coordinate of the upper-left corner of this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>The x-coordinate of the upper-left corner of this <see cref="T:System.Drawing.RectangleD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.Y">
+            <summary>Gets or sets the y-coordinate of the upper-left corner of this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>The y-coordinate of the upper-left corner of this <see cref="T:System.Drawing.RectangleD"></see> structure. </returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.Width">
+            <summary>Gets or sets the width of this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>The width of this <see cref="T:System.Drawing.RectangleD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.Height">
+            <summary>Gets or sets the height of this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>The height of this <see cref="T:System.Drawing.RectangleD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.Left">
+            <summary>Gets the x-coordinate of the left edge of this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>The x-coordinate of the left edge of this <see cref="T:System.Drawing.RectangleD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.Top">
+            <summary>Gets the y-coordinate of the top edge of this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>The y-coordinate of the top edge of this <see cref="T:System.Drawing.RectangleD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.Right">
+            <summary>Gets the x-coordinate that is the sum of <see cref="P:System.Drawing.RectangleD.X"></see> and <see cref="P:System.Drawing.RectangleD.Width"></see> of this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>The x-coordinate that is the sum of <see cref="P:System.Drawing.RectangleD.X"></see> and <see cref="P:System.Drawing.RectangleD.Width"></see> of this <see cref="T:System.Drawing.RectangleD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.Bottom">
+            <summary>Gets the y-coordinate that is the sum of <see cref="P:System.Drawing.RectangleD.Y"></see> and <see cref="P:System.Drawing.RectangleD.Height"></see> of this <see cref="T:System.Drawing.RectangleD"></see> structure.</summary>
+            <returns>The y-coordinate that is the sum of <see cref="P:System.Drawing.RectangleD.Y"></see> and <see cref="P:System.Drawing.RectangleD.Height"></see> of this <see cref="T:System.Drawing.RectangleD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RectangleD.IsEmpty">
+            <summary>Tests whether the <see cref="P:System.Drawing.RectangleD.Width"></see> or <see cref="P:System.Drawing.RectangleD.Height"></see> property of this <see cref="T:System.Drawing.RectangleD"></see> has a value of zero.</summary>
+            <returns>This property returns true if the <see cref="P:System.Drawing.RectangleD.Width"></see> or <see cref="P:System.Drawing.RectangleD.Height"></see> property of this <see cref="T:System.Drawing.RectangleD"></see> has a value of zero; otherwise, false.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.RenderQuality">
+            <summary>
+            Enumeration to indicate render quality.
+            </summary>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.RenderQuality.Low">
+            <summary>
+            Rendering is performed favouring speed over quality
+            </summary>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.RenderQuality.High">
+            <summary>
+            Rendering is performed favouring quality over speed
+            </summary>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.RenderQuality.Auto">
+            <summary>
+            Rendering quality is adjusted automatically. In most cases this is the preferred choice
+            </summary>        
+        </member>
+        <member name="T:EGIS.ShapeFileLib.ShapeFile">
+            <summary>    
+            .NET ShapeFile class used to load, render and query data in an ESRI Shape File.
+            The ShapeFile class is the main class of the EGIS.ShapeFileLib namespace    
+            </summary>
+            <remarks>    
+            The class is designed to open very large shapefiles, providing a low memory implementation which will not load the contents of the
+            shapefile in memory.    
+            <para>The class also provides an option to map the shapefile in memory using native file mapping, which will provide faster
+            rendering speed</para>
+            <para>
+            NOTE THAT MANY OF THE METHODS IN THIS CLASS ARE NOT THREAD SAFE (due to internal shared buffers). If multiple threads require access to ShapeFile objects
+            then the static (Shared in VB) Sync object should be used to provide mutual access to the shapefiles
+            </para>
+            <para>
+            An ESRI Shape File consists of 3 files - the ShapeFile index file (.shx), the shape file (.shp) and a DBF file (.dbf). For a more detailed
+            desription of the ShapeFile format consult the ESRI ShapeFile file specification.</para>
+            <para>
+            Currently supported Shape Types are Point, PointZ, PolyLine, PolyLineM, Polygon and PolygonZ</para>   
+            </remarks>        
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetActualExtent">
+            <summary>
+            Returns the actual ShapeFile Extent in unprojected coordinates
+            </summary>
+            <remarks>The returned rectanlge is the extent contained in the shapefile's header</remarks>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.ProjectionToLatLong(EGIS.ShapeFileLib.PointD)">
+            <summary>
+            Returns a projected point to its Lat Long equivalent 
+            </summary>
+            <remarks>
+            If UseMercatorProjection is true then returned point will be transformed
+            to Lat Long.
+            <para>If UseMercatorProjection is false then projPoint is returned</para>
+            </remarks>
+            <param name="projPoint"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.LatLongToProjection(EGIS.ShapeFileLib.PointD)">
+            <summary>
+            Transforms a point using MercatorProjection
+            </summary>
+            <remarks>
+            If UseMercatorProjection is true then the returned point is transformed using MercatorProjection
+            <para>If UseMercatorProjection is false then latLong will be returned (no transformation is performed)</para>
+            </remarks>
+            <param name="latLong"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeExtents">
+            <summary>
+            Gets the rectangular extent of each shape in the shapefile
+            </summary>
+            <returns>RectangleF[] representing the extent of each shape in the shapefile</returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeExtentsD">
+            <summary>
+            Gets the rectangular extent of each shape in the shapefile in double precision form
+            </summary>
+            <returns>RectangleD[] representing the extent of each shape in the shapefile</returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.IsVisibleAtZoomLevel(System.Single)">
+            <summary>
+            Checks whether the ShapeFile will be visible if rendered at given zoom level, as determined by the
+            ShapeFile RenderSettings
+            </summary>
+            <param name="zoom"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.IsRecordSelected(System.Int32)">
+            <summary>
+            returns whether a shapefile record is currently selected
+            </summary>
+            <param name="index">zero based index of the shapefile record to query</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.SelectRecord(System.Int32,System.Boolean)">
+            <summary>
+            Selects or de-selects a shapefile record.
+            </summary>
+            <remarks>
+            <para>Selected shapefiles will be rednered in the color specified by the RenderSettings SelectedFillColor and SelectedOutlineColor</para>
+            </remarks>
+            <param name="index">zero based index of the record to select or de-select</param>
+            <param name="selected"></param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.ClearSelectedRecords">
+            <summary>
+            Clears any selected shapefile records
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetRecords(System.Int32)">
+            <summary>
+            Gets all of the records at fieldIndex in the DBF file
+            </summary>
+            <param name="fieldIndex">zero based index of the required field</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetAttributeFieldNames">
+            <summary>
+            Gets all of the Attribute Names contained in the shapefile's DBF file
+            </summary>        
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetAttributeFieldValues(System.Int32)">
+            <summary>
+            Gets all of the Attribute values contained in the shapefile's DBF file        
+            </summary>
+            <param name="recordNumber">zero based index of the required record/shape</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.Render(System.Drawing.Graphics,System.Drawing.Size,System.Drawing.PointF,System.Single,EGIS.ShapeFileLib.RenderSettings,EGIS.ShapeFileLib.ProjectionType)">
+            <summary>
+            Renders the shapefile centered at given point and zoom
+            </summary>
+            <param name="graphics">The Graphics device to render to</param>
+            <param name="clientArea">The client area in pixels to draw </param>
+            <param name="centre">The centre point in the ShapeFiles coordinates</param>
+            <param name="zoom">The scaling to apply</param>
+            <param name="renderSetings">render settings to apply when rendering the shapefile</param>
+            <remarks>
+            If zoom is 1 and the width of the ShapeFile's extent is N units wide, then the
+            ShapeFile wil be rendered N pixels wide. If zoom is 2 then shapefile will be rendered 2N pixels wide
+            </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.Render(System.Drawing.Graphics,System.Drawing.Size,EGIS.ShapeFileLib.PointD,System.Double,EGIS.ShapeFileLib.ProjectionType)">
+            <summary>
+            Renders the shapefile centered at given point and zoom
+            </summary>
+            <param name="graphics">The Graphics device to render to</param>
+            <param name="clientArea">The client area in pixels to draw </param>
+            <param name="centre">The centre point in the ShapeFiles coordinates</param>
+            <param name="zoom">The scaling to apply</param>
+            <param name="projectionType">The Map Projection to use when rendering the shapefile</param>
+            <remarks>
+            If zoom is 1 and the width of the ShapeFile's extent is N units wide, then the
+            ShapeFile wil be rendered N pixels wide. If zoom is 2 then shapefile will be rendered 2N pixels wide
+            </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.#ctor">
+            <summary>
+            Empty constructor. 
+            </summary>
+            <remarks>If a ShapeFile is constructed using the empty constructor then it should be followed by calling Load or ReadXml</remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.#ctor(System.String)">
+            <summary>
+            Constructs a ShapeFile using a path to a .shp shape file
+            </summary>
+            <param name="shapeFilePath">The path to the ".shp" shape file</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.LoadFromFile2(System.String)">
+            <summary>
+            Loads a ShapeFile using a path to a .shp shape file
+            </summary>
+            <param name="shapeFilePath">The path to the ".shp" shape file</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.LoadFromFile(System.String)">
+            <summary>
+            Loads a ShapeFile using a path to a .shp shape file
+            </summary>
+            <param name="shapeFilePath">The path to the ".shp" shape file</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.Dispose">
+            <summary>
+            Disposes of the ShapeFile
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.Close">
+            <summary>
+            Closes the underlying stream of the ShapeFile and clears all of the internal data.
+            After calling this method the ShapeFile can no longer be rendered
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.ToString">
+            <summary>
+            overridden ToString method
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.WriteXml(System.Xml.XmlWriter)">
+            <summary>
+            Writes an Xml representation of the ShapeFile.        
+            </summary>
+            <param name="writer"></param>
+            <remarks>Use ReadXml to load a ShapeFile from the Xml representation writen by this method</remarks>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFile.ReadXml(System.Xml.XmlElement)"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.ReadXml(System.Xml.XmlElement)">
+            <summary>
+            Reads and and loads a ShapeFile from Xml representation of the ShapeFile (as output by WriteXml)
+            </summary>
+            <param name="element"></param>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFile.WriteXml(System.Xml.XmlWriter)"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeData(System.Int32)">
+            <summary>
+            Gets the raw shape data at given record index.        
+            </summary>
+            <param name="recordIndex"> The zero based index of the shape data to return</param>
+            <returns></returns>
+            <remarks>If you are reading every record in a large shape file then the preferred method is to call GetShapeFileEnumerator</remarks>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeData(System.Int32,System.Byte[])">
+            <summary>
+            Gets the raw shape data at given record index, using a supplied dataBuffer to read the data.         
+            </summary>
+            <param name="recordIndex"> The zero based index of the shape data to return</param>
+            <param name="dataBuffer"> A supplied data buffer to use when reading the raw shape data from the shapefile. The buffer must be large enough to read the raw
+            shape data.</param>
+            <returns></returns>
+            <remarks>If you are reading every record in a large shape file then the preferred method is to call GetShapeFileEnumerator</remarks>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeDataD(System.Int32)">
+            <summary>
+            Gets the raw shape data in double precision format at given record index.        
+            </summary>
+            <param name="recordIndex"> The zero based index of the shape data to return</param>
+            <returns></returns>
+            <remarks>If you are reading every record in a large shape file then the preferred method is to call GetShapeFileEnumerator</remarks>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeDataD(System.Int32,System.Byte[])">
+            <summary>
+            Gets the raw shape data in double precision format at given record index, using a supplied dataBuffer to read the data.         
+            </summary>
+            <param name="recordIndex"> The zero based index of the shape data to return</param>
+            <param name="dataBuffer"> A supplied data buffer to use when reading the raw shape data from the shapefile. The buffer must be large enough to read the raw
+            shape data.</param>
+            <returns></returns>
+            <remarks>If you are reading every record in a large shape file then the preferred method is to call GetShapeFileEnumerator</remarks>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeZData(System.Int32)">
+            <summary>
+            Gets the raw shape Z(height) data at given record index.        
+            </summary>
+            <param name="recordIndex"> The zero based index of the shape data to return</param>
+            <returns></returns>
+            <remarks>If you are reading every record in a large shape file then the preferred method is to call GetShapeFileEnumerator
+            <para>If the shapefile does not contain any Z values then this method will return null</para>
+            </remarks>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeZData(System.Int32,System.Byte[])">
+            <summary>
+            Gets the raw shape Z(height) data at given record index, using a supplied dataBuffer to read the data.         
+            </summary>
+            <param name="recordIndex"> The zero based index of the shape data to return</param>
+            <param name="dataBuffer"> A supplied data buffer to use when reading the raw shape data from the shapefile. The buffer must be large enough to read the raw
+            shape data.</param>
+            <returns></returns>
+            <remarks>If you are reading every record in a large shape file then the preferred method is to call GetShapeFileEnumerator
+            <para>If the shapefile does not contain any Z values then this method will return null</para>
+            </remarks>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeZDataD(System.Int32,System.Byte[])">
+            <summary>
+            Gets the raw shape Z(height) data in double precision format at given record index, using a supplied dataBuffer to read the data.         
+            </summary>
+            <param name="recordIndex"> The zero based index of the shape data to return</param>
+            <param name="dataBuffer"> A supplied data buffer to use when reading the raw shape data from the shapefile. The buffer must be large enough to read the raw
+            shape data.</param>
+            <returns></returns>
+            <remarks>If you are reading every record in a large shape file then the preferred method is to call GetShapeFileEnumerator
+            <para>If the shapefile does not contain any Z values then this method will return null</para>
+            </remarks>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeMDataD(System.Int32,System.Byte[])">
+            <summary>
+            Gets the raw shape M(Measures) data in double precision format at given record index, using a supplied dataBuffer to read the data.         
+            </summary>
+            <param name="recordIndex"> The zero based index of the shape data to return</param>
+            <param name="dataBuffer"> A supplied data buffer to use when reading the raw shape data from the shapefile. The buffer must be large enough to read the raw
+            shape data.</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeMDataD(System.Int32)">
+            <summary>
+            Gets the raw shape M(Measures) data in double precision format at given record index, using a supplied dataBuffer to read the data.         
+            </summary>
+            <param name="recordIndex"> The zero based index of the shape data to return</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeBounds(System.Int32)">
+            <summary>
+            Gets the rectangular bounds of an individual shape in the ShapeFile
+            </summary>
+            <param name="recordIndex">Zero based index of shape bounds to return</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeBoundsD(System.Int32)">
+            <summary>
+            Gets the rectangular bounds of an individual shape in the ShapeFile in double precision coordinates
+            </summary>
+            <param name="recordIndex">Zero based index of shape bounds to return</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeIndexContainingPoint(EGIS.ShapeFileLib.PointD,System.Double)">
+            <summary>
+            returns the index of the shape containing Point pt
+            </summary>
+            <param name="pt">The location of the point (in the shapefile's coordinates)</param>
+            <param name="minDistance">the min distance (in ShapeFile coordinates) between pt and a shape when searching point or line shapes
+            that will return a "hit". </param>
+            <returns>zero based index of the shape containing pt or -1 if no shape contains the point</returns>
+            <remarks>When searching in a Point ShapeFile a point will be defined as contining pt if the distance between the found point and pt is less than or equal to minDistance
+            <para>When searching in a PolyLine ShapeFile a Line will be defined as containing the point if the distance between a line segment in the found shape and pt is less than or equal to minDistance</para>
+            </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetClosestShape(EGIS.ShapeFileLib.PointD,System.Double,System.Collections.Generic.List{System.Int32},EGIS.ShapeFileLib.PolylineDistanceInfo@)">
+            <summary>
+            returns the index of the closest shape in the given collection of records
+            </summary>
+            <param name="centre"></param>
+            <param name="radius"></param>
+            <param name="recordIndicies">list of zero-based record indices</param>
+            <param name="polylineDistanceInfo"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator">
+            <summary>
+            Gets a ShapeFileEnumerator, which can be used to enumerate over all of the records in the ShapeFile
+            </summary>        
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator(EGIS.ShapeFileLib.RectangleD)">
+            <summary>
+            Gets a ShapeFileEnumerator, which can be used to enumerate over all of the records in the ShapeFile, intersecting with a given bounds
+            </summary>
+            <returns></returns>        
+            <param name="extents">extents defines the area that returned shapes must intersect with.If this is RectangleF.Empty then no recrods will be returned</param>        
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.GetShapeFileEnumerator(System.Drawing.RectangleF,EGIS.ShapeFileLib.ShapeFileEnumerator.IntersectionType)">
+            <summary>
+            Gets a ShapeFileEnumerator, which can be used to enumerate over all of the records in the ShapeFile, intersecting or contained within a given bounds
+            </summary>
+            <returns></returns>        
+            <param name="extent">Defines the area that returned shapes must intersect with or be contained by. If this is RectangleF.Empty then no recrods will be returned</param>        
+            /// <param name="intersectionType">Indicates whether shapes must intersect with or be contained by extent</param>        
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.LLToMercator(System.Drawing.PointF)">
+            <summary>
+            Utillity method to translate a Lat/Long Point to its Mercator Projection representation.
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.LLToMercator(EGIS.ShapeFileLib.PointD)">
+            <summary>
+            Applys the Mercator projection to a lat long pt and returns
+            the projected point
+            </summary>
+            <param name="pt"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.MercatorToLLF(System.Drawing.PointF)">
+            <summary>
+            Utillity method to translate a Point using a Mercator Projection t its Lat/Long representation.
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFile.MercatorToLL(EGIS.ShapeFileLib.PointD)">
+            <summary>
+            Utillity method to translate a Point using a Mercator Projection t its Lat/Long representation.
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.RenderQuality">
+            <summary>
+            Gets or Sets the RenderQuality to use when rendering shapefiles
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.MapFilesInMemory">
+            <summary>
+            Gets or Sets whether to map files in memory.        
+            </summary>
+            <remarks>
+            If MapFilesInMemory is set to true then shapefiles will be mapped in memory using native file mapping.
+            When files are mapped in memory rendering performance will be improved; however they will use more
+            memory.
+            </remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.ShapeType">
+            <summary>
+            Gets the ShapeType of the ShapeFile
+            
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.Sync">
+            <summary>
+            Gets an object that can be used to synchronize access to the ShapeFile
+            </summary>
+            <remarks>
+            NOTE: Many of the methods in this class are not Thread Safe (due to internal shared buffers). If multiple threads require access to ShapeFile objects
+            then the static (Shared in VB) Sync object should be used to provide mutual access to the shapefiles
+            </remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.RenderSettings">
+            <summary>
+            Gets or sets the RenderSettings used by the ShapeFile when Rendering
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.FilePath">
+            <summary>
+            Gets the path to the ShapeFile, not including the .shp file extension
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.Name">
+            <summary>
+            The name of this ShapeFile.
+            </summary>
+            <remarks>
+            This is common name used to identify a shapefile and is not the name
+            of the file path of this shapefile
+            </remarks>        
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.Extent">
+            <summary>
+            Gets the Rectangular extent of the shapefile
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.IsSelectable">
+            <summary>
+            Indicates whether the ShapeFile is selectable. 
+            </summary>
+            <remarks>For a ShapeFile to be selectable, the ShapeFile's RenderSettings must not be null
+            and the RenderSettings must be selectable</remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.SelectedRecordIndices">
+            <summary>
+            Returns a collection of all the selected record indices
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFile.RecordCount">
+            <summary>
+            Gets the number of records(shapes) in the ShapeFile
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.ShapeType">
+            <summary>
+            Enumeration representing a ShapeType. Currently supported shape types are Point, PolyLine, Polygon and PolyLineM
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.MultiPointRecord.read(System.Byte[],System.Int32)">
+            To Do : add measures
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PolyLineRecordEx.read(System.Byte[],System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="dataOffset"></param>
+            <returns>number of bytes read</returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PolyLineMRecordEx.read(System.Byte[],System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="dataOffset"></param>
+            <returns>number of bytes read</returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PolygonRecordEx.read(System.Byte[],System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="dataOffset"></param>
+            <returns>number of bytes read</returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.PolygonZRecordEx.read(System.Byte[],System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="data"></param>
+            <param name="dataOffset"></param>
+            <returns>number of bytes read</returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SFRecordCol.GetPointsFAngle(System.Byte[],System.Int32,System.Int32,System.Int32@,System.Drawing.RectangleF,System.Boolean)">
+            <summary>
+            returns the angle of the longest line between consecutive points in the data
+            </summary>
+            <param name="data"></param>
+            <param name="offset"></param>
+            <param name="numPoints"></param>
+            <param name="pointIndex"> reference to the index in data containing the first point of the segment</param>
+            <param name="extent"></param>
+            <param name="mercProjection"></param>
+            <returns></returns>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.DbfReader">
+            <summary>
+            A DBF Reader class, providing direct access to record data within a DBF file, with low memory useage.    
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfReader.#ctor(System.String)">
+            <summary>
+            DbfReader constructor
+            </summary>
+            <param name="filePath"> The path to the DBF file. If the file extension contained in fileName is not included then ".dbf" will be appended to the file path
+            before it is opened</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfReader.GetField(System.Int32,System.Int32)">
+            <summary>
+            returns a string representing the field[fieldIndex] of the Record[recordNumber] in the dbf file
+            Throws ArgumentException if recordNumber ">=" NumberOfRecords or negative, fieldIndex >= FieldCount or negative, 
+            </summary>
+            <param name="recordNumber">Zero based record number in the dbf file</param>
+            <param name="fieldIndex">Zero based field index in a record</param>
+            <returns>the string contents of the required field. Note that the returned string is not trimmed so that if a field length is longer than the stored string
+            then the string is padded with spaces. I.E if a field of length 10 is storing "abc" then the returned string will be padded with 7 space characters</returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfReader.GetFields(System.Int32)">
+            <summary>
+            Gets an array of strings representing the fields of Record[recordNumber] in the DBF file
+            Throws ArgumentException if recordNumber ">=" NumberOfRecords or negative
+            </summary>
+            <param name="recordNumber">Zero based record number in the dbfFile</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfReader.GetRecords(System.Int32)">
+            <summary>
+            Gets an array of strings representing all of the record contents for a specified field.
+            Each string in the returned array is trimmed to remove trailing spaces
+            </summary>
+            <param name="fieldIndex">Zero based index of the field in the DBF file</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfReader.GetDistinctRecords(System.Int32)">
+            <summary>
+            Gets an array of strings representing the distinct record contents for a specified field.
+            Each string in the returned array is trimmed to remove trailing spaces
+            </summary>
+            <param name="fieldIndex">Zero based index of the field in the DBF file</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfReader.IndexOfFieldName(System.String)">
+            <summary>
+            returns the field index of fieldName.
+            If a field with name fieldName does not exist the method will return -1
+            </summary>
+            <param name="fieldName"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfReader.Close">
+            <summary>
+            Closes the DbfReader. This method will close internal resources and should be called when you have finshed using the DbfReader.
+            After this method has been called any attempt to read a field or record data from the DbfReader will throw an Exception
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfReader.GetFieldNames">
+            <summary>
+            Utility method to return the names of the fields in the DBF file
+            Internally extracts the field names from the DBFRecordHeader
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfReader.DbfRecordHeader">
+            <summary>
+            Returns the DbfFileHeader representing the contents of the DBF file's main header
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfReader.StringEncoding">
+            <summary>
+            Get/Sets the Encoding used to read string fields
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.DbfFileHeader">
+            <summary>
+            Struct representing the contents of the main header of a DBF file.
+            The main header stores version number, modification date, the number of fields in each record
+            and a description of each field in a record.
+            For a more detailed description of the main header of a DBF file refer to the DBF File Format techincal description
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfFileHeader.Read(System.IO.Stream)">
+            <summary>
+            Reads the header contents from a stream
+            </summary>
+            <param name="stream"></param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfFileHeader.Read(System.Byte[],System.Int32)">
+            <summary>
+            Reads the header contents from raw byte data
+            </summary>
+            <param name="data">byte array containing the header data</param>        
+            <param name="dataOffset">offset in the data byte array containing the first byte of the header</param>        
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfFileHeader.GetFieldDescriptions">
+            <summary>
+            Method to return an array of DbfFieldDesc structs, describing each field in a record
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfFileHeader.ToString">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFileHeader.VersionNumber">
+            <summary>
+            The DBF version number
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFileHeader.LDID">
+            <summary>
+            The DBF Language Driver Id        
+            </summary>
+            <remarks>
+            See http://downloads.esri.com/support/documentation/pad_/ArcPad_RefGuide_1105.pdf
+            </remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFileHeader.RecordCount">
+            <summary>
+            the number of records contained in the DBF file
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFileHeader.HeaderLength">
+            <summary>
+            The length of the main header
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFileHeader.RecordLength">
+            <summary>
+            The length of each record (in bytes) in the DBF file. Note that each record will have the same length.
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFileHeader.FieldCount">
+            <summary>
+            The number of fields in each record
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.DbfFieldType">
+            <summary>
+            Specifies the type of a field in a DBF file 
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.DbfFieldDesc">
+            <summary>
+            Describes a single field in a DBF file, including the name of the field, the DbfFieldType and the length of the field
+            </summary>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.DbfFieldDesc._recordOffset">
+            <summary>
+            RecordOffset = the offset of the field in a record.
+            For Field 0, RecordOffset = 0,
+            For Field 1, RecordOffset = Length of Field 0,
+            For Field N, RecordOffset = Length of Field0 to FieldN-1
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfFieldDesc.#ctor(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Creates a DBFFieldDesc struct by reading from raw byte data. The contents of the raw byte data are as they would appear in the 
+            header of a DBF file
+            </summary>
+            <param name="data">a byte array containing the raw header data</param>
+            <param name="dataOffset">the zero based offset in the raw data from where to start reading</param>
+            <param name="recordOffset">the zero based offset of the Field within a record</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.DbfFieldDesc.ToString">
+            <summary>
+            Returns a string representation of the DbfFieldDesc
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFieldDesc.FieldName">
+            <summary>
+            The name of the field. The maximum length of a field name is 10 characters
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFieldDesc.FieldType">
+            <summary>
+            The field type
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFieldDesc.FieldLength">
+            <summary>
+            The length of the field. Note that in a DBF file each record is a constant length (even if a record is an empty string)
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFieldDesc.DecimalCount">
+            <summary>
+            Gets/Sets the decimal count for numeric data types.
+            </summary>
+            <remarks>
+            <para>DecimalCount must be &gt;=0 and &lt;16</para>
+            </remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.DbfFieldDesc.RecordOffset">
+            <summary>
+            RecordOffset = the offset of the field in a record.
+            For Field 0, RecordOffset = 0,
+            For Field 1, RecordOffset = Length of Field 0,
+            For Field N, RecordOffset = Length of Field0 to FieldN-1
+            </summary>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.NativeMethods.OPAQUE">
+            <summary>
+            constant representing the OPAQUE Background Mode
+            </summary>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.NativeMethods.TRANSPARENT">
+            <summary>
+            constant representing the TRANSPARENT Background Mode
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.EndianUtils.SwapIntBytes(System.Byte[],System.Int32)">
+            <summary>
+            swaps the bytes ordering of the data at offset
+            ie. bytes offset, ofset+1, offset+2, offset+3 become offset+3, offset+2, offset+1, offset
+            This can be used to convert a BE int to a LE int and vice-versa
+            Note that no bounds checks are performed so offset must be &lt;= data.length-4
+            </summary>
+            <param name="data"></param>
+            <param name="offset"></param>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.ShapeFileEnumerator">
+            <summary>
+            ShapeFile enumerator used to enumerate the raw data of each shape in a shapeFile.
+            The ShapeFileEnumerator provides a fast, low memory, forward only means of iterating over all of the 
+            records in a shapefile.
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileEnumerator.GetCurrentZValues">
+            <summary>
+            Gets the raw Z data of the current shape (3D shapefiles only)
+            </summary>        
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileEnumerator.GetCurrentMValues">
+            <summary>
+            Gets the Measure data of the current shape.
+            This method is currently not implemented
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileEnumerator.MoveNext">
+            <summary>
+            Advances the enumerator to the next shape in the shape file. The next shape may not be the next shape in the shape file if
+            the enumerator has a smaller Extent than the shape file's Extent.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileEnumerator.Reset">
+            <summary>
+            Sets the enumerator to its initial position, which is before the first shape in the shapefile
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileEnumerator.Extent">
+            <summary>
+            Gets the Extent of the enumerator. In most cases this will be the extent of the shapefile, but
+            this may be smaller than the shape file's exent if the enumerator has been created from a sub region
+            of the shapefile's extent
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileEnumerator.Current">
+            <summary>
+            Gets the raw PointD data of the current shape
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileEnumerator.CurrentShapeIndex">
+            <summary>
+            Gets the index (zero based) of the current shape.        
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileEnumerator.TotalRecords">
+            <summary>
+            Convenience method which returns he total records contained in the shapefile. TotalRecords is the same as the shape File's RecordCount property         
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.ShapeFileEnumerator.IntersectionType">
+            <summary>
+            Defines how shapes will be evaluated when moving to the next record when enumerating through a shapefile.
+            Intersects (the default) evaluates shapes that intersect with the Extent of the ShapeFileEnumerator. Contains
+            evaluates shapes that fit entirely within the Extent of the ShapeFileEnumerator.
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.LineType">
+            <summary>
+            Enumeration defining a LineType when rendering PolyLine ShapeFiles
+            </summary>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.LineType.Solid">
+            <summary>
+            Solid line
+            </summary>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.LineType.Outline">
+            <summary>
+            A line with an outlined color
+            </summary>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.LineType.Railway">
+            <summary>
+            A line representing a railway
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.RenderSettings">
+            <summary>
+            Encapsulates settings used when rendering a ShapeFile
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RenderSettings.Finalize">
+            <summary>
+            Destructor
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RenderSettings.#ctor(System.String,System.String,System.Drawing.Font)">
+            <summary>
+            Constructs a new RenderSettings object
+            </summary>
+            <param name="shapeFilePath">The path to the shape file without the .shp file extension</param>
+            <param name="fieldName">The name of the DBF field to use when labelling shapes</param>
+            <param name="renderFont">The Font to use when labelling shapes in the shape file</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RenderSettings.GetImageSymbol">
+            <summary>
+            Returns the symbol Image if PointImageSymbol has been set
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RenderSettings.WriteXml(System.Xml.XmlWriter)">
+            <summary>
+            Writes an XML representation of RenderSettings
+            </summary>
+            <param name="writer"></param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RenderSettings.ReadXml(System.Xml.XmlElement)">
+            <summary>
+            Reads the RenderSettings properties from an Xml representation
+            </summary>
+            <param name="element"></param>        
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RenderSettings.Dispose">
+            <summary>
+            Dispose of the RenderSettings
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.RenderSettings.Dispose(System.Boolean)">
+            <summary>
+            Diposes of the RenderSettings. Derived classes that override this method
+            should call base.Dispose(disposing)
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.DbfReader">
+            <summary>
+            Gets the DbfReader of this RenderSettings ShapeFile
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.StringEncoding">
+            <summary>
+            Gets/Sets the text encoding used when reading string attribbutes from the shapefile's DBF file
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.MinRenderLabelZoom">
+            <summary>
+            Gets / Sets the Minimum Zoom Level before labels will be rendered. 
+            </summary>
+            <remarks>If MinRenderLabelZoom is less than zero then
+            this setting is ignored and shape labels will be rendered regardless
+            of the zurent zoom level</remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.RenderDuplicateFields">
+            <summary>
+            Indicates whether or not to render duplicate field names on a polyline shape
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.MinZoomLevel">
+            <summary>
+            Gets / Sets the Min Zoom level before the layer is rendered.        
+            </summary>
+            <remarks>Use this property in conjunction with MaxZoomLevel to control whether
+            a layer is rendered as a map is zoomed in and out.
+            <para>
+            This property will be ignored if it is set to a number less than 0</para>
+            </remarks>
+            <seealso cref="P:EGIS.ShapeFileLib.RenderSettings.MaxZoomLevel"/>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.MaxZoomLevel">
+            <summary>
+            Gets / Sets the Max Zoom level before the layer is not rendered
+            </summary>
+            <remarks>Use this property in conjunction with MinRenderZoomLevel to control whether
+            a layer is rendered as a map is zoomed in and out
+            <para>
+            This property will be ignored if it is set to a number less than 0</para>
+            </remarks>        
+            <seealso cref="P:EGIS.ShapeFileLib.RenderSettings.MinZoomLevel"/>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.FieldName">
+            <summary>
+            Gets / Sets the name of the Field in the DBF file that will be used when labeling shapes
+            </summary>        
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.FieldIndex">
+            <summary>
+            Gets the zero based field column index of the specifed DBF FieldName
+            </summary>
+            <remarks> If no FieldName is set or FieldName is not in the DBF file Field index returns -1</remarks>
+            <seealso cref="P:EGIS.ShapeFileLib.RenderSettings.FieldName"/>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.Font">
+            <summary>
+            Gets / Sets the Font to use when labelling shapes
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.FontColor">
+            <summary>
+            Gets / Sets the Font Color to use when rendering shape labels
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.ShadowText">
+            <summary>
+            Gets / Sets whether to use a "Shadow" text effect when labelling shapes
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.FillColor">
+            <summary>
+            Gets / Sets the Fill Color to use when rendering the interior of each shape
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.OutlineColor">
+            <summary>
+            Gets / Sets the color used to draw the outline of each shape.
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.PenWidthScale">
+            <summary>
+            Gets / Sets the width of the pen in ShapeFile coordinate units (PolyLines only).
+            </summary>
+            <remarks>
+            This settings is only used when rendering PolyLine or PolyLineM ShapeFiles
+            <para>
+            If a ShapeFile is using UTM coords this is the width of the lines in metres. 
+            </para>
+            <para>If a ShapeFile is using Lat Long coordinates this is the width of the line in decimal degrees</para>
+            <para>
+            This property is set automatically when using the Desktop version of Easy GIS .NET, using a default value of 8m for UTM ShapeFiles.
+            For ShapeFiles using Lat Long coordinates, the decimal degree equivalent of the 8m value is calculated based on teh ShapeFiles Extent
+            </para>
+            </remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.MaxPixelPenWidth">
+            <summary>
+            Gets / Sets the Maximum width of the pen in Pixels.
+            </summary>
+            <remarks>
+            This settings is only used when rendering PolyLine or PolyLineM ShapeFiles
+            <para>
+            This property is ignored if its value is set to zero or less.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.MinPixelPenWidth">
+            <summary>
+            Gets / Sets the Minimum width of the pen in Pixels.
+            </summary>
+            <remarks>
+            This settings is only used when rendering PolyLine or PolyLineM ShapeFiles
+            <para>
+            This property is ignored if its value is set to zero or less.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.LineType">
+            <summary>
+            Gets / Sets the LineType to use when rending lines (PolyLine and PolyLineM only)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "P:EGIS.ShapeFileLib.RenderSettings.LineDashStyle" -->
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.FillInterior">
+            <summary>
+            Gets / Sets whether to fill the interior of each shape (Polygon)
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.IsSelectable">
+            <summary>
+            Gets / Sets whether the ShapeFile is selectable
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.SelectOutlineColor">
+            <summary>
+            Gets / Sets the color used to draw the outline of selected shapes.
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.SelectFillColor">
+            <summary>
+            Gets / Sets the Fill Color to use when rendering the interior of selected shapes
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.ToolTipFieldName">
+            <summary>
+            Gets / Sets the name of the Field in the DBF file that will be used for the ToolTip text
+            </summary>        
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.UseToolTip">
+            <summary>
+            Gets / Sets whether to use a ToolTip for the layer
+            </summary>        
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.ToolTipFieldIndex">
+            <summary>
+            Gets the zero based field column index of the ToolTipFieldName
+            </summary>
+            <remarks> If no FieldName is set or FieldName is not in the DBF file Field index returns -1</remarks>
+            <seealso cref="P:EGIS.ShapeFileLib.RenderSettings.ToolTipFieldName"/>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.PointImageSymbol">
+            <summary>
+            Gets/Sets the Image Symbol to use for Point records
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.PointSize">
+            <summary>
+            Gets/Sets the size (in pixels) to use when rendering each point in a Point ShapeFile
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.RenderSettings.CustomRenderSettings">
+            <summary>
+            Gets or sets a ICustomRenderSettings object that should be applied when rendering the shapefile
+            </summary>
+            <seealso cref="T:EGIS.ShapeFileLib.ICustomRenderSettings"/>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.ImageFileNameEditor">
+            <summary>
+            implementing our own editor instead of deriving FileNameEditor due to Client Profile compilation issues
+            </summary>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.ShapeFileWriter">
+            <summary>
+            .NET ShapeFile Writer utility class which provides the ability to create or edit shapefiles from .NET applications.
+            </summary>
+            <remarks>        
+            ShapeFileWriter is an abstract class. To create an instance of ShapeFileWriter call the CreateWriter
+            method or derive a new class by extending ShapeFileWriter
+            <para>To use the ShapeFileWriter create a new instance by calling the CreateWriter method, passing in 
+            the shapefile path information, shape type and DBF field desricriptions. Progressively call the AddRecord method to 
+            add new records to the shapefile. Once all records have been added, close the shapefile by calling the Close method</para>
+            <para>Deriving classes must overload AddRecord.</para>
+            <para>IMPORTANT- When you have finished writing all records you must call Close.</para>            
+            <para>All characters stored in DBF records use UTF-8 character encoding to support Unicode character sets</para>
+            </remarks>
+            <example> Example code to create a new shapefile using an existing shapefile and a ShapeFileWriter. 
+            <code>
+            public void CreateShapeFile()
+            {
+                ShapeFile sf = new ShapeFile("allroads.shp");
+                DbfReader dbfReader = new DbfReader("allroads.dbf");
+            
+                //create a new ShapeFileWriter
+                ShapeFileWriter sfw;
+                sfw = ShapeFileWriter.CreateWriter(".", "highways", sf.ShapeType, 
+                    dbfReader.DbfRecordHeader.GetFieldDescriptions());
+                try
+                {
+                    // Get a ShapeFileEnumerator from the shapefile
+                    // and read each record
+                    ShapeFileEnumerator sfEnum = sf.GetShapeFileEnumerator();
+                    while (sfEnum.MoveNext())
+                    {
+                        // get the raw point data
+                        PointD[] points = sfEnum.Current[0];
+                        //get the DBF record
+                        string[] fields = dbfReader.GetFields(sfEnum.CurrentShapeIndex);
+                        //check whether to add the record to the new shapefile.
+                        //(in this example, field zero contains the road type)
+                        if(string.Compare(fields[0].Trim(), "highway", true) == 0)
+                        {
+                            sfw.AddRecord(points, points.Length, fields);
+                        }
+                    }
+                }
+                finally
+                {
+                    //close the shapefile, shapefilewriter and dbfreader
+                    sfw.Close(); 
+                    sf.Close();
+                    dbfReader.Close();
+                }
+            }
+            </code>
+            </example>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFileWriter.AddRecord(System.Double[],System.Int32,System.String[])"/>
+            <seealso cref="M:EGIS.ShapeFileLib.ShapeFileWriter.Close"/>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.#ctor(System.String,System.String,EGIS.ShapeFileLib.DbfFieldDesc[],System.Boolean)">
+            <summary>
+            ShapeFileWriter Constructor
+            </summary>
+            <remarks>Derived classes must call this constructor</remarks>
+            <param name="baseDir">The base directory where the 3 shapefile files will be created</param>
+            <param name="shapeFileName">The name of the shapefile. The shapefile will be generated at baseDir + shapeFileName + ".shx|.shp|.dbf|.cpg</param>
+            <param name="dataFields">DbfFieldDesc array describing the dbf fields of the shapefile</param>       
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.Finalize">
+            <summary>
+            Destructor
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.WriteDbfRecord(System.String[])">
+            <summary>
+            Writes a record to the Shape Files's DBF file
+            </summary>
+            <param name="fieldData">The data for each field in the record</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.CloseIndexFile">
+            <summary>
+            Closes the index file.  
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.CloseDbfFile">
+            <summary>
+            Closes the shape file's DBF file
+            </summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.WriteFileHeaders">
+            <summary>
+            writes the shapefile's 3 file headers
+            </summary>
+            <remarks>
+            Derived classes must call this method after setting the ShapeType when the ShapeFileWriter is created
+            before the first record is written
+            </remarks>        
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.AddRecord(System.Double[],System.Int32,System.String[])">
+             <summary>
+             abstract method used to add a new record to the shapefile    
+             </summary>
+             <param name="points"> an array containing the individual points of the shape record, where the 
+              first element of the array is the x value of point 0, second element is y value of point 0 etc.
+             </param>
+             <param name="pointCount"> The number of points in the pts array (which may be less than points.length*2).
+              Note that if all elements of points are used pointCount will equal pts.length/2
+             </param>
+             <param name="fieldData">fieldData string values of the data associated with the shape record (which is stored
+             in the dbf file)
+            </param>
+             <remarks>
+             Derived subclasses override this method to write the appropriate data
+             depending on the ShapeType being used.
+             </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.AddRecord(System.Drawing.PointF[],System.Int32,System.String[])">
+             <summary>
+             abstract method used to add a new record to the shapefile    
+             </summary>
+             <param name="points"> an array containing the individual points of the shape record.    
+             </param>
+             <param name="pointCount"> The number of points in the pts array (which may be less than points.length).
+             </param>
+             <param name="fieldData">fieldData string values of the data associated with the shape record (which is stored
+             in the dbf file)
+            </param>
+            <remarks>
+             Implementing subclasses override this method to write the appropriate data
+             depending on the ShapeType being used.
+             </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.AddRecord(EGIS.ShapeFileLib.PointD[],System.Int32,System.String[])">
+             <summary>
+             abstract method used to add a new record to the shapefile    
+             </summary>
+             <param name="points"> an array containing the individual points of the shape record.    
+             </param>
+             <param name="pointCount"> The number of points in the pts array (which may be less than points.length).
+             </param>
+             <param name="fieldData">fieldData string values of the data associated with the shape record (which is stored
+             in the dbf file)
+            </param>
+            <remarks>
+             Implementing subclasses override this method to write the appropriate data
+             depending on the ShapeType being used.
+             </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.AddRecord(System.Collections.ObjectModel.ReadOnlyCollection{System.Double[]},System.String[])">
+             <summary>
+             abstract method used to add a new record to the shapefile    
+             </summary>
+             <param name="parts"> collection of double arrays containing the individual points of each part in the shape record.    
+             </param>
+             <param name="fieldData">fieldData string values of the data associated with the shape record (which is stored
+             in the dbf file)
+            </param>
+            <remarks>
+             Implementing subclasses override this method to write the appropriate data
+             depending on the ShapeType being used.
+             </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.AddRecord(System.Collections.ObjectModel.ReadOnlyCollection{System.Drawing.PointF[]},System.String[])">
+             <summary>
+             abstract method used to add a new record to the shapefile    
+             </summary>
+             <param name="parts"> collection of float arrays containing the individual points of each part in the shape record.    
+             </param>
+             <param name="fieldData">fieldData string values of the data associated with the shape record (which is stored
+             in the dbf file)
+            </param>
+            <remarks>
+             Implementing subclasses override this method to write the appropriate data
+             depending on the ShapeType being used.
+             </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.AddRecord(System.Collections.ObjectModel.ReadOnlyCollection{EGIS.ShapeFileLib.PointD[]},System.String[])">
+             <summary>
+             abstract method used to add a new record to the shapefile    
+             </summary>
+             <param name="parts"> collection of PointD arrays containing the individual points of each part in the shape record.    
+             </param>
+             <param name="fieldData">fieldData string values of the data associated with the shape record (which is stored
+             in the dbf file)
+            </param>
+            <remarks>
+             Implementing subclasses override this method to write the appropriate data
+             depending on the ShapeType being used.
+             </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.CreateWriter(System.String,System.String,EGIS.ShapeFileLib.ShapeType,EGIS.ShapeFileLib.DbfFieldDesc[])">
+            <summary>
+            Creates a ShapeFileWriter class
+            </summary>
+            <remarks>
+            <para>
+            To create a ShapeFileWriter to create a polygon shapefile pass in ShapeType.Polygon
+            </para>
+            <para>
+            To create a ShapeFileWriter to create a point shapefile pass in ShapeType.Point
+            </para>
+            <para>
+            To create a ShapeFileWriter to create a polyline shapefile pass in ShapeType.Polyline
+            </para>
+            </remarks>
+            <param name="baseDir">The path to the base directory where the shape file should be created</param>
+            <param name="shapeFileName">The name of the shapefile to create</param>
+            <param name="shapeFileType">The ShapeType of the shapefile</param>
+            <param name="dataFields">array of DbfFieldDesc objects describing the fields to be created in the shape file's DBF file</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.OpenWriter(System.String,System.String)">
+            <param name="baseDir">The path to the base directory where the shape file should be created</param>
+            <param name="shapeFileName">The name of the shapefile to create</param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.Close">
+            <summary>
+            Updates the headers inside the individual shapefile files and closes any used streams.    
+            </summary>
+            <remarks>
+            This method MUST be called after all records have been added to the shapefile.
+            Failure to call this method will result in a shapefile being generated with incorrect
+            headers
+            </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.ShapeFileWriter.Dispose">
+            <summary>
+            Releases all resources used by the DbfWriter
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileWriter.BaseDirectory">
+            <summary>
+            The base directory where the new shape file will be written
+            </summary>
+            <remarks>
+            The location of the 3 shapefiles will be written to BaseDirectory + FileName + .shp|.shx|.dbf
+            </remarks>                
+            <seealso cref="P:EGIS.ShapeFileLib.ShapeFileWriter.FileName"/>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileWriter.FileName">
+            <summary>
+            The file name of the 3 shpaefile files, exluding their file extensions
+            </summary>
+            <seealso cref="P:EGIS.ShapeFileLib.ShapeFileWriter.BaseDirectory"/>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileWriter.IndexStream">
+            <summary>
+            The Stream used to write the shape files index (.shx) file
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileWriter.ShapeStream">
+            <summary>
+            The Stream used to write the shape files .shp file
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileWriter.DbfStream">
+            <summary>
+            The Stream used to write the shape files .dbf file
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileWriter.ShapeType">
+            <summary>
+            The shape type of the shapefile        
+            </summary>
+            <remarks>Derived classes should set this when creating the ShapeFileWriter</remarks>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileWriter.RecordCount">
+            <summary>
+            The number of records written in the shapefile
+            </summary>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.ShapeFileWriter.ShapeBounds">
+            <summary>
+            The extent bounds of the shapefile being written
+            </summary>
+            <remarks>
+            Derived classes must update the ShapeBounds as each record is written, as thie shapefile's main
+            header will be updated with the ShapeBounds when the Close method is called.
+            </remarks>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.SizeD">
+            <summary>Stores an ordered pair of double-precision floating-point numbers, typically the width and height of a rectangle.</summary>
+            <remarks>
+            This structure is essentially the same as the System.Drawing.SizeF structure but uses double-precision floating point numbers, which are
+            needed for accuracy in GIS applications
+            </remarks>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="F:EGIS.ShapeFileLib.SizeD.Empty">
+            <summary>Initializes a new instance of the <see cref="T:EGIS.ShapeFileLib.SizeD"></see> class.</summary>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.#ctor(EGIS.ShapeFileLib.SizeD)">
+            <summary>Initializes a new instance of the <see cref="T:EGIS.ShapeFileLib.SizeD"></see> class from the specified existing <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</summary>
+            <param name="size">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> from which to create the new <see cref="T:EGIS.ShapeFileLib.SizeD"></see>. </param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.#ctor(EGIS.ShapeFileLib.PointD)">
+            <summary>Initializes a new instance of the <see cref="T:EGIS.ShapeFileLib.SizeD"></see> class from the specified <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</summary>
+            <param name="pt">The <see cref="T:EGIS.ShapeFileLib.PointD"></see> from which to initialize this <see cref="T:EGIS.ShapeFileLib.SizeD"></see>. </param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.#ctor(System.Double,System.Double)">
+            <summary>Initializes a new instance of the <see cref="T:EGIS.ShapeFileLib.SizeD"></see> class from the specified dimensions.</summary>
+            <param name="width">The width component of the new <see cref="T:EGIS.ShapeFileLib.SizeD"></see>. </param>
+            <param name="height">The height component of the new <see cref="T:EGIS.ShapeFileLib.SizeD"></see>. </param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.op_Addition(EGIS.ShapeFileLib.SizeD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Adds the width and height of one <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure to the width and height of another <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure.</summary>
+            <returns>A <see cref="T:EGIS.ShapeFileLib.Size"></see> structure that is the result of the addition operation.</returns>
+            <param name="sz2">The second <see cref="T:EGIS.ShapeFileLib.SizeD"></see> to add. </param>
+            <param name="sz1">The first <see cref="T:EGIS.ShapeFileLib.SizeD"></see> to add. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.op_Subtraction(EGIS.ShapeFileLib.SizeD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Subtracts the width and height of one <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure from the width and height of another <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure.</summary>
+            <returns>A <see cref="T:EGIS.ShapeFileLib.SizeD"></see> that is the result of the subtraction operation.</returns>
+            <param name="sz2">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> on the right side of the subtraction operator. </param>
+            <param name="sz1">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> on the left side of the subtraction operator. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.op_Equality(EGIS.ShapeFileLib.SizeD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Tests whether two <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structures are equal.</summary>
+            <returns>This operator returns true if sz1 and sz2 have equal width and height; otherwise, false.</returns>
+            <param name="sz2">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure on the right of the equality operator. </param>
+            <param name="sz1">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure on the left side of the equality operator. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.op_Inequality(EGIS.ShapeFileLib.SizeD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Tests whether two <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structures are different.</summary>
+            <returns>This operator returns true if sz1 and sz2 differ either in width or height; false if sz1 and sz2 are equal.</returns>
+            <param name="sz2">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure on the right of the inequality operator. </param>
+            <param name="sz1">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure on the left of the inequality operator. </param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.op_Explicit(EGIS.ShapeFileLib.SizeD)~EGIS.ShapeFileLib.PointD">
+            <summary>Converts the specified <see cref="T:EGIS.ShapeFileLib.SizeD"></see> to a <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</summary>
+            <returns>The <see cref="T:EGIS.ShapeFileLib.PointD"></see> structure to which this operator converts.</returns>
+            <param name="size">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure to be converted</param>
+            <filterpriority>3</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.Add(EGIS.ShapeFileLib.SizeD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Adds the width and height of one <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure to the width and height of another <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure.</summary>
+            <returns>A <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure that is the result of the addition operation.</returns>
+            <param name="sz2">The second <see cref="T:EGIS.ShapeFileLib.SizeD"></see> to add.</param>
+            <param name="sz1">The first <see cref="T:EGIS.ShapeFileLib.SizeD"></see> to add.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.Subtract(EGIS.ShapeFileLib.SizeD,EGIS.ShapeFileLib.SizeD)">
+            <summary>Subtracts the width and height of one <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure from the width and height of another <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure.</summary>
+            <returns>The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> that is a result of the subtraction operation.</returns>
+            <param name="sz2">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure on the right side of the subtraction operator. </param>
+            <param name="sz1">The <see cref="T:EGIS.ShapeFileLib.SizeD"></see> structure on the left side of the subtraction operator. </param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.Equals(System.Object)">
+            <summary>Tests to see whether the specified object is a <see cref="T:EGIS.ShapeFileLib.SizeD"></see> with the same dimensions as this <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</summary>
+            <returns>This method returns true if obj is a <see cref="T:EGIS.ShapeFileLib.SizeD"></see> and has the same width and height as this <see cref="T:EGIS.ShapeFileLib.SizeD"></see>; otherwise, false.</returns>
+            <param name="obj">The <see cref="T:System.Object"></see> to test. </param>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.GetHashCode">
+            <summary>Returns a hash code for this <see cref="T:EGIS.ShapeFileLib.Size"></see> structure.</summary>
+            <returns>An integer value that specifies a hash value for this <see cref="T:EGIS.ShapeFileLib.Size"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.ToPointD">
+            <summary>Converts a <see cref="T:EGIS.ShapeFileLib.SizeD"></see> to a <see cref="T:EGIS.ShapeFileLib.PointD"></see>.</summary>
+            <returns>Returns a <see cref="T:EGIS.ShapeFileLib.PointD"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.ToSize">
+            <summary>Converts a <see cref="T:EGIS.ShapeFileLib.SizeD"></see> to a <see cref="T:EGIS.ShapeFileLib.Size"></see>.</summary>
+            <returns>Returns a <see cref="T:System.Drawing.Size"></see> structure.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeD.ToString">
+            <summary>Creates a human-readable string that represents this <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</summary>
+            <returns>A string that represents this <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</returns>
+            <filterpriority>1</filterpriority>
+            <PermissionSet><IPermission class="System.Security.Permissions.SecurityPermission, mscorlib, Version=2.0.3600.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" version="1" Flags="UnmanagedCode" /></PermissionSet>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.SizeD.IsEmpty">
+            <summary>Gets a value indicating whether this <see cref="T:EGIS.ShapeFileLib.SizeD"></see> has zero width and height.</summary>
+            <returns>This property returns true when this <see cref="T:EGIS.ShapeFileLib.SizeD"></see> has both a width and height of zero; otherwise, false.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.SizeD.Width">
+            <summary>Gets or sets the horizontal component of this <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</summary>
+            <returns>The horizontal component of this <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="P:EGIS.ShapeFileLib.SizeD.Height">
+            <summary>Gets or sets the vertical component of this <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</summary>
+            <returns>The vertical component of this <see cref="T:EGIS.ShapeFileLib.SizeD"></see>.</returns>
+            <filterpriority>1</filterpriority>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.SizeDConverter">
+            <summary>Converts <see cref="T:EGIS.ShapeFileLib.SizeD"></see> objects from one type to another.</summary>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeDConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <summary>Returns a value indicating whether the converter can convert from the type specified to the <see cref="T:EGIS.ShapeFileLib.SizeD"></see> type, using the specified context.</summary>
+            <returns>true to indicate the conversion can be performed; otherwise, false. </returns>
+            <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> through which additional context can be supplied.</param>
+            <param name="sourceType">A <see cref="T:System.Type"></see> the represents the type you wish to convert from.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeDConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext,System.Type)">
+            <summary>Returns a value indicating whether the <see cref="T:EGIS.ShapeFileLib.SizeDConverter"></see> can convert a <see cref="T:EGIS.ShapeFileLib.SizeD"></see> to the specified type.</summary>
+            <returns>true if this converter can perform the conversion otherwise, false.</returns>
+            <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> through which additional context can be supplied.</param>
+            <param name="destinationType">A <see cref="T:System.Type"></see> that represents the type you want to convert from.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeDConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext,System.Collections.IDictionary)">
+            <summary>Creates an instance of a <see cref="T:EGIS.ShapeFileLib.SizeD"></see> with the specified property values using the specified context.</summary>
+            <returns>An <see cref="T:System.Object"></see> representing the new <see cref="T:EGIS.ShapeFileLib.SizeD"></see>, or null if the object cannot be created.</returns>
+            <param name="propertyValues">An <see cref="T:System.Collections.IDictionary"></see> containing property names and values.</param>
+            <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> through which additional context can be supplied.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeDConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext)">
+            <summary>Returns a value indicating whether changing a value on this object requires a call to the <see cref="M:EGIS.ShapeFileLib.SizeDConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext,System.Collections.IDictionary)"></see> method to create a new value.</summary>
+            <returns>Always returns true.</returns>
+            <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> that provides a format context. This may be null.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeDConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext,System.Object,System.Attribute[])">
+            <summary>Retrieves a set of properties for the <see cref="T:EGIS.ShapeFileLib.SizeD"></see> type using the specified context and attributes.</summary>
+            <returns>A <see cref="T:System.ComponentModel.PropertyDescriptorCollection"></see> containing the properties.</returns>
+            <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> through which additional context can be supplied.</param>
+            <param name="attributes">An array of <see cref="T:System.Attribute"></see> objects that describe the properties.</param>
+            <param name="value">The <see cref="T:System.Object"></see> to return properties for.</param>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.SizeDConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext)">
+            <summary>Returns whether the <see cref="T:EGIS.ShapeFileLib.SizeD"></see> type supports properties.</summary>
+            <returns>Always returns true.</returns>
+            <param name="context">An <see cref="T:System.ComponentModel.ITypeDescriptorContext"></see> through which additional context can be supplied.</param>
+        </member>
+        <member name="T:EGIS.ShapeFileLib.TileUtil">
+            <summary>
+            Utility class with methods to convert Lat Long locations to Tile Coordinates
+            </summary>
+            <remarks>
+            <para>
+            The TileUtil class is used by the EGIS.Web.Controls TiledSFMap to convert map tile image
+            requests to actual Lat Long position and zoom level for rendering purposes
+            </para>
+            <para>Note that in order to use Map tiles the <see cref="!:EGIS.ShapeFileLib.ShapeFile.UseMercatorProjection"/> property
+            must be set to true</para>
+            <para>
+            Tiles are organised in a manner similar to the approach used by google maps and bing maps. Each tiles dimension is 256x256 pixels.
+            A tile request is made up of a zoom-level between 0 and 16(inclusive), tile x-ccord and a tile y-ccord. At zoom-level
+            0 the entire world (-180 lon -&gt; +180 lon) is scaled to fit in 1 tile. At level 1 the world will fit
+            in 2 tiles x 2 tiles, at level 2 the world will fit into 4 tiles x 4 tiles, .. etc.     
+            </para>
+            <para>Tiles are numbered from zero in the upper left corner to (NumTiles at zoom-level)-1 as below:</para>
+            <para>
+            <code>
+            (0,0) (1,0) (2,0) ..
+            (0,1) (1,1) (2,1) ..
+            (0,2) (1,2) (2,2) ..
+            ..
+            </code>      
+            </para>
+            <seealso cref="!:EGIS.ShapeFileLib.ShapeFile.UseMercatorProjection"/>
+            </remarks>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.TileUtil.GetTileFromGisLocation(System.Double,System.Double,System.Int32)">
+            <summary>
+            Returns the tile number a given lat/long location lies in at a given zoom level
+            </summary>
+            <param name="lon"></param>
+            <param name="lat"></param>
+            <param name="zoomLevel"></param>
+            <returns>a Point containing the tiles x,y coordinates</returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.TileUtil.GetMercatorCenterPointFromTile(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Returns the centre point (in Mercator Projection coordinates) of a given tile
+            </summary>
+            <param name="tileX">zero based tile x-coord</param>
+            <param name="tileY">zero based tile y-ccord</param>
+            <param name="zoomLevel"></param>
+            /// <exception cref="T:System.ArgumentException">If zoomLevel less than zero</exception>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.TileUtil.ZoomLevelToScale(System.Int32)">
+            <summary>
+            Converts a zoomLevel to its equivalent double-precision scaling
+            </summary>
+            <exception cref="T:System.ArgumentException">If zoomLevel less than zero</exception>
+            <param name="zoomLevel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:EGIS.ShapeFileLib.TileUtil.ScaleToZoomLevel(System.Double)">
+            <summary>
+            Converts a double-precision scaling to equivalent tile zoom-level
+            </summary>
+            <param name="scale"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

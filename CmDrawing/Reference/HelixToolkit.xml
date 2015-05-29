@@ -1,0 +1,1884 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HelixToolkit</name>
+    </assembly>
+    <members>
+        <member name="T:HelixToolkit.Visual3DHelper">
+            <summary>
+            Helper methods for Visual3D objects
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.Visual3DHelper.FindBounds(System.Windows.Media.Media3D.Visual3DCollection)">
+            <summary>
+            Finds the bounding box for a collection of Visual3Ds.
+            </summary>
+            <param name="children">The children.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Visual3DHelper.FindBounds(System.Windows.Media.Media3D.Visual3D,System.Windows.Media.Media3D.Transform3D)">
+            <summary>
+            Finds the bounding box for the specified visual.
+            </summary>
+            <param name="visual">The visual.</param>
+            <param name="transform">The transform if the visual.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Visual3DHelper.Traverse``1(System.Windows.Media.Media3D.Visual3DCollection,System.Action{``0,System.Windows.Media.Media3D.Transform3D})">
+            <summary>
+            Traverses the Visual3D/Model3D tree. Run the specified action for each Model3D.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="visuals">The visuals.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:HelixToolkit.Visual3DHelper.Traverse``1(System.Windows.Media.Media3D.Visual3D,System.Action{``0,System.Windows.Media.Media3D.Transform3D})">
+            <summary>
+            Traverses the Visual3D/Model3D tree. Run the specified action for each Model3D.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="visual">The visual.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:HelixToolkit.Visual3DHelper.TraverseModel``1(System.Windows.Media.Media3D.Model3D,System.Action{``0,System.Windows.Media.Media3D.Transform3D})">
+            <summary>
+            Traverses the Model3D tree. Run the specified action for each Model3D.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="model">The model.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="M:HelixToolkit.Visual3DHelper.TraverseModel``1(System.Windows.Media.Media3D.Model3D,System.Windows.Media.Media3D.Transform3D,System.Action{``0,System.Windows.Media.Media3D.Transform3D})">
+            <summary>
+            Traverses the Model3D tree. Run the specified action for each Model3D.
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="model">The model.</param>
+            <param name="transform">The transform.</param>
+            <param name="action">The action.</param>
+        </member>
+        <member name="T:HelixToolkit.ImageMaterialExtension">
+            <summary>
+            Markupextension for Image Materials
+            Usage: Material={helix:ImageMaterial images\\myimage.png, Opacity=0.8}
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.Matrix3DExtensions">
+            Note that the Matrix3D contains row vectors
+            http://steve.hollasch.net/cgindex/math/matrix/column-vec.html
+            http://en.wikipedia.org/wiki/Row_vector
+            http://en.wikipedia.org/wiki/Column_vector
+        </member>
+        <member name="M:HelixToolkit.Matrix3DExtensions.ToString(System.Windows.Media.Media3D.Matrix3D,System.Int32)">
+            <summary>
+            Convert the matrix to a string using invariant culture and '\t' and '\n' as separators.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Matrix3DExtensions.ToString(System.Windows.Media.Media3D.Matrix3D,System.String,System.Int32)">
+            <summary>
+            Convert the matrix to a string 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Matrix3DExtensions.ToString(System.Windows.Media.Media3D.Matrix3D,System.String,System.String,System.String,System.Int32,System.Globalization.CultureInfo)">
+            <summary>
+            Convert the matrix to a string 
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Matrix3DExtensions.ConvertToString(System.Windows.Media.Media3D.Matrix3D,System.String,System.Int32)">
+            <summary>
+            Converts to string using the specified format and the invariant culture
+            </summary>
+            <param name="format">Format string, e.g. "N8"</param>
+            <param name="columnWidth">Width of column, number of characters</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Matrix3DExtensions.ConvertToString(System.Windows.Media.Media3D.Matrix3D,System.String,System.String,System.String,System.Int32,System.Globalization.CultureInfo)">
+            <summary>
+            Converts to string using the specified format and the invariant culture
+            </summary>
+            <param name="format"></param>
+            <param name="columnSeparator"></param>
+            <param name="lineSeparator"></param>
+            <param name="columnWidth"></param>
+            <param name="provider"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Matrix3DExtensions.ToArray(System.Windows.Media.Media3D.Matrix3D)">
+            <summary>
+            Convert the <see cref="T:System.Windows.Media.Media3D.Matrix3D"/> to a two-dimensional <see cref="T:System.Array"/>.
+            </summary>
+            <returns>Two-dimensional array, the indexing is Array[row,column]</returns>
+        </member>
+        <member name="T:HelixToolkit.StereoView3D">
+            <summary>
+            Interaction logic for StereoView3D.xaml
+            </summary>
+            <summary>
+            StereoView3D
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.StereoControl">
+            <summary>
+            Base control handling stereo cameras
+            todo: keyboard shortcut 'x' to change cross/parallel viewing   
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.StereoView3D.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.MeshElement3D">
+            <summary>
+            The <see cref="T:HelixToolkit.MeshElement3D"/> is a base class that contains a <see cref="T:System.Windows.Media.Media3D.GeometryModel3D"/> and 
+            front/back <see cref="P:HelixToolkit.MeshElement3D.Material"/>s.
+            Derived classes should override the Tesselate() method to generate the geometry.
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.MeshElement3D.UpdateModel">
+            <summary>
+            Forces an update to the geometry model and materials
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.MeshElement3D.Tessellate">
+            <summary>
+            Do the tesselation and return the <see cref="T:System.Windows.Media.Media3D.MeshGeometry3D"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:HelixToolkit.CoordinateSystemVisual3D">
+            <summary>
+            The CoordinateSystemVisual3D renders a coordinate system with arrows in the X, Y and Z directions.
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.Vector3DExtensions.FindAnyPerpendicular(System.Windows.Media.Media3D.Vector3D)">
+            <summary>
+            Find a <see cref="T:System.Windows.Media.Media3D.Vector3D"/> that is perpendicular to the given <see cref="T:System.Windows.Media.Media3D.Vector3D"/>.
+            </summary>
+            <param name="n"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Vector3DExtensions.ToVector3D(System.Windows.Media.Media3D.Point3D)">
+            <summary>
+            Convert a <see cref="T:System.Windows.Media.Media3D.Point3D"/> to a <see cref="T:System.Windows.Media.Media3D.Vector3D"/>.
+            </summary>
+            <param name="n"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Vector3DExtensions.ToPoint3D(System.Windows.Media.Media3D.Vector3D)">
+            <summary>
+            Convert a <see cref="T:System.Windows.Media.Media3D.Vector3D"/> to a <see cref="T:System.Windows.Media.Media3D.Point3D"/>.
+            </summary>
+            <param name="n"></param>
+            <returns></returns>
+        </member>
+        <member name="T:HelixToolkit.QuadVisual3D">
+            <summary>
+            A quadrilateral defined by the four corner points.
+            
+            Point4          Point3
+              +---------------+
+              |               |
+              |               |
+              +---------------+
+            Point1          Point2
+            
+            The texture coordinates are
+            (0,0)           (1,0)
+              +---------------+
+              |               |
+              |               |
+              +---------------+
+            (0,1)          (1,1)
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.MaterialHelper">
+            <summary>
+            Creates diffuse/specular materials
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.MaterialHelper.CreateMaterial(System.Windows.Media.Color)">
+            <summary>
+            Creates a material for the specified color.
+            </summary>
+            <param name="color">The color.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MaterialHelper.CreateMaterial(System.Windows.Media.Color,System.Double)">
+            <summary>
+            Creates a material for the specified color and opacity.
+            </summary>
+            <param name="color">The color.</param>
+            <param name="opacity">The opacity.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MaterialHelper.CreateMaterial(System.Windows.Media.Brush)">
+            <summary>
+            Creates a material for the specified brush.
+            </summary>
+            <param name="brush">The brush.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MaterialHelper.CreateMaterial(System.Windows.Media.Brush,System.Double)">
+            <summary>
+            Creates a material with the specifed brush as diffuse material. 
+            This method will also add a white specular material.
+            </summary>
+            <param name="brush">The brush.</param>
+            <param name="specularPower">The specular power.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MaterialHelper.CreateMaterial(System.Windows.Media.Brush,System.Windows.Media.Brush,System.Windows.Media.Brush,System.Double,System.Double)">
+            <summary>
+            Creates a material with the specified diffuse, emissive and specular brushes.
+            </summary>
+            <param name="diffuse">The diffuse.</param>
+            <param name="emissive">The emissive.</param>
+            <param name="specular">The specular.</param>
+            <param name="opacity">The opacity.</param>
+            <param name="specularPower">The specular power.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MaterialHelper.CreateImageMaterial(System.String)">
+            <summary>
+            Creates a material from the specified bitmap file.
+            </summary>
+            <param name="path">The path.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MaterialHelper.CreateImageMaterial(System.String,System.Double)">
+            <summary>
+            Creates a material from the specified bitmap file.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="opacity">The opacity.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MaterialHelper.CreateImageMaterial(System.Windows.Media.Imaging.BitmapImage,System.Double)">
+            <summary>
+            Creates a material from the specified BitmapImage.
+            </summary>
+            <param name="image">The image.</param>
+            <param name="opacity">The opacity.</param>
+            <returns></returns>
+        </member>
+        <member name="T:HelixToolkit.LwoReader">
+            <summary>
+            LWO (Lightwave object) file reader
+            http://www.martinreddy.net/gfx/3d/LWOB.txt
+            http://www.modwiki.net/wiki/LWO_(file_format)
+            http://www.newtek.com/lightwave/developers.php
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.LwoReader.ReadShortInt">
+            <summary>
+            Read big-endian short.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.LwoReader.ReadInt">
+            <summary>
+            Read big-endian int.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.LwoReader.ReadFloat">
+            <summary>
+            Read big-endian float.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.LwoReader.ReadData(System.Int32)">
+            <summary>
+            Read the data block of a chunk.
+            </summary>
+            <param name="size">Excluding header size</param>
+            <returns></returns>
+        </member>
+        <member name="T:HelixToolkit.CameraHelper">
+            <summary>
+            Helper class for Media3D.Camera.
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.CameraHelper.CreateDefaultCamera">
+            <summary>
+            Creates a default perspective camera.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.CameraHelper.Reset(System.Windows.Media.Media3D.Camera)">
+            <summary>
+            Resets the specified camera.
+            </summary>
+            <param name="camera">The camera.</param>
+        </member>
+        <member name="M:HelixToolkit.CameraHelper.Reset(System.Windows.Media.Media3D.PerspectiveCamera)">
+            <summary>
+            Resets the specified perspective camera.
+            </summary>
+            <param name="camera">The camera.</param>
+        </member>
+        <member name="M:HelixToolkit.CameraHelper.Reset(System.Windows.Media.Media3D.OrthographicCamera)">
+            <summary>
+            Resets the specified orthographic camera.
+            </summary>
+            <param name="camera">The camera.</param>
+        </member>
+        <member name="M:HelixToolkit.CameraHelper.Copy(System.Windows.Media.Media3D.PerspectiveCamera,System.Windows.Media.Media3D.PerspectiveCamera)">
+            <summary>
+            Copies all members of the source <see cref="T:System.Windows.Media.Media3D.Camera"/>.
+            </summary>
+            <param name="source">Source camera.</param>
+            <param name="dest">Destination camera.</param>
+        </member>
+        <member name="M:HelixToolkit.CameraHelper.CopyDirectionOnly(System.Windows.Media.Media3D.ProjectionCamera,System.Windows.Media.Media3D.ProjectionCamera,System.Double)">
+            <summary>
+            Copy the direction of the source <see cref="T:System.Windows.Media.Media3D.Camera"/> only. Used for the CoordinateSystem view.
+            </summary>
+            <param name="source"></param>
+            <param name="dest"></param>
+            <param name="distance"></param>
+        </member>
+        <member name="M:HelixToolkit.CameraHelper.AnimateTo(System.Windows.Media.Media3D.ProjectionCamera,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D,System.Windows.Media.Media3D.Vector3D,System.Double)">
+            <summary>
+            Animates the camera position and direction
+            </summary>
+            <param name="camera">Camera</param>
+            <param name="newPosition">The position to animate to</param>
+            <param name="newDirection">The direction to animate to</param>
+            <param name="newUpDirection">The up direction to animate to</param>
+            <param name="animationTime">Animation time in milliseconds</param>
+        </member>
+        <member name="M:HelixToolkit.CameraHelper.AnimateWidth(System.Windows.Media.Media3D.OrthographicCamera,System.Double,System.Double)">
+            <summary>
+            Animates the camera position and direction
+            </summary>
+            <param name="camera">An ortographic camera.</param>
+            <param name="newWidth">The Width to animate to.</param>
+            <param name="animationTime">Animation time in milliseconds</param>
+        </member>
+        <member name="T:HelixToolkit.PieSliceVisual3D">
+            <summary>
+            A flat pie slice defined by center, normal, up vectors, inner and outer radius, start and end angles
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.StudioReader">
+            <summary>
+            3DStudio file reader
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.StudioReader.ReadData(System.Int32)">
+            <summary>
+            
+            </summary>
+            <param name="size">Excluding header size</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.GetViewMatrix(System.Windows.Media.Media3D.Camera)">
+            <summary>
+            Obtains the view transform matrix for a camera. (see page 327)
+            </summary>
+            <param name="camera">Camera to obtain the ViewMatrix for</param>
+            <returns>A Matrix3D object with the camera view transform matrix, or a Matrix3D with all zeros if the "camera" is null.</returns>
+            <exception cref="T:System.ApplicationException">if the 'camera' is neither of type MatrixCamera nor ProjectionCamera. </exception>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.GetProjectionMatrix(System.Windows.Media.Media3D.Camera,System.Double)">
+            <summary>
+            Projection matrix, page 327-331
+            </summary>
+            <param name="camera"></param>
+            <param name="aspectRatio"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.GetTotalTransform(System.Windows.Media.Media3D.Camera,System.Double)">
+            <summary>
+            Get the combined view and projection transform
+            </summary>
+            <param name="camera"></param>
+            <param name="aspectRatio"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.GetLights(System.Windows.Controls.Viewport3D)">
+            <summary>
+            Get all lights in the Viewport3D
+            </summary>
+            <param name="viewport"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.SearchFor``1(System.Collections.Generic.IEnumerable{System.Windows.Media.Media3D.Visual3D})">
+            <summary>
+            Recursive search in a collection for objects of given type T 
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="collection"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.SearchFor(System.Collections.Generic.IEnumerable{System.Windows.Media.Media3D.Visual3D},System.Type,System.Collections.Generic.ICollection{System.Windows.Media.Media3D.Model3D})">
+            <summary>
+            Recursive search for an object of a given type
+            </summary>
+            <param name="collection"></param>
+            <param name="type"></param>
+            <param name="output"></param>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.FindNearestVisual(System.Windows.Controls.Viewport3D,System.Windows.Point)">
+            <summary>
+            Find the Visual3D that is nearest given a 2D position in the viewport
+            </summary>
+            <param name="viewport"></param>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.FindNearestPoint(System.Windows.Controls.Viewport3D,System.Windows.Point)">
+            <summary>
+            Find the coordinates of the nearest point given a 2D position in the viewport
+            </summary>
+            <param name="viewport"></param>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.FindHits(System.Windows.Controls.Viewport3D,System.Windows.Point)">
+            <summary>
+            Finds the hits for a given 2D viewport position.
+            </summary>
+            <param name="viewport">The viewport.</param>
+            <param name="position">The position.</param>
+            <returns>List of hits, sorted with the nearest hit first.</returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.GetGlobalHitPosition(System.Windows.Media.Media3D.RayMeshGeometry3DHitTestResult,System.Windows.Controls.Viewport3D)">
+            <summary>
+            Gets the hit position transformed to global (viewport) coordinates.
+            </summary>
+            <param name="rayHit">The hit structure.</param>
+            <param name="viewport">The viewport.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.GetNormalHit(System.Windows.Media.Media3D.RayMeshGeometry3DHitTestResult)">
+            <summary>
+            Gets the normal for a hit test result.
+            </summary>
+            <param name="rayHit">The ray hit.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.GetTransform(System.Windows.Controls.Viewport3D,System.Windows.Media.Media3D.Visual3D)">
+            <summary>
+            Get the total transform of a Visual3D
+            </summary>
+            <param name="viewport"></param>
+            <param name="visual"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.Viewport3DHelper.GetTransform(System.Windows.Media.Media3D.Visual3D,System.Windows.Media.Media3D.Model3D)">
+            <summary>
+            Gets the transform from the specified Visual3D to the Model3D.
+            </summary>
+            <param name="visual">The source visual.</param>
+            <param name="model">The target model.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.TextCreator.CreateTextLabel3D(System.String,System.Windows.Media.Brush,System.Boolean,System.Double,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D,System.Windows.Media.Media3D.Vector3D)">
+            <summary>
+            Creates a ModelVisual3D containing a text label.
+            </summary>
+            <param name="text">The string</param>
+            <param name="textColor">The color of the text.</param>
+            <param name="bDoubleSided">Visible from both sides?</param>
+            <param name="height">Height of the characters</param>
+            <param name="center">The center of the label</param>
+            <param name="over">Horizontal direction of the label</param>
+            <param name="up">Vertical direction of the label</param>
+            <returns>Suitable for adding to your Viewport3D</returns>
+        </member>
+        <member name="M:HelixToolkit.StereoHelper.FindFocalLength(System.Double,System.Double)">
+            <summary>
+            Find the focal length given the field of view and the format
+            http://en.wikipedia.org/wiki/Angle_of_view
+            </summary>
+            <param name="fov">field of view (degrees)</param>
+            <param name="format">e.g. 36mm</param>
+            <returns>The focal length in the same unit as the format</returns>
+        </member>
+        <member name="M:HelixToolkit.StereoHelper.CalculateStereoBase(System.Double,System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Calculate the stereo base using the full Bercovitz formula
+            </summary>
+            <param name="L">Largest distance from the camera lens</param>
+            <param name="N">Nearest distance from the camera lens</param>
+            <param name="screenWidth">Width of screen</param>
+            <param name="depthRatio">depth ratio 1/30</param>
+            <param name="hfov">Horizontal field of view</param>
+            <returns>The stereo base</returns>
+        </member>
+        <member name="M:HelixToolkit.StereoHelper.CalculateStereoBase(System.Double,System.Double,System.Double,System.Double)">
+            <summary>
+            Calculate the stereo base using the full Bercovitz formula
+              B = P(LN/(L-N)) (1/F - (L+N)/2LN)
+            http://nzphoto.tripod.com/stereo/3dtake/fbercowitz.htm
+            </summary>
+            <param name="P">Parallax aimed for, in mm on the film</param>
+            <param name="L">Largest distance from the camera lens, mm</param>
+            <param name="N">Nearest distance from the camera lens, mm</param>
+            <param name="F">Focal length of the lens, mm</param>
+            <returns>The stereo base</returns>
+        </member>
+        <member name="M:HelixToolkit.StereoHelper.UpdateStereoCameras(System.Windows.Media.Media3D.PerspectiveCamera,System.Windows.Media.Media3D.PerspectiveCamera,System.Windows.Media.Media3D.PerspectiveCamera,System.Double,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            Updates the left and right camera based on a center camera.
+            </summary>
+            <param name="centerCamera">Center camera (input)</param>
+            <param name="leftCamera">Left camera (is updated)</param>
+            <param name="rightCamera">Right camera (is updated)</param>
+            <param name="stereoBase">Stereo base</param>
+            <param name="crossViewing">true for cross-viewingm false for parallel-viewing</param>
+            <param name="sameUpDirection">use the same UpDirection for both cameras</param>
+            <param name="sameDirection">use the same LookDirection for both cameras</param>
+        </member>
+        <member name="M:HelixToolkit.StereoHelper.CreateClone(System.Windows.Media.Media3D.Visual3D)">
+            <summary>
+            Create a clone of a Visual3D
+            </summary>
+            <param name="v">a Visual3D</param>
+            <returns>the clone</returns>
+        </member>
+        <member name="T:HelixToolkit.MaterialExtension">
+            <summary>
+            Markupextension for Materials
+            Usage: Material={helix:Material Blue, Opacity=0.5}
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.Polygon3D">
+            <summary>
+            3D Polygon
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.HelixView3D">
+            <summary>
+            The HelixView3D contains a camera controller, coordinate view and a view cube
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.HelixView3D.Camera">
+            <summary>
+            Access to the Camera
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.HelixView3D.CameraController">
+            <summary>
+            Access to the camera controller
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.HelixView3D.ViewCubeOpacity">
+            <summary>
+            Opacity of the ViewCube when inactive
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.HelixView3D.CameraRotationMode">
+            <summary>
+            Select rotation by two-axis or virtual trackball
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.HelixView3D.CameraMode">
+            <summary>
+            Selected <see cref="P:HelixToolkit.HelixView3D.CameraMode"/>
+            </summary>
+        </member>
+        <member name="E:HelixToolkit.HelixView3D.CameraChanged">
+            <summary>
+            Event when a property has been changed
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.TubeVisual3D">
+            <summary>
+            The TubeVisual3D renders a tube along the specified Path.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.ExtrudedVisual3D">
+            <summary>
+            Extrude a section along a path
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.TextVisual3D.CreateTextLabel3D(System.String,System.Windows.Media.Brush,System.Boolean,System.Double,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D,System.Windows.Media.Media3D.Vector3D)">
+            <summary>
+            Creates a ModelVisual3D containing a text label.
+            </summary>
+            <param name="text">The string</param>
+            <param name="textColor">The color of the text.</param>
+            <param name="bDoubleSided">Visible from both sides?</param>
+            <param name="height">Height of the characters</param>
+            <param name="center">The center of the label</param>
+            <param name="over">Horizontal direction of the label</param>
+            <param name="up">Vertical direction of the label</param>
+            <returns>Suitable for adding to your Viewport3D</returns>
+        </member>
+        <member name="T:HelixToolkit.ClonedElement3D">
+            <summary>
+            The ClonedElement3D renders a cloned visual - set the source to the ModelVisual3D you want to clone.
+            This is used for Stereo views
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.StLReader">
+            <summary>
+            StL (StereoLithography) file reader
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.StLReader.ReadUInt32B">
+            <summary>
+            Read UInt32.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.StLReader.ReadUInt16B">
+            <summary>
+            Read UInt16.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.StLReader.ReadFloatB">
+            <summary>
+            Read float (4 byte)
+            </summary>
+            <returns></returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "T:HelixToolkit.AnaglyphView3D" -->
+        <member name="M:HelixToolkit.AnaglyphView3D.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.PovRayExporter">
+            <summary>
+            Export the visual tree to a PovRay input file
+            http://www.povray.org
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.Exporter.Export(System.Windows.Controls.Viewport3D)">
+            <summary>
+            Exports the specified viewport.
+            Exports model, camera and lights.
+            </summary>
+            <param name="viewport">The viewport.</param>
+        </member>
+        <member name="M:HelixToolkit.OpacitySortingHelper.AlphaSort(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Model3DCollection,System.Windows.Media.Media3D.Transform3D)">
+            <summary>
+            Sort Modelgroups in Farthest to Closest order, to enable transparency
+            Should be applied whenever the scene is significantly re-oriented
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.OpacitySortingHelper.SortModel(System.Windows.Media.Media3D.Point3D,System.Collections.Generic.IList{System.Windows.Media.Media3D.Visual3D})">
+            <summary>
+            Sort scene - first opaque objects, then transparent objects sorted by distance from camera
+            </summary>
+            <param name="model"></param>
+        </member>
+        <member name="M:HelixToolkit.OpacitySortingHelper.IsTransparent(System.Windows.Media.Media3D.Visual3D)">
+            <summary>
+            Determines whether the specified visual is transparent.
+            </summary>
+            <param name="v">The v.</param>
+            <returns>
+            	<c>true</c> if the specified visual is transparent; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:HelixToolkit.OpacitySortingHelper.IsTransparent(System.Windows.Media.Media3D.Model3D)">
+            <summary>
+            Determines whether the specified model is transparent.
+            </summary>
+            <param name="model">The model.</param>
+            <returns>
+            	<c>true</c> if the specified model is transparent; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:HelixToolkit.OpacitySortingHelper.IsTransparent(System.Windows.Media.Media3D.GeometryModel3D)">
+            <summary>
+            Determines whether the specified model is transparent.
+            </summary>
+            <param name="gm3D">The GM3 D.</param>
+            <returns>
+            	<c>true</c> if the specified GM3 D is transparent; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:HelixToolkit.OpacitySortingHelper.IsTransparent(System.Windows.Media.Media3D.Material)">
+            <summary>
+            Determines whether any part of the specified material is transparent.
+            </summary>
+            <param name="material">The material.</param>
+            <returns>
+            	<c>true</c> if the specified material is transparent; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:HelixToolkit.OpacitySortingHelper.IsTransparent(System.Windows.Media.Brush)">
+            <summary>
+            Determines whether the specified brush is transparent.
+            </summary>
+            <param name="brush">The brush.</param>
+            <returns>
+            	<c>true</c> if the specified brush is transparent; otherwise, <c>false</c>.
+            </returns>
+        </member>
+        <member name="T:HelixToolkit.DefaultLightsVisual3D">
+            <summary>
+            The DefaultLightsVisual3D adds a default 3-point directional light setup to the visual3d tree.
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.DefaultLightsVisual3D.#ctor">
+            <summary>
+            A <see cref="T:System.Windows.Media.Media3D.ModelVisual3D"/> consisting of a 3-point directional light setup.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.ObjReader">
+            <summary>
+            Obj (Wavefront) file reader
+            http://en.wikipedia.org/wiki/Obj
+            http://www.martinreddy.net/gfx/3d/OBJ.spec
+            http://www.eg-models.de/formats/Format_Obj.html
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.ObjReader.ReadZ(System.String)">
+            <summary>
+            Reads a GZipStream compressed OBJ file.
+            </summary>
+            <param name="path">The path.</param>
+            <returns></returns>
+        </member>
+        <member name="T:HelixToolkit.CameraMode">
+            <summary>
+            Inspect/Examine: orbits around a point (fixed target position, move closer target when zooming)
+            WalkAround: walk around (fixed camera position, move in cameradirection when zooming)
+            FixedPosition: fixed camera position, change FOV when zooming
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.CameraRotationMode">
+            <summary>
+            TwoAxis: constrained to two axes of rotation
+            VirtualTrackball: free rotation
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.CameraController.ChangeFov(System.Double)">
+            <summary>
+            Changes the field of view and tries to keep the scale fixed.
+            </summary>
+            <param name="delta">The relative change in fov.</param>
+        </member>
+        <member name="M:HelixToolkit.CameraController.ChangeCameraDistance(System.Double)">
+            <summary>
+            Changes the camera distance.
+            </summary>
+            <param name="delta">The delta.</param>
+        </member>
+        <member name="M:HelixToolkit.CameraController.GetRay(System.Windows.Point)">
+            <summary>
+            Get the ray into the view volume given by the position in 2D (screen coordinates)
+            </summary>
+            <param name="position"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.CameraController.UnProject(System.Windows.Point,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D)">
+            <summary>
+            Unproject a point from the screen (2D) to a point on plane (3D)
+            </summary>
+            <param name="p"></param>
+            <param name="position">plane position</param>
+            <param name="normal">plane normal</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.CameraController.Project(System.Windows.Media.Media3D.Point3D)">
+            <summary>
+            Calculate the screen position of a 3D point
+            </summary>
+            <param name="p"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.CameraController.LookAt(System.Windows.Media.Media3D.Point3D,System.Double)">
+            <summary>
+            Set the camera target point
+            </summary>
+            <param name="target">The target.</param>
+            <param name="animationTime">The animation time.</param>
+        </member>
+        <member name="M:HelixToolkit.CameraController.LookAt(System.Windows.Media.Media3D.Point3D,System.Double,System.Double)">
+            <summary>
+            Set the camera target point
+            </summary>
+            <param name="target">The target point.</param>
+            <param name="distance">The distance to the camera.</param>
+            <param name="animationTime">The animation time.</param>
+        </member>
+        <member name="M:HelixToolkit.CameraController.LookAt(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D,System.Double)">
+            <summary>
+            Set the camera target point
+            </summary>
+            <param name="target">The target.</param>
+            <param name="newDirection">The new direction.</param>
+            <param name="animationTime">The animation time.</param>
+        </member>
+        <member name="P:HelixToolkit.CameraController.SpinReleaseTime">
+            <summary>
+            Max time for mousebutton relesae to activate spin
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.CameraController.ShowCameraTarget">
+            <summary>
+            Show a 3D model at the target position when manipulating the camera
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.CameraController.TargetModel">
+            <summary>
+            Children to show at the camera target position
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.CameraController.FixedMouseDownPoint">
+            <summary>
+            Keep the point (3D) where rotation/zoom started at the same screen position(2D)
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.CameraController.EventSurface">
+            <summary>
+            The element that receives mouse events
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.BoundingBoxVisual3D">
+            <summary>
+            The BoundingBoxVisual3D shows a wireframe for the specified Rect3D.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.Expander3D">
+            <summary>
+            The Expander3D translates all child Model3Ds relative to the ExpandOrigin.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.KerkytheaExporter">
+            <summary>
+            Export the WPF3D visual tree to a Kerkythea xml file
+            Kerkythea: http://www.kerkythea.net/joomla
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.KerkytheaExporter.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HelixToolkit.KerkytheaExporter"/> class.
+            </summary>
+            <param name="outputFileName">Name of the output file.</param>
+        </member>
+        <member name="M:HelixToolkit.KerkytheaExporter.CreateTransform(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D,System.Windows.Media.Media3D.Vector3D)">
+            <summary>
+            Create transform from the original coordinate system to the system defined by translation origin
+            </summary>
+        </member>
+        <member name="F:HelixToolkit.KerkytheaExporter.textureFiles">
+            <summary>
+            Texture bitmaps are reused. This dictionary contains a map from brush to filename
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.X3DExporter">
+            <summary>
+            Export the visual tree to an X3D file
+            http://en.wikipedia.org/wiki/X3D
+            http://en.wikipedia.org/wiki/Web3D
+            
+            Validation
+            http://www.w3.org/People/mimasa/test/schemas/SCHEMA/x3d-3.0.xsd
+            http://www.web3d.org/x3d/tools/schematron/X3dSchematron.html
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.ObjExporter">
+            <summary>
+            Export the WPF3D visual tree to an OBJ file
+            http://en.wikipedia.org/wiki/Obj
+            http://www.martinreddy.net/gfx/3d/OBJ.spec
+            http://www.eg-models.de/formats/Format_Obj.html
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.BoxVisual3D">
+            <summary>
+            The BoxVisual3D renders a box aligned with the local X, Y and Z coordinate system.
+            Use a transform to orient the box in other directions.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.ColorHelper">
+            <summary>
+            Static <see cref="T:System.Windows.Media.Color"/> helper methods.
+            </summary>
+        </member>
+        <member name="F:HelixToolkit.ColorHelper.UndefinedColor">
+            <summary>
+            The undefined color #00000000.
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.ChangeAlpha(System.Windows.Media.Color,System.Byte)">
+            <summary>
+            Change the alpha value of a color
+            </summary>
+            <param name="c"></param>
+            <param name="alpha"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.Interpolate(System.Windows.Media.Color,System.Windows.Media.Color,System.Double)">
+            <summary>
+            Linear interpolation between two <see cref="T:System.Windows.Media.Color"/>s.
+            </summary>
+            <param name="c0"></param>
+            <param name="c1"></param>
+            <param name="x"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.ColorToHex(System.Windows.Media.Color)">
+            <summary>
+            Convert a <see cref="T:System.Windows.Media.Color"/> to a hexadecimal string.
+            </summary>
+            <param name="color"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.ColorDifference(System.Windows.Media.Color,System.Windows.Media.Color)">
+            <summary>
+            Calculates the difference between two <see cref="T:System.Windows.Media.Color"/>s
+            </summary>
+            <param name="c1"></param>
+            <param name="c2"></param>
+            <returns>L2-norm in RGBA space</returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.HueDifference(System.Windows.Media.Color,System.Windows.Media.Color)">
+            <summary>
+            Calculate the difference in hue between two <see cref="T:System.Windows.Media.Color"/>s.
+            </summary>
+            <param name="c1"></param>
+            <param name="c2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.Complementary(System.Windows.Media.Color)">
+            <summary>
+            Calculates the complementary color
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.HexToColor(System.String)">
+            <summary>
+            Convert a hexadecimal string to <see cref="T:System.Windows.Media.Color"/>.
+            </summary>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.UIntToColor(System.UInt32)">
+            <summary>
+            Convert an unsigned int (32bit) to <see cref="T:System.Windows.Media.Color"/>
+            </summary>
+            <param name="color"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.ColorToUint(System.Windows.Media.Color)">
+            <summary>
+            Convert a <see cref="T:System.Windows.Media.Color"/> to unsigned int
+            </summary>
+            <param name="c"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.ColorToHsvBytes(System.Windows.Media.Color)">
+            <summary>
+            Converts from a <see cref="T:System.Windows.Media.Color"/> to HSV values (byte)
+            </summary>
+            <param name="color"></param>
+            <returns>Array of [Hue,Saturation,Value] in the range [0,255]</returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.ColorToHsv(System.Windows.Media.Color)">
+            <summary>
+            Converts from a <see cref="T:System.Windows.Media.Color"/> to HSV values (double)
+            </summary>
+            <param name="color"></param>
+            <returns>Array of [Hue,Saturation,Value] in the range [0,1]</returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.HsvToColor(System.Byte,System.Byte,System.Byte)">
+            <summary>
+            Converts from HSV to a RGB <see cref="T:System.Windows.Media.Color"/>
+            </summary>
+            <param name="hue"></param>
+            <param name="saturation"></param>
+            <param name="value"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.ColorHelper.HsvToColor(System.Double,System.Double,System.Double)">
+            <summary>
+            Convert from HSV to <see cref="T:System.Windows.Media.Color"/>
+            http://en.wikipedia.org/wiki/HSL_color_space
+            </summary>
+            <param name="hue">Hue [0,1]</param>
+            <param name="sat">Saturation [0,1]</param>
+            <param name="val">Value [0,1]</param>
+            <returns></returns>
+        </member>
+        <member name="T:HelixToolkit.SphereVisual3D">
+            <summary>
+            A sphere defined by center and radius
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.SphereVisual3D.Center">
+            <summary>
+            Gets or sets the center of the sphere.
+            </summary>
+            <value>The center.</value>
+        </member>
+        <member name="P:HelixToolkit.SphereVisual3D.ThetaDiv">
+            <summary>
+            Gets or sets the number of divisions in the theta direction (around the sphere).
+            </summary>
+            <value>The theta div.</value>
+        </member>
+        <member name="P:HelixToolkit.SphereVisual3D.PhiDiv">
+            <summary>
+            Gets or sets the number of divisions in the phi direction (top-bottom).
+            </summary>
+            <value>The phi div.</value>
+        </member>
+        <member name="P:HelixToolkit.SphereVisual3D.Radius">
+            <summary>
+            Gets or sets the radius of the sphere.
+            </summary>
+            <value>The radius.</value>
+        </member>
+        <member name="T:HelixToolkit.StudioVisual3D">
+            <summary>
+            Visual model - reading model from file (.3ds, .obj. .lwo or .stl)
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.Materials">
+            <summary>
+            Implements a set of predefined materials.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.PanoramaCube3D">
+            <summary>
+            Panorama cube / skybox
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.GZipHelper.Compress(System.String)">
+            <summary>
+            Compresses a file using standard zlib compression. 
+            A "z" is added to the extension for the compressed file.
+            </summary>
+            <param name="source">The source.</param>
+        </member>
+        <member name="T:HelixToolkit.GradientBrushes">
+            <summary>
+            Implements a set of predefined gradient brushes.
+            Usage in XAML: Fill="{x:Static helix:GradientBrushes.Hue}"
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.Polygon.Triangulate">
+            <summary>
+            Triangulate by cutting ears
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.CuttingEarsTriangulator">
+            <summary>
+            Cutting ears triangulator for simple polygons (no holes) O(n^2)
+            Based on http://www.flipcode.com/archives/Efficient_Polygon_Triangulation.shtml
+            
+            References
+            http://en.wikipedia.org/wiki/Polygon_triangulation
+            http://computacion.cs.cinvestav.mx/~anzures/geom/triangulation.php
+            http://www.codeproject.com/KB/recipes/cspolygontriangulation.aspx
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.CuttingEarsTriangulator.Triangulate(System.Windows.Media.PointCollection)">
+            <summary>
+            Triangulate a polygon (cutting ears algorithm)
+            The algorithm does not support holes.
+            </summary>
+            <param name="contour">the polygon contour</param>
+            <returns>collection of triangle points</returns>
+        </member>
+        <member name="T:HelixToolkit.TruncatedConeVisual3D">
+            <summary>
+            A truncated cone defined by Origin, Height, Normal, Base- and TopRadius
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.AnimatedModelVisual3D.OnAnimationTick(System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="dt">Delta time since last call of OnAnimationTick (seconds)</param>
+        </member>
+        <member name="T:HelixToolkit.OpacitySortingVisual3D">
+            <summary>
+            This is a ModelVisual3D where the child Model3Ds are sorted by opacity.
+            Opaque models are added first, then transparent models at decreasing distance from camera.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.Helix3D">
+            <summary>
+            http://en.wikipedia.org/wiki/Helix
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.VrmlExporter">
+             <summary>
+             Export the visual tree to a VRML97 (2.0) file
+             http://en.wikipedia.org/wiki/Vrml
+             http://en.wikipedia.org/wiki/Web3D
+            
+             VRML plugin/browser detector:
+             http://cic.nist.gov/vrml/vbdetect.html
+            
+             Links
+             http://openvrml.org/
+             </summary>
+        </member>
+        <member name="T:HelixToolkit.MeshBuilder">
+            <summary>
+            This class helps building MeshGeometry3D instances.
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:HelixToolkit.MeshBuilder"/> class.
+            Normal and texture coordinate generation is turned on.
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.#ctor(System.Boolean,System.Boolean)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HelixToolkit.MeshBuilder"/> class.
+            </summary>
+            <param name="generateNormals">generate normals</param>
+            <param name="generateTextureCoordinates">generate texture coordinates</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.ToMesh(System.Boolean)">
+            <summary>
+            Converts the geometry to a <see cref="T:System.Windows.Media.Media3D.MeshGeometry3D"/>.
+            </summary>
+            <param name="freeze">freeze the mesh if set to <c>true</c>.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.ToMesh">
+            <summary>
+             Converts the geometry to a <see cref="T:System.Windows.Media.Media3D.MeshGeometry3D"/>.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddTriangle(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D)">
+            <summary>
+            Adds a triangle.
+            </summary>
+            <param name="p0">The p0.</param>
+            <param name="p1">The p1.</param>
+            <param name="p2">The p2.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddTriangle(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Windows.Point,System.Windows.Point,System.Windows.Point)">
+            <summary>
+            Adds a triangle.
+            </summary>
+            <param name="p0">The p0.</param>
+            <param name="p1">The p1.</param>
+            <param name="p2">The p2.</param>
+            <param name="uv0">The uv0.</param>
+            <param name="uv1">The uv1.</param>
+            <param name="uv2">The uv2.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddQuad(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D)">
+            <summary>
+            Adds a quad.
+            
+            The nodes are arranged in counter-clockwise order
+             p3               p2
+              +---------------+
+              |               |
+              |               |
+              +---------------+
+            </summary>
+            <param name="p0">The p0.</param>
+            <param name="p1">The p1.</param>
+            <param name="p2">The p2.</param>
+            <param name="p3">The p3.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddQuad(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Windows.Point,System.Windows.Point,System.Windows.Point,System.Windows.Point)">
+            <summary>
+            Adds a quad.
+            
+            The nodes are arranged in counter-clockwise order
+             p3               p2
+              +---------------+
+              |               |
+              |               |
+              +---------------+
+             p0               p1
+            </summary>
+            <param name="p0">The p0.</param>
+            <param name="p1">The p1.</param>
+            <param name="p2">The p2.</param>
+            <param name="p3">The p3.</param>
+            <param name="uv0">The uv0.</param>
+            <param name="uv1">The uv1.</param>
+            <param name="uv2">The uv2.</param>
+            <param name="uv3">The uv3.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddTriangleStrip(System.Windows.Media.Media3D.Point3DCollection,System.Windows.Media.Media3D.Vector3DCollection,System.Windows.Media.PointCollection)">
+            <summary>
+            Adds a triangle strip to the mesh.
+            http://en.wikipedia.org/wiki/Triangle_strip
+            </summary>
+            <param name="pos">The points.</param>
+            <param name="norms">The normals.</param>
+            <param name="texCoords">The texture coordinates.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddTriangleFan(System.Windows.Media.Media3D.Point3DCollection)">
+            <summary>
+            Adds a triangle fan to the mesh
+            </summary>
+            <param name="points">the fan points</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddTriangleFan(System.Windows.Media.Media3D.Point3DCollection,System.Windows.Media.Media3D.Vector3DCollection,System.Windows.Media.PointCollection)">
+            <summary>
+            Adds a triangle fan to the mesh
+            </summary>
+            <param name="points">the fan points</param>
+            <param name="norms">The normals.</param>
+            <param name="texCoords">The texture coordinates.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddQuads(System.Windows.Media.Media3D.Point3DCollection,System.Windows.Media.Media3D.Vector3DCollection,System.Windows.Media.PointCollection)">
+            <summary>
+            Adds the quads.
+            </summary>
+            <param name="points">The points.</param>
+            <param name="norms">The norms.</param>
+            <param name="texCoords">The tex coords.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddLoftedGeometry(System.Collections.Generic.IList{System.Windows.Media.Media3D.Point3DCollection},System.Collections.Generic.IList{System.Windows.Media.Media3D.Vector3DCollection},System.Collections.Generic.IList{System.Windows.Media.PointCollection})">
+            <summary>
+            Adds the lofted geometry.
+            http://en.wikipedia.org/wiki/Loft_(3D)
+            </summary>
+            <param name="positionsList">List of lofting sections.</param>
+            <param name="normalList">The normal list.</param>
+            <param name="textureCoordinateList">The texture coordinate list.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddExtrudedGeometry(System.Windows.Media.PointCollection,System.Windows.Media.Media3D.Vector3D,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D)">
+            <summary>
+            Add the extruded geometry of the specified curve and direction.
+            </summary>
+            <param name="points">The points.</param>
+            <param name="xDirection">The x axis direction.</param>
+            <param name="p0">The p0.</param>
+            <param name="p1">The p1.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.GetCircle(System.Int32)">
+            <summary>
+            Gets a circle section.
+            The sections are cached in a dictionary.
+            </summary>
+            <param name="thetaDiv">The number of division.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddRevolvedGeometry(System.Windows.Media.PointCollection,System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D,System.Int32)">
+            <summary>
+            Add a surface of revolution
+            http://en.wikipedia.org/wiki/Surface_of_revolution
+            </summary>
+            <param name="points">The points.</param>
+            <param name="origin">The origin.</param>
+            <param name="direction">The direction.</param>
+            <param name="thetaDiv">The theta div.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddSphere(System.Windows.Media.Media3D.Point3D,System.Double,System.Int32,System.Int32)">
+            <summary>
+            Add a sphere.
+            </summary>
+            <param name="center">The center.</param>
+            <param name="radius">The radius.</param>
+            <param name="thetaDiv">The number of divisions around the sphere.</param>
+            <param name="phiDiv">The number of divisions from top to bottom of the sphere.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddRegularIcosahedron(System.Windows.Media.Media3D.Point3D,System.Double,System.Boolean)">
+            <summary>
+            Add a regular icosahedron.
+            </summary>
+            <param name="center">The center.</param>
+            <param name="radius">The radius.</param>
+            <param name="shareVertices">if set to <c>true</c> [share vertices].</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddBox(System.Windows.Media.Media3D.Point3D,System.Double,System.Double,System.Double)">
+            <summary>
+            Add a box align with the X, Y and Z axes.
+            </summary>
+            <param name="center">The center.</param>
+            <param name="xLength">The width.</param>
+            <param name="yLength">The length.</param>
+            <param name="zLength">The height.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddBox(System.Windows.Media.Media3D.Point3D,System.Double,System.Double,System.Double,HelixToolkit.MeshBuilder.BoxFaces)">
+            <summary>
+            Add a box with specifed faces, align with the X, Y and Z axes.
+            </summary>
+            <param name="center">The center of the box.</param>
+            <param name="xLength">The length of the box along the X axis.</param>
+            <param name="yLength">The length of the box along the Y axis.</param>
+            <param name="zLength">The length of the box along the Z axis.</param>
+            <param name="faces">The faces to include.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddCubeFace(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D,System.Windows.Media.Media3D.Vector3D,System.Double,System.Double,System.Double)">
+            <summary>
+            Adds a cube face.
+            </summary>
+            <param name="center">The center of the cube.</param>
+            <param name="normal">The normal.</param>
+            <param name="up">The up vector for the face.</param>
+            <param name="dist">The dist from the center of the cube to the face.</param>
+            <param name="width">The width of the face.</param>
+            <param name="height">The height of the face.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddPyramid(System.Windows.Media.Media3D.Point3D,System.Double,System.Double)">
+            <summary>
+            Adds a pyramid.
+            http://en.wikipedia.org/wiki/Pyramid_(geometry)
+            </summary>
+            <param name="center">The center.</param>
+            <param name="sideLength">Length of the side.</param>
+            <param name="height">The height.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddCone(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D,System.Double,System.Double,System.Double,System.Boolean,System.Boolean,System.Int32)">
+            <summary>
+            Adds a cone.
+            http://en.wikipedia.org/wiki/Cone_(geometry)
+            </summary>
+            <param name="origin">The origin.</param>
+            <param name="direction">The direction.</param>
+            <param name="baseRadius">The base radius.</param>
+            <param name="topRadius">The top radius.</param>
+            <param name="height">The height.</param>
+            <param name="baseCap">Include a base cap if set to <c>true</c>.</param>
+            <param name="topCap">Include the top cap if set to <c>true</c>.</param>
+            <param name="thetaDiv">The number of divisions around the cone.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddCylinder(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Double,System.Int32)">
+            <summary>
+            Adds a cylinder to the mesh.
+            http://en.wikipedia.org/wiki/Cylinder_(geometry)
+            </summary>
+            <param name="p1">The p1.</param>
+            <param name="p2">The p2.</param>
+            <param name="diameter">The diameter.</param>
+            <param name="thetaDiv">The theta div.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddEdges(System.Collections.Generic.IList{System.Windows.Media.Media3D.Point3D},System.Collections.Generic.IList{System.Int32},System.Double,System.Int32)">
+            <summary>
+            Adds a collection of edges as cylinders.
+            </summary>
+            <param name="pts">The PTS.</param>
+            <param name="edges">The edges.</param>
+            <param name="diameter">The diameter.</param>
+            <param name="thetaDiv">The theta div.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddNode(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Vector3D,System.Windows.Point)">
+            <summary>
+            Add a single node.
+            </summary>
+            <param name="pos">The position.</param>
+            <param name="normal">The normal.</param>
+            <param name="textureCoordinate">The texture coordinate.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddRectangularMesh(System.Collections.Generic.IList{System.Windows.Media.Media3D.Point3D},System.Int32)">
+            <summary>
+            Adds a rectangular mesh (m x n points).
+            </summary>
+            <param name="points">The one-dimensional array of points. The points are stored row-by-row.</param>
+            <param name="columns">The number of columns in the rectangular mesh.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddRectangularMesh(System.Windows.Media.Media3D.Point3D[0:,0:],System.Boolean,System.Boolean)">
+            <summary>
+            Adds a rectangular mesh defined by a two-dimensional arrary of points.
+            </summary>
+            <param name="pts">The points.</param>
+            <param name="closed0">set to <c>true</c> if the mesh is closed in the 1st dimension.</param>
+            <param name="closed1">set to <c>true</c> if the mesh is closed in the 2nd dimension.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.Append(HelixToolkit.MeshBuilder)">
+            <summary>
+            Appends the specified mesh.
+            </summary>
+            <param name="mesh">The mesh.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddTube(System.Collections.Generic.IList{System.Windows.Media.Media3D.Point3D},System.Double[],System.Double[],System.Int32,System.Boolean)">
+            <summary>
+            Adds a tube.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="values">The texture coordinate X values.</param>
+            <param name="diameter">The diameter per point.</param>
+            <param name="thetaDiv">The number of divisions around the tube.</param>
+            <param name="isTubeClosed">If the tube is closed set to <c>true</c>.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddTube(System.Collections.Generic.IList{System.Windows.Media.Media3D.Point3D},System.Double[],System.Double[],System.Windows.Media.PointCollection,System.Boolean,System.Boolean)">
+            <summary>
+            Adds a tube.
+            </summary>
+            <param name="path">The path.</param>
+            <param name="values">The texture coordinate X values.</param>
+            <param name="diameter">The diameter per point.</param>
+            <param name="Section">The section.</param>
+            <param name="isTubeClosed">If the tube is closed set to <c>true</c>.</param>
+            <param name="isSectionClosed">if set to <c>true</c> [is section closed].</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.Append(System.Collections.Generic.IList{System.Windows.Media.Media3D.Point3D},System.Collections.Generic.IList{System.Int32})">
+            <summary>
+            Appends the specified points and triangles.
+            </summary>
+            <param name="pts">The points.</param>
+            <param name="tri">The triangle indices.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.AddArrow(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D,System.Double,System.Double,System.Int32)">
+            <summary>
+            Adds the arrow to the mesh.
+            </summary>
+            <param name="point1">The start point.</param>
+            <param name="point2">The end point.</param>
+            <param name="diameter">The diameter of the tube.</param>
+            <param name="headLength">Length of the head (in diameter units).</param>
+            <param name="thetaDiv">The number of divisions around the arrow.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.NoSharedVertices">
+            <summary>
+            Makes sure no triangles share the same vertex.
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.ChamferCorner(System.Windows.Media.Media3D.Point3D,System.Double,System.Double,System.Collections.Generic.ICollection{System.Windows.Media.Media3D.Point3D})">
+            <summary>
+            Chamfers the specified corner (experimental code).
+            </summary>
+            <param name="p">The corner point.</param>
+            <param name="d">The chamfer distance.</param>
+            <param name="eps">The corner search limit distance.</param>
+            <param name="chamferPoints">If this parameter is provided, the collection will be filled with the generated chamfer points.</param>
+        </member>
+        <member name="M:HelixToolkit.MeshBuilder.FindCornerNormal(System.Windows.Media.Media3D.Point3D,System.Double)">
+            <summary>
+            Finds a normal to the specified corner.
+            </summary>
+            <param name="p">The corner point.</param>
+            <param name="eps">The corner search limit distance.</param>
+            <returns></returns>
+        </member>
+        <member name="P:HelixToolkit.MeshBuilder.Positions">
+            <summary>
+            Gets the positions collection.
+            </summary>
+            <value>The positions.</value>
+        </member>
+        <member name="P:HelixToolkit.MeshBuilder.Normals">
+            <summary>
+            Gets the normals.
+            </summary>
+            <value>The normals.</value>
+        </member>
+        <member name="P:HelixToolkit.MeshBuilder.TextureCoordinates">
+            <summary>
+            Gets the texture coordinates.
+            </summary>
+            <value>The texture coordinates.</value>
+        </member>
+        <member name="P:HelixToolkit.MeshBuilder.TriangleIndices">
+            <summary>
+            Gets the triangle indices.
+            </summary>
+            <value>The triangle indices.</value>
+        </member>
+        <member name="T:HelixToolkit.GradientBrushType">
+            <summary>
+            Gradient brush type
+            </summary>
+        </member>
+        <member name="F:HelixToolkit.GradientBrushType.Hue">
+            <summary>
+            Hue gradient
+            </summary>
+        </member>
+        <member name="F:HelixToolkit.GradientBrushType.Rainbow">
+            <summary>
+            Rainbow gradient
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.GradientExtension">
+            <summary>
+            Markupextension for Materials
+            Usage: Material={helix:Gradient Rainbow}
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.GradientExtension.#ctor(HelixToolkit.GradientBrushType)">
+            <summary>
+            Initializes a new instance of the <see cref="T:HelixToolkit.GradientExtension"/> class.
+            </summary>
+            <param name="type">The type.</param>
+        </member>
+        <member name="M:HelixToolkit.GradientExtension.ProvideValue(System.IServiceProvider)">
+            <summary>
+            Returns the gradient brush of the specified type.
+            </summary>
+            <param name="serviceProvider">Object that can provide services for the markup extension.</param>
+            <returns>
+            The brush to set on the property where the extension is applied.
+            </returns>
+        </member>
+        <member name="T:HelixToolkit.ParametricSurface3D">
+            <summary>
+            Base class for surfaces evaluated on a rectangular mesh.
+            Override the Evaluate method to define the points.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.TargetSymbolAdorner">
+            <summary>
+            A Target symbol adorner. This is shown when manipulating the camera with the mouse.
+            Inspired by Google Earth...
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.MeshGeometryHelper.FindEdges(System.Windows.Media.Media3D.MeshGeometry3D)">
+            <summary>
+            Find all edges in the mesh (each edge is only inclued once)
+            </summary>
+            <param name="mesh">a mesh</param>
+            <returns>edge indices (minium index first)</returns>
+        </member>
+        <member name="M:HelixToolkit.MeshGeometryHelper.CreateKey(System.UInt32,System.UInt32)">
+            <summary>
+            Create a 64-bit key from two 32-bit indices
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.MeshGeometryHelper.ReverseKey(System.UInt64,System.UInt32@,System.UInt32@)">
+            <summary>
+            Extract two 32-bit indices from the 64-bit key
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.MeshGeometryHelper.FindBorderEdges(System.Windows.Media.Media3D.MeshGeometry3D)">
+            <summary>
+            Find edges that are only connected to one triangle
+            </summary>
+            <param name="mesh">a mesh</param>
+            <returns>edge indices</returns>
+        </member>
+        <member name="M:HelixToolkit.MeshGeometryHelper.FindSharpEdges(System.Windows.Media.Media3D.MeshGeometry3D,System.Double)">
+            <summary>
+            Finds all edges where the angle between adjacent triangle normals
+            is larger than minimumAngle
+            </summary>
+            <param name="mesh">a mesh</param>
+            <param name="minimumAngle">the minimum angle between the normals of two adjacent triangles (degrees)</param>
+            <returns>edge indices</returns>
+        </member>
+        <member name="T:HelixToolkit.TerrainVisual3D">
+            <summary>
+            Terrain model - reading model from .bt files
+            The origin of  model will be centered around the midpoint of the model.
+            Also support a ".btz" format - compressed with gzip. A compression method to convert from ".bt" to ".btz" can be found in the GZipHelper.
+            No advanced LOD algorithm imported - this is for small terrains only...
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.MapTexture">
+            <summary>
+            Terrain texture using a bitmap. Set the Left,Right,Bottom and Top coordinates to get the right alignment.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.SlopeTexture">
+            <summary>
+            Texture by the slope angle.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.SlopeDirectionTexture">
+            <summary>
+            Texture by the direction of the steepest gradient.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.TerrainModel">
+            <summary>
+            Read .bt files from disk, keeps the model data and creates the Model3D.
+            The .btz format is a gzip compressed version of the .bt format.
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.TerrainModel.CreateModel(System.Int32)">
+            <summary>
+            Creates the 3D model of the terrain.
+            </summary>
+            <param name="lod">The level of detail.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.TerrainModel.ReadBT(System.IO.Stream)">
+            <summary>
+            Reads a .bt (Binary terrain) file.
+            http://www.vterrain.org/Implementation/Formats/BT.html
+            </summary>
+            <param name="s">The stream.</param>
+            <returns></returns>
+        </member>
+        <member name="P:HelixToolkit.Viewport3DController.CameraMode">
+            <summary>
+            Select the mode 
+            - inspect/examine (moves closer to target when zooming)
+            - walkaround (moves camera when zooming)
+            - fixedposition (changes fov when zooming)
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.AnimatedMeshElement3D.OnAnimationTick(System.Double)">
+            <summary>
+            
+            </summary>
+            <param name="dt">Delta time since last call of OnAnimationTick (seconds)</param>
+        </member>
+        <member name="T:HelixToolkit.LightVisual3D">
+            <summary>
+            A visual for the specified light
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.BrushHelper">
+            <summary>
+            Helper class for brushes
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.ChangeOpacity(System.Windows.Media.Brush,System.Double)">
+            <summary>
+            Creates a copy of a brush with the specified opacity.
+            </summary>
+            <param name="brush">The brush to copy.</param>
+            <param name="opacity">The opacity.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.CreateGrayBrush(System.Double)">
+            <summary>
+            Creates a gray brush.
+            </summary>
+            <param name="intensity">The intensity of the gray color.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.CreateHsvBrush(System.Double)">
+            <summary>
+            Creates a HSV brush.
+            </summary>
+            <param name="alpha">The opacity (0-1).</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.CreateSteppedHsvBrush(System.Int32)">
+            <summary>
+            Creates a stepped HSV brush.
+            </summary>
+            <param name="nSteps">The number of steps.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.CreateGradientBrush(System.Windows.Media.Color[])">
+            <summary>
+            Creates a gradient brush from the given colors.
+            </summary>
+            <param name="colors">The colors.</param>
+            <returns>A LinearGradientBrush.</returns>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.CreateGradientBrush(System.Collections.Generic.IList{System.Windows.Media.Color})">
+            <summary>
+            Creates a gradient brush from a list of colors.
+            </summary>
+            <param name="colors">The colors.</param>
+            <returns>A LinearGradientBrush.</returns>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.CreateSteppedGradientBrush(System.Collections.Generic.IList{System.Windows.Media.Color})">
+            <summary>
+            Creates a 'stepped' gradient brush from a list of colors.
+            </summary>
+            <param name="colors">The colors.</param>
+            <returns>A gradientbrush.</returns>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.CreateSteppedGradientBrush(System.Windows.Media.LinearGradientBrush)">
+            <summary>
+            Creates the stepped gradient brush (same number of steps as the number of stops in the gradient).
+            </summary>
+            <param name="gradient">The gradient.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.CreateSteppedGradientBrush(System.Windows.Media.LinearGradientBrush,System.Int32)">
+            <summary>
+            Creates the stepped gradient brush (any number of steps).
+            </summary>
+            <param name="gradient">The gradient.</param>
+            <param name="steps">The number of steps.</param>
+            <returns></returns>
+        </member>
+        <member name="M:HelixToolkit.BrushHelper.CreateRainbowBrush">
+            <summary>
+            Creates a rainbow brush.
+            </summary>
+            <returns>A rainbow brush.</returns>
+        </member>
+        <member name="T:HelixToolkit.WiggleView3D">
+            <summary>
+            Interaction logic for WiggleView3D.xaml
+            </summary>
+            <summary>
+            WiggleView3D
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.WiggleView3D.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.WiggleView3D.WiggleRate">
+            <summary>
+            Wiggles per second
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.XamlExporter">
+            <summary>
+            Export Viewport or model to XAML.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.EnumToBooleanConverter">
+            <summary>
+            Enum to bool converter with MarkupExtension
+            Usage: 
+              IsChecked="{Binding Myproperty, Converter={helix:EnumToBooleanConverter}, ConverterParameter=Param1}"
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.HelixVisual3D">
+            <summary>
+            The HelixVisual3D renders a Helix.
+            http://en.wikipedia.org/wiki/Helix
+            A helix (pl: helixes or helices) is a type of space curve, i.e. a smooth curve in three-dimensional space. 
+            It is characterised by the fact that the tangent line at any point makes a constant angle with a fixed line 
+            called the axis. Examples of helixes are coil springs and the handrails of spiral staircases. A "filled-in" 
+            helix – for example, a spiral ramp – is called a helicoid. Helices are important in biology, as the DNA
+            molecule is formed as two intertwined helices, and many proteins have helical substructures, known as alpha 
+            helices. The word helix comes from the Greek word ἕλιξ.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.CubeVisual3D">
+            <summary>
+            A Cube visual.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.AnaglyphEffect">
+            <summary>
+            Anaglyph blending effect
+            
+            Usage: 
+            1. Add the effect to the RED UIElement. 
+            2. Set CyanInput to a VisualBrush of the CYAN UIElement.
+            
+            See AnalgyphView3D for an example on the usage.
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.PlaneVisual3D">
+            <summary>
+            A plane defined by origin and normal, length and width
+            </summary>
+        </member>
+        <member name="P:HelixToolkit.PlaneVisual3D.Origin">
+            <summary>
+            Gets or sets the center point of the plane.
+            </summary>
+            <value>The origin.</value>
+        </member>
+        <member name="P:HelixToolkit.PlaneVisual3D.Normal">
+            <summary>
+            Gets or sets the normal vector of the plane.
+            </summary>
+            <value>The normal.</value>
+        </member>
+        <member name="P:HelixToolkit.PlaneVisual3D.LengthDirection">
+            <summary>
+            Gets or sets the length direction.
+            </summary>
+            <value>The length direction.</value>
+        </member>
+        <member name="P:HelixToolkit.PlaneVisual3D.Length">
+            <summary>
+            Gets or sets the length.
+            </summary>
+            <value>The length.</value>
+        </member>
+        <member name="P:HelixToolkit.PlaneVisual3D.Width">
+            <summary>
+            Gets or sets the width.
+            </summary>
+            <value>The width.</value>
+        </member>
+        <member name="P:HelixToolkit.PlaneVisual3D.DivLength">
+            <summary>
+            Gets or sets the number of divisions in the 'length' direction.
+            </summary>
+            <value>The number of divisions.</value>
+        </member>
+        <member name="P:HelixToolkit.PlaneVisual3D.DivWidth">
+            <summary>
+            Gets or sets the number of divisions in the 'width' direction.
+            </summary>
+            <value>The number of divisions.</value>
+        </member>
+        <member name="P:HelixToolkit.VectorFieldVisual3D.HeadLength">
+            <summary>
+            Length of head in diameters
+            </summary>
+        </member>
+        <member name="M:HelixToolkit.Plane3D.LineIntersection(System.Windows.Media.Media3D.Point3D,System.Windows.Media.Media3D.Point3D)">
+            <summary>
+            Finds the intersection between the plane and the line (la,lb).
+            </summary>
+            <param name="la">The la.</param>
+            <param name="lb">The lb.</param>
+            <returns></returns>
+        </member>
+        <member name="T:HelixToolkit.ImageBrushExtension">
+            <summary>
+            Markupextension for Image brushes
+            Usage: Fill={helix:ImageBrush images\\myimage.png}
+            </summary>
+        </member>
+        <member name="T:HelixToolkit.BoolToVisibilityConverter">
+            <summary>
+            BooltoVisibility converter with MarkupExtension
+            Usage: 
+              Visibility="{Binding Myproperty, Converter={helix:BoolToVisibilityConverter}}"
+            </summary>
+        </member>
+        <member name="F:HelixToolkit.Exporters.Filter">
+            <summary>
+            File filter for all the supported exporters
+            </summary>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
+            </summary>
+        </member>
+    </members>
+</doc>

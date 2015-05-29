@@ -1,0 +1,107 @@
+﻿<Window
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
+    x:Class="TongJi.Drawing.Menu"
+    x:Name="Window"
+    Title="上海滩涂" MinWidth="240" MinHeight="480"
+    d:DesignWidth="240" d:DesignHeight="640" Topmost="True" ShowInTaskbar="False" WindowStyle="ToolWindow">
+
+    <Window.Resources>
+        <LinearGradientBrush x:Key="orangeMenu" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="SkyBlue"/>
+            <GradientStop Color="DodgerBlue" Offset="1"/>
+        </LinearGradientBrush>
+        <LinearGradientBrush x:Key="redMenu" EndPoint="0.5,1" StartPoint="0.5,0">
+            <GradientStop Color="Red"/>
+            <GradientStop Color="DarkRed" Offset="1"/>
+        </LinearGradientBrush>
+        <Style TargetType="Expander">
+            <Setter Property="Foreground" Value="SaddleBrown" />
+            <Setter Property="Background" Value="WhiteSmoke" />
+            <Setter Property="Margin" Value="5" />
+            <Setter Property="BorderBrush" Value="Silver" />
+            <Setter Property="Border.CornerRadius" Value="5" />
+        </Style>
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="DimGray" />
+            <Setter Property="Padding" Value="5" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Border Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" CornerRadius="3" >
+                            <ContentPresenter RecognizesAccessKey="True" Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" ContentStringFormat="{TemplateBinding ContentControl.ContentStringFormat}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" SnapsToDevicePixels="{TemplateBinding UIElement.SnapsToDevicePixels}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Background" Value="{StaticResource orangeMenu}" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="true">
+                    <Setter Property="Background" Value="{StaticResource redMenu}" />
+                    <Setter Property="Foreground" Value="White" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+
+    <ScrollViewer x:Name="LayoutRoot" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Background="Lavender">
+        <StackPanel>
+            <TextBlock Text="崇明滩涂" Padding="10" FontSize="16" FontWeight="Bold" Background="{StaticResource orangeMenu}" Foreground="White" />
+            <Expander Header="常规" IsExpanded="True" Expanded="Expander_Expanded">
+                <StackPanel>
+                    <Button Content="绘图工具库..." Click="cadCmdHandler" Tag="ShowGallery" />
+                    <Button Content="快捷工具面板" Click="cadCmdHandler" Tag="ShowExpressGallery" />
+                    <Button Content="转换CASS对象" Click="cadCmdHandler" Tag="ConvertCass" />
+                    <Button Content="转换任意对象" Click="cadCmdHandler" Tag="ConvertEntity" />
+                    <!--<Button Content="属性检索" Click="cadCmdHandler" Tag="PropQuery" />
+                    <Button Content="属性标注" Click="cadCmdHandler" Tag="PropMark" />
+                    <Button Content="属性匹配" Click="cadCmdHandler" Tag="PropMatch" />
+                    <Button Content="转换CASS高程点" Click="cadCmdHandler" Tag="ConvertPoint" />
+                    <Button Content="转换CASS等深线" Click="cadCmdHandler" Tag="ConvertContour" />
+                    <Button Content="分幅" Click="cadCmdHandler" Tag="SplitLayout" />-->
+                </StackPanel>
+            </Expander>
+            <!--<Expander Header="图形检查" IsExpanded="False" Expanded="Expander_Expanded">
+                <StackPanel>
+                    <Button Content="01多段线清理-去除零短线" Click="cadCmdHandler" Tag="PolyClean0" />
+                    <Button Content="02多段线清理-去除重复点" Click="cadCmdHandler" Tag="PolyClean" />
+                    <Button Content="03多段线清理-去除过近点" Click="cadCmdHandler" Tag="PolyClean2" />
+                    <Button Content="04多段线清理-弧段拟合" Click="cadCmdHandler" Tag="PolyClean3" />
+                    <Button Content="05多段线清理-去除冗余" Click="cadCmdHandler" Tag="PolyOverkill" />
+                    <Button Content="06多段线清理-合并碎线" Click="cadCmdHandler" Tag="PolyMerge" />
+                    <Button Content="07多段线清理-去除多余共线点" Click="cadCmdHandler" Tag="PolyClean5" />
+                    <Button Content="08多段线清理-出头线/缩头线/错位相交" Click="cadCmdHandler" Tag="PolyTrimExtend" />
+                    <Button Content="检查多段线自相交" Click="cadCmdHandler" Tag="DetectSelfIntersection" />
+                    <Button Content="闭合多段线" Click="cadCmdHandler" Tag="ClosePolyline" />
+                </StackPanel>
+            </Expander>
+            <Expander Header="工具" IsExpanded="False" Expanded="Expander_Expanded">
+                <StackPanel>
+                    <Button Content="显示对象范围" Click="cadCmdHandler" Tag="ShowExtents" />
+                    <Button Content="多行文字转单行文字" Click="cadCmdHandler" Tag="MT2DT" />
+                    <Button Content="单行文字转多行文字" Click="cadCmdHandler" Tag="DT2MT" />
+                    <Button Content="Hatch转为多段线" Click="cadCmdHandler" Tag="HatchToPline" />
+                    <Button Content="存储选择集" Click="cadCmdHandler" Tag="SaveSelection" />
+                    <Button Content="读取选择集" Click="cadCmdHandler" Tag="LoadSelection" />
+                    <Button Content="由Handle找实体" Click="cadCmdHandler" Tag="ShowObject" />
+                    <Button Content="按图层选择实体" Click="cadCmdHandler" Tag="SelectByLayer" />
+                    <Button Content="查看多段线信息" Click="cadCmdHandler" Tag="PolylineInfo" />
+                    <Button Content="PolyLanding" Click="cadCmdHandler" Tag="PolyLanding" />
+                    <Button Content="多段线布尔并集" Click="cadCmdHandler" Tag="PolyUnion" />
+                    <Button Content="EzEntDbg" Click="cadCmdHandler" Tag="InspectObject" />
+                </StackPanel>
+            </Expander>-->
+            <Expander Header="帮助" IsExpanded="False" Expanded="Expander_Expanded">
+                <StackPanel>
+                    <Button Content="帮助" Click="cadCmdHandler" Tag="ProductHelp" />
+                    <Button Content="关于" Click="cadCmdHandler" Tag="AboutProduct" />
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</Window>

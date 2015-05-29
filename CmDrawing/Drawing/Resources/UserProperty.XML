@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="gb2312" ?>
+<Components Version="1.3" Company="TongJi">
+  <!-- 数据表 -->
+  <!-- FDOType 1=GeometricType_Point -->
+  <!-- FDOType 2=GeometricType_Curve -->
+  <!-- FDOType 4=GeometricType_Surface -->
+  <!-- FDOType 8=GeometricType_Solid -->
+  <!-- DXFType : CAD实体DXF名称 -->
+  <!-- 数据表 -->
+
+  <Component Number="region" Name="区域" Layer="区域" FDOType="4" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="行政级别" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary="行政级别表"/>
+    </Group>
+  </Component>
+
+  <Component Number="cl" Name="控制线" Layer="控制线" FDOType="4" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="类型" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary="控制线表"/>
+    </Group>
+  </Component>
+
+  <Component Number="unit" Name="控规单元" Layer="控规单元" FDOType="4" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="主导用地代码" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary="用地代码表"/>
+      <Property Caption="主导用地性质" DataType="System.String" Length="100.0" ReadOnly="true" DataLink="" Dictionary="" Function="ParcelUsage"/>
+      <Property Caption="总人口" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="总建筑面积" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="净用地面积" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="DXFType.Area./10000" Dictionary="" Function="ParcelArea"/>
+      <Property Caption="平均净容积率" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="总绿地面积" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="绿地率" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="建筑限高" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="停车泊位" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="配套设施" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="plan-region" Name="控规分区" Layer="控规分区" FDOType="4" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="规划状态" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary="规划状态表"/>
+      <Property Caption="总人口" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="总建筑面积" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="总绿地面积" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="parcel" Name="地块" Layer="地块" FDOType="4" DXFType="LWPOLYLINE">
+    <!-- 属性编组 -->
+    <Group Name="标准">
+      <Property Caption="地块编码" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="控规单元" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="街坊" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="动态控规参数" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="用地代码" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary="用地代码表"/>
+      <Property Caption="用地性质" DataType="System.String" Length="16.0" ReadOnly="true" DataLink="Property.用地代码.Dictionary.Detail" Dictionary="" Function="ParcelUsage"/>
+      <Property Caption="用地面积" DataType="System.Double" Length="4.2" ReadOnly="true" DataLink="DXFType.Area./10000" Dictionary="" Function="ParcelArea"/>
+      <Property Caption="人口" DataType="System.Double" Length="4.2" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+    <Group Name="强制性指标">
+      <Property Caption="容积率" DataType="System.Double" Length="4.1" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="建筑密度" DataType="System.Double" Length="4.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="建筑限高" DataType="System.Double" Length="4.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="绿地率" DataType="System.Double" Length="4.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+    <Group Name="引导性指标">
+      <Property Caption="机动车停车位" DataType="System.Int32" Length="4.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="配套设施" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="备注" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="出入口" DataType="System.String" Length="100.0" ReadOnly="true" DataLink="" Dictionary=""/>
+      <Property Caption="人均居住面积" DataType="System.Double" Length="4.2" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+    <Group Name="分析结果">
+      <Property Caption="公服设施建筑面积" DataType="System.Double" Length="4.2" ReadOnly="true" DataLink="" Dictionary=""/>
+      <Property Caption="居住区人口容量" DataType="System.Double" Length="4.2" ReadOnly="true" DataLink="" Dictionary=""/>
+    </Group>
+    <!-- 三维属性编组 -->
+    <Group3D Name="">
+    </Group3D>
+  </Component>
+
+  <Component Number="building" Name="建筑" Layer="建筑" FDOType="4" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="建筑功能分类" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary="建筑功能分类表"/>
+      <Property Caption="建筑节能分类" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary="建筑节能分类表"/>
+      <Property Caption="高度" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="层数" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="建筑面积" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="water" Name="水系" Layer="水系" FDOType="4" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="类型" DataType="System.String" Length="10.4" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="面积" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="深度" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="parcel-jt" Name="交通地块" Layer="ParcelJt" FDOType="4" DXFType="LWPOLYLINE">
+    <Group Name="Standard">
+      <Property Caption="ID" Description="ID" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="far" Description="容积率" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="code" Description="用地代码" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="pop" Description="人口数" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="emp" Description="就业岗位数" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="R" Description="居住用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="M" Description="工业用地面积" DataType="System.Int32" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="W" Description="物流仓储用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="U" Description="公用设施用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="G" Description="绿地与广场用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="B" Description="商业服务设施用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="S" Description="道路与交通设施用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="H" Description="村庄建设及其他用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="A" Description="公共管理与服务设施用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="production" Description="产生量" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="attraction" Description="吸引量" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="xiaoqu-jt" Name="交通小区" Layer="XiaoquJt" FDOType="4" DXFType="LWPOLYLINE">
+    <Group Name="Standard">
+      <Property Caption="name" Description="名称" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="area" Description="面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="pop" Description="人口数" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="pop_den" Description="人口密度" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="road_den" Description="路网密度" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="R" Description="居住用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="M" Description="工业用地面积" DataType="System.Int32" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="W" Description="物流仓储用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="U" Description="公用设施用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="G" Description="绿地与广场用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="B" Description="商业服务设施用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="S" Description="道路与交通设施用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="H" Description="村庄建设及其他用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="A" Description="公共管理与服务设施用地面积" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="mo" Description="产生量" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="md" Description="吸引量" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="delta" Description="商业调整系数" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="road" Name="道路" Layer="道路" FDOType="2" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="宽度" DataType="System.Double" Length="10.4" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="道路断面" DataType="System.String" Length="100.0" ReadOnly="true" DataLink="" Dictionary=""/>
+      <Property Caption="断面符号" DataType="System.String" Length="16.0" ReadOnly="true" DataLink="" Dictionary=""/>
+      <Property Caption="道路等级" DataType="System.String" Length="16.0" ReadOnly="false" DataLink="" Dictionary="道路性质表"/>
+      <Property Caption="设计时速" DataType="System.Double" Length="16.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="pipeline" Name="管线" Layer="管线" FDOType="2" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="类型" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary="管线类型表"/>
+      <Property Caption="管径" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="railway" Name="铁路" Layer="铁路" FDOType="2" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="highway" Name="公路" Layer="公路" FDOType="2" DXFType="LWPOLYLINE">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="等级" DataType="System.String" Length="16.0" ReadOnly="false" DataLink="" Dictionary="道路性质表"/>
+    </Group>
+  </Component>
+
+  <Component Number="town" Name="城镇" Layer="城镇" FDOType="1" DXFType="INSERT">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="行政级别" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary="行政级别表"/>
+    </Group>
+  </Component>
+
+  <Component Number="dizhendian" Name="地震点" Layer="地震点" FDOType="1" DXFType="INSERT">
+    <Group Name="标准">
+      <Property Caption="名称" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="里氏震级" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary="里氏震级表"/>
+    </Group>
+  </Component>
+
+  <Component Number="point-jt" Name="交通点" Layer="PointJt" FDOType="1" DXFType="INSERT">
+    <Group Name="Standard">
+      <Property Caption="ID" Description="ID" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="name" Description="名称" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="Longitude" Description="经度" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="Latitude" Description="纬度" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="roadsection" Name="路段" Layer="RoadSegment" FDOType="2" DXFType="LWPOLYLINE">
+    <Group Name="Standard">
+      <Property Caption="ID" Description="ID" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="road_name" Description="名称" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="Length" Description="长度" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="capacity" Description="单向通行能力" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="speed" Description="设计车速" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="lanes2" Description="双向车道数" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="width" Description="红线宽度" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="plate" Description="道路板块数" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="sec_comp" Description="路网构成" DataType="System.String" Length="100.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="vitt" Description="行程时间" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="wktt" Description="步行时间" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="connector" Description="连杆标记" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="alpha" Description="延误函数参数1" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="beta" Description="延误函数参数2" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+    <Group Name="Emme">
+      <Property Caption="dir" Description="道路方向（正同负反零双向）" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="mode" Description="允许模式" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="type" Description="道路等级" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="lanes" Description="单向车道数" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="vdf" Description="延误函数" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="ul2-capability" Description="通行能力" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="ul1-velocity" Description="设计车速" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="inode" Description="I结点" DataType="System.Int32" Length="10.0" ReadOnly="true" DataLink="" Dictionary=""/>
+      <Property Caption="jnode" Description="J结点" DataType="System.Int32" Length="10.0" ReadOnly="true" DataLink="" Dictionary=""/>
+      <Property Caption="volume" Description="流量" DataType="System.Double" Length="10.0" ReadOnly="true" DataLink="" Dictionary=""/>
+      <Property Caption="saturation" Description="饱和度" DataType="System.Double" Length="10.0" ReadOnly="true" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="emme-node" Name="Emme结点" Layer="EmmeNode" FDOType="1" DXFType="POINT">
+    <Group Name="Standard">
+      <Property Caption="ID" Description="ID" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="is_zone" Description="是否形心点" DataType="System.Boolean" Length="10.0" ReadOnly="false" DataLink="" Dictionary="" Default="false"/>
+    </Group>
+  </Component>
+
+  <Component Number="emme-centroid" Name="Emme形心" Layer="EmmeCentroid" FDOType="1" DXFType="POINT">
+    <Group Name="Standard">
+      <Property Caption="ID" Description="ID" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <!--<Property Caption="name" Description="名称" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>-->
+      <Property Caption="mo" Description="发生量" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="md" Description="吸引量" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="groups" Description="所在组" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <!--<Property Caption="is_zone" Description="是否形心点" DataType="System.Boolean" Length="10.0" ReadOnly="false" DataLink="" Dictionary="" Default="false"/>-->
+    </Group>
+  </Component>
+
+  <Component Number="busline" Name="公交线路" Layer="BusLine" FDOType="2" DXFType="LWPOLYLINE">
+    <Group Name="Emme">
+      <Property Caption="name" Description="线路名" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="description" Description="线路描述" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="mode" Description="允许模式" DataType="System.String" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="vehicle" Description="投运车辆" DataType="System.Int32" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="headway" Description="发车间隔" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="speed" Description="运行速度" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="layover" Description="折返时间" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="SeperationBreak" Name="绿带打断" Layer="绿带打断" FDOType="1" DXFType="INSERT">
+    <Group Name="Standard">
+      <Property Caption="长度" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <Component Number="BusStop" Name="港湾停车" Layer="港湾停车" FDOType="1" DXFType="INSERT">
+    <Group Name="Standard">
+      <Property Caption="长度" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="进站缓长" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="出站缓长" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+      <Property Caption="宽度" DataType="System.Double" Length="10.0" ReadOnly="false" DataLink="" Dictionary=""/>
+    </Group>
+  </Component>
+
+  <!--数据字典-->
+  <Dictionaries>
+    <Dictionary Name="旧国标用地代码表">
+      <Item Caption="R" Detail="居住用地"/>
+      <Item Caption="R1" Detail="一类居住用地"/>
+      <Item Caption="R11" Detail="住宅用地"/>
+      <Item Caption="R12" Detail="公共服务设施用地"/>
+      <Item Caption="R13" Detail="道路用地"/>
+      <Item Caption="R14" Detail="绿地"/>
+      <Item Caption="R2" Detail="二类居住用地"/>
+      <Item Caption="R21" Detail="住宅用地"/>
+      <Item Caption="R22" Detail="公共服务设施用地"/>
+      <Item Caption="R23" Detail="道路用地"/>
+      <Item Caption="R24" Detail="绿地"/>
+      <Item Caption="R3" Detail="三类居住用地"/>
+      <Item Caption="R31" Detail="住宅用地"/>
+      <Item Caption="R32" Detail="公共服务设施用地"/>
+      <Item Caption="R33" Detail="道路用地"/>
+      <Item Caption="R34" Detail="绿地"/>
+      <Item Caption="R4" Detail="四类居住用地"/>
+      <Item Caption="R41" Detail="住宅用地"/>
+      <Item Caption="R42" Detail="公共服务设施用地"/>
+      <Item Caption="R43" Detail="道路用地"/>
+      <Item Caption="R44" Detail="绿地"/>
+      <Item Caption="RC" Detail="商住混合用地"/>
+      <Item Caption="C" Detail="公共设施用地"/>
+      <Item Caption="C1" Detail="行政办公用地"/>
+      <Item Caption="C11" Detail="市属办公用地"/>
+      <Item Caption="C12" Detail="非市属办公用地"/>
+      <Item Caption="C2" Detail="商业金融业用地"/>
+      <Item Caption="C21" Detail="商业用地"/>
+      <Item Caption="C22" Detail="金融保险业用地"/>
+      <Item Caption="C23" Detail="贸易咨询用地"/>
+      <Item Caption="C24" Detail="服务业用地"/>
+      <Item Caption="C25" Detail="旅馆业用地"/>
+      <Item Caption="C26" Detail="市场用地"/>
+      <Item Caption="C3" Detail="文化娱乐用地"/>
+      <Item Caption="C31" Detail="新闻出版用地"/>
+      <Item Caption="C32" Detail="文化艺术团体用地"/>
+      <Item Caption="C33" Detail="广播电视用地"/>
+      <Item Caption="C34" Detail="图书展览用地"/>
+      <Item Caption="C35" Detail="影剧院用地"/>
+      <Item Caption="C36" Detail="游乐用地"/>
+      <Item Caption="C4" Detail="体育用地"/>
+      <Item Caption="C41" Detail="体育场馆用地"/>
+      <Item Caption="C42" Detail="体育训练用地"/>
+      <Item Caption="C5" Detail="医疗卫生用地"/>
+      <Item Caption="C51" Detail="医院用地"/>
+      <Item Caption="C52" Detail="卫生防疫用地"/>
+      <Item Caption="C53" Detail="休疗养用地"/>
+      <Item Caption="C6" Detail="教育科研设计用地"/>
+      <Item Caption="C61" Detail="高等学校用地"/>
+      <Item Caption="C62" Detail="中等专业学校用地"/>
+      <Item Caption="C63" Detail="成人与业余学校用地"/>
+      <Item Caption="C64" Detail="特殊学校用地"/>
+      <Item Caption="C65" Detail="科研设计用地"/>
+      <Item Caption="M" Detail="工业用地"/>
+      <Item Caption="M1" Detail="一类工业用地"/>
+      <Item Caption="M2" Detail="二类工业用地"/>
+      <Item Caption="M3" Detail="三类工业用地"/>
+      <Item Caption="W" Detail="仓储用地"/>
+      <Item Caption="W1" Detail="普通仓库用地"/>
+      <Item Caption="W2" Detail="危险品仓库用地"/>
+      <Item Caption="W3" Detail="堆场用地"/>
+      <Item Caption="T" Detail="对外交通用地"/>
+      <Item Caption="T1" Detail="铁路用地"/>
+      <Item Caption="T2" Detail="公路用地"/>
+      <Item Caption="T21" Detail="高速公路用地"/>
+      <Item Caption="T22" Detail="一、二、三级公路用地"/>
+      <Item Caption="T23" Detail="长途客运站用地"/>
+      <Item Caption="T3" Detail="管道运输用地"/>
+      <Item Caption="T4" Detail="港口用地"/>
+      <Item Caption="T41" Detail="海港用地"/>
+      <Item Caption="T42" Detail="河港用地"/>
+      <Item Caption="T5" Detail="机场用地"/>
+      <Item Caption="S" Detail="道路广场用地"/>
+      <Item Caption="S1" Detail="道路用地"/>
+      <Item Caption="S11" Detail="主干路用地"/>
+      <Item Caption="S12" Detail="次干路用地"/>
+      <Item Caption="S13" Detail="支路用地"/>
+      <Item Caption="S19" Detail="其它道路用地"/>
+      <Item Caption="S2" Detail="广场用地"/>
+      <Item Caption="S21" Detail="交通广场用地"/>
+      <Item Caption="S22" Detail="游憩集会广场用地"/>
+      <Item Caption="S3" Detail="社会停车场库用地"/>
+      <Item Caption="S31" Detail="机动车停车场库用地"/>
+      <Item Caption="S32" Detail="非机动车停车场库用地"/>
+      <Item Caption="U" Detail="市政公用设施用地"/>
+      <Item Caption="U1" Detail="供应设施用地"/>
+      <Item Caption="U11" Detail="供水用地"/>
+      <Item Caption="U12" Detail="供电用地"/>
+      <Item Caption="U13" Detail="供燃气用地"/>
+      <Item Caption="U14" Detail="供热用地"/>
+      <Item Caption="U2" Detail="交通设施用地"/>
+      <Item Caption="U21" Detail="公共交通用地"/>
+      <Item Caption="U22" Detail="货运交通用地"/>
+      <Item Caption="U29" Detail="其它交通设施用地"/>
+      <Item Caption="U3" Detail="邮电设施用地"/>
+      <Item Caption="U4" Detail="环境卫生设施用地"/>
+      <Item Caption="U41" Detail="雨水、污水处理用地"/>
+      <Item Caption="U42" Detail="粪便垃圾处理用地"/>
+      <Item Caption="U5" Detail="施工与维修设施用地"/>
+      <Item Caption="U6" Detail="殡葬设施用地"/>
+      <Item Caption="U9" Detail="其它市政公用设施用地"/>
+      <Item Caption="G" Detail="绿地"/>
+      <Item Caption="G1" Detail="公共绿地"/>
+      <Item Caption="G11" Detail="公园"/>
+      <Item Caption="G12" Detail="街头绿地"/>
+      <Item Caption="G2" Detail="生产防护绿地"/>
+      <Item Caption="G21" Detail="园林生产绿地"/>
+      <Item Caption="G22" Detail="防护绿地"/>
+      <Item Caption="D" Detail="特殊用地"/>
+      <Item Caption="D1" Detail="军事用地"/>
+      <Item Caption="D2" Detail="外事用地"/>
+      <Item Caption="D3" Detail="保安用地"/>
+      <Item Caption="E" Detail="水域和其它用地"/>
+      <Item Caption="E1" Detail="水域"/>
+      <Item Caption="E2" Detail="耕地"/>
+      <Item Caption="E21" Detail="菜地"/>
+      <Item Caption="E22" Detail="灌溉水田"/>
+      <Item Caption="E29" Detail="其它耕地"/>
+      <Item Caption="E3" Detail="园地"/>
+      <Item Caption="E4" Detail="林地"/>
+      <Item Caption="E5" Detail="牧草地"/>
+      <Item Caption="E6" Detail="村镇建设用地"/>
+      <Item Caption="E61" Detail="村镇居住用地"/>
+      <Item Caption="E62" Detail="村镇企业用地"/>
+      <Item Caption="E63" Detail="村镇公路用地"/>
+      <Item Caption="E69" Detail="村镇其它用地"/>
+      <Item Caption="E7" Detail="弃置地"/>
+      <Item Caption="E8" Detail="露天矿用地"/>
+    </Dictionary>
+
+    <Dictionary Name="用地代码表">
+      <Item Caption="H" Detail="建设用地"/>
+      <Item Caption="H1" Detail="城乡居民点建设用地"/>
+      <Item Caption="H11" Detail="城市建设用地"/>
+      <Item Caption="H12" Detail="镇建设用地"/>
+      <Item Caption="H13" Detail="乡建设用地"/>
+      <Item Caption="H14" Detail="村庄建设用地"/>
+      <Item Caption="H15" Detail="独立建设用地"/>
+      <Item Caption="H2" Detail="区域交通设施用地"/>
+      <Item Caption="H21" Detail="铁路用地"/>
+      <Item Caption="H22" Detail="公路用地"/>
+      <Item Caption="H23" Detail="港口用地"/>
+      <Item Caption="H24" Detail="机场用地"/>
+      <Item Caption="H25" Detail="管道运输用地"/>
+      <Item Caption="H3" Detail="公用设施用地"/>
+      <Item Caption="H4" Detail="特殊用地"/>
+      <Item Caption="H41" Detail="军事用地"/>
+      <Item Caption="H42" Detail="安保用地"/>
+      <Item Caption="H5" Detail="采矿用地"/>
+      <Item Caption="E" Detail="非建设用地"/>
+      <Item Caption="E1" Detail="水域"/>
+      <Item Caption="E2" Detail="农用地"/>
+      <Item Caption="E3" Detail="其他非建设用地"/>
+      <Item Caption="R" Detail="居住用地"/>
+      <Item Caption="R1" Detail="一类居住用地"/>
+      <Item Caption="R11" Detail="住宅用地"/>
+      <Item Caption="R12" Detail="服务设施用地"/>
+      <Item Caption="R2" Detail="二类居住用地"/>
+      <Item Caption="R21" Detail="住宅用地"/>
+      <Item Caption="R22" Detail="服务设施用地"/>
+      <Item Caption="R3" Detail="三类居住用地"/>
+      <Item Caption="R31" Detail="住宅用地"/>
+      <Item Caption="R32" Detail="服务设施用地"/>
+      <Item Caption="A" Detail="公共管理与公共服务用地"/>
+      <Item Caption="A1" Detail="行政办公用地"/>
+      <Item Caption="A2" Detail="文化设施用地"/>
+      <Item Caption="A21" Detail="图书展览设施用地"/>
+      <Item Caption="A22" Detail="文化活动设施用地"/>
+      <Item Caption="A3" Detail="教育科研用地"/>
+      <Item Caption="A31" Detail="高等院校用地"/>
+      <Item Caption="A32" Detail="中等专业学校用地"/>
+      <Item Caption="A33" Detail="中小学用地"/>
+      <Item Caption="A34" Detail="特殊教育用地"/>
+      <Item Caption="A35" Detail="科研用地"/>
+      <Item Caption="A4" Detail="体育用地"/>
+      <Item Caption="A41" Detail="体育场馆用地"/>
+      <Item Caption="A42" Detail="体育训练用地"/>
+      <Item Caption="A5" Detail="医疗卫生用地"/>
+      <Item Caption="A51" Detail="医院用地"/>
+      <Item Caption="A52" Detail="卫生防疫用地"/>
+      <Item Caption="A53" Detail="特殊医疗用地"/>
+      <Item Caption="A59" Detail="其他医疗卫生用地"/>
+      <Item Caption="A6" Detail="社会福利设施用地"/>
+      <Item Caption="A7" Detail="文物古迹用地"/>
+      <Item Caption="A8" Detail="外事用地"/>
+      <Item Caption="A9" Detail="宗教设施用地"/>
+      <Item Caption="B" Detail="商业服务业设施用地"/>
+      <Item Caption="B1" Detail="商业设施用地"/>
+      <Item Caption="B11" Detail="零售商业用地"/>
+      <Item Caption="B12" Detail="农贸市场用地"/>
+      <Item Caption="B13" Detail="餐饮业用地"/>
+      <Item Caption="B14" Detail="旅馆用地"/>
+      <Item Caption="B2" Detail="商务设施用地"/>
+      <Item Caption="B21" Detail="金融保险业用地"/>
+      <Item Caption="B22" Detail="艺术传媒产业用地"/>
+      <Item Caption="B29" Detail="其他商务设施用地"/>
+      <Item Caption="B3" Detail="娱乐康体用地"/>
+      <Item Caption="B31" Detail="娱乐用地"/>
+      <Item Caption="B32" Detail="康体用地"/>
+      <Item Caption="B4" Detail="公用设施营业网点用地"/>
+      <Item Caption="B41" Detail="加油加气站用地"/>
+      <Item Caption="B49" Detail="其他公用设施营业网点用地"/>
+      <Item Caption="B9" Detail="其他服务设施用地"/>
+      <Item Caption="M" Detail="工业用地"/>
+      <Item Caption="M1" Detail="一类工业用地"/>
+      <Item Caption="M2" Detail="二类工业用地"/>
+      <Item Caption="M3" Detail="三类工业用地"/>
+      <Item Caption="W" Detail="物流仓储用地"/>
+      <Item Caption="W1" Detail="一类物流仓储用地"/>
+      <Item Caption="W2" Detail="二类物流仓储用地"/>
+      <Item Caption="W3" Detail="三类物流仓储用地"/>
+      <Item Caption="S" Detail="城市交通用地"/>
+      <Item Caption="S1" Detail="城市道路用地"/>
+      <Item Caption="S2" Detail="城市轨道交通用地"/>
+      <Item Caption="S3" Detail="交通枢纽用地"/>
+      <Item Caption="S4" Detail="交通场站用地"/>
+      <Item Caption="S41" Detail="公共交通设施用地"/>
+      <Item Caption="S42" Detail="社会停车场用地"/>
+      <Item Caption="S9" Detail="其他交通设施用地"/>
+      <Item Caption="U" Detail="市政公用设施用地"/>
+      <Item Caption="U1" Detail="供应设施用地"/>
+      <Item Caption="U11" Detail="供水用地"/>
+      <Item Caption="U12" Detail="供电用地"/>
+      <Item Caption="U13" Detail="供燃气用地"/>
+      <Item Caption="U14" Detail="供热用地"/>
+      <Item Caption="U15" Detail="邮政设施用地"/>
+      <Item Caption="U16" Detail="广播电视设施用地"/>
+      <Item Caption="U2" Detail="环境设施用地"/>
+      <Item Caption="U21" Detail="排水设施用地"/>
+      <Item Caption="U22" Detail="环卫设施用地"/>
+      <Item Caption="U23" Detail="环保设施用地"/>
+      <Item Caption="U3" Detail="安全设施用地"/>
+      <Item Caption="U31" Detail="消防设施用地"/>
+      <Item Caption="U32" Detail="防洪设施用地"/>
+      <Item Caption="U9" Detail="其他市政公用设施用地"/>
+      <Item Caption="G" Detail="绿地与广场"/>
+      <Item Caption="G1" Detail="公园绿地"/>
+      <Item Caption="G2" Detail="防护绿地"/>
+      <Item Caption="G3" Detail="广场用地"/>
+    </Dictionary>
+
+    <Dictionary Name="道路性质表">
+      <Item Caption="城市主干道" Detail=""/>
+      <Item Caption="城市次干道" Detail=""/>
+      <Item Caption="城市支路" Detail=""/>
+      <Item Caption="高速公路" Detail=""/>
+      <Item Caption="高等级公路" Detail=""/>
+      <Item Caption="公路" Detail=""/>
+    </Dictionary>
+
+    <Dictionary Name="Emme道路类型表">
+      <Item Caption="城市快速路" Detail="11"/>
+      <Item Caption="城市主干道" Detail="12"/>
+      <Item Caption="城市次干道" Detail="13"/>
+      <Item Caption="城市支路" Detail="14"/>
+      <Item Caption="高速公路" Detail="21"/>
+      <Item Caption="高等级公路" Detail="22"/>
+      <Item Caption="公路" Detail="23"/>
+    </Dictionary>
+
+    <Dictionary Name="行政级别表">
+      <Item Caption="省自治区直辖市" Detail=""/>
+      <Item Caption="地区地级市自治州" Detail=""/>
+      <Item Caption="区县自治县旗自治旗" Detail=""/>
+      <Item Caption="街道乡镇" Detail=""/>
+      <Item Caption="居委会行政村" Detail=""/>
+    </Dictionary>
+
+    <Dictionary Name="大运量公交表">
+      <Item Caption="地铁" Detail=""/>
+      <Item Caption="轻轨单轨" Detail=""/>
+      <Item Caption="有轨电车" Detail=""/>
+      <Item Caption="BRT" Detail=""/>
+    </Dictionary>
+
+    <Dictionary Name="控制线表">
+      <Item Caption="红线" Detail="道路"/>
+      <Item Caption="橙线" Detail="防护范围"/>
+      <Item Caption="蓝线" Detail="水体"/>
+      <Item Caption="绿线" Detail="绿化"/>
+      <Item Caption="紫线" Detail="历史保护"/>
+      <Item Caption="黄线" Detail="基础设施"/>
+      <Item Caption="黑线" Detail="市政管网"/>
+      <Item Caption="青线" Detail="油气田"/>
+    </Dictionary>
+
+    <Dictionary Name="建筑功能分类表">
+      <Item Caption="交通建筑" Detail=""/>
+      <Item Caption="集合住宅" Detail=""/>
+      <Item Caption="独立住宅" Detail=""/>
+      <Item Caption="办公建筑" Detail=""/>
+      <Item Caption="商业建筑" Detail=""/>
+      <Item Caption="酒店旅馆" Detail=""/>
+      <Item Caption="教育建筑" Detail=""/>
+      <Item Caption="医疗建筑" Detail=""/>
+      <Item Caption="博物馆建筑" Detail=""/>
+      <Item Caption="体育建筑" Detail=""/>
+      <Item Caption="集会建筑" Detail=""/>
+    </Dictionary>
+
+    <Dictionary Name="建筑节能分类表">
+      <Item Caption="多层办公" Detail=""/>
+      <Item Caption="多层住宅" Detail=""/>
+      <Item Caption="高层办公" Detail=""/>
+      <Item Caption="高层住宅" Detail=""/>
+      <Item Caption="旅馆" Detail=""/>
+      <Item Caption="商场" Detail=""/>
+    </Dictionary>
+
+    <Dictionary Name="里氏震级表">
+      <Item Caption="8.0级以上" Detail=""/>
+      <Item Caption="7.0-7.9级" Detail=""/>
+      <Item Caption="6.0-6.9级" Detail=""/>
+    </Dictionary>
+
+    <Dictionary Name="管线类型表">
+      <Item Caption="给水干管" Detail=""/>
+      <Item Caption="给水支管" Detail=""/>
+      <Item Caption="污水主干管" Detail=""/>
+      <Item Caption="污水次干管" Detail=""/>
+      <Item Caption="污水支管" Detail=""/>
+      <Item Caption="雨水主干管" Detail=""/>
+      <Item Caption="雨水支管" Detail=""/>
+      <Item Caption="给水支管" Detail=""/>
+      <Item Caption="电缆" Detail=""/>
+      <Item Caption="通信光缆" Detail=""/>
+      <Item Caption="燃气中压主管线" Detail=""/>
+      <Item Caption="燃气中压次管线" Detail=""/>
+    </Dictionary>
+  </Dictionaries>
+</Components>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Setup ProductName="崇明滩涂" InstallPath="CmDrawing">
+  <Folders>
+    <Folder Source="bin" Target="{0}" />
+    <Folder Source="fonts" Target="{1}\fonts" />
+    <Folder Source="support" Target="{1}\support" />
+    <Folder Source="sysfonts" Target="C:\Windows\Fonts" />
+  </Folders>
+  <Desktop>
+    <ShortCut Name="崇明滩涂" Description="“崇明滩涂”CAD绘图工具包" Target="{0}\StartUp.exe" Args="" Icon="" />
+  </Desktop>
+  <StartMenu>
+    <ShortCut Name="崇明滩涂" Folder="崇明滩涂" Description="“崇明滩涂”CAD绘图工具包" Target="{0}\StartUp.exe" Args="" Icon="" />
+  </StartMenu>
+</Setup>
