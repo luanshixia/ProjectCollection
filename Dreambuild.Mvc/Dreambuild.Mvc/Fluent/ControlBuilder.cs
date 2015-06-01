@@ -122,9 +122,9 @@
         /// </summary>
         /// <param name="class"></param>
         /// <returns></returns>
-        public TBuilder CssClass(string @class)
+        public TBuilder CssClasses(params string[] classes)
         {
-            _control.CssClass = @class;
+            Array.ForEach(classes, c => _control.CssClasses.Add(c));
             return this as TBuilder;
         }
     }

@@ -19,6 +19,7 @@
         protected HtmlHelper _htmlHelper;
         private IDictionary<string, object> _htmlAttributes = null;
         private IDictionary<string, object> _cssStyles = null;
+        private ISet<string> _cssClasses = null;
 
         #endregion
 
@@ -92,17 +93,17 @@
         }
 
         /// <summary>
-        /// The class attribute.
+        /// The class attributes.
         /// </summary>
-        public string CssClass
+        public ISet<string> CssClasses
         {
             get
             {
-                return HtmlAttributes["class"].TryToString(); ;
-            }
-            set
-            {
-                HtmlAttributes["class"] = value;
+                if (this._cssClasses == null)
+                {
+                    this._cssClasses = new HashSet<string>();
+                }
+                return this._cssClasses;
             }
         }
 
@@ -160,6 +161,7 @@
             var element = new HtmlElement(this.TagName, mode == null ? this.TagRenderMode : mode.Value)
                 .Attributes(this.HtmlAttributes);
             this.CssStyles.ForEach(s => element.Css(s.Key.ToHyphenedName(), s.Value.ToString()));
+            element.AddClass(this.CssClasses.ToArray());
             return element;
         }
 

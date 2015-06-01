@@ -67,4 +67,10 @@ namespace Dreambuild.Mvc
             _htmlHelper.ViewContext.Writer.Write("</{0}>", TagName);
         }
     }
+
+    public interface IChildElement<T>
+        where T: HtmlControl
+    {
+        T Parent { get; }
+    }
 }
