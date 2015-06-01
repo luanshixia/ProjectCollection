@@ -44,16 +44,6 @@ namespace Dreambuild.Mvc
             }
         }
 
-        public IDictionary<string, string> Attributes()
-        {
-            return tagBuilder.Attributes;
-        }
-
-        public string Attribute(string key)
-        {
-            return Attributes()[key];
-        }
-
         public IList<IHtmlNode> Children
         {
             get;
@@ -67,12 +57,6 @@ namespace Dreambuild.Mvc
                 WriteTo(output);
                 return output.GetStringBuilder().ToString();
             }
-        }
-
-        public IHtmlNode Attributes(object attributes)
-        {
-            Attributes<string, object>(attributes.ToDictionary());
-            return this;
         }
 
         public IHtmlNode AddClass(params string[] classes)
@@ -134,6 +118,33 @@ namespace Dreambuild.Mvc
             return this;
         }
 
+        public string Attribute(string key)
+        {
+            return Attributes()[key];
+        }
+
+        public IHtmlNode Attribute(string key, string value)
+        {
+            return Attribute(key, value, true);
+        }
+
+        public IHtmlNode Attribute(string key, string value, bool replaceExisting)
+        {
+            tagBuilder.MergeAttribute(key, value, replaceExisting);
+            return this;
+        }
+
+        public IDictionary<string, string> Attributes()
+        {
+            return tagBuilder.Attributes;
+        }
+
+        public IHtmlNode Attributes(object attributes)
+        {
+            Attributes(attributes.ToDictionary());
+            return this;
+        }
+
         public IHtmlNode Attributes<TKey, TValue>(IDictionary<TKey, TValue> values)
         {
             return Attributes(values, true);
@@ -151,14 +162,10 @@ namespace Dreambuild.Mvc
             return this;
         }
 
-        public IHtmlNode Attribute(string key, string value)
+        public IHtmlNode Text(string value)
         {
-            return Attribute(key, value, true);
-        }
-
-        public IHtmlNode Attribute(string key, string value, bool replaceExisting)
-        {
-            tagBuilder.MergeAttribute(key, value, replaceExisting);
+            tagBuilder.SetInnerText(value);
+            Children.Clear();
             return this;
         }
 
@@ -206,13 +213,6 @@ namespace Dreambuild.Mvc
         public IHtmlNode RemoveAttribute(string key)
         {
             tagBuilder.Attributes.Remove(key);
-            return this;
-        }
-
-        public IHtmlNode Text(string value)
-        {
-            tagBuilder.SetInnerText(value);
-            Children.Clear();
             return this;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq.Expressions;
+using System.Web;
 using System.Web.Mvc;
 
 namespace Dreambuild.Mvc
@@ -9,13 +10,7 @@ namespace Dreambuild.Mvc
     /// </summary>
     public class ControlFactory
     {
-        #region Fields
-
         protected readonly HtmlHelper _htmlHelper = null;
-
-        #endregion
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of the WidgetFactory class.
@@ -28,46 +23,58 @@ namespace Dreambuild.Mvc
             this._htmlHelper = htmlHelper;
         }
 
-        #endregion
+        #region Basic HTML elements
 
-        #region Properties
-
-        protected HtmlHelper HtmlHelper
+        public HtmlControlBuilder Anchor(string text, string href, string title = null, string target = null)
         {
-            get
-            {
-                return _htmlHelper;
-            }
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "a"))
+                .Text(text)
+                .HtmlAttribute("href", href)
+                .HtmlAttribute("title", title)
+                .HtmlAttribute("target", target);
         }
 
-        protected ViewContext ViewContext
+        public HtmlControlBuilder Image(string src, string alt = null, string title = null)
         {
-            get
-            {
-                return _htmlHelper.ViewContext;
-            }
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "img", TagRenderMode.SelfClosing))
+                .HtmlAttribute("src", src)
+                .HtmlAttribute("alt", alt)
+                .HtmlAttribute("title", title);
         }
 
-        #endregion
-
-        #region Controls - Input
-
-        public Control Control(string selector = null)
+        public HtmlControlBuilder Button(string text, string onclick)
         {
-            return new Control(this.ViewContext, selector);
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "button"))
+                .Text(text)
+                .HtmlAttribute("onclick", onclick);
         }
 
-        #endregion
+        public HtmlControlBuilder Span(Func<object, object> content)
+        {
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "span"))
+                .Content(content);
+        }
 
-        #region Controls - Chart
+        public HtmlControlBuilder Div(Func<object, object> content)
+        {
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "div"))
+                .Content(content);
+        }
 
-        #endregion
+        public HtmlControlBuilder Table(Func<object, object> content)
+        {
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "table"))
+                .Content(content);
+        }
 
-        #region Controls - Gauge
-
-        #endregion
-
-        #region Controls - Grid
+        public HtmlControlBuilder Form(Func<object, object> content, string action = null, string method = "POST", bool multipart = false)
+        {
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "form"))
+                .Content(content)
+                .HtmlAttribute("action", action)
+                .HtmlAttribute("method", method)
+                .HtmlAttribute("enctype", multipart ? "multipart/form-data" : null);
+        }
 
         #endregion
     }
@@ -91,17 +98,9 @@ namespace Dreambuild.Mvc
         {
         }
 
-        protected new HtmlHelper<TModel> HtmlHelper
-        {
-            get
-            {
-                return base.HtmlHelper as HtmlHelper<TModel>;
-            }
-        }
-
         private string GetName(LambdaExpression expression)
         {
-            return ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(ExpressionHelper.GetExpressionText(expression));
+            return _htmlHelper.ViewContext.ViewData.TemplateInfo.GetFullHtmlFieldName(ExpressionHelper.GetExpressionText(expression));
         }
 
         #endregion

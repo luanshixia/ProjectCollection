@@ -16,15 +16,15 @@
         #region Fields
 
         private string _id = string.Empty;
+        protected HtmlHelper _htmlHelper;
         private IDictionary<string, object> _htmlAttributes = null;
-        private IDictionary<string, object> _styles = null;
+        private IDictionary<string, object> _cssStyles = null;
 
         #endregion
 
-        public Control(ViewContext context, string selector = null)
+        public Control(HtmlHelper helper)
         {
-            this.ViewContext = context;
-            this.Selector = selector;
+            this._htmlHelper = helper;
         }
 
         /// <summary>
@@ -79,28 +79,48 @@
         /// <summary>
         /// A IDictionary value that save the styles for the outmost html tag.
         /// </summary>
-        public IDictionary<string, object> Styles
+        public IDictionary<string, object> CssStyles
         {
             get
             {
-                if (this._styles == null)
+                if (this._cssStyles == null)
                 {
-                    this._styles = new RouteValueDictionary();
+                    this._cssStyles = new RouteValueDictionary();
                 }
-                return this._styles;
+                return this._cssStyles;
             }
         }
 
-        protected string Selector
+        /// <summary>
+        /// The class attribute.
+        /// </summary>
+        public string CssClass
+        {
+            get
+            {
+                return HtmlAttributes["class"].TryToString(); ;
+            }
+            set
+            {
+                HtmlAttributes["class"] = value;
+            }
+        }
+
+        /// <summary>
+        /// The HTML element selector.
+        /// </summary>
+        public string Selector
         {
             get;
             set;
         }
 
-        protected ViewContext ViewContext
+        internal ViewContext ViewContext
         {
-            get;
-            set;
+            get
+            {
+                return _htmlHelper.ViewContext;
+            }
         }
 
         protected virtual string ControlName
@@ -139,7 +159,7 @@
         {
             var element = new HtmlElement(this.TagName, this.TagRenderMode)
                 .Attributes(this.HtmlAttributes);
-            this.Styles.ForEach(s => element.Css(s.Key.ToHyphenedName(), s.Value.ToString()));
+            this.CssStyles.ForEach(s => element.Css(s.Key.ToHyphenedName(), s.Value.ToString()));
             return element;
         }
 
@@ -224,12 +244,13 @@
         {
             if (string.IsNullOrEmpty(this.ID))
             {
-                int num = this.ViewContext.ViewData.ContainsKey(this.ControlFullName)
-                    ? (int)this.ViewContext.ViewData[this.ControlFullName]
+                var routeData = this.ViewContext.RequestContext.RouteData.Values;
+                int num = routeData.ContainsKey(this.ControlFullName)
+                    ? (int)routeData[this.ControlFullName]
                     : 0;
                 num++;
                 this.ID = this.ControlName.ToCamel() + num;
-                this.ViewContext.ViewData[this.ControlFullName] = num;
+                routeData[this.ControlFullName] = num;
             }
         }
 
