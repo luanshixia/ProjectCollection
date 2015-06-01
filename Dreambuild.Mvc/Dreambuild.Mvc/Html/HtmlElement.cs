@@ -220,22 +220,28 @@ namespace Dreambuild.Mvc
         {
             if (RenderMode != TagRenderMode.SelfClosing)
             {
-                output.Write(tagBuilder.ToString(TagRenderMode.StartTag));
+                if (RenderMode != TagRenderMode.EndTag)
+                {
+                    output.Write(tagBuilder.ToString(TagRenderMode.StartTag));
 
-                if (TemplateCallback != null)
-                {
-                    TemplateCallback(output);
-                }
-                else if (Children.Any())
-                {
-                    Children.ForEach(child => child.WriteTo(output));
-                }
-                else
-                {
-                    output.Write(tagBuilder.InnerHtml);
+                    if (TemplateCallback != null)
+                    {
+                        TemplateCallback(output);
+                    }
+                    else if (Children.Any())
+                    {
+                        Children.ForEach(child => child.WriteTo(output));
+                    }
+                    else
+                    {
+                        output.Write(tagBuilder.InnerHtml);
+                    }
                 }
 
-                output.Write(tagBuilder.ToString(TagRenderMode.EndTag));
+                if (RenderMode != TagRenderMode.StartTag)
+                {
+                    output.Write(tagBuilder.ToString(TagRenderMode.EndTag));
+                }
             }
             else
             {

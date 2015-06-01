@@ -155,9 +155,9 @@
             }
         }
 
-        protected virtual IHtmlNode Template()
+        protected virtual IHtmlNode Template(TagRenderMode? mode = null)
         {
-            var element = new HtmlElement(this.TagName, this.TagRenderMode)
+            var element = new HtmlElement(this.TagName, mode == null ? this.TagRenderMode : mode.Value)
                 .Attributes(this.HtmlAttributes);
             this.CssStyles.ForEach(s => element.Css(s.Key.ToHyphenedName(), s.Value.ToString()));
             return element;

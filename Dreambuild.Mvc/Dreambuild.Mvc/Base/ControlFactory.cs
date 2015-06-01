@@ -61,10 +61,20 @@ namespace Dreambuild.Mvc
                 .Content(content);
         }
 
+        public HtmlControlBuilder BeginDiv()
+        {
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "div", TagRenderMode.StartTag)).Begin();
+        }
+
         public HtmlControlBuilder Table(Func<object, object> content)
         {
             return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "table"))
                 .Content(content);
+        }
+
+        public HtmlControlBuilder BeginTable()
+        {
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "table", TagRenderMode.StartTag)).Begin();
         }
 
         public HtmlControlBuilder Form(Func<object, object> content, string action = null, string method = "POST", bool multipart = false)
@@ -74,6 +84,11 @@ namespace Dreambuild.Mvc
                 .HtmlAttribute("action", action)
                 .HtmlAttribute("method", method)
                 .HtmlAttribute("enctype", multipart ? "multipart/form-data" : null);
+        }
+
+        public HtmlControlBuilder BeginForm()
+        {
+            return new HtmlControlBuilder(new HtmlControl(_htmlHelper, "form", TagRenderMode.StartTag)).Begin();
         }
 
         #endregion

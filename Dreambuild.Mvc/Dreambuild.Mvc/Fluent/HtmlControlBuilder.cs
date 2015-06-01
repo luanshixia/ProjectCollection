@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Dreambuild.Mvc
 {
-    public class HtmlControlBuilder : ControlBuilder<HtmlControl, HtmlControlBuilder>
+    public class HtmlControlBuilder : ControlBuilder<HtmlControl, HtmlControlBuilder>, IDisposable
     {
         public HtmlControlBuilder(HtmlControl control)
             : base(control)
@@ -22,6 +22,17 @@ namespace Dreambuild.Mvc
         {
             this._control.Content = content;
             return this;
+        }
+
+        internal HtmlControlBuilder Begin()
+        {
+            _control.BeginControl();
+            return this;
+        }
+
+        void IDisposable.Dispose()
+        {
+            _control.EndControl();
         }
     }
 }

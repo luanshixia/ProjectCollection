@@ -11,3 +11,9 @@
 @Html.Dreambuild().Div(@<text>
     @Html.Dreambuild().Button("Press me", "")
 </text>)
+
+@using (Html.Dreambuild().BeginDiv())
+{
+    <div>aaa</div>
+    <div>bbb</div>
+}

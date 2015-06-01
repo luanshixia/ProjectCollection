@@ -47,14 +47,24 @@ namespace Dreambuild.Mvc
             set;
         }
 
-        protected override IHtmlNode Template()
+        protected override IHtmlNode Template(TagRenderMode? mode)
         {
-            return base.Template().Html(Content(null).TryToString());
+            return base.Template(mode).Html(Content(null).TryToString());
         }
 
         protected override void RenderStartupScript(System.IO.TextWriter writer)
         {
 
+        }
+
+        internal void BeginControl()
+        {
+            this.Template(TagRenderMode.StartTag).WriteTo(_htmlHelper.ViewContext.Writer);
+        }
+
+        internal void EndControl()
+        {
+            _htmlHelper.ViewContext.Writer.Write("</{0}>", TagName);
         }
     }
 }
