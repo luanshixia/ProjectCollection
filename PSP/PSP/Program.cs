@@ -16,9 +16,9 @@ namespace P1B
             {
                 return;
             }
-            Console.Write("Read or write? (r/w): ");
+            Console.Write("Read, write, or modify? (r/w/m): ");
             string option = Console.ReadLine();
-            if (option != "r" && option != "w")
+            if (option != "r" && option != "w" && option != "m")
             {
                 return;
             }
@@ -53,7 +53,61 @@ namespace P1B
                     return r;
                 }).ToList();
                 Save(list, fileName);
-                Console.WriteLine("Write file succeeded.");
+                Console.WriteLine("Successfully saved to {0}.", fileName);
+            }
+            else if (option == "m")
+            {
+                var list = Load(fileName);
+                Console.WriteLine("Operations for items:");
+                Console.WriteLine("[a] Accept");
+                Console.WriteLine("[r] Replace");
+                Console.WriteLine("[d] Delete");
+                Console.WriteLine("[i] Insert After");
+                Console.WriteLine("[e] Accept Remainder");
+                int i = 0;
+                while (i < list.Count)
+                {
+                    Console.Write("Item {0} of {1}: {2}. ", i + 1, list.Count, list[i]);
+                    var key = Console.ReadLine();
+                    if (key == "a")
+                    {
+                        i++;
+                    }
+                    else if (key == "r")
+                    {
+                        Console.Write("Enter new value: ");
+                        string rStr = Console.ReadLine();
+                        double r;
+                        double.TryParse(rStr, out r);
+                        list[i] = r;
+                        i++;
+                    }
+                    else if (key == "d")
+                    {
+                        list.RemoveAt(i);
+                    }
+                    else if (key == "i")
+                    {
+                        Console.Write("Enter new value: ");
+                        string rStr = Console.ReadLine();
+                        double r;
+                        double.TryParse(rStr, out r);
+                        list.Insert(i + 1, r);
+                        i += 2;
+                    }
+                    else if (key == "e")
+                    {
+                        break;
+                    }
+                }
+                Console.Write("Enter new file name (empty to save directly): ");
+                string newName = Console.ReadLine();
+                if (string.IsNullOrEmpty(newName))
+                {
+                    newName = fileName;
+                }
+                Save(list, newName);
+                Console.WriteLine("Successfully saved to {0}.", newName);
             }
             Console.ReadLine();
         }
