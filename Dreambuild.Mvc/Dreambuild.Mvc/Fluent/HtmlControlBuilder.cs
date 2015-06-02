@@ -5,34 +5,45 @@ using System.Text;
 
 namespace Dreambuild.Mvc
 {
-    public class HtmlControlBuilder : ControlBuilder<HtmlControl, HtmlControlBuilder>, IDisposable
+    public class HtmlControlBuilderBase<TControl, TBuilder>
+        : ControlBuilder<TControl, TBuilder>, IDisposable
+        where TControl : HtmlControl
+        where TBuilder : HtmlControlBuilderBase<TControl, TBuilder>
     {
-        public HtmlControlBuilder(HtmlControl control)
+        public HtmlControlBuilderBase(TControl control)
             : base(control)
         {
         }
 
-        public HtmlControlBuilder Text(string text)
+        public TBuilder Text(string text)
         {
             this._control.Text = text;
-            return this;
+            return this as TBuilder;
         }
 
-        public HtmlControlBuilder Content(Func<object, object> content)
+        public TBuilder Content(Func<object, object> content)
         {
             this._control.Content = content;
-            return this;
+            return this as TBuilder;
         }
 
-        internal HtmlControlBuilder Begin()
+        internal TBuilder Begin()
         {
             _control.BeginControl();
-            return this;
+            return this as TBuilder;
         }
 
         void IDisposable.Dispose()
         {
             _control.EndControl();
+        }
+    }
+
+    public class HtmlControlBuilder : HtmlControlBuilderBase<HtmlControl, HtmlControlBuilder>
+    {
+        public HtmlControlBuilder(HtmlControl control)
+            : base(control)
+        {
         }
     }
 }

@@ -54,6 +54,7 @@
     <Compile Include="Controls\BootstrapControl.cs" />
     <Compile Include="Controls\HtmlControl.cs" />
     <Compile Include="Fluent\ControlBuilder.cs" />
+    <Compile Include="Fluent\BootstrapControlBuilder.cs" />
     <Compile Include="Fluent\HtmlControlBuilder.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Base\ControlCallbackManager.cs" />

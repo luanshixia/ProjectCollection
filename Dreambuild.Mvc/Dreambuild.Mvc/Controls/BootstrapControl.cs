@@ -87,13 +87,25 @@ namespace Dreambuild.Mvc
         {
         }
 
-        public string DeviceSize
+        public int ExtraSmall
         {
             get;
             set;
         }
 
-        public int Width
+        public int Small
+        {
+            get;
+            set;
+        }
+
+        public int Middle
+        {
+            get;
+            set;
+        }
+
+        public int Large
         {
             get;
             set;
@@ -103,7 +115,12 @@ namespace Dreambuild.Mvc
         {
             get
             {
-                return string.Format(bs_col, DeviceSize, Width);
+                string xs = ExtraSmall > 0 ? string.Format(bs_col, DeviceSize.ExtraSmall, ExtraSmall) : null;
+                string sm = ExtraSmall > 0 ? string.Format(bs_col, DeviceSize.Small, Small) : null;
+                string md = ExtraSmall > 0 ? string.Format(bs_col, DeviceSize.Middle, Middle) : null;
+                string lg = ExtraSmall > 0 ? string.Format(bs_col, DeviceSize.Large, Large) : null;
+                var array = new[] { xs, sm, md, lg }.Where(x => x != null).ToArray();
+                return string.Join(" ", array);
             }
         }
 
