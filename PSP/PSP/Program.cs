@@ -4,52 +4,58 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// TP = Test Point
+
 namespace P1B
 {
+    internal static class Messages
+    {
+        public const string FileNotFound = "File not found. Please enter again. ";
+        public const string FileAlreadyExists = "File already exists. Please enter again. ";
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            Console.Write("Enter file name: ");
-            string fileName = Console.ReadLine();
-            if (string.IsNullOrEmpty(fileName))
+            string fileName = PromptForValidInput("Enter file name: ", x => IsFileNameProper(x)); // [TP1] empty file name
+            if (fileName == null)
             {
                 return;
             }
-            Console.Write("Read, write, or modify? (r/w/m): ");
-            string option = Console.ReadLine();
-            if (option != "r" && option != "w" && option != "m")
+            string option = PromptForValidInput("Read, write, or modify? (r/w/m): ", x => x == "r" || x == "w" || x == "m"); // [TP2] prompt for valid input
+            if (option == null)
             {
                 return;
             }
             if (option == "r")
             {
-                if (!System.IO.File.Exists(fileName))
+                fileName = PromptForValidInput(Messages.FileNotFound, x => System.IO.File.Exists(x), fileName); // [TP3] file not found
+                if (fileName == null)
                 {
-                    Console.WriteLine("File not found.");
+                    return;
                 }
-                else
-                {
-                    Load(fileName)
-                        .ForEach(x => Console.WriteLine(x));
-                    Console.WriteLine("Read file succeeded.");
-                }
+                Load(fileName)
+                    .ForEach(x => Console.WriteLine(x));
+                Console.WriteLine("Read file succeeded.");
             }
             else if (option == "w")
             {
-                Console.Write("Enter number of reals: ");
-                string nStr = Console.ReadLine();
-                int n;
-                if (!int.TryParse(nStr, out n))
+                fileName = PromptForValidInput(Messages.FileAlreadyExists, x => !System.IO.File.Exists(x), fileName);
+                if (fileName == null)
+                {
+                    return;
+                }
+                int n = 0;
+                string nStr = PromptForValidInput("Enter number of reals: ", x => int.TryParse(x, out n));
+                if (nStr == null)
                 {
                     return;
                 }
                 var list = Enumerable.Range(1, n).Select(i =>
                 {
-                    Console.Write("Enter real number {0}: ", i);
-                    string rStr = Console.ReadLine();
-                    double r;
-                    double.TryParse(rStr, out r);
+                    double r = 0;
+                    string rStr = PromptForValidInput(string.Format("Enter real number {0}: ", i), x => double.TryParse(x, out r));
                     return r;
                 }).ToList();
                 Save(list, fileName);
@@ -57,6 +63,11 @@ namespace P1B
             }
             else if (option == "m")
             {
+                fileName = PromptForValidInput(Messages.FileNotFound, x => System.IO.File.Exists(x), fileName);
+                if (fileName == null)
+                {
+                    return;
+                }
                 var list = Load(fileName);
                 Console.WriteLine("Operations for items:");
                 Console.WriteLine("[a] Accept");
@@ -112,9 +123,37 @@ namespace P1B
             Console.ReadLine();
         }
 
+        static string PromptForValidInput(string msg, Predicate<string> pred, string input = null)
+        {
+            if (input != null && pred(input))
+            {
+                return input;
+            }
+            Console.Write(msg);
+            while (true)
+            {
+                input = Console.ReadLine();
+                if (string.IsNullOrEmpty(input))
+                {
+                    return null;
+                }
+                if (pred(input))
+                {
+                    break;
+                }
+                Console.Write("Improper input. Input again, or press ENTER to terminate: ");
+            }
+            return input;
+        }
+
+        static bool IsFileNameProper(string fileName)
+        {
+            return System.IO.Path.GetInvalidFileNameChars().All(c => !fileName.Contains(c));
+        }
+
         static void Save(List<double> list, string fileName)
         {
-            System.IO.File.WriteAllLines(fileName, 
+            System.IO.File.WriteAllLines(fileName,
                 list.Select(x => x.ToString())
                 .ToArray());
         }
