@@ -35,8 +35,8 @@ namespace P1B
                 {
                     return;
                 }
-                Load(fileName)
-                    .ForEach(x => Console.WriteLine(x));
+                LoadArray(fileName)
+                    .ForEach(x => Console.WriteLine(FormatArray(x)));
                 Console.WriteLine("Read file succeeded.");
             }
             else if (option == "w")
@@ -47,21 +47,20 @@ namespace P1B
                     return;
                 }
                 int n = 0;
-                string nStr = PromptForValidInput("Enter number of reals: ", x => int.TryParse(x, out n));
+                string nStr = PromptForValidInput("Enter number of records: ", x => int.TryParse(x, out n));
                 if (nStr == null)
                 {
                     return;
                 }
                 var list = Enumerable.Range(1, n).Select(i =>
                 {
-                    double r = 0;
-                    string rStr = PromptForValidInput(string.Format("Enter real number {0}: ", i), x => double.TryParse(x, out r));
-                    return r;
+                    string line = PromptForValidInput(string.Format("Enter record {0}: ", i), x => ValidArray(x));
+                    return ParseArray(line);
                 }).ToList();
-                Save(list, fileName);
+                SaveArray(list, fileName);
                 Console.WriteLine("Successfully saved to {0}.", fileName);
             }
-            else if (option == "m")
+            else if (option == "m") // m is not modified for arryas.
             {
                 fileName = PromptForValidInput(Messages.FileNotFound, x => System.IO.File.Exists(x), fileName);
                 if (fileName == null)
@@ -163,6 +162,35 @@ namespace P1B
             return System.IO.File.ReadAllLines(fileName)
                 .Select(x => Convert.ToDouble(x))
                 .ToList();
+        }
+
+        static void SaveArray(List<List<double>> list, string fileName)
+        {
+            System.IO.File.WriteAllLines(fileName,
+                list.Select(x => FormatArray(x))
+                .ToArray());
+        }
+
+        static List<List<double>> LoadArray(string fileName)
+        {
+            return System.IO.File.ReadAllLines(fileName)
+                .Select(x => ParseArray(x))
+                .ToList();
+        }
+
+        static string FormatArray(List<double> values)
+        {
+            return string.Join(",", values);
+        }
+
+        static List<double> ParseArray(string line)
+        {
+            return line.Split(',').Select(y => Convert.ToDouble(y)).ToList();
+        }
+
+        static bool ValidArray(string line)
+        {
+            return line.Replace(",", "").Replace(".", "").All(c => char.IsDigit(c));
         }
     }
 }
