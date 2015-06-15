@@ -4,59 +4,69 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+// TP = Test Point
+
 namespace P1B
 {
+    internal static class Messages
+    {
+        public const string FileNotFound = "File not found. Please enter again. ";
+        public const string FileAlreadyExists = "File already exists. Please enter again. ";
+    }
+
     class Program
     {
         static void Main(string[] args)
         {
-            Console.Write("Enter file name: ");
-            string fileName = Console.ReadLine();
-            if (string.IsNullOrEmpty(fileName))
+            string fileName = PromptForValidInput("Enter file name: ", x => IsFileNameProper(x)); // [TP1] empty file name
+            if (fileName == null)
             {
                 return;
             }
-            Console.Write("Read, write, or modify? (r/w/m): ");
-            string option = Console.ReadLine();
-            if (option != "r" && option != "w" && option != "m")
+            string option = PromptForValidInput("Read, write, or modify? (r/w/m): ", x => x == "r" || x == "w" || x == "m"); // [TP2] prompt for valid input
+            if (option == null)
             {
                 return;
             }
             if (option == "r")
             {
-                if (!System.IO.File.Exists(fileName))
+                fileName = PromptForValidInput(Messages.FileNotFound, x => System.IO.File.Exists(x), fileName); // [TP3] file not found
+                if (fileName == null)
                 {
-                    Console.WriteLine("File not found.");
+                    return;
                 }
-                else
-                {
-                    Load(fileName)
-                        .ForEach(x => Console.WriteLine(x));
-                    Console.WriteLine("Read file succeeded.");
-                }
+                LoadArray(fileName)
+                    .ForEach(x => Console.WriteLine(FormatArray(x)));
+                Console.WriteLine("Read file succeeded.");
             }
             else if (option == "w")
             {
-                Console.Write("Enter number of reals: ");
-                string nStr = Console.ReadLine();
-                int n;
-                if (!int.TryParse(nStr, out n))
+                fileName = PromptForValidInput(Messages.FileAlreadyExists, x => !System.IO.File.Exists(x), fileName);
+                if (fileName == null)
+                {
+                    return;
+                }
+                int n = 0;
+                string nStr = PromptForValidInput("Enter number of records: ", x => int.TryParse(x, out n));
+                if (nStr == null)
                 {
                     return;
                 }
                 var list = Enumerable.Range(1, n).Select(i =>
                 {
-                    Console.Write("Enter real number {0}: ", i);
-                    string rStr = Console.ReadLine();
-                    double r;
-                    double.TryParse(rStr, out r);
-                    return r;
+                    string line = PromptForValidInput(string.Format("Enter record {0}: ", i), x => ValidArray(x));
+                    return ParseArray(line);
                 }).ToList();
-                Save(list, fileName);
+                SaveArray(list, fileName);
                 Console.WriteLine("Successfully saved to {0}.", fileName);
             }
-            else if (option == "m")
+            else if (option == "m") // m is not modified for arryas.
             {
+                fileName = PromptForValidInput(Messages.FileNotFound, x => System.IO.File.Exists(x), fileName);
+                if (fileName == null)
+                {
+                    return;
+                }
                 var list = Load(fileName);
                 Console.WriteLine("Operations for items:");
                 Console.WriteLine("[a] Accept");
@@ -112,9 +122,37 @@ namespace P1B
             Console.ReadLine();
         }
 
+        static string PromptForValidInput(string msg, Predicate<string> pred, string input = null)
+        {
+            if (input != null && pred(input))
+            {
+                return input;
+            }
+            Console.Write(msg);
+            while (true)
+            {
+                input = Console.ReadLine();
+                if (string.IsNullOrEmpty(input))
+                {
+                    return null;
+                }
+                if (pred(input))
+                {
+                    break;
+                }
+                Console.Write("Improper input. Input again, or press ENTER to terminate: ");
+            }
+            return input;
+        }
+
+        static bool IsFileNameProper(string fileName)
+        {
+            return System.IO.Path.GetInvalidFileNameChars().All(c => !fileName.Contains(c));
+        }
+
         static void Save(List<double> list, string fileName)
         {
-            System.IO.File.WriteAllLines(fileName, 
+            System.IO.File.WriteAllLines(fileName,
                 list.Select(x => x.ToString())
                 .ToArray());
         }
@@ -124,6 +162,35 @@ namespace P1B
             return System.IO.File.ReadAllLines(fileName)
                 .Select(x => Convert.ToDouble(x))
                 .ToList();
+        }
+
+        static void SaveArray(List<List<double>> list, string fileName)
+        {
+            System.IO.File.WriteAllLines(fileName,
+                list.Select(x => FormatArray(x))
+                .ToArray());
+        }
+
+        static List<List<double>> LoadArray(string fileName)
+        {
+            return System.IO.File.ReadAllLines(fileName)
+                .Select(x => ParseArray(x))
+                .ToList();
+        }
+
+        static string FormatArray(List<double> values)
+        {
+            return string.Join(",", values);
+        }
+
+        static List<double> ParseArray(string line)
+        {
+            return line.Split(',').Select(y => Convert.ToDouble(y)).ToList();
+        }
+
+        static bool ValidArray(string line)
+        {
+            return line.Replace(",", "").Replace(".", "").All(c => char.IsDigit(c));
         }
     }
 }
