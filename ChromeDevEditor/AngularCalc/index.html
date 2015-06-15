@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <title>Calculator</title>
+    <link href="styles.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <h1>
+        A Web Calculator
+    </h1>
+    <p>
+        This is a <i>calculator</i> running on the <b>web</b>.
+    </p>
+    <blockquote>
+        A calculator running on the web is good.
+    </blockquote>
+    <div ng-controller="Calc">
+        <table class="layout-table">
+            <colgroup>
+                <col />
+                <col />
+                <col />
+                <col />
+                <col />
+            </colgroup>
+            <tr>
+                <td colspan="5">
+                    <input type="text" name="display" value="0" class="right-align" readonly ng-model="display" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="button" name="backspace" value="Backspace" />
+                </td>
+                <td colspan="2">
+                    <input type="button" name="ce" value="CE" ng-click="clearEntry()" />
+                </td>
+                <td>
+                    <input type="button" name="c" value="C" ng-click="clear()" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" name="digit7" value="7" ng-click="appendChar('7')" />
+                </td>
+                <td>
+                    <input type="button" name="digit8" value="8" ng-click="appendChar('8')" />
+                </td>
+                <td>
+                    <input type="button" name="digit9" value="9" ng-click="appendChar('9')" />
+                </td>
+                <td>
+                    <input type="button" name="divide" value="/" ng-click="setOperation('/')" />
+                </td>
+                <td>
+                    <input type="button" name="sqrt" value="sqrt" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" name="digit4" value="4" ng-click="appendChar('4')" />
+                </td>
+                <td>
+                    <input type="button" name="digit5" value="5" ng-click="appendChar('5')" />
+                </td>
+                <td>
+                    <input type="button" name="digit6" value="6" ng-click="appendChar('6')" />
+                </td>
+                <td>
+                    <input type="button" name="multiply" value="*" ng-click="setOperation('*')" />
+                </td>
+                <td>
+                    <input type="button" name="percentage" value="%" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" name="digit1" value="1" ng-click="appendChar('1')" />
+                </td>
+                <td>
+                    <input type="button" name="digit2" value="2" ng-click="appendChar('2')" />
+                </td>
+                <td>
+                    <input type="button" name="digit3" value="3" ng-click="appendChar('3')" />
+                </td>
+                <td>
+                    <input type="button" name="subtract" value="-" ng-click="setOperation('-')" />
+                </td>
+                <td>
+                    <input type="button" name="reverse" value="1/x" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <input type="button" name="digit0" value="0" ng-click="appendChar('0')" />
+                </td>
+                <td>
+                    <input type="button" name="sign" value="+/-" />
+                </td>
+                <td>
+                    <input type="button" name="dot" value="." ng-click="appendChar('.')" />
+                </td>
+                <td>
+                    <input type="button" name="add" value="+" ng-click="setOperation('+')" />
+                </td>
+                <td>
+                    <input type="button" name="equal" value="=" ng-click="result()" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <script type="text/javascript" src="angular.js"></script>
+    <script type="text/javascript" src="main.js"></script>
+</body>
+</html>

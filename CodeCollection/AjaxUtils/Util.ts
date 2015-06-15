@@ -121,6 +121,9 @@ module dreambuild {
                     }
                 }
             }
+            if (settings.dataType === 'blob') {
+                xhr.responseType = 'blob';
+            }
             xhr.onload = e => {
                 var data;
                 if (settings.dataType === 'json') {
