@@ -35,9 +35,10 @@ namespace P1B
                 {
                     return;
                 }
-                LoadArray(fileName)
-                    .ForEach(x => Console.WriteLine(FormatArray(x)));
-                Console.WriteLine("Read file succeeded.");
+                var array = LoadArray(fileName);
+                array.ForEach(x => Console.WriteLine(FormatArray(x)));
+                var lr = new LinearRegression(array.Select(x => x[0]).ToArray(), array.Select(x => x[1]).ToArray());
+                Console.WriteLine("Read file succeeded. Beta0={0} and Beta1={1}", lr.Beta0, lr.Beta1);
             }
             else if (option == "w")
             {
@@ -191,6 +192,22 @@ namespace P1B
         static bool ValidArray(string line)
         {
             return line.Replace(",", "").Replace(".", "").All(c => char.IsDigit(c));
+        }
+    }
+
+    public class LinearRegression
+    {
+        public double Beta0 { get; private set; }
+        public double Beta1 { get; private set; }
+
+        public LinearRegression(double[] x, double[] y)
+        {
+            int n = x.Count();
+            double xavg = x.Average();
+            double yavg = y.Average();
+            Beta1 = (x.Zip(y, (a, b) => a * b).Sum() - n * xavg * yavg) 
+                / (x.Sum(a => a * a) - n * xavg * xavg);
+            Beta0 = yavg - Beta1 * xavg;
         }
     }
 }
