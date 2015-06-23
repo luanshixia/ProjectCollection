@@ -199,15 +199,48 @@ namespace P1B
     {
         public double Beta0 { get; private set; }
         public double Beta1 { get; private set; }
+        public double Sigma { get; private set; }
+
+        public const double T70 = 1.108;
+        public const double T90 = 1.860;
+
+        private double[] x;
+        private double[] y;
+        private int n;
+        private double xavg;
+        private double yavg;
 
         public LinearRegression(double[] x, double[] y)
         {
-            int n = x.Count();
-            double xavg = x.Average();
-            double yavg = y.Average();
-            Beta1 = (x.Zip(y, (a, b) => a * b).Sum() - n * xavg * yavg) 
+            this.x = x;
+            this.y = y;
+            n = x.Count();
+            xavg = x.Average();
+            yavg = y.Average();
+            Beta1 = (x.Zip(y, (a, b) => a * b).Sum() - n * xavg * yavg)
                 / (x.Sum(a => a * a) - n * xavg * xavg);
             Beta0 = yavg - Beta1 * xavg;
+            Sigma = Math.Sqrt(1.0 / (n - 2) * x.Zip(y, (a, b) => Math.Pow(b - Beta0 - Beta1 * a, 2)).Sum());
+        }
+
+        public double Projection(double value)
+        {
+            return Beta0 + Beta1 * value;
+        }
+
+        public double Range(double value, double t)
+        {
+            return t * Sigma * Math.Sqrt(1 + 1.0 / n + (value - xavg) * (value - xavg) / x.Sum(a => (a - xavg) * (a - xavg)));
+        }
+
+        public double Lpi(double projection, double range)
+        {
+            return projection - range;
+        }
+
+        public double Upi(double projection, double range)
+        {
+            return projection + range;
         }
     }
 }
