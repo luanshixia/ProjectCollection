@@ -560,6 +560,42 @@ namespace CSharpLeetCode
             }
             return 0;
         }
+
+        //
+        // 164 - Maximum Gap
+        //
+        //public int MaximumGap(int[] nums) // wrong
+        //{
+        //    if (nums.Length < 2)
+        //    {
+        //        return 0;
+        //    }
+        //    int left = Math.Min(nums[0], nums[1]);
+        //    int right = Math.Max(nums[0], nums[1]);
+        //    int maxGap = right - left;
+        //    for (int i = 2; i < nums.Length; i++)
+        //    {
+        //        int value = nums[i];
+        //        if (left - value > maxGap)
+        //        {
+        //            right = left;
+        //            left = value;
+        //            maxGap = right - left;
+        //        }
+        //        else if (value - right > maxGap)
+        //        {
+        //            left = right;
+        //            right = value;
+        //            maxGap = right - left;
+        //        }
+        //        else if (value - left > right - value)
+        //        {
+        //            right = value;
+        //            // ...
+        //        }
+        //    }
+        //    return maxGap;
+        //}
     }
 
     public class LinkedList
