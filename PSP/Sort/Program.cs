@@ -36,15 +36,23 @@ namespace P1B
                     return;
                 }
                 int index = 0;
-                var indexStr = PromptForValidInput("Enter key index: ", x => int.TryParse(x, out index));
-                if (fileName == null)
-                {
-                    return;
-                }
                 var arrays = LoadArray(fileName);
-                SortArrays(arrays, index);
-                arrays.ForEach(x => Console.WriteLine(FormatArray(x)));
-                Console.WriteLine("Read file succeeded.");
+                while (true)
+                {
+                    var indexStr = PromptForValidInput("Enter key index: ", x => int.TryParse(x, out index));
+                    if (indexStr == null)
+                    {
+                        return;
+                    }
+                    var array = arrays.Select(x => x[index]).ToArray();
+                    var stat = new Statistics(array);
+                    Console.WriteLine("Col={0}|Min={1}|Max={2}|Avg={3}|SD={4}", index, stat.Min, stat.Max, stat.Avg, stat.SD);
+                    Console.WriteLine("Read file succeeded.");
+                    if (PromptForValidInput("Save to file? ", x => true) == "y")
+                    {
+                        // Save
+                    }
+                }
             }
             else if (option == "w")
             {
@@ -219,6 +227,24 @@ namespace P1B
                     return 0;
                 }
             });
+        }
+    }
+
+    public class Statistics
+    {
+        public double Min { get; private set; }
+        public double Max { get; private set; }
+        public double Avg { get; private set; }
+        public double Var { get; private set; }
+        public double SD { get; private set; }
+
+        public Statistics(double[] values)
+        {
+            Min = values.Min();
+            Max = values.Max();
+            Avg = values.Average();
+            Var = values.Average(x => (x - Avg) * (x - Avg));
+            SD = Math.Sqrt(Var);
         }
     }
 }
