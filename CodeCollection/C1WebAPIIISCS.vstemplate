@@ -1,0 +1,62 @@
+﻿<VSTemplate Version="3.0.0" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" Type="Project">
+  <TemplateData>
+    <Name>C1 Web API Application Hosted in IIS</Name>
+    <Description>Create a C1 Web API Application Hosted in IIS.</Description>
+    <ProjectType>CSharp</ProjectType>
+    <ProjectSubType>Web</ProjectSubType>
+    <SortOrder>1000</SortOrder>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>C1WebAPIIIS</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <LocationField>Enabled</LocationField>
+    <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <Icon>C1WebAPI_IIS_small.png</Icon>
+    <PreviewImage>C1WebAPI_IIS_large.png</PreviewImage>
+    <RequiredFrameworkVersion>4.5</RequiredFrameworkVersion>
+    <CreateInPlace>true</CreateInPlace>
+    <PromptForSaveOnCreation>true</PromptForSaveOnCreation>
+  </TemplateData>
+  <TemplateContent>
+    <Project TargetFileName="C1WebAPIIISCS.csproj" File="MyTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="default.html">default.html</ProjectItem>
+      <Folder Name="Properties" TargetFolderName="Properties">
+        <ProjectItem ReplaceParameters="true" TargetFileName="AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="licenses.licx">licenses.licx</ProjectItem>
+      </Folder>
+      <Folder Name="resources" TargetFolderName="resources">
+        <ProjectItem ReplaceParameters="false" TargetFileName="wijmo5.png">wijmo5.png</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Startup.cs">Startup.cs</ProjectItem>
+      <Folder Name="styles" TargetFolderName="styles">
+        <ProjectItem ReplaceParameters="true" TargetFileName="app.css">app.css</ProjectItem>
+        <ProjectItem ReplaceParameters="true" TargetFileName="bootstrap.min.css">bootstrap.min.css</ProjectItem>
+      </Folder>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.config">Web.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Debug.config">Web.Debug.config</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="Web.Release.config">Web.Release.config</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>ProjectTemplateWizard, Version=1.0.0.0, Culture=neutral, PublicKeyToken=77e47f006d81924b</Assembly>
+    <FullClassName>ProjectTemplateWizard.C1WebAPIWizard</FullClassName>
+  </WizardExtension>
+  <WizardData>
+    <packages repository="extension" repositoryId="ProjectTemplateInstaller..4c90eea4-4847-4cf2-bb27-5b5468046880">
+      <package id="C1.Excel" version="4.0.20151.39" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="C1.Web.Api" version="4.0.20152.5" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Microsoft.AspNet.Cors" version="5.0.0" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Microsoft.AspNet.WebApi.Client" version="5.2.3" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Microsoft.AspNet.WebApi.Core" version="5.2.3" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Microsoft.AspNet.WebApi.Owin" version="5.2.3" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Microsoft.AspNet.WebApi.WebHost" version="5.2.3" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Microsoft.Owin" version="3.0.1" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Microsoft.Owin.Cors" version="3.0.1" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Microsoft.Owin.Host.SystemWeb" version="3.0.1" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Newtonsoft.Json" version="6.0.4" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Owin" version="1.0" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="PhantomJS" version="2.0.0" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Selenium.Support" version="2.45.0" targetFramework="net451" skipAssemblyReferences="true" />
+      <package id="Selenium.WebDriver" version="2.45.0" targetFramework="net451" skipAssemblyReferences="true" />
+    </packages>
+  </WizardData>
+</VSTemplate>
