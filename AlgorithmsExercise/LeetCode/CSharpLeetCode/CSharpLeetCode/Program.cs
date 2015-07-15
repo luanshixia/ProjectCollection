@@ -42,6 +42,24 @@ namespace CSharpLeetCode
     public class Solution
     {
         //
+        // 206 - Reverse Linked List
+        //
+        public ListNode ReverseList(ListNode head)
+        {
+            var cur = head;
+            ListNode prev = null;
+            ListNode next = null;
+            while (cur != null)
+            {
+                next = cur.next;
+                cur.next = prev;
+                prev = cur;
+                cur = next;
+            }
+            return prev;
+        }
+
+        //
         // 205 - Isomorphic Strings
         //
         public bool IsIsomorphic(string s, string t)
