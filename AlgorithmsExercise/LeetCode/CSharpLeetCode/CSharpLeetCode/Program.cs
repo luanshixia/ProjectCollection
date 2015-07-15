@@ -42,6 +42,43 @@ namespace CSharpLeetCode
     public class Solution
     {
         //
+        // 205 - Isomorphic Strings
+        //
+        public bool IsIsomorphic(string s, string t)
+        {
+            int n = s.Length;
+            if (t.Length != n)
+            {
+                return false;
+            }
+            var dict = new Dictionary<char, char>();
+            var set = new HashSet<char>();
+            for (int i = 0; i < n; i++)
+            {
+                if (dict.ContainsKey(s[i]))
+                {
+                    if (dict[s[i]] != t[i])
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (set.Contains(t[i]))
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        dict[s[i]] = t[i];
+                        set.Add(t[i]);
+                    }
+                }
+            }
+            return true;
+        }
+
+        //
         // 204 - Count Primes
         //
         public int CountPrimes(int n)
