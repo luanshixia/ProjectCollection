@@ -32,7 +32,7 @@ namespace CSharpLeetCode
             //{
             //    bsti.Next();
             //}
-            
+
             Console.WriteLine(sol.TrailingZeroes(2147483647));
 
             Console.ReadLine();
@@ -41,6 +41,71 @@ namespace CSharpLeetCode
 
     public class Solution
     {
+        //
+        // 231 - Power of Two
+        //
+        public bool IsPowerOfTwo(int n)
+        {
+            if (n <= 0)
+            {
+                return false;
+            }
+            return Math.Pow(2, (int)Math.Log(n, 2)) == n;
+        }
+
+        //
+        // 220 - Contains Duplicate III
+        //
+        public bool ContainsNearbyAlmostDuplicate(int[] nums, int k, int t)
+        {
+            if (nums == null || nums.Length < 2 || k < 1 || t < 0)
+            {
+                return false;
+            }
+            var set = new SortedSet<long>();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                long num = nums[i];
+                var sub = set.GetViewBetween(num - t, num + t); // use long to avoid overflow
+                if (sub.Count > 0)
+                {
+                    return true;
+                }
+                if (i - k >= 0)
+                {
+                    set.Remove(nums[i - k]);
+                }
+                set.Add(num); // after remove!
+            }
+            return false;
+        }
+
+        //
+        // 219 - Contains Duplicate II
+        //
+        public bool ContainsNearbyDuplicate(int[] nums, int k)
+        {
+            var dict = new Dictionary<int, int>();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int num = nums[i];
+                if (dict.ContainsKey(num) && i - dict[num] <= k)
+                {
+                    return true;
+                }
+                dict[num] = i;
+            }
+            return false;
+        }
+
+        //
+        // 217 - Contains Duplicate
+        //
+        public bool ContainsDuplicate(int[] nums)
+        {
+            return nums.Distinct().Count() != nums.Length;
+        }
+
         //
         // 206 - Reverse Linked List
         //
