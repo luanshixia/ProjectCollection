@@ -682,40 +682,30 @@ namespace CSharpLeetCode
         }
 
         //
-        // 164 - Maximum Gap
+        // 2 - Add Two Numbers
         //
-        //public int MaximumGap(int[] nums) // wrong
-        //{
-        //    if (nums.Length < 2)
-        //    {
-        //        return 0;
-        //    }
-        //    int left = Math.Min(nums[0], nums[1]);
-        //    int right = Math.Max(nums[0], nums[1]);
-        //    int maxGap = right - left;
-        //    for (int i = 2; i < nums.Length; i++)
-        //    {
-        //        int value = nums[i];
-        //        if (left - value > maxGap)
-        //        {
-        //            right = left;
-        //            left = value;
-        //            maxGap = right - left;
-        //        }
-        //        else if (value - right > maxGap)
-        //        {
-        //            left = right;
-        //            right = value;
-        //            maxGap = right - left;
-        //        }
-        //        else if (value - left > right - value)
-        //        {
-        //            right = value;
-        //            // ...
-        //        }
-        //    }
-        //    return maxGap;
-        //}
+        public ListNode AddTwoNumbers(ListNode l1, ListNode l2)
+        {
+            return AddTwoDigits(l1, l2);
+        }
+
+        private ListNode AddTwoDigits(ListNode l1, ListNode l2, bool carry = false)
+        {
+            if (l1 == null && l2 == null)
+            {
+                return carry ? new ListNode(1) : null;
+            }
+            else
+            {
+                int d1 = l1 != null ? l1.val : 0;
+                int d2 = l2 != null ? l2.val : 0;
+                int d3 = carry ? 1 : 0;
+                int sum = d1 + d2 + d3;
+                ListNode l3 = new ListNode(sum % 10);
+                l3.next = AddTwoDigits(l1 != null ? l1.next : null, l2 != null ? l2.next : null, sum >= 10);
+                return l3;
+            }
+        }
 
         //
         // 1 - Two Sum
