@@ -716,6 +716,24 @@ namespace CSharpLeetCode
         //    }
         //    return maxGap;
         //}
+
+        //
+        // 1 - Two Sum
+        //
+        public int[] TwoSum(int[] nums, int target)
+        {
+            var dict = new Dictionary<int, int>();
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int sub = target - nums[i];
+                if (dict.ContainsKey(nums[i]))
+                {
+                    return new[] { dict[nums[i]] + 1, i + 1 };
+                }
+                dict[sub] = i;
+            }
+            return null;
+        }
     }
 
     public class LinkedList
