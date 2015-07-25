@@ -33,7 +33,9 @@ namespace CSharpLeetCode
             //    bsti.Next();
             //}
 
-            Console.WriteLine(sol.TrailingZeroes(2147483647));
+            //Console.WriteLine(sol.TrailingZeroes(2147483647));
+
+            sol.LengthOfLongestSubstring("abba");
 
             Console.ReadLine();
         }
@@ -679,6 +681,30 @@ namespace CSharpLeetCode
                 }
             }
             return 0;
+        }
+
+        //
+        // 3 - Longest Substring without Repeating Characters
+        //
+        public int LengthOfLongestSubstring(string s)
+        {
+            if (s.Length == 0)
+            {
+                return 0;
+            }
+            int dupIndex = -1;
+            var list = new List<int>();
+            var dict = new Dictionary<char, int>();
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (dict.ContainsKey(s[i]))
+                {
+                    dupIndex = Math.Max(dict[s[i]], dupIndex);
+                }
+                list.Add(i - dupIndex);
+                dict[s[i]] = i;
+            }
+            return list.Max();
         }
 
         //
