@@ -684,6 +684,112 @@ namespace CSharpLeetCode
         }
 
         //
+        // 6 - ZigZag Conversion
+        //
+        public string ZigZagConvert(string s, int numRows)
+        {
+            if (numRows == 1)
+            {
+                return s;
+            }
+            var lists = Enumerable.Range(0, numRows).Select(x => new List<char>()).ToList();
+            int i = 0;
+            bool backward = false;
+            foreach (var c in s)
+            {
+                lists[i].Add(c);
+                if (backward)
+                {
+                    i--;
+                    if (i == 0)
+                    {
+                        backward = false;
+                    }
+                }
+                else
+                {
+                    i++;
+                    if (i == numRows - 1)
+                    {
+                        backward = true;
+                    }
+                }
+            }
+            return new string(lists.SelectMany(x => x).ToArray());
+        }
+
+        //
+        // 5 - Longest Palindromic Substring
+        //
+        public string LongestPalindrome(string s) // O(N^2)
+        {
+            if (s.Length == 1)
+            {
+                return s;
+            }
+            int longest = 1;
+            string result = null;
+            // odd
+            for (int i = 1; i < s.Length - 1; i++)
+            {
+                for (int r = 1; r <= Math.Min(i, s.Length - 1 - i); r++)
+                {
+                    int length = 2 * r + 1;
+                    if (s[i - r] == s[i + r] && length > longest)
+                    {
+                        longest = r;
+                        result = s.Substring(i - r, length);
+                    }
+                }
+            }
+            // even
+            for (int i = 0, j = 1; j < s.Length; i++, j++)
+            {
+                if (s[i] == s[j])
+                {
+                    for (int r = 0; r <= Math.Min(i, s.Length - 1 - j); r++)
+                    {
+                        int length = 2 * r + 2;
+                        if (s[i - r] == s[j + r] && length > longest)
+                        {
+                            longest = r;
+                            result = s.Substring(i - r, length);
+                        }
+                    }
+                }
+            }
+            return result;
+            //var dict = s.Distinct().ToDictionary(c => c, c => new List<int>());
+            //for (int i = 0; i < s.Length; i++)
+            //{
+            //    dict[s[i]].Add(i);
+            //}
+            //var list = dict.Values.Where(v => v.Count >= 2).ToList();
+            //foreach(var entry in list)
+            //{
+            //    var sub = s.Substring(entry.First(), entry.Last() - entry.First() + 1);
+            //    if (IsPalindrome(sub))
+            //    {
+            //        return sub;
+            //    }
+            //}
+            //return null;
+        }
+
+        //private bool IsPalindrome(string s)
+        //{
+        //    return new string(s.Reverse().ToArray()) == s;
+        //}
+
+        //
+        // 4 - Median of Two Sorted Arrays
+        //
+        //public double FindMedianSortedArrays(int[] nums1, int[] nums2)
+        //{
+
+        //}
+
+        //
         // 3 - Longest Substring without Repeating Characters
         //
         public int LengthOfLongestSubstring(string s)
