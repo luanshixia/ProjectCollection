@@ -759,27 +759,7 @@ namespace CSharpLeetCode
                 }
             }
             return result;
-            //var dict = s.Distinct().ToDictionary(c => c, c => new List<int>());
-            //for (int i = 0; i < s.Length; i++)
-            //{
-            //    dict[s[i]].Add(i);
-            //}
-            //var list = dict.Values.Where(v => v.Count >= 2).ToList();
-            //foreach(var entry in list)
-            //{
-            //    var sub = s.Substring(entry.First(), entry.Last() - entry.First() + 1);
-            //    if (IsPalindrome(sub))
-            //    {
-            //        return sub;
-            //    }
-            //}
-            //return null;
         }
-
-        //private bool IsPalindrome(string s)
-        //{
-        //    return new string(s.Reverse().ToArray()) == s;
-        //}
 
         //
         // 4 - Median of Two Sorted Arrays
