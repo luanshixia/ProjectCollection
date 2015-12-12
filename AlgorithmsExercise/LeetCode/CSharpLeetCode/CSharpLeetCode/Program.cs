@@ -764,10 +764,56 @@ namespace CSharpLeetCode
         //
         // 4 - Median of Two Sorted Arrays
         //
-        //public double FindMedianSortedArrays(int[] nums1, int[] nums2)
-        //{
 
-        //}
+        // Solutions 1 - http://www.programcreek.com/2012/12/leetcode-median-of-two-sorted-arrays-java/
+        public double FindMedianSortedArrays(int[] nums1, int[] nums2)
+        {
+            int m = nums1.Length;
+            int n = nums2.Length;
+
+            if ((m + n) % 2 != 0) // odd
+                return FindKth(nums1, nums2, (m + n) / 2, 0, m - 1, 0, n - 1);
+            else { // even
+                return (FindKth(nums1, nums2, (m + n) / 2, 0, m - 1, 0, n - 1)
+                    + FindKth(nums1, nums2, (m + n) / 2 - 1, 0, m - 1, 0, n - 1)) * 0.5;
+            }
+        }
+
+        public static int FindKth(int[] A, int[] B, int k, int aStart, int aEnd, int bStart, int bEnd)
+        {
+            int aLen = aEnd - aStart + 1;
+            int bLen = bEnd - bStart + 1;
+
+            // Handle special cases
+            if (aLen == 0)
+                return B[bStart + k];
+            if (bLen == 0)
+                return A[aStart + k];
+            if (k == 0)
+                return A[aStart] < B[bStart] ? A[aStart] : B[bStart];
+
+            int aMid = aLen * k / (aLen + bLen); // a's middle count
+            int bMid = k - aMid - 1; // b's middle count
+
+            // make aMid and bMid to be array index
+            aMid = aMid + aStart;
+            bMid = bMid + bStart;
+
+            if (A[aMid] > B[bMid])
+            {
+                k = k - (bMid - bStart + 1);
+                aEnd = aMid;
+                bStart = bMid + 1;
+            }
+            else
+            {
+                k = k - (aMid - aStart + 1);
+                bEnd = bMid;
+                aStart = aMid + 1;
+            }
+
+            return FindKth(A, B, k, aStart, aEnd, bStart, bEnd);
+        }
 
         //
         // 3 - Longest Substring without Repeating Characters
