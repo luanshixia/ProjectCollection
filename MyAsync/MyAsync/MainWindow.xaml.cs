@@ -61,5 +61,21 @@ namespace MyAsync
             }
             Label1.Content = "done.";
         }
+
+        private async Task<string> GetUrlContents(string url)
+        {
+            using (var client = new System.Net.WebClient())
+            {
+                return await client.DownloadStringTaskAsync(url);
+            }
+        }
+        
+        // Shows how to use WhenAll()
+        private async void ButtonLoopAwaitAll_Click(object sender, RoutedEventArgs e)
+        {
+            var wc = new System.Net.WebClient();
+            string[] urls = { "www.baidu.com", "www.qq.com" };
+            var results = await Task.WhenAll(urls.Select(url => GetUrlContents(url)));
+        }
     }
 }
