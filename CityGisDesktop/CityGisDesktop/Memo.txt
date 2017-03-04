@@ -1,0 +1,58 @@
+﻿
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Hi there! Here's a place for us to write down important things. I would give instructions here. You may
+ also ask questions through this.
+
+Keep in mind to check this every day.
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+[2014-6-5][wy]
+1. Mind your code style. Check the TODO list for my advice on CO2ProcessClass.cs.
+
+[2014-6-7][wy]
+1. Check the TODO list for my advice.
+
+[2014-6-16][wy]
+1. There is a huge terminology confusion. "Comsumption" means 吸收, while the term for 排放 is "production". When it comes about building running and maintenance, it is production rather than comsumption that we consider.
+2. Once again we emphasize: none-ascii identifier is not acceptable. Please fix the enum member naming problem.
+
+[2014-6-26][wy]
+1. 混合用地：设置SecondaryType和SecondaryTypeProportion。分别表示次要用地类型及其比例。
+2. 属性表的实现思路：
+a. 由于shp属性名必须是10个以内Ascii字符，所以需要一个中英文属性名映射。
+b. 属性值要设置到现有的ComputationUnit的属性值上，理论上也需要一个映射。
+c. 根据配置生成的属性用字典存储，可以给ComputationUnit添加一个字典字段来保存所有的属性。
+d. 理论上通过配置文件添加的属性是不可能不经修改代码用于计算的，也不推荐在代码中访问这些属性。所以这些属性应当只用于临时增加看看样子。
+e. UserProperty相关代码在CityFoundation中。
+f. 用PropertyDescriptor把字典值描述成属性。
+
+[2014-7-1]
+1. 属性多选 - 高
+2. 高低层判断 - 中
+3. 结果可视化 - 高
+4. 底图调整 - 低
+5. 类型切换 - 中
+
+[2014-7-7]
+1. 图例 - 高
+2. 高低层判断第2种 - 高
+3. 结果导出 - 高
+4. 底图调整 - 低
+5. 类型切换界面 - 中
+6. 用地性质和建筑功能着色 - 中
+7. 程序标题 - 低
+
+[2014-11-7]
+Todolist
+1. UI
+2. New geolib replacement
+3. Shapefile read
+4. Add gengwan demo
+5. Move features from demo to main
+6. Repair features broken by Niaogebi
+7. HitTest refactor
+8. Selection redesign
+9. Introduce cij and cib file format

@@ -1,0 +1,30 @@
+﻿<UserControl x:Class="Dreambuild.Gis.Desktop.Demos.LowCarbon.DemoPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="260" d:DesignWidth="260">
+    <StackPanel Margin="8">
+        <StackPanel.Resources>
+            <Style TargetType="Button">
+                <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                <Setter Property="Padding" Value="30,1,0,1"/>
+            </Style>
+        </StackPanel.Resources>
+        <StackPanel Orientation="Vertical" Margin="5">
+            <TextBlock Text="{DynamicResource CarbonDioxideEmissionsCaculation}" />
+            <StackPanel Orientation="Horizontal" Margin="130,5,0,5">
+                <RadioButton Name="RB_Land" Content="{DynamicResource Land}" IsChecked="True" Checked="CaculateType_Set"/>
+                <RadioButton Name="RB_Architecture" Content="{DynamicResource Architecture}" Checked="CaculateType_Set"/>
+            </StackPanel>
+        </StackPanel>
+        <Button Content="{DynamicResource OpenFile}" Margin="0,0,0,5" Click="Button_Open"/>
+        <Button Content="{DynamicResource GeneralParameters}" Margin="0,0,0,5" Click="Button_BaseParams"/>
+        <Button Content="{DynamicResource BuildingParameters}" Margin="0,0,0,5" Click="Button_BuildingParams"/>
+        <Button Content="{DynamicResource TransportParameters}" Margin="0,0,0,5" Click="Button_TripParams"/>
+        <Button Content="{DynamicResource GreenSpaceParameters}" Margin="0,0,0,5" Click="Button_GreenParams"/>
+        <Button Content="{DynamicResource ConsolidateCalculation}" Margin="0,0,0,5" Click="Button_Result"/>
+        <Button Content="{DynamicResource ResultVisualization}" Margin="0,0,0,5" Click="Button_Visualization"/>
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+
+<html ng-app="app">
+<head>
+    <meta charset="utf-8" />
+    <title>CityGIS Data Visualization Legend</title>
+    <link type="text/css" href="css/bootstrap.css" rel="stylesheet" />
+    <style>
+        .color-block {
+            display: inline-block;
+            border: 1px solid silver;
+            width: 100px;
+            height: 20px;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" ng-controller="Legend">
+        <div class="panel panel-default">
+            <div class="panel-heading">{{title}}</div>
+            <ul class="list-group">
+                <li class="list-group-item" ng-repeat="item in items">
+                    <span>{{item.text}}</span>
+                    <span class="color-block pull-right" style="background-color: {{item.color}};"></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/angular.js"></script>
+    <script type="text/javascript">
+        var app = angular.module("app", []);
+        app.controller("Legend", function ($scope, $http) {
+            $http.get("data/legend.json").success(function (data) {
+                $scope.title = data.title;
+            	$scope.items = data.items;
+            });
+        });
+    </script>
+</body>
+</html>

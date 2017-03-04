@@ -1,0 +1,108 @@
+﻿<Window x:Class="Dreambuild.Gis.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:Dreambuild.Gis.Desktop"
+        xmlns:props="clr-namespace:Dreambuild.Gis.Desktop.Properties"
+        xmlns:citygis="clr-namespace:Dreambuild.Gis.Display;assembly=Dreambuild.Gis.Display" 
+        Title="CityGIS Desktop" Height="720" Width="1200" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing" KeyUp="Window_KeyUp" KeyDown="Window_KeyDown">
+
+    <DockPanel x:Name="LayoutRoot" Background="White">
+        <DockPanel Name="Sidebar" DockPanel.Dock="Left" Width="280">
+            <Border Background="Orange" DockPanel.Dock="Top">
+                <TextBlock Name="AppTitle" Text="CityGIS Desktop" Margin="10" FontSize="20" FontFamily="Georgia" TextAlignment="Center" />
+            </Border>
+            <Menu Name="TheMenu" Margin="5" Background="White" DockPanel.Dock="Top">
+                <MenuItem Header="{DynamicResource File}">
+                    <MenuItem Header="{DynamicResource New}" Click="MenuItem_New" />
+                    <MenuItem Header="{DynamicResource Open}" Click="MenuItem_Open" />
+                    <MenuItem Header="{DynamicResource Save}" Click="MenuItem_Save" />
+                    <MenuItem Header="{DynamicResource SaveAs}" Click="MenuItem_SaveAs" />
+                    <Separator />
+                    <MenuItem Header="{DynamicResource Import}">
+                        <MenuItem Header="Autodesk DXF..." Click="MenuItem_Import" />
+                        <MenuItem Header="ESRI Shapefile..." Click="MenuItem_Import" />
+                        <MenuItem Header="Bitmap Reference..." Click="MenuItem_Import" />
+                    </MenuItem>
+                    <MenuItem Header="{DynamicResource Export}">
+                        <MenuItem Header="Autodesk DXF..." Click="MenuItem_Export" />
+                        <MenuItem Header="ESRI Shapefile..." Click="MenuItem_Export" />
+                        <MenuItem Header="Image..." Click="MenuItem_Export" />
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="{DynamicResource Quit}" Click="MenuItem_Exit" />
+                </MenuItem>
+                <MenuItem Name="ToolsMenu" Header="{DynamicResource Tool}">
+
+                </MenuItem>
+                <MenuItem Header="{DynamicResource Help}">
+                    <MenuItem Header="{DynamicResource Topic}" Click="MenuItem_Topic"/>
+                    <MenuItem Header="{DynamicResource About}" Click="MenuItem_About" />
+                </MenuItem>
+                <MenuItem Header="{DynamicResource language}" Click="MenuItem_SwitchLanguage" >
+                </MenuItem>
+            </Menu>
+            <ScrollViewer VerticalScrollBarVisibility="Auto" BorderThickness="0">
+                <StackPanel Name="PanelStack">
+                    <Expander x:Name="LayerPanel" Header="{DynamicResource LayerPanel}" HeaderStringFormat="LayerPanel" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True" />
+                    <Expander x:Name="PropertyPanel" Header="{DynamicResource PropertyPanel}" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True" />
+                    <Expander x:Name="FeaturePanel" Header="{DynamicResource FeaturePanel}" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True" />
+                    <Expander x:Name="SearchPanel" Header="{DynamicResource SearchPanel}" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True" />
+                    <Expander x:Name="DebugPanel" Header="{DynamicResource DebugPanel}" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True">
+                        <TextBlock x:Name="FeatureCount" Text="0" />
+                    </Expander>
+                    <Expander x:Name="PythonPanel" Header="IronPython Console" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True">
+                        <local:PythonConsole Height="200" Margin="5" />
+                    </Expander>
+                </StackPanel>
+
+            </ScrollViewer>
+        </DockPanel>
+        <Grid>
+            <Grid.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="White" />
+                    <Setter Property="Padding" Value="20,3" />
+                    <Setter Property="Margin" Value="2" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate>
+                                <StackPanel Name="stack" Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" >
+                                    <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" />
+                                </StackPanel>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Grid.Resources>
+
+            <Border BorderThickness="1" BorderBrush="DarkGray">
+                <citygis:MapControl x:Name="MyCanvas" SizeChanged="MyCanvas_SizeChanged" Background="#E6E6E6" >
+                </citygis:MapControl>
+            </Border>
+            <Border VerticalAlignment="Top" Margin="10,10,10,0" Padding="1">
+  
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                        <GradientStop  Color="#80808080" Offset="0" />
+                        <GradientStop Color="#80000000" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+                <StackPanel Name="Toolbar" Orientation="Horizontal">
+                    <Button Name="btnPan" Content="{DynamicResource Pan}" Click="btnPan_Click" />
+                    <Button Name="btnZoom" Content="{DynamicResource Zoom}" Click="btnZoom_Click" />
+                    <Button Name="btnZoomE" Content="{DynamicResource ZoomE}" Click="btnZoomE_Click" />
+                    <Button Name="btnSelect" Content="{DynamicResource Select}" Click="btnSelect_Click" />
+                    <Button Name="btnSelectRect" Content="{DynamicResource SelectRect}" Click="btnSelectRect_Click" />
+                    <Button Name="btnMeasure" Content="{DynamicResource Measure}" Click="btnMeasure_Click" />
+                    <Button Name="btnMeasureArea" Content="{DynamicResource MeasureArea}" Click="btnAreaMeasure_Click" />
+                </StackPanel>
+            </Border>
+            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,20" Background="#80000000">
+                <TextBlock Padding="20,5" Name="Message" Text="CityGIS" Foreground="White" />
+            </Border>
+            <citygis:ScaleRuler x:Name="SRuler" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,20" Width="200" Height="25"/>
+
+        </Grid>
+    </DockPanel>
+</Window>

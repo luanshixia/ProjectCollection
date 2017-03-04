@@ -1,0 +1,51 @@
+﻿<Window x:Class="Dreambuild.Gis.Desktop.Demos.LowCarbon.GUIs.EnergySavingEditorWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      mc:Ignorable="d"
+	Title="{DynamicResource CU:EnergyParameters}" Height="263.446" Width="400.076">
+ 
+    <Grid Margin="0,0,16,0">
+        <TreeView Margin="10,12,10,86">
+            <TreeViewItem Header="{DynamicResource EnergySaveCriterion}" IsExpanded="True">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Name="SavingRatioType" GroupName="SaveStandardGroup" Content="{DynamicResource EnergySaveRatio}" Width="220" HorizontalAlignment="Left" VerticalAlignment="Center" IsChecked="True" Checked="RadioButton_Checked"/>
+                            <TextBox Name="SavingRatioTextBox" Width="70" Text="0" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" TextChanged="TextBox_TextChanged"  />
+                            <Label Content="%" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Name="LeedStandardType" GroupName="SaveStandardGroup" Content="{DynamicResource AmericanLEEDCertification}" Width="220" HorizontalAlignment="Left" VerticalAlignment="Center" Checked="RadioButton_Checked"/>
+                            <ComboBox Name="LEEDComboBox" HorizontalAlignment="Left" Width="70" VerticalAlignment="Center" SelectionChanged="LEEDComboBox_SelectionChanged">
+                                <ComboBoxItem Content="{DynamicResource Certified}" IsSelected="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <ComboBoxItem Content="{DynamicResource Silver}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <ComboBoxItem Content="{DynamicResource Gold}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <ComboBoxItem Content="{DynamicResource Platinum}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <RadioButton Name="ChineseGreenBuildingStandardType" GroupName="SaveStandardGroup" Content="{DynamicResource ChineseGreenBuildingStandard}" Width="220" HorizontalAlignment="Left" VerticalAlignment="Center" Checked="RadioButton_Checked"/>
+                            <ComboBox Name="ChineseGreenBuildingStandar_ComboBox" HorizontalAlignment="Left" Width="70" SelectionChanged="ChineseGreenBuildingStandar_ComboBox_SelectionChanged" >
+                                <ComboBoxItem Content="{DynamicResource OneStar}" IsSelected="True" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <ComboBoxItem Content="{DynamicResource TwoStars}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <ComboBoxItem Content="{DynamicResource ThreeStars}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </ComboBox>
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+            </TreeViewItem>
+        </TreeView>
+        <Button Content="OK" Margin="57,168,202,32" Click="ButtonOk_Click"/>
+        <Button Content="Cancel" Margin="203,168,53,32" Click="ButtonCancel_Click"/>
+    </Grid>
+</Window>

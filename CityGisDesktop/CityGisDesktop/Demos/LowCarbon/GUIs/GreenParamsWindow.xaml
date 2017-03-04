@@ -1,0 +1,97 @@
+﻿<Window x:Class="Dreambuild.Gis.Desktop.Demos.LowCarbon.GreenParamsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="绿地参数" Height="500" Width="800" WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+
+    <Grid Margin="0,90,0,0" Name="GreenParamsGrid">
+        <TreeView Margin="150,0,150,130">
+            <TreeViewItem Header="{DynamicResource CO2MitigationofDifferentGreenSpaceTypesPerUnit}" IsExpanded="True">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{DynamicResource Park}" Width="120" HorizontalAlignment="Left" />
+                            <TextBox Width="70" Text="{Binding ParkUnit, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            <Label Content="kg/(㎡·a)" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{DynamicResource Shrub}" Width="120" HorizontalAlignment="Left" />
+                            <TextBox Width="70" Text="{Binding BushesUnit, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            <Label Content="kg/(㎡·a)" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{DynamicResource Farm}" Width="120" HorizontalAlignment="Left" />
+                            <TextBox Width="70" Text="{Binding FarmUnit, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            <Label Content="kg/(㎡·a)" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="{DynamicResource Forest}" Width="120" HorizontalAlignment="Left" />
+                            <TextBox Name="CO2FactorTextBox" Width="70" Text="{Binding ForestUnit,Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <Label Content="kg/(㎡·a)" Width="100" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+            </TreeViewItem>
+
+            <!--<TreeViewItem Header="TO BE DELETED " IsExpanded="True">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="公园:" Width="120" HorizontalAlignment="Left" />
+                            <TextBox Width="70" Text="{Binding ParkArea, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            <Label Content="公顷" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="灌木林:" Width="120" HorizontalAlignment="Left" />
+                            <TextBox Width="70" Text="{Binding BushesArea, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            <Label Content="公顷" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="农田" Width="120" HorizontalAlignment="Left" />
+                            <TextBox Width="70" Text="{Binding FarmArea, Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Right" />
+                            <Label Content="公顷" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="森林" Width="120" HorizontalAlignment="Left" />
+                            <TextBox Width="70" Text="{Binding ForestArea,Mode=TwoWay}" TextAlignment="Center" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                            <Label Content="公顷" Width="100" HorizontalAlignment="Right" />
+                        </StackPanel>
+                    </TreeViewItem.Header>
+                </TreeViewItem>
+            </TreeViewItem>-->
+
+        </TreeView>
+
+        <Button Content="{DynamicResource Confirm}" HorizontalAlignment="Left" Margin="442,265,0,0" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.744,0.767" Click="OK_Button_Click"/>
+        <Button Content="{DynamicResource Cancel}" HorizontalAlignment="Left" Margin="567,265,0,0" VerticalAlignment="Top" Width="75" Click="Cancel_Button_Click"/>
+    </Grid>
+</Window>
