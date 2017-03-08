@@ -41,5 +41,15 @@ namespace Dreambuild.Common.Utils
 
             return sb.ToString();
         }
+
+        public static string GetBase64(long value)
+        {
+            return Convert.ToBase64String(BitConverter.GetBytes(value));
+        }
+
+        internal static string[] ShowBinaryRepresentation(byte[] bytes)
+        {
+            return bytes.Select(b => Convert.ToString(b, 2).PadLeft(8, '0')).ToArray();
+        }
     }
 }
