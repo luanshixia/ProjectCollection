@@ -20,13 +20,13 @@ namespace Roger.Testing
         public static void Main()
         {            
             List<bool> map = new List<bool>
-			{
-				true, true, true, false, false,
-				false, true, false, true,false,
-				false, false, false, true,false,
-				false,true,false, false, false,
-				false, false, false, true, false
-			};
+            {
+                true, true, true, false, false,
+                false, true, false, true,false,
+                false, false, false, true,false,
+                false,true,false, false, false,
+                false, false, false, true, false
+            };
             int width = 5;
             int start = 10;
             int end = 24;
