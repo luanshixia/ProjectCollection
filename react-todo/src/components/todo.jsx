@@ -64,7 +64,7 @@ class Todo extends React.Component {
     return (
       <div id="todo-area">
         <div className="panel input-group">
-          <input className="form-control" type="text" value={input} onChange={handleChange} />
+          <input className="form-control" type="text" value={input} onChange={handleChange} onKeyPress={event => event.key === 'Enter' && addTodo()} />
           <span className="input-group-btn">
             <a className="btn btn-default" onClick={addTodo}>Add</a>
           </span>
