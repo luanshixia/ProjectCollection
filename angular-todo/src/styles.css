@@ -1,1 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
+
+.starter-template {
+  padding: 40px 15px;
+  text-align: center;
+}
+
+.container {
+  max-width: 800px;
+}
+
+#todo-area {
+  text-align: left;
+}
+
+.badge-important {
+  background-color: orange;
+}
+
+.text-crossline{
+  text-decoration: line-through;
+}

@@ -1,0 +1,14 @@
+<div class="panel {{panelClass}}">
+  <div class="panel-heading">
+    <span>{{title}}<span class="badge badge-important pull-right">{{items.length}}</span></span>
+  </div>
+  <ul class="list-group">
+    <li *ngFor="let item of items" class="list-group-item">
+      <label class="{{labelClass}}">
+        <input type="checkbox" (click)="onClick(item)" />
+        {{item.title}}
+      </label>
+      <span class="text-muted pull-right">{{item.createTime.toString()}}</span>
+    </li>
+  </ul>
+</div>

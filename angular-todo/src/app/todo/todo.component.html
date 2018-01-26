@@ -1,0 +1,10 @@
+<div id="todo-area">
+  <div class="panel input-group">
+    <input class="form-control" type="text" [(ngModel)]="input" (keyup.enter)="addTodo()" />
+    <span class="input-group-btn">
+      <a class="btn btn-default" (click)="addTodo()">Add</a>
+    </span>
+  </div>
+  <app-listview title="Todo List" [items]="todolist" panelClass="panel-primary" (itemClick)="getDone($event)"></app-listview>
+  <app-listview title="Done List" [items]="donelist" panelClass="panel-success" labelClass="text-crossline" (itemClick)="discard($event)"></app-listview>
+</div>
