@@ -9,11 +9,29 @@
     "sourceMap": true,
     "skipDefaultLibCheck": true,
     "strict": true,
-    "lib": ["es6", "dom"],
-    "types": ["webpack-env"]
+    "outDir": "build/dist",
+    "allowJs": true,
+    "rootDir": "src",
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "lib": [
+      "es6",
+      "dom"
+    ],
+    "types": [
+      "webpack-env"
+    ]
   },
   "exclude": [
-      "bin",
-      "node_modules"
+    "bin",
+    "node_modules",
+    "build",
+    "scripts",
+    "acceptance-tests",
+    "webpack",
+    "jest",
+    "src/setupTests.ts"
   ]
 }
