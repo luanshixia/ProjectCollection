@@ -29,6 +29,7 @@
     "react-redux": "5.0.5",
     "react-router-dom": "4.1.1",
     "react-router-redux": "5.0.0-alpha.6",
+    "react-scripts-ts": "2.13.0",
     "redux": "3.7.1",
     "redux-thunk": "2.2.0",
     "style-loader": "0.18.2",

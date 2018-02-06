@@ -3,14 +3,15 @@ import { RouteComponentProps } from 'react-router-dom';
 
 export default class Home extends React.Component<RouteComponentProps<{}>, {}> {
   public render() {
-    return <div>
+    return (
+    <div>
       <h1>Hello, world!</h1>
       <p>Welcome to your new single-page application, built with:</p>
       <ul>
-        <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-        <li><a href='https://facebook.github.io/react/'>React</a>, <a href='http://redux.js.org'>Redux</a>, and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
-        <li><a href='https://webpack.github.io/'>Webpack</a> for building and bundling client-side resources</li>
-        <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
+        <li><a href="https://get.asp.net/">ASP.NET Core</a> and <a href="https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx">C#</a> for cross-platform server-side code</li>
+        <li><a href="https://facebook.github.io/react/">React</a>, <a href="http://redux.js.org">Redux</a>, and <a href="http://www.typescriptlang.org/">TypeScript</a> for client-side code</li>
+        <li><a href="https://webpack.github.io/">Webpack</a> for building and bundling client-side resources</li>
+        <li><a href="http://getbootstrap.com/">Bootstrap</a> for layout and styling</li>
       </ul>
       <p>To help you get started, we've also set up:</p>
       <ul>
@@ -20,6 +21,7 @@ export default class Home extends React.Component<RouteComponentProps<{}>, {}> {
         <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and the <code>webpack</code> build tool produces minified static CSS and JavaScript files.</li>
         <li><strong>Server-side prerendering</strong>. To optimize startup time, your React application is first rendered on the server. The initial HTML and state is then transferred to the browser, where client-side code picks up where the server left off.</li>
       </ul>
-    </div>;
+    </div>
+    );
   }
 }
