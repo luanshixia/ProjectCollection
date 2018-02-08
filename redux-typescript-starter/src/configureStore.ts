@@ -13,7 +13,7 @@ export default function configureStore(history: History, initialState?: Applicat
   const createStoreWithMiddleware = compose(
     applyMiddleware(thunk, routerMiddleware(history)),
     devToolsExtension ? devToolsExtension() : <S>(next: StoreEnhancerStoreCreator<S>) => next
-  )(createStore);
+  )(createStore) as any;
 
   // Combine all reducers and instantiate the app-wide store instance
   const allReducers = buildRootReducer(reducers);
