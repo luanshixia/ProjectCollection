@@ -71,7 +71,7 @@ namespace WarmPlanGenerator
             }
 
             var output = GetOutput(inputLines);
-            output.Save(Console.Out);
+            output.Save($"{inputFileName}.xml"); // .Save(Console.Out) will change 'encoding' to 'IBM437'
         }
 
         static T TryCatch<T>(Func<T> tryFunc, Func<Exception, T> catchFunc)
@@ -93,7 +93,7 @@ namespace WarmPlanGenerator
               <ReleaseType>[releasetype]</ReleaseType>
               <JobType>Deploy Only</JobType>
               <DeploymentType>Component</DeploymentType>
-              <Notes>WARMsubmit of [product]</Notes>
+              <Notes>ARM WARM submit of [product]</Notes>
               <Build>
                 <Branch>[branch]</Branch>
                 <BuildNumber>[buildnumber]</BuildNumber>
