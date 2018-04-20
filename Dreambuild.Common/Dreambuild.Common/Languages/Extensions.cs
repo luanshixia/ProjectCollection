@@ -267,6 +267,22 @@ namespace System.Linq
                 .GroupBy(element => element, equalityComparer)
                 .ToDictionary(group => group.Key, group => group.Count());
         }
+
+        /// <summary>
+        /// Breaks the source collection into chunks. - newly 20180420
+        /// </summary>
+        /// <typeparam name="T">The type of elements.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="chunkSize">The chunk size.</param>
+        /// <returns>A collection of chunks.</returns>
+        public static IEnumerable<T[]> Chunk<T>(this IEnumerable<T> source, int chunkSize)
+        {
+            for (var offset = 0; offset < source.Count(); offset += chunkSize)
+            {
+                var size = Math.Min(chunkSize, source.Count() - offset);
+                yield return source.Slice(offset, size).ToArray();
+            }
+        }
     }
 
     /// <summary>

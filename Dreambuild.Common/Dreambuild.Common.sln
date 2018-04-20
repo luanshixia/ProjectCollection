@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreambuild.Common", "Dreambuild.Common\Dreambuild.Common.csproj", "{ECF25C78-700A-4164-AA2A-8E408DA5C7E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dreambuild.Common.Test", "Dreambuild.Common.Test\Dreambuild.Common.Test.csproj", "{D0ABD53C-637A-43C5-AA1C-F770DDFEAB67}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{ECF25C78-700A-4164-AA2A-8E408DA5C7E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ECF25C78-700A-4164-AA2A-8E408DA5C7E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ECF25C78-700A-4164-AA2A-8E408DA5C7E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0ABD53C-637A-43C5-AA1C-F770DDFEAB67}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0ABD53C-637A-43C5-AA1C-F770DDFEAB67}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0ABD53C-637A-43C5-AA1C-F770DDFEAB67}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0ABD53C-637A-43C5-AA1C-F770DDFEAB67}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
