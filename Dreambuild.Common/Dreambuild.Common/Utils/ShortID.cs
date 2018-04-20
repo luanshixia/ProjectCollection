@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Text;
 
-namespace Dreambuild.Common.Utils
+namespace Dreambuild.Utils
 {
     /// <summary>
     /// Short ID generator. 
