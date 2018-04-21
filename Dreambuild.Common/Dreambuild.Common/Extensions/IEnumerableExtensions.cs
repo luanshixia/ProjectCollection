@@ -56,22 +56,17 @@ namespace Dreambuild.Extensions
             return Seq.fetch(indices, source);
         }
 
-        public static IEnumerable<double> ListTo(this double start, double end, double step)
+        public static IEnumerable<int> SeqTo(this int start, int end, int step = 1)
         {
             return Seq.range(start, end, step);
         }
 
-        public static IEnumerable<int> ListTo(this int start, int end, int step)
+        public static IEnumerable<T> Every<T>(this IEnumerable<T> source, int step = 1, int start = 0)
         {
-            return Seq.range(start, end, step);
+            return Seq.fetch(SeqTo(start, source.Count() - 1, step), source);
         }
 
-        public static IEnumerable<T> Every<T>(this IEnumerable<T> source, int step, int start = 0)
-        {
-            return ListTo(start, source.Count() - 1, step).Select(i => source.ElementAt(i));
-        }
-
-        public static IEnumerable<T> Initialize<T>(this int n, Func<int, T> initializer)
+        public static IEnumerable<T> Generate<T>(this int n, Func<int, T> initializer)
         {
             return Seq.init(n, initializer);
         }
@@ -101,7 +96,7 @@ namespace Dreambuild.Extensions
             return Seq.cross(ts, us, selector);
         }
 
-        public static bool IsSame<T, U>(this IEnumerable<T> source, Func<T, U> selector)
+        public static bool AreElementsEqual<T, U>(this IEnumerable<T> source, Func<T, U> selector)
         {
             return source.Select(selector).Distinct().Count() == 1;
         }

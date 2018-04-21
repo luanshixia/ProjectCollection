@@ -1,5 +1,7 @@
 using Dreambuild.Extensions;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Xunit;
@@ -35,6 +37,29 @@ namespace Dreambuild.Common.Test
 
             Assert.Single(collection: chunks);
             Assert.Equal(expected: originalText, actual: new string(chunks.First()));
+        }
+
+        [Fact]
+        public void ElementsAt_Optimized()
+        {
+            var n = 99999;
+            var source = 0.SeqTo(n);
+            var indices = 0.SeqTo(n / 2);
+
+            var sw = Stopwatch.StartNew();
+            var result = source.ElementsAt(indices).ToArray();
+            var elapsed = sw.ElapsedMilliseconds;
+            Assert.True(sw.ElapsedMilliseconds < 100);
+
+            sw = Stopwatch.StartNew();
+            result = fetch_Slow(indices, source).ToArray();
+            elapsed = sw.ElapsedMilliseconds;
+            Assert.True(sw.ElapsedMilliseconds > 10000);
+        }
+
+        private static IEnumerable<T> fetch_Slow<T>(IEnumerable<int> indices, IEnumerable<T> source)
+        {
+            return indices.Select(i => source.ElementAt(i));
         }
     }
 }

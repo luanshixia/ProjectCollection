@@ -215,10 +215,11 @@ namespace Dreambuild.Functional
 
         public static IEnumerable<T> fetch<T>(IEnumerable<int> indices, IEnumerable<T> source)
         {
-            return indices.Select(i => source.ElementAt(i));
+            var indexSet = indices.ToHashSet();
+            return source.Where((x, i) => indexSet.Contains(i));
         }
 
-        public static IEnumerable<double> range(double start, double end, double step = 1)
+        public static IEnumerable<double> range(double start, double end, double step)
         {
             for (double x = start; x <= end; x += step)
             {
@@ -226,7 +227,7 @@ namespace Dreambuild.Functional
             }
         }
 
-        public static IEnumerable<int> range(int start, int end, int step = 1)
+        public static IEnumerable<int> range(int start, int end, int step)
         {
             for (int x = start; x <= end; x += step)
             {
