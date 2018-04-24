@@ -43,12 +43,7 @@ namespace Dreambuild.Extensions
 
         public static IEnumerable<T> StepSlice<T>(this IEnumerable<T> source, int start, int end, int step) // mod 20140422
         {
-            var indices = new List<int>();
-            for (int i = start; i <= end; i += step)
-            {
-                indices.Add(i);
-            }
-            return source.ElementsAt(indices);
+            return source.ElementsAt(start.SeqTo(end, step));
         }
 
         public static IEnumerable<T> ElementsAt<T>(this IEnumerable<T> source, IEnumerable<int> indices)
@@ -159,11 +154,13 @@ namespace Dreambuild.Extensions
             }
         }
 
-        public static List<T> Cons<T>(this T head, List<T> tail)
+        public static IEnumerable<T> Cons<T>(this T head, IEnumerable<T> tail)
         {
-            var list = new List<T> { head };
-            list.AddRange(tail);
-            return list;
+            yield return head;
+            foreach(var element in tail)
+            {
+                yield return element;
+            }
         }
 
         /// <summary>

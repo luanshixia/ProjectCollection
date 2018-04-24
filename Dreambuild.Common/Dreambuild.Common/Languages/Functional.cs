@@ -165,7 +165,7 @@ namespace Dreambuild.Functional
 
         public static int findIndex<T>(Func<T, bool> predicate, IEnumerable<T> source)
         {
-            return source.ToList().IndexOf(source.First(predicate));
+            return source.ToList().IndexOf(source.First(predicate)); // TODO: optimize
         }
 
         public static bool forall<T>(Func<T, bool> predicate, IEnumerable<T> source)

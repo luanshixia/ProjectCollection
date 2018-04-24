@@ -48,7 +48,7 @@ namespace Dreambuild.Common.Test
 
             await Task
                 .Run(() => source.ElementsAt(indices).ToArray())
-                .MustFinishWithin(TimeSpan.FromMilliseconds(1000));
+                .MustFinishWithin(TimeSpan.FromMilliseconds(100));
 
             await Task
                 .Run(() => fetch_Slow(indices, source).ToArray())
