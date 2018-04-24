@@ -219,14 +219,6 @@ namespace Dreambuild.Functional
             return source.Where((x, i) => indexSet.Contains(i));
         }
 
-        public static IEnumerable<double> range(double start, double end, double step)
-        {
-            for (double x = start; x <= end; x += step)
-            {
-                yield return x;
-            }
-        }
-
         public static IEnumerable<int> range(int start, int end, int step)
         {
             for (int x = start; x <= end; x += step)

@@ -66,6 +66,29 @@ namespace Dreambuild.Extensions
             return Seq.init(n, initializer);
         }
 
+        public static IEnumerable<T> Recurrent<T>(this int n, Func<T, T> recurrence, T element0)
+        {
+            var temp = element0;
+            for (var i = 0; i < n; i++)
+            {
+                yield return temp;
+                temp = recurrence(temp);
+            }
+        }
+
+        public static IEnumerable<T> Recurrent<T>(this int n, Func<T, T, T> recurrence, T element0, T element1)
+        {
+            var temp1 = element0;
+            var temp2 = element1;
+            for (var i = 0; i < n; i++)
+            {
+                yield return temp1;
+                var temp11 = temp1;
+                temp1 = temp2;
+                temp2 = recurrence(temp11, temp2);
+            }
+        }
+
         public static U Fold<T, U>(this IEnumerable<T> source, Func<U, T, U> folder, U state)
         {
             return Seq.fold(folder, state, source);
@@ -154,6 +177,13 @@ namespace Dreambuild.Extensions
             }
         }
 
+        /// <summary>
+        /// Prepends element to sequence.
+        /// </summary>
+        /// <typeparam name="T">The element type.</typeparam>
+        /// <param name="head">The head.</param>
+        /// <param name="tail">The tail.</param>
+        /// <returns>The result sequence.</returns>
         public static IEnumerable<T> Cons<T>(this T head, IEnumerable<T> tail)
         {
             yield return head;
@@ -224,6 +254,139 @@ namespace Dreambuild.Extensions
         public static IEnumerable<T> Safe<T>(this IEnumerable<T> source)
         {
             return source ?? Enumerable.Empty<T>();
+        }
+
+        /// <summary>
+        /// Determines if source collection is null or empty.
+        /// </summary>
+        /// <typeparam name="T">The element type of the source collection.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <returns>The result.</returns>
+        public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
+        {
+            return source == null || source.Count() == 0;
+        }
+
+        /// <summary>
+        /// Versatile minimum.
+        /// </summary>
+        /// <typeparam name="TSource">The element type of the source collection.</typeparam>
+        /// <typeparam name="TCompare">The type of value to compare on.</typeparam>
+        /// <typeparam name="TResult">The type of result.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="selector">The comparing value selector.</param>
+        /// <param name="resultSelector">The result selector.</param>
+        /// <param name="comparison">The comparison.</param>
+        /// <returns>The result.</returns>
+        public static TResult Min<TSource, TCompare, TResult>(this IEnumerable<TSource> source, Func<TSource, TCompare> selector, Func<TSource, int, TResult> resultSelector, Comparison<TCompare> comparison = null)
+        {
+            if (source.IsNullOrEmpty())
+            {
+                throw new ArgumentException("Empty source.");
+            }
+
+            if (comparison == null)
+            {
+                comparison = Comparer<TCompare>.Default.Compare;
+            }
+
+            var minElement = default(TSource);
+            var minValue = default(TCompare);
+            var minIndex = default(Int32);
+
+            source.ForEach((element, index) =>
+            {
+                if (index == 0)
+                {
+                    minElement = element;
+                    minValue = selector(minElement);
+                    minIndex = 0;
+                }
+                else
+                {
+                    var value = selector(element);
+                    if (comparison(value, minValue) < 0)
+                    {
+                        minElement = element;
+                        minValue = value;
+                        minIndex = index;
+                    }
+                }
+            });
+
+            return resultSelector(minElement, minIndex);
+        }
+
+        /// <summary>
+        /// Versatile maximum.
+        /// </summary>
+        /// <typeparam name="TSource">The element type of the source collection.</typeparam>
+        /// <typeparam name="TCompare">The type of value to compare on.</typeparam>
+        /// <typeparam name="TResult">The type of result.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="selector">The comparing value selector.</param>
+        /// <param name="resultSelector">The result selector.</param>
+        /// <param name="comparison">The comparison.</param>
+        /// <returns>The result.</returns>
+        public static TResult Max<TSource, TCompare, TResult>(this IEnumerable<TSource> source, Func<TSource, TCompare> selector, Func<TSource, int, TResult> resultSelector, Comparison<TCompare> comparison = null)
+        {
+            if (source.IsNullOrEmpty())
+            {
+                throw new ArgumentException("Empty source.");
+            }
+
+            if (comparison == null)
+            {
+                comparison = Comparer<TCompare>.Default.Compare;
+            }
+
+            var maxElement = default(TSource);
+            var maxValue = default(TCompare);
+            var maxIndex = default(Int32);
+
+            source.ForEach((element, index) =>
+            {
+                if (index == 0)
+                {
+                    maxElement = element;
+                    maxValue = selector(maxElement);
+                    maxIndex = 0;
+                }
+                else
+                {
+                    var value = selector(element);
+                    if (comparison(value, maxValue) > 0)
+                    {
+                        maxElement = element;
+                        maxValue = value;
+                        maxIndex = index;
+                    }
+                }
+            });
+
+            return resultSelector(maxElement, maxIndex);
+        }
+
+        /// <summary>
+        /// Shorthand minimum.
+        /// </summary>
+        /// <typeparam name="TSource">The element type of the source collection.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="comparer">The comparer.</param>
+        public static TSource Min<TSource>(this IEnumerable<TSource> source, Comparison<TSource> comparison = null)
+        {
+            return source.Min(selector: element => element, resultSelector: (element, index) => element, comparison: comparison);
+        }
+
+        /// <summary>
+        /// Shorthand maximum.
+        /// </summary>
+        /// <typeparam name="TSource">The element type of the source collection.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="comparer">The comparer.</param>
+        public static TSource Max<TSource>(this IEnumerable<TSource> source, Comparison<TSource> comparison = null)
+        {
+            return source.Max(selector: element => element, resultSelector: (element, index) => element, comparison: comparison);
         }
     }
 

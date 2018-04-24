@@ -59,5 +59,21 @@ namespace Dreambuild.Common.Test
         {
             return indices.Select(i => source.ElementAt(i));
         }
+
+        [Fact]
+        public void MinAndMax()
+        {
+            var source = 1.SeqTo(1000);
+
+            Assert.Equal(expected: 0, actual: source.Min(selector: x => x, resultSelector: (x, i) => i));
+            Assert.Equal(expected: 999, actual: source.Max(selector: x => x, resultSelector: (x, i) => i));
+        }
+
+        [Fact]
+        public void Recurrent()
+        {
+            Assert.Equal(expected: new[] { 64.0, 32.0, 16.0, 8.0, 4.0, 2.0, 1.0, 0.5, 0.25, 0.125 }, actual: 10.Recurrent(x => x / 2, 64.0));
+            Assert.Equal(expected: new[] { 1, 1, 2, 3, 5, 8, 13, 21, 34, 55 }, actual: 10.Recurrent((x, y) => x + y, 1, 1));
+        }
     }
 }
