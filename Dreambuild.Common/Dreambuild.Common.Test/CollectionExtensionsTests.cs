@@ -1,9 +1,9 @@
 using Dreambuild.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 using Xunit;
 
 namespace Dreambuild.Common.Test
@@ -40,21 +40,19 @@ namespace Dreambuild.Common.Test
         }
 
         [Fact]
-        public void ElementsAt_Optimized()
+        public async void ElementsAt_Optimized()
         {
             var n = 99999;
             var source = 0.SeqTo(n);
             var indices = 0.SeqTo(n / 2);
 
-            var sw = Stopwatch.StartNew();
-            var result = source.ElementsAt(indices).ToArray();
-            var elapsed = sw.ElapsedMilliseconds;
-            Assert.True(sw.ElapsedMilliseconds < 100);
+            await Task
+                .Run(() => source.ElementsAt(indices).ToArray())
+                .MustFinishWithin(TimeSpan.FromMilliseconds(1000));
 
-            sw = Stopwatch.StartNew();
-            result = fetch_Slow(indices, source).ToArray();
-            elapsed = sw.ElapsedMilliseconds;
-            Assert.True(sw.ElapsedMilliseconds > 10000);
+            await Task
+                .Run(() => fetch_Slow(indices, source).ToArray())
+                .CannotFinishWithin(TimeSpan.FromMilliseconds(1000));
         }
 
         private static IEnumerable<T> fetch_Slow<T>(IEnumerable<int> indices, IEnumerable<T> source)
