@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Dreambuild.Common.Utils
+namespace Dreambuild.Utils
 {
     /// <summary>
     /// A handy <see cref="EqualityComparer{T}"/> base, so no need to subclass.
