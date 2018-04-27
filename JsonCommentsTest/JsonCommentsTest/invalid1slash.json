@@ -1,0 +1,309 @@
+﻿{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "appServiceSku": {
+      "type": "object",
+      "metadata": {
+        "allowedValues": [
+          {
+            "code": "F1",
+            "name": "Free" // comment
+          },
+          {
+            "code": "D1",
+            "name": "Shared"
+          },
+          {
+            "code": "B1",
+            "name": "Basic"
+          },
+          {
+            "code": "B2",
+            "name": "Basic"
+          },
+          {
+            "code": "S1",
+            "name": "Standard"
+          },
+          {
+            "code": "S2",
+            "name": "Standard"
+          },
+          {
+            "code": "S3",
+            "name": "Standard"
+          },
+          {
+            "code": "P1",
+            "name": "Premium"
+          },
+          {
+            "code": "P2",
+            "name": "Premium"
+          },
+          {
+            "code": "P3",
+            "name": "Premium"
+          },
+          {
+            "code": "P4",
+            "name": "Premium"
+          }
+        ]
+      }
+    },
+    "servicePlanSKUCapacity": {
+      "type": "int",
+      "defaultValue": 1,
+      "minValue": 1,
+      "metadata": {
+        "description": "Describes plan's instance count"
+      }
+    },
+    "logicAppTriggerRecurrence": {
+      "type": "object",
+      "defaultValue": {
+        "frequency": "Minute",
+        "interval": 1
+      }
+    },
+    "apiAppSecret": {
+      "type": "securestring",
+      "metadata": {
+        "description": "The secret for the API app. This value must be a base64-encoded string. It should be a random string with 64 characters, and consist of only integers and lowercase characters. "
+      }
+    },
+    "apiAppSiteAuthEnabled": {
+      "type": "bool"
+    },
+    "apiAppApplicationClientId": {
+      "type": "string"
+    },
+    "apiAppApplicationSecret": {
+      "type": "securestring"
+    },
+    "logicAppApplicationClientId": {
+      "type": "string"
+    },
+    "logicAppApplicationSecret": {
+      "type": "securestring"
+    },
+    "environmentKey": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sharePointPropertyManagementSiteUrl": {
+      "type": "string"
+    },
+    "auditSqlPassword": {
+      "type": "securestring"
+    },
+    "dashboardServicesApplicationClientId": {
+      "type": "string"
+    },
+    "dashboardServicesApplicationSecret": {
+      "type": "securestring"
+    },
+    "crmServicesClientId": {
+      "type": "string",
+      "metadata": {
+        "description": "Azure application client id"
+      }
+    },
+    "dynamicsCrmConnectionString": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Dynamics CRM online connection string (Url=https://utildev.crm6.dynamics.com; Username=rtio.ifmsintegrationdev@sdxifms.onmicrosoft.com; Password=xxx)"
+      }
+    },
+    "dynamicsCrmInstanceName": {
+      "type": "string",
+      "metadata": {
+        "description": "Dynamics CRM online instance name"
+      }
+    },
+    "ifsIntegrationUserName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "templateVersion": {
+      "type": "string"
+    },
+    "_artifactsLocation": {
+      "type": "string"
+    },
+    "_artifactsLocationSasToken": {
+      "type": "securestring"
+    },
+    "previewDataFlows": {
+      "type": "string",
+      "allowedValues": [
+        "enabled",
+        "disabled" // comment
+      ],
+      "defaultValue": "disabled"
+    }
+  },
+  "variables": {
+    "dashProjectPrefix": "au-sdx-int-utils-",
+    "dotProjectPrefix": "au.sdx.int.utils.",
+    "conventions": {
+      "environmentKey": "[parameters('environmentKey')]",
+      "dashProjectPrefix": "[variables('dashProjectPrefix')]",
+      "dotProjectPrefix": "[variables('dotProjectPrefix')]",
+      "fullProjectKey": "[concat(variables('dashProjectPrefix'), parameters('environmentKey'))]"
+    },
+    "sharePointSettings": {
+      "propertyManagementSiteUrl": "[parameters('sharePointPropertyManagementSiteUrl')]"
+    },
+    "auditSqlConnection": {
+      "server": "[concat('au-sdx-int-utils-', parameters('environmentKey'), '.database.windows.net')]",
+      "database": "IntegrationLogging",
+      "username": "sodexoadmin",
+      "password": "[parameters('auditSqlPassword')]"
+    },
+    "logicAppAuthentication": {
+      "tenant": "[subscription().tenantId]",
+      "audience": "[parameters('apiAppApplicationClientId')]",
+      "clientId": "[parameters('logicAppApplicationClientId')]",
+      "secret": "[parameters('logicAppApplicationSecret')]",
+      "type": "ActiveDirectoryOAuth"
+    },
+    "dashboardServicesAuthentication": {
+      "tenant": "[subscription().tenantId]",
+      "audience": "[parameters('apiAppApplicationClientId')]",
+      "clientId": "[parameters('dashboardServicesApplicationClientId')]",
+      "secret": "[parameters('dashboardServicesApplicationSecret')]",
+      "type": "ActiveDirectoryOAuth"
+    },
+    "apiAppSiteAuthSettings": {
+      "clientId": "[parameters('apiAppApplicationClientId')]",
+      "issuer": "[concat('https://sts.windows.net/', subscription().tenantId, '/')]"
+    },
+    "servicePlanName": "[concat(variables('dashProjectPrefix'), 'crm-', parameters('environmentKey'))]",
+    "dynamicsCrm": {
+      "connectionstring": "[parameters('dynamicsCrmConnectionString')]",
+      "instancename": "[parameters('dynamicsCrmInstanceName')]"
+    },
+    "templatesRoot": "[concat('/au-sdx-int-utils-crm/Templates')]",
+    "templateUris": {
+      "forwardedSubscriptionTask": "[concat(parameters('_artifactsLocation'), variables('templatesRoot'), '/Components/forwardedsubscription.task.azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+      "pollFileShareAdapter": "[concat(parameters('_artifactsLocation'), variables('templatesRoot'), '/Components/pollfileshare.adapter.azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+      "pollSftpAdapter": "[concat(parameters('_artifactsLocation'), variables('templatesRoot'), '/Components/pollsftp.adapter.azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+      "httpTransformSplitAdapter": "[concat(parameters('_artifactsLocation'), variables('templatesRoot'), '/Components/httptransformsplit.adapter.azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+      "httpblobstoreAdapter": "[concat(parameters('_artifactsLocation'), variables('templatesRoot'), '/Components/httpblobstore.adapter.azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+      "topicOnlyTask": "[concat(parameters('_artifactsLocation'), variables('templatesRoot'), '/Components/topiconly.task.azuredeploy.json', parameters('_artifactsLocationSasToken'))]"
+    },
+    "templates": {
+      "commonresources": "[concat('commonresources-', 'latest')]",
+      "utilitiesbilling": "[concat('utilitiesbilling-', 'latest')]"
+    }
+  },
+  "resources": [
+    // commonresources.azuredeploy.json
+    {
+      "name": "[variables('templates').commonresources]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), variables('templatesRoot'), '/Common/commonresources.azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServiceSku": {
+            "value": "[parameters('appServiceSku')]"
+          },
+          "servicePlanSKUCapacity": {
+            "value": "[parameters('servicePlanSKUCapacity')]"
+          },
+          "servicePlanName": {
+            "value": "[variables('servicePlanName')]"
+          },
+          "apiAppSecret": {
+            "value": "[parameters('apiAppSecret')]"
+          },
+          "apiAppSiteAuthEnabled": {
+            "value": "[parameters('apiAppSiteAuthEnabled')]"
+          },
+          "apiAppSiteAuthSettings": {
+            "value": "[variables('apiAppSiteAuthSettings')]"
+          },
+          "logicAppTriggerRecurrence": {
+            "value": "[parameters('logicAppTriggerRecurrence')]"
+          },
+          "conventions": {
+            "value": "[variables('conventions')]"
+          },
+          "crmServicesClientId": {
+            "value": "[parameters('crmServicesClientId')]"
+          },
+          "dynamicsCrm": {
+            "value": "[variables('dynamicsCrm')]"
+          },
+          "dashboardServicesAuthentication": {
+            "value": "[variables('dashboardServicesAuthentication')]"
+          },
+          "logicAppAuthentication": {
+            "value": "[variables('logicAppAuthentication')]"
+          },
+          "auditSqlConnection": {
+            "value": "[variables('auditSqlConnection')]"
+          },
+          "_artifactsLocation": {
+            "value": "[parameters('_artifactsLocation')]"
+          },
+          "_artifactsLocationSasToken": {
+            "value": "[parameters('_artifactsLocationSasToken')]"
+          }
+        }
+      }
+    },
+    // Utilities billing
+    {
+      "name": "[variables('templates').utilitiesbilling]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', variables('templates').commonresources)]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('_artifactsLocation'), variables('templatesRoot'), '/utilitiesbilling.azuredeploy.json', parameters('_artifactsLocationSasToken'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "appServiceSku": {
+            "value": "[parameters('appServiceSku')]"
+          },
+          "_artifactsLocation": {
+            "value": "[parameters('_artifactsLocation')]"
+          },
+          "_artifactsLocationSasToken": {
+            "value": "[parameters('_artifactsLocationSasToken')]"
+          },
+          "templatesRoot": {
+            "value": "[variables('templatesRoot')]"
+          },
+          "templateUris": {
+            "value": "[variables('templateUris')]"
+          },
+          "conventions": {
+            "value": "[variables('conventions')]"
+          },
+          "logicAppTriggerRecurrence": {
+            "value": "[parameters('logicAppTriggerRecurrence')]"
+          },
+          "logicAppAuthentication": {
+            "value": "[variables('logicAppAuthentication')]"
+          }
+        }
+      }
+    }
+    // END logic apps
+  ],
+  "outputs": {}
+}
