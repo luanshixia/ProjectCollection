@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Text;
@@ -15,7 +16,7 @@ namespace JsonCommentsTest
     {
         static void Main(string[] args)
         {
-            var json = GetTestJson();
+            var json = GetTestJson("invalid1.json");
 
             //// JsonConvert.DeserializeObject - JToken
             //var obj = JsonConvert.DeserializeObject(json, JsonExtensions.ObjectSerializationSettings);
@@ -38,17 +39,81 @@ namespace JsonCommentsTest
             //Console.WriteLine(template1);
 
             // HttpContent.Read
-            var content = new StringContent(json, Encoding.Unicode, "application/json");
-            var template2 = content.ReadAsAsync<Template>(JsonExtensions.JsonMediaTypeFormatters).Result;
-            template2.ContentVersion = "test";
-            Console.WriteLine(template2.ToJToken());
+            //var content = new StringContent(json, Encoding.Unicode, "application/json");
+            //var template2 = content.ReadAsAsync<Template>(JsonExtensions.JsonMediaTypeFormatters).Result;
+            //template2.ContentVersion = "test";
+            //Console.WriteLine(template2.ToJToken());
+
+            var jtoken = json.FromJson<JToken>();
+            //var jtoken = json.ToJToken();
+            //var jtoken = JToken.Parse(json);
+
+            //Console.WriteLine(jtoken.ToString());
+            Console.WriteLine(CountComments(jtoken));
+            StripOutComments(jtoken);
+            Console.WriteLine(jtoken);
+            Console.WriteLine(CountComments(jtoken));
 
             Console.ReadLine();
         }
 
-        static string GetTestJson()
+        static string GetTestJson(string fileName)
         {
-            return File.ReadAllText("invalid2.json");
+            return File.ReadAllText(fileName);
+        }
+
+        static int CountComments(JToken json)
+        {
+            int n = 0;
+            WalkJsonRecursively(
+                root: json,
+                tokenAction: token =>
+                {
+                    if (token.Type == JTokenType.Comment)
+                    {
+                        n++;
+                    }
+                });
+            return n;
+        }
+
+        static void StripOutComments(JToken json)
+        {
+            WalkJsonRecursively(
+                root: json,
+                tokenAction: token =>
+                {
+                    if (token.Type == JTokenType.Comment)
+                    {
+                        token.Remove();
+                    }
+                });
+        }
+
+        static void WalkJsonRecursively(JToken root, Action<JObject> objectAction = null, Action<JProperty> propertyAction = null, Action<JToken> tokenAction = null)
+        {
+            if (root.Type == JTokenType.Array)
+            {
+                foreach (var child in root.Children().ToList())
+                {
+                    WalkJsonRecursively(child, objectAction, propertyAction, tokenAction);
+                }
+            }
+            else if (root.Type == JTokenType.Object)
+            {
+                objectAction?.Invoke((JObject)root);
+
+                foreach (var property in root.Children<JProperty>().ToList())
+                {
+                    propertyAction?.Invoke(property);
+
+                    WalkJsonRecursively(property.Value, objectAction, propertyAction, tokenAction);
+                }
+            }
+            else
+            {
+                tokenAction?.Invoke(root);
+            }
         }
     }
 
