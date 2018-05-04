@@ -1,4 +1,5 @@
 ﻿Imports System.IO
+Imports System.Collections.ObjectModel
 Imports System.ComponentModel
 
 Public Class SnapshotManager
@@ -34,12 +35,12 @@ Public Class SnapshotManager
         Return subDirRecords.Concat(fileRecords).ToList()
     End Function
 
-    Public Function GetEmptyRecords() As System.Collections.ObjectModel.ObservableCollection(Of Record)
+    Public Function GetEmptyRecords() As ObservableCollection(Of Record)
         Dim subDirs = Path.GetDirectories()
         Dim subDirRecords = subDirs.Select(Function(x) New Record(x))
         Dim files = Path.GetFiles()
         Dim fileRecords = files.Select(Function(x) New Record(x))
-        Return New System.Collections.ObjectModel.ObservableCollection(Of Record)(subDirRecords.Concat(fileRecords).ToList())
+        Return New ObservableCollection(Of Record)(subDirRecords.Concat(fileRecords).ToList())
     End Function
 
     Public Sub Test()
@@ -50,11 +51,25 @@ Public Class SnapshotManager
 End Class
 
 Public Class Record
-    Implements System.ComponentModel.INotifyPropertyChanged
+    Implements INotifyPropertyChanged
     Public Property DF As String
     Public Property Name As String
     Private sizeValue As Long
     Private propertyChangeCount As Long
+    Private calculationFinished As Boolean
+    Private dirInfo As DirectoryInfo
+
+    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
+    Public Sub NotifyPropertyChanged(ByVal propertyName As String)
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
+    End Sub
+
+    Public Sub UpdateProperty(Optional finishCalculation As Boolean = False)
+        Me.calculationFinished = finishCalculation
+        NotifyPropertyChanged("Size")
+        NotifyPropertyChanged("SizeString")
+    End Sub
+
     Public Property Size As Long
         Get
             Return sizeValue
@@ -67,19 +82,8 @@ Public Class Record
             End If
         End Set
     End Property
-    Private dirInfo As DirectoryInfo
 
-    Public Event PropertyChanged As PropertyChangedEventHandler Implements INotifyPropertyChanged.PropertyChanged
-    Public Sub NotifyPropertyChanged(ByVal propertyName As String)
-        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(propertyName))
-    End Sub
-
-    Public Sub UpdateProperty()
-        NotifyPropertyChanged("Size")
-        NotifyPropertyChanged("SizeString")
-    End Sub
-
-    Public ReadOnly Property SizeString As String
+    Public ReadOnly Property SizeString0 As String
         Get
             If Size < 1024 Then
                 Return Size & " Byte"
@@ -88,6 +92,12 @@ Public Class Record
             Else
                 Return CInt(Size / 1024 / 1024) & " MB"
             End If
+        End Get
+    End Property
+
+    Public ReadOnly Property SizeString As String
+        Get
+            Return IIf(calculationFinished, SizeString0, "(...) " & SizeString0)
         End Get
     End Property
 
@@ -104,12 +114,17 @@ Public Class Record
         Size = file.Length
     End Sub
 
-    Public Async Function StartSum() As Task(Of Long)
+    Public Async Function SumSize() As Task(Of Long)
         If dirInfo IsNot Nothing Then
             Return Await GetDirectorySize(dirInfo)
         Else
             Return Size
         End If
+    End Function
+
+    Public Async Function StartSum() As Task
+        Me.Size = Await Me.SumSize()
+        Me.UpdateProperty(finishCalculation:=True)
     End Function
 
     Public Async Function GetDirectorySize(dir As DirectoryInfo) As Task(Of Long)

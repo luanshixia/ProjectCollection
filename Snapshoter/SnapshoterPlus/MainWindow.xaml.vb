@@ -20,28 +20,8 @@
         Dim sm As New SnapshotManager(TextBox1.Text)
         Dim records = sm.GetEmptyRecords()
         TheList.ItemsSource = records
-        For Each r In records
-            r.Size = Await r.StartSum()
-            r.UpdateProperty()
-        Next
 
-        'TheList.Items.Clear()
-        'For Each r In records
-        '    r.Size = Await r.StartSum()
-        '    TheList.Items.Add(r)
-        '    'Await r.StartSum()
-        '    'Update()
-        'Next
-    End Function
-
-    Private Async Function Test() As Task(Of Long)
-        Await Task.Run(Sub()
-                           Dim a = ""
-                           For i = 0 To 9999
-                               a += "a"
-                           Next
-                       End Sub)
-        Return 100
+        Await Task.WhenAll(records.Select(Function(r) r.StartSum()))
     End Function
 
 End Class
