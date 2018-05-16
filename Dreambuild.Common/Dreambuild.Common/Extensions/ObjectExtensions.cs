@@ -57,5 +57,43 @@ namespace Dreambuild.Extensions
             }
             return host;
         }
+
+        /// <summary>
+        /// Adds element to a dictionary of List value.
+        /// </summary>
+        /// <typeparam name="TKey">The type of the key.</typeparam>
+        /// <typeparam name="TValue">The type of the List element.</typeparam>
+        /// <param name="dictionary">The dictionary.</param>
+        /// <param name="key">The key.</param>
+        /// <param name="value">The element value.</param>
+        public static void AddElement<TKey, TValue>(this IDictionary<TKey, List<TValue>> dictionary, TKey key, TValue value)
+        {
+            if (!dictionary.ContainsKey(key))
+            {
+                dictionary[key] = new List<TValue>();
+            }
+
+            dictionary[key].Add(value);
+        }
+
+        /// <summary>
+        /// Adds entry to a dictionary of Dictionary value.
+        /// </summary>
+        /// <typeparam name="TKey1">The type of the key 1.</typeparam>
+        /// <typeparam name="TKey2">The type of the key 2.</typeparam>
+        /// <typeparam name="TValue">The type of the value.</typeparam>
+        /// <param name="dictionary">The dictionary.</param>
+        /// <param name="key1">The key 1.</param>
+        /// <param name="key2">The key 2.</param>
+        /// <param name="value">The entry value.</param>
+        public static void AddEntry<TKey1, TKey2, TValue>(this IDictionary<TKey1, Dictionary<TKey2, TValue>> dictionary, TKey1 key1, TKey2 key2, TValue value)
+        {
+            if (!dictionary.ContainsKey(key1))
+            {
+                dictionary[key1] = new Dictionary<TKey2, TValue>();
+            }
+
+            dictionary[key1][key2] = value;
+        }
     }
 }
