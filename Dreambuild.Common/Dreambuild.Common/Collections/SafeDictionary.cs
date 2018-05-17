@@ -8,12 +8,26 @@ namespace Dreambuild.Collections
     public class SafeDictionary<TKey, TValue> : IDictionary<TKey, TValue>
     {
         protected Dictionary<TKey, TValue> internalDictionary = new Dictionary<TKey, TValue>();
+        protected bool createOnMiss = false;
+        protected Func<TKey, TValue> valueGenerator = key => default(TValue);
+
+        public SafeDictionary(bool createOnMiss = false, Func<TKey, TValue> valueGenerator = null)
+        {
+            if (valueGenerator != null)
+            {
+                this.valueGenerator = valueGenerator;
+            }
+        }
 
         public TValue this[TKey key]
         {
             get
             {
-                return this.internalDictionary.ContainsKey(key) ? this.internalDictionary[key] : default(TValue);
+                return this.internalDictionary.ContainsKey(key)
+                    ? this.internalDictionary[key]
+                    : this.createOnMiss
+                        ? this.internalDictionary[key] = this.valueGenerator(key)
+                        : default(TValue);
             }
             set
             {
