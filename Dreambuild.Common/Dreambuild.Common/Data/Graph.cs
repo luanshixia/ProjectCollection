@@ -1,4 +1,5 @@
-﻿using Dreambuild.Extensions;
+﻿using Dreambuild.Collections;
+using Dreambuild.Extensions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,17 +36,17 @@ namespace Dreambuild.Data
         }
     }
 
-    public class EdgeTriplet<TSource, TEdge, TDestination> : Edge<TEdge>
-    {
-        public TSource SourceProperty { get; set; }
+    //public class EdgeTriplet<TSource, TEdge, TDestination> : Edge<TEdge>
+    //{
+    //    public TSource SourceProperty { get; set; }
 
-        public TDestination DestinationProperty { get; set; }
+    //    public TDestination DestinationProperty { get; set; }
 
-        public EdgeTriplet()
-        {
+    //    public EdgeTriplet()
+    //    {
 
-        }
-    }
+    //    }
+    //}
 
     public class Graph<TVertex, TEdge>
     {
@@ -55,17 +56,17 @@ namespace Dreambuild.Data
 
         protected Dictionary<long, Vertex<TVertex>> VerticesIndex { get; set; }
 
-        protected Dictionary<long, Dictionary<long, Edge<TEdge>>> OutgoingEdges { get; set; }
+        protected DoubleDictionary<long, long, Edge<TEdge>> OutgoingEdges { get; set; }
 
-        protected Dictionary<long, Dictionary<long, Edge<TEdge>>> IncomingEdges { get; set; }
+        protected DoubleDictionary<long, long, Edge<TEdge>> IncomingEdges { get; set; }
 
         protected Graph()
         {
             this.Vertices = new List<Vertex<TVertex>>();
             this.Edges = new List<Edge<TEdge>>();
             this.VerticesIndex = new Dictionary<long, Vertex<TVertex>>();
-            this.OutgoingEdges = new Dictionary<long, Dictionary<long, Edge<TEdge>>>();
-            this.IncomingEdges = new Dictionary<long, Dictionary<long, Edge<TEdge>>>();
+            this.OutgoingEdges = new DoubleDictionary<long, long, Edge<TEdge>>();
+            this.IncomingEdges = new DoubleDictionary<long, long, Edge<TEdge>>();
         }
 
         public Graph(IEnumerable<Vertex<TVertex>> vertices, IEnumerable<Edge<TEdge>> edges)
@@ -77,9 +78,13 @@ namespace Dreambuild.Data
 
             edges.ForEach(edge =>
             {
-                this.OutgoingEdges.AddEntry(edge.Source, edge.Destination, edge);
-                this.IncomingEdges.AddEntry(edge.Destination, edge.Source, edge);
+                this.OutgoingEdges.Add(edge.Source, edge.Destination, edge);
+                this.IncomingEdges.Add(edge.Destination, edge.Source, edge);
             });
         }
+
+        public IDictionary<long, int> GetOutgoingDegrees() => this.Vertices.ToDictionary(vertex => vertex.ID, vertex => this.OutgoingEdges[vertex.ID].Count);
+
+        public IDictionary<long, int> GetIncomingDegrees() => this.Vertices.ToDictionary(vertex => vertex.ID, vertex => this.IncomingEdges[vertex.ID].Count);
     }
 }
