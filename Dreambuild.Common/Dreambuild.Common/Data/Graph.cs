@@ -207,14 +207,14 @@ namespace Dreambuild.Data
             }
         }
 
-        public IDictionary<long, TMsg> MapReduce<TMsg>(
-            Func<EdgeTriplet<TVertex, TEdge>, TMsg> sourceMapper, 
-            Func<EdgeTriplet<TVertex, TEdge>, TMsg> destinationMapper, 
-            Func<TMsg, TMsg, TMsg> reducer)
+        public IDictionary<long, TMessage> MapReduce<TMessage>(
+            Func<EdgeTriplet<TVertex, TEdge>, TMessage> sourceMapper, 
+            Func<EdgeTriplet<TVertex, TEdge>, TMessage> destinationMapper, 
+            Func<TMessage, TMessage, TMessage> reducer)
         {
-            var messages = new SafeDictionary<long, List<TMsg>>(
+            var messages = new SafeDictionary<long, List<TMessage>>(
                 createOnMiss: true, 
-                valueGenerator: key => new List<TMsg>());
+                valueGenerator: key => new List<TMessage>());
 
             this.GetTriplets().ForEach(triplet =>
             {
