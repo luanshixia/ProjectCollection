@@ -86,5 +86,12 @@ namespace Dreambuild.Data
         public IDictionary<long, int> GetOutgoingDegrees() => this.Vertices.ToDictionary(vertex => vertex.ID, vertex => this.OutgoingEdges[vertex.ID].Count);
 
         public IDictionary<long, int> GetIncomingDegrees() => this.Vertices.ToDictionary(vertex => vertex.ID, vertex => this.IncomingEdges[vertex.ID].Count);
+
+        public IDictionary<long, int> GetDegrees() => this.Vertices.ToDictionary(vertex => vertex.ID, vertex => this.OutgoingEdges[vertex.ID].Count + this.IncomingEdges[vertex.ID].Count);
+    }
+
+    public class GraphBuilder
+    {
+
     }
 }
