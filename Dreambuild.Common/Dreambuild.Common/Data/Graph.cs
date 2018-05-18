@@ -230,7 +230,7 @@ namespace Dreambuild.Data
 
     public class Graph2<TVertex, TEdge>
     {
-        protected Dictionary<long, TVertex> VerticesIndex { get; set; }
+        protected Dictionary<long, TVertex> Vertices { get; set; }
 
         protected DoubleDictionary<long, long, TEdge> OutgoingEdges { get; set; }
 
@@ -238,7 +238,7 @@ namespace Dreambuild.Data
 
         protected Graph2()
         {
-            this.VerticesIndex = new Dictionary<long, TVertex>();
+            this.Vertices = new Dictionary<long, TVertex>();
             this.OutgoingEdges = new DoubleDictionary<long, long, TEdge>();
             this.IncomingEdges = new DoubleDictionary<long, long, TEdge>();
         }
@@ -246,7 +246,7 @@ namespace Dreambuild.Data
         public Graph2(IEnumerable<Vertex<TVertex>> vertices, IEnumerable<Edge<TEdge>> edges)
             : this()
         {
-            this.VerticesIndex = vertices.ToDictionary(vertex => vertex.ID, vertex => vertex.Property);
+            this.Vertices = vertices.ToDictionary(vertex => vertex.ID, vertex => vertex.Property);
 
             // TODO: remove duplicate edges
             edges.ForEach(edge =>
@@ -262,30 +262,30 @@ namespace Dreambuild.Data
                 .Select(edge => new EdgeTriplet<TVertex, TEdge>(
                     source: edge.Source,
                     destination: edge.Destination,
-                    sourceProperty: this.VerticesIndex[edge.Source],
+                    sourceProperty: this.Vertices[edge.Source],
                     edgeProperty: edge.Property,
-                    destinationProperty: this.VerticesIndex[edge.Destination]))
+                    destinationProperty: this.Vertices[edge.Destination]))
                 .ToList();
         }
 
-        public IEnumerable<Vertex<TVertex>> GetVertices() => this.VerticesIndex.Select(vertex => new Vertex<TVertex>(vertex.Key, vertex.Value)).ToList();
+        public IEnumerable<Vertex<TVertex>> GetVertices() => this.Vertices.Select(vertex => new Vertex<TVertex>(vertex.Key, vertex.Value)).ToList();
 
         public IEnumerable<Edge<TEdge>> GetEdges() => this.OutgoingEdges.SelectMany(source => source.Value.Select(destination => new Edge<TEdge>(source.Key, destination.Key, destination.Value))).ToList();
 
-        public IDictionary<long, int> GetOutgoingDegrees() => this.VerticesIndex.ToDictionary(vertex => vertex.Key, vertex => this.OutgoingEdges[vertex.Key].Count);
+        public IDictionary<long, int> GetOutgoingDegrees() => this.Vertices.ToDictionary(vertex => vertex.Key, vertex => this.OutgoingEdges[vertex.Key].Count);
 
-        public IDictionary<long, int> GetIncomingDegrees() => this.VerticesIndex.ToDictionary(vertex => vertex.Key, vertex => this.IncomingEdges[vertex.Key].Count);
+        public IDictionary<long, int> GetIncomingDegrees() => this.Vertices.ToDictionary(vertex => vertex.Key, vertex => this.IncomingEdges[vertex.Key].Count);
 
-        public IDictionary<long, int> GetDegrees() => this.VerticesIndex.ToDictionary(vertex => vertex.Key, vertex => this.OutgoingEdges[vertex.Key].Count + this.IncomingEdges[vertex.Key].Count);
+        public IDictionary<long, int> GetDegrees() => this.Vertices.ToDictionary(vertex => vertex.Key, vertex => this.OutgoingEdges[vertex.Key].Count + this.IncomingEdges[vertex.Key].Count);
 
         public Vertex<TVertex> GetVertex(long id)
         {
-            if (!this.VerticesIndex.ContainsKey(id))
+            if (!this.Vertices.ContainsKey(id))
             {
                 return null;
             }
 
-            return new Vertex<TVertex>(id, this.VerticesIndex[id]);
+            return new Vertex<TVertex>(id, this.Vertices[id]);
         }
 
         public Edge<TEdge> GetEdge(long source, long destination)
@@ -300,7 +300,7 @@ namespace Dreambuild.Data
 
         public Graph<TVertex2, TEdge> MapVertices<TVertex2>(Func<long, TVertex, TVertex2> mapper)
         {
-            var newVertices = this.VerticesIndex
+            var newVertices = this.Vertices
                 .Select(vertex => new Vertex<TVertex2>(
                     id: vertex.Key,
                     property: mapper(vertex.Key, vertex.Value)))
@@ -347,11 +347,11 @@ namespace Dreambuild.Data
 
         public IDictionary<long, List<long>> GetNeighbors(EdgeDirection direction)
         {
-            var outgoingNeighbors = this.VerticesIndex.ToDictionary(
+            var outgoingNeighbors = this.Vertices.ToDictionary(
                 keySelector: vertex => vertex.Key,
                 elementSelector: vertex => this.OutgoingEdges[vertex.Key].Keys.ToList());
 
-            var incomingNeighbors = this.VerticesIndex.ToDictionary(
+            var incomingNeighbors = this.Vertices.ToDictionary(
                 keySelector: vertex => vertex.Key,
                 elementSelector: vertex => this.IncomingEdges[vertex.Key].Keys.ToList());
 
@@ -365,13 +365,13 @@ namespace Dreambuild.Data
             }
             else if (direction == EdgeDirection.Either)
             {
-                return this.VerticesIndex.ToDictionary(
+                return this.Vertices.ToDictionary(
                     keySelector: vertex => vertex.Key,
                     elementSelector: vertex => outgoingNeighbors[vertex.Key].Union(incomingNeighbors[vertex.Key]).Distinct().ToList());
             }
             else // direction == EdgeDirection.Both
             {
-                return this.VerticesIndex.ToDictionary(
+                return this.Vertices.ToDictionary(
                     keySelector: vertex => vertex.Key,
                     elementSelector: vertex => outgoingNeighbors[vertex.Key].Intersect(incomingNeighbors[vertex.Key]).Distinct().ToList());
             }
@@ -392,7 +392,7 @@ namespace Dreambuild.Data
                 messages[triplet.Destination].Add(destinationMapper(triplet));
             });
 
-            return this.VerticesIndex.ToDictionary(
+            return this.Vertices.ToDictionary(
                 keySelector: vertex => vertex.Key,
                 elementSelector: vertex => messages[vertex.Key].Aggregate(reducer));
         }
