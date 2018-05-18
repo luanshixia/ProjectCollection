@@ -21,6 +21,19 @@ namespace Dreambuild.Extensions
         }
 
         /// <summary>
+        /// Tries parsing to <see cref="Int64"/>.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <param name="defaultValue">The default value.</param>
+        /// <returns>The result.</returns>
+        public static long TryParseToInt64(this string s, long defaultValue = 0)
+        {
+            long result = defaultValue;
+            long.TryParse(s, out result);
+            return result;
+        }
+
+        /// <summary>
         /// Tries parsing to <see cref="Int32"/>.
         /// </summary>
         /// <param name="s">The string.</param>
@@ -31,6 +44,36 @@ namespace Dreambuild.Extensions
             int result = defaultValue;
             int.TryParse(s, out result);
             return result;
+        }
+
+        /// <summary>
+        /// Parses to <see cref="Double"/>.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>The result.</returns>
+        public static double ParseToDouble(this string s)
+        {
+            return double.Parse(s);
+        }
+
+        /// <summary>
+        /// Parses to <see cref="Int64"/>.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>The result.</returns>
+        public static long ParseToInt64(this string s)
+        {
+            return long.Parse(s);
+        }
+
+        /// <summary>
+        /// Parses to <see cref="Int32"/>.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>The result.</returns>
+        public static int ParseToInt32(this string s)
+        {
+            return int.Parse(s);
         }
 
         /// <summary>
@@ -51,7 +94,37 @@ namespace Dreambuild.Extensions
         /// <returns>A boolean result.</returns>
         public static bool CanParseToNumber(this string s)
         {
+            return s.CanParseToDouble() || s.CanParseToInt64();
+        }
+
+        /// <summary>
+        /// Determines if can parse to <see cref="Double"/>.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>A boolean result.</returns>
+        public static bool CanParseToDouble(this string s)
+        {
             return double.TryParse(s, out double result);
+        }
+
+        /// <summary>
+        /// Determines if can parse to <see cref="Int64"/>.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>A boolean result.</returns>
+        public static bool CanParseToInt64(this string s)
+        {
+            return long.TryParse(s, out long result);
+        }
+
+        /// <summary>
+        /// Determines if can parse to <see cref="Int32"/>.
+        /// </summary>
+        /// <param name="s">The string.</param>
+        /// <returns>A boolean result.</returns>
+        public static bool CanParseToInt32(this string s)
+        {
+            return int.TryParse(s, out int result);
         }
     }
 }

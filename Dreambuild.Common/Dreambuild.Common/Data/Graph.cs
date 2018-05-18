@@ -2,7 +2,10 @@
 using Dreambuild.Extensions;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Dreambuild.Data
 {
@@ -395,6 +398,67 @@ namespace Dreambuild.Data
             return this.Vertices.ToDictionary(
                 keySelector: vertex => vertex.Key,
                 elementSelector: vertex => messages[vertex.Key].Aggregate(reducer));
+        }
+    }
+
+    public static class GraphLoader
+    {
+        public static Graph<int, int> FromEdgeList(IEnumerable<(long, long)> edgeList)
+        {
+            edgeList = edgeList.ToList();
+
+            var vertexList = edgeList
+                .SelectMany(edge => new[] { edge.Item1, edge.Item2 })
+                .Distinct()
+                .OrderBy(vertex => vertex)
+                .ToList();
+
+            return new Graph<int, int>(
+                vertices: vertexList.Select(id => id.ToVertex(0)).ToArray(),
+                edges: edgeList.Select(edge => edge.ToEdge(0)).ToArray());
+        }
+
+        public static Graph<int, int> FromEdgeListLines(IEnumerable<string> edgeListLines, string fieldDelimiter = "\t")
+        {
+            return GraphLoader.FromEdgeList(
+                edgeList: edgeListLines
+                    .Select(line => 
+                    {
+                        var items = line.Split(fieldDelimiter, StringSplitOptions.RemoveEmptyEntries);
+                        if (items.Length < 2)
+                        {
+                            throw new ArgumentException();
+                        }
+
+                        if (items.Take(2).Any(item => !item.CanParseToInt64()))
+                        {
+                            throw new ArgumentException();
+                        }
+
+                        return (items[0].ParseToInt64(), items[1].ParseToInt64());
+                    }));
+        }
+
+        public static Graph<int, int> FromEdgeListFile(string fileName)
+        {
+            return GraphLoader.FromEdgeListLines(
+                edgeListLines: File.ReadAllLines(fileName));
+        }
+
+        public static async Task<Graph<int, int>> FromEdgeListFileAsync(string fileName, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            return GraphLoader.FromEdgeListLines(
+                edgeListLines: await File.ReadAllLinesAsync(fileName, cancellationToken));
+        }
+
+        public static Vertex<TVertex> ToVertex<TVertex>(this long vertexId, TVertex property)
+        {
+            return new Vertex<TVertex>(vertexId, property);
+        }
+
+        public static Edge<TEdge> ToEdge<TEdge>(this (long, long) edge, TEdge property)
+        {
+            return new Edge<TEdge>(edge.Item1, edge.Item2, property);
         }
     }
 
