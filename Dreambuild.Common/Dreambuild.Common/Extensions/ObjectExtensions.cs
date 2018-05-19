@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dreambuild.Collections;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -24,9 +25,15 @@ namespace Dreambuild.Extensions
         /// </summary>
         /// <typeparam name="T">The type of the value.</typeparam>
         /// <param name="value">The value.</param>
+        /// <param name="emptyIfNull">If true, return empty list for null value.</param>
         /// <returns>The result.</returns>
-        public static List<T> WrapInList<T>(this T value)
+        public static List<T> WrapInList<T>(this T value, bool emptyIfNull = false)
         {
+            if (emptyIfNull && value == null)
+            {
+                return EmptyList<T>.Instance;
+            }
+
             return new List<T> { value };
         }
 
@@ -35,9 +42,15 @@ namespace Dreambuild.Extensions
         /// </summary>
         /// <typeparam name="T">The type of the value.</typeparam>
         /// <param name="value">The value.</param>
+        /// <param name="emptyIfNull">If true, return empty array for null value.</param>
         /// <returns>The result.</returns>
-        public static T[] WrapInArray<T>(this T value)
+        public static T[] WrapInArray<T>(this T value, bool emptyIfNull = false)
         {
+            if (emptyIfNull && value == null)
+            {
+                return Array.Empty<T>();
+            }
+
             return new[] { value };
         }
 

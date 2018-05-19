@@ -200,11 +200,11 @@ namespace Dreambuild.Data
         {
             var outgoingNeighbors = this.Vertices.ToDictionary(
                 keySelector: vertex => vertex.Key,
-                elementSelector: vertex => this.OutgoingEdges[vertex.Key].Keys.ToList());
+                elementSelector: vertex => this.OutgoingEdges[vertex.Key].Keys.OrderBy(id => id).ToList());
 
             var incomingNeighbors = this.Vertices.ToDictionary(
                 keySelector: vertex => vertex.Key,
-                elementSelector: vertex => this.IncomingEdges[vertex.Key].Keys.ToList());
+                elementSelector: vertex => this.IncomingEdges[vertex.Key].Keys.OrderBy(id => id).ToList());
 
             if (direction == EdgeDirection.Outgoing)
             {
@@ -218,13 +218,21 @@ namespace Dreambuild.Data
             {
                 return this.Vertices.ToDictionary(
                     keySelector: vertex => vertex.Key,
-                    elementSelector: vertex => outgoingNeighbors[vertex.Key].Union(incomingNeighbors[vertex.Key]).Distinct().ToList());
+                    elementSelector: vertex => outgoingNeighbors[vertex.Key]
+                        .Union(incomingNeighbors[vertex.Key])
+                        .Distinct()
+                        .OrderBy(id => id)
+                        .ToList());
             }
             else // direction == EdgeDirection.Both
             {
                 return this.Vertices.ToDictionary(
                     keySelector: vertex => vertex.Key,
-                    elementSelector: vertex => outgoingNeighbors[vertex.Key].Intersect(incomingNeighbors[vertex.Key]).Distinct().ToList());
+                    elementSelector: vertex => outgoingNeighbors[vertex.Key]
+                        .Intersect(incomingNeighbors[vertex.Key])
+                        .Distinct()
+                        .OrderBy(id => id)
+                        .ToList());
             }
         }
 
