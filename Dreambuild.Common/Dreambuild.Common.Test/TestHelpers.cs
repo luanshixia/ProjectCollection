@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dreambuild.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,6 +19,22 @@ namespace Dreambuild.Common.Test
         {
             var taskFinishedFirst = await Task.WhenAny(task, Task.Delay(timeout));
             Assert.False(condition: taskFinishedFirst == task, userMessage: message);
+        }
+
+        public static void DictionaryEqual<K, V>(IDictionary<K, V> expected, IDictionary<K, V> actual)
+        {
+            Assert.Equal(expected.Count, actual.Count);
+
+            var expectedKeys = new HashSet<K>(expected.Keys);
+            var actualKeys = new HashSet<K>(actual.Keys);
+
+            Assert.Subset(expectedKeys, actualKeys);
+            Assert.Superset(expectedKeys, actualKeys);
+
+            expectedKeys.ForEach(key =>
+            {
+                Assert.Equal(expected[key], actual[key]);
+            });
         }
     }
 }
