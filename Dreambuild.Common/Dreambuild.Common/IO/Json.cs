@@ -27,6 +27,16 @@ namespace Dreambuild.IO
             return JsonConvert.SerializeObject(value);
         }
 
+        public static object Read(TextReader reader, Type targetType)
+        {
+            return JsonSerializer.Create().Deserialize(reader, targetType);
+        }
+
+        public static T Read<T>(TextReader reader)
+        {
+            return (T)JsonSerializer.Create().Deserialize(reader, typeof(T));
+        }
+
         public static void Write(Object value, TextWriter writer)
         {
             JsonSerializer.Create().Serialize(writer, value);
