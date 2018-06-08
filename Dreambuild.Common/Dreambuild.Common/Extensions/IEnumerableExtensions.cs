@@ -114,6 +114,17 @@ namespace Dreambuild.Extensions
             return Seq.cross(ts, us, selector);
         }
 
+        public static void Cross<T, U>(this IEnumerable<T> ts, IEnumerable<U> us, Action<T, U> action)
+        {
+            foreach (var t in ts)
+            {
+                foreach (var u in us)
+                {
+                    action(t, u);
+                }
+            }
+        }
+
         public static bool AreElementsEqual<T, U>(this IEnumerable<T> source, Func<T, U> selector)
         {
             return source.Select(selector).Distinct().Count() == 1;
