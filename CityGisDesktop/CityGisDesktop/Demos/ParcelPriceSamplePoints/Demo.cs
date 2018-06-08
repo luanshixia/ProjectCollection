@@ -1,4 +1,5 @@
-﻿using Dreambuild.Gis.Display;
+﻿using Dreambuild.Extensions;
+using Dreambuild.Gis.Display;
 using System;
 using System.Collections.Generic;
 using System.Linq;

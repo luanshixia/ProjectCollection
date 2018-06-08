@@ -213,11 +213,6 @@ namespace Dreambuild.Geometry
             return this.Add(v.Sub(this).Mult(amt));
         }
 
-        //public Vector Transform(Geometry3D.Matrix4 m)
-        //{
-        //    return m.MultiplyVector3(this);
-        //}
-
         public override string ToString()
         {
             return string.Format("{0},{1},{2}", X.ToDecimalString(), Y.ToDecimalString(), Z.ToDecimalString());

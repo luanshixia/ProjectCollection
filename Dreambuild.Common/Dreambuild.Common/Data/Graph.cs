@@ -280,7 +280,7 @@ namespace Dreambuild.Data
                 edgeList: edgeListLines
                     .Select(line => 
                     {
-                        var items = line.Split(fieldDelimiter, StringSplitOptions.RemoveEmptyEntries);
+                        var items = line.Split(fieldDelimiter.WrapInArray(), StringSplitOptions.RemoveEmptyEntries);
                         if (items.Length < 2)
                         {
                             throw new ArgumentException();
@@ -301,11 +301,12 @@ namespace Dreambuild.Data
                 edgeListLines: File.ReadAllLines(fileName));
         }
 
-        public static async Task<Graph<int, int>> FromEdgeListFileAsync(string fileName, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            return GraphLoader.FromEdgeListLines(
-                edgeListLines: await File.ReadAllLinesAsync(fileName, cancellationToken));
-        }
+        // TODO: re-enable this method when netstandard supports it
+        //public static async Task<Graph<int, int>> FromEdgeListFileAsync(string fileName, CancellationToken cancellationToken = default(CancellationToken))
+        //{
+        //    return GraphLoader.FromEdgeListLines(
+        //        edgeListLines: await File.ReadAllLinesAsync(fileName, cancellationToken));
+        //}
 
         public static Vertex<TVertex> ToVertex<TVertex>(this long vertexId, TVertex property)
         {

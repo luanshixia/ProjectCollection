@@ -1,4 +1,5 @@
-﻿using Dreambuild.Gis.Desktop.Utils;
+﻿using Dreambuild.Extensions;
+using Dreambuild.Gis.Desktop.Utils;
 using Dreambuild.Gis.Display;
 using Dreambuild.Gis.Formats;
 using Dreambuild.Utils;
@@ -8,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Xml.Linq;
 
 namespace Dreambuild.Gis.Desktop
 {

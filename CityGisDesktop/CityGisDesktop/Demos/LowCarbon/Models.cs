@@ -1,4 +1,5 @@
-﻿using Dreambuild.Geometry;
+﻿using Dreambuild.Extensions;
+using Dreambuild.Geometry;
 using Dreambuild.Properties;
 using Dreambuild.Utils;
 using System;

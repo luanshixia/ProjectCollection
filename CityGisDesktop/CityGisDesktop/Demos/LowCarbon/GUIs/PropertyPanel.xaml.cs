@@ -1,4 +1,5 @@
-﻿using Dreambuild.Utils;
+﻿using Dreambuild.Extensions;
+using Dreambuild.Utils;
 using System;
 using System.Linq;
 using System.Windows;
@@ -26,7 +27,7 @@ namespace Dreambuild.Gis.Desktop.Demos.LowCarbon
                 var changedProperty = e.ChangedItem.PropertyDescriptor.Name;
                 if (PropGrid.SelectedObject != null && PropGrid.SelectedObjects.Length == 1)
                 {
-                    var unit =PropGrid.SelectedObject as ComputationUnit;
+                    var unit = PropGrid.SelectedObject as ComputationUnit;
                     PropertyValueChanged(unit, changedProperty);
                 }
                 else if (PropGrid.SelectedObjects != null)
@@ -47,7 +48,7 @@ namespace Dreambuild.Gis.Desktop.Demos.LowCarbon
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "ERROR");                
+                MessageBox.Show(ex.Message, "ERROR");
             }
         }
 

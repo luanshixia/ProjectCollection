@@ -299,7 +299,7 @@ namespace Dreambuild.Geometry3D
             {
                 points.RemoveAt(points.Count - 1);
             }
-            var triIndices = CuttingEarsTriangulator.Triangulate(points.Select(p => new System.Windows.Point(p.X, p.Y)).ToList());
+            var triIndices = CuttingEarsTriangulator.Triangulate(points);
             if (triIndices == null)
             {
                 return null;

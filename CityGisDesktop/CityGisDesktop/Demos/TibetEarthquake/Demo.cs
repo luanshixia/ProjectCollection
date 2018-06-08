@@ -1,5 +1,5 @@
-﻿using Dreambuild.Gis.Display;
-using System.Linq;
+﻿using Dreambuild.Extensions;
+using Dreambuild.Gis.Display;
 using System.Windows.Controls;
 
 namespace Dreambuild.Gis.Desktop.Demos.TibetEarthquake

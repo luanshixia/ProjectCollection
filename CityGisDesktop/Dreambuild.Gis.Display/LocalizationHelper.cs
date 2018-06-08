@@ -27,9 +27,9 @@ namespace Dreambuild.Utils
         static LocalizationHelper()
         {
             CurrentLocale = Locales.ZH_CN;
-            _localResources = _locales.ToDictionary(x => x, x => new ResourceDictionary 
-            { 
-                Source = new Uri(string.Format(@"Resources\{0}.xaml", x), UriKind.RelativeOrAbsolute) 
+            _localResources = _locales.ToDictionary(x => x, x => new ResourceDictionary
+            {
+                Source = new Uri(string.Format(@"Resources\{0}.xaml", x), UriKind.RelativeOrAbsolute)
             });
         }
 

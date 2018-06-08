@@ -857,4 +857,12 @@ namespace Dreambuild.Geometry3D
         //THREE.Matrix4.__m1 = new THREE.Matrix4();
         //THREE.Matrix4.__m2 = new THREE.Matrix4();
     }
+
+    public static class VectorMatrix4Extensions
+    {
+        public static Vector Transform(this Vector pt, Matrix4 m)
+        {
+            return m.MultiplyVector3(pt);
+        }
+    }
 }

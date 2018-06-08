@@ -1,4 +1,5 @@
-﻿using Dreambuild.Geometry;
+﻿using Dreambuild.Extensions;
+using Dreambuild.Geometry;
 using System;
 using System.Collections.Generic;
 using System.IO;

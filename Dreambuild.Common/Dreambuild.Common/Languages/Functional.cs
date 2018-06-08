@@ -215,7 +215,7 @@ namespace Dreambuild.Functional
 
         public static IEnumerable<T> fetch<T>(IEnumerable<int> indices, IEnumerable<T> source)
         {
-            var indexSet = indices.ToHashSet();
+            var indexSet = new HashSet<int>(indices); // TODO: replace with .ToHashSet() when netstandard supports it
             return source.Where((x, i) => indexSet.Contains(i));
         }
 

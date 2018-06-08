@@ -7,7 +7,6 @@
 namespace Dreambuild.Geometry
 {
     using System.Collections.Generic;
-    using System.Windows;
 
     /// <summary>
     /// A cutting ears triangulator for simple polygons with no holes. O(n^2)
@@ -38,7 +37,7 @@ namespace Dreambuild.Geometry
         /// <returns>
         /// collection of triangle points
         /// </returns>
-        public static List<int> Triangulate(IList<Point> contour)
+        public static List<int> Triangulate(IList<Vector> contour)
         {
             // allocate and initialize list of indices in polygon
             var result = new List<int>();
@@ -138,7 +137,7 @@ namespace Dreambuild.Geometry
         /// </summary>
         /// <param name="contour">The contour.</param>
         /// <returns>The area.</returns>
-        private static double Area(IList<Point> contour)
+        private static double Area(IList<Vector> contour)
         {
             int n = contour.Count;
             double A = 0.0;
@@ -216,7 +215,7 @@ namespace Dreambuild.Geometry
         /// <param name="n">The n.</param>
         /// <param name="V">The v.</param>
         /// <returns>The snip.</returns>
-        private static bool Snip(IList<Point> contour, int u, int v, int w, int n, int[] V)
+        private static bool Snip(IList<Vector> contour, int u, int v, int w, int n, int[] V)
         {
             int p;
             double Ax, Ay, Bx, By, Cx, Cy, Px, Py;
@@ -252,6 +251,5 @@ namespace Dreambuild.Geometry
 
             return true;
         }
-
     }
 }

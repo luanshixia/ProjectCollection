@@ -1,4 +1,5 @@
-﻿using Dreambuild.Geometry;
+﻿using Dreambuild.Extensions;
+using Dreambuild.Geometry;
 using Dreambuild.Geometry3D;
 using HelixToolkit.Wpf;
 using System;
@@ -72,13 +73,13 @@ namespace Dreambuild.Gis.Helix
         public static MeshGeometry3D ToWpfMesh(this Mesh mesh)
         {
             MeshGeometry3D result = new MeshGeometry3D();
-            result.Positions = new Point3DCollection(mesh.Vertices.Cast<Geometry.Vector>().Select(p => new System.Windows.Media.Media3D.Point3D(p.X, p.Y, p.Z)));
+            result.Positions = new Point3DCollection(mesh.Vertices.Cast<Geometry.Vector>().Select(p => new Point3D(p.X, p.Y, p.Z)));
             var vertexIndices = mesh.Triangles.Cast<Triangle>().Select(f => new int[] { f.V0, f.V1, f.V2 }).SelectMany(x => x).ToArray();
             result.TriangleIndices = new Int32Collection(vertexIndices);
 
             if (mesh.Normals != null && mesh.Normals.Count > 0)
             {
-                result.Normals = new Vector3DCollection(mesh.Normals.Cast<Geometry.Vector>().Select(n => new System.Windows.Media.Media3D.Vector3D(n.X, n.Y, n.Z)));
+                result.Normals = new Vector3DCollection(mesh.Normals.Cast<Geometry.Vector>().Select(n => new Vector3D(n.X, n.Y, n.Z)));
             }
             if (mesh.TextureCoordinates != null && mesh.TextureCoordinates.Count > 0)
             {
@@ -104,17 +105,17 @@ namespace Dreambuild.Gis.Helix
                 grid[j + 1, 1] = b;
                 grid[j + 1, 2] = b.Add(0.5 * width * norm);
             }
-            return Dreambuild.Geometry3D.MeshBuilder.RectGrid(grid).ToMesh().ToWpfMesh();
+            return Geometry3D.MeshBuilder.RectGrid(grid).ToMesh().ToWpfMesh();
         }
 
         public static MeshGeometry3D Block(PointString poly, double height)
         {
-            return Dreambuild.Geometry3D.MeshBuilder.ExtrudeWithCaps(poly, height).ToMesh().ToWpfMesh();
+            return Geometry3D.MeshBuilder.ExtrudeWithCaps(poly, height).ToMesh().ToWpfMesh();
         }
 
         public static MeshGeometry3D Polygon(PointString poly)
         {
-            var planar = Dreambuild.Geometry3D.MeshBuilder.Planar(poly);
+            var planar = Geometry3D.MeshBuilder.Planar(poly);
             return planar == null ? null : planar.ToMesh().ToWpfMesh();
         }
     }

@@ -124,7 +124,7 @@ namespace Dreambuild.Properties
                     Object[] objs = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
                     if (objs.Length > 0)
                     {
-                        string description = ((DescriptionAttribute) objs[0]).Description;
+                        string description = ((DescriptionAttribute)objs[0]).Description;
 
                         dict.Add(Enum.Parse(enumType, field.Name), LocalizationHelper.GetString(description));
                     }
