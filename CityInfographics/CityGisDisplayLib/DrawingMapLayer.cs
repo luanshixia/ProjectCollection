@@ -64,7 +64,7 @@ namespace TongJi.Gis.Display
             return string.Format("{0}|{1}", LayerData.Name, Features.Count);
         }
 
-        public void AddFeatureChildren(IFeature f, GeometryDrawing drawing)
+        private void AddFeatureChildren(IFeature f, GeometryDrawing drawing)
         {
             Features.Add(f, drawing);
             _drawingGroup.Children.Add(drawing);
@@ -76,7 +76,7 @@ namespace TongJi.Gis.Display
             _drawingGroup.Children.Add(drawing);
         }
 
-        public new void ClearOverlayChildren()
+        private void ClearOverlayChildren()
         {
             Overlays.ForEach(x => _drawingGroup.Children.Remove(x));
             Overlays.Clear();
@@ -313,6 +313,12 @@ namespace TongJi.Gis.Display
 
         protected override void AddPolygon(Point[] points, IFeature f)
         {
+            if (points.First() != points.Last()) // newly 20140624
+            {
+                var pts = points.ToList();
+                pts.Add(pts.First());
+                points = pts.ToArray();
+            }
             AddPolylineInternal(points, f, LayerStyle.GetFill(), LayerStyle.Stroke, LayerStyle.StrokeWeight);
         }
 
@@ -349,6 +355,12 @@ namespace TongJi.Gis.Display
         {
             _drawingGroup.Children.Remove(drawing);
             _drawingGroup.Children.Add(drawing);
+        }
+
+        public void BringToBack(GeometryDrawing drawing)
+        {
+            _drawingGroup.Children.Remove(drawing);
+            _drawingGroup.Children.Insert(0, drawing);
         }
     }
 }

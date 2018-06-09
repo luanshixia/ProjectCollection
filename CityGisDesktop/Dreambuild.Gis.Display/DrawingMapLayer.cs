@@ -92,8 +92,8 @@ namespace Dreambuild.Gis.Display
                 if (Features.ContainsKey(feature))
                 {
                     _drawingGroup.Children.Remove(Features[feature]);
+                    Features.Remove(feature);
                 }
-                Features.Remove(feature);
             }
         }
 
@@ -331,6 +331,10 @@ namespace Dreambuild.Gis.Display
 
         private void AddPolylineInternal(Point[] points, IFeature f, Brush fill, Brush stroke, double strokeWeight, bool addToFeatureList = true)
         {
+            if (points.Length == 0) // newly 20131015
+            {
+                return;
+            }
             PathGeometry geometry = new PathGeometry();
             PathFigure figure = new PathFigure { StartPoint = points.First() };
             PolyLineSegment segment = new PolyLineSegment(points, true);
