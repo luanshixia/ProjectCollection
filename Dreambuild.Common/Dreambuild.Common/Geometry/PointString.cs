@@ -116,7 +116,7 @@ namespace Dreambuild.Geometry
             for (int i = 0; i < this.Points.Count; i++)
             {
                 int j = (i < this.Points.Count - 1) ? (i + 1) : 0;
-                a += this.Points[i].Sub(p).AngleTo(this.Points[j].Sub(p), AngleToMode.MinusPiToPi);
+                a += this.Points[i].Sub(p).AngleTo(this.Points[j].Sub(p), AngleRange.MinusPiToPi);
             }
             return Math.Abs(Math.Abs(a) - 2 * Math.PI) < 0.1;
         }

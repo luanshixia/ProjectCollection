@@ -170,23 +170,23 @@ namespace Dreambuild.Geometry
             return Math.Atan2(Y, X);
         }
 
-        public double AngleTo(Vector v, AngleToMode mode = AngleToMode.ZeroToPi)
+        public double AngleTo(Vector v, AngleRange mode = AngleRange.ZeroToPi)
         {
-            if (mode == AngleToMode.ZeroToPi)
+            if (mode == AngleRange.ZeroToPi)
             {
                 return Vector.AngleBetween(this, v);
             }
             var dir0 = this.Heading();
             var dir1 = v.Heading();
             var angle = dir1 - dir0;
-            if (mode == AngleToMode.ZeroTo2Pi)
+            if (mode == AngleRange.ZeroTo2Pi)
             {
                 if (angle < 0)
                 {
                     angle += 2 * Math.PI;
                 }
             }
-            else if (mode == AngleToMode.MinusPiToPi)
+            else if (mode == AngleRange.MinusPiToPi)
             {
                 if (angle < -Math.PI)
                 {
@@ -314,9 +314,9 @@ namespace Dreambuild.Geometry
     }
 
     /// <summary>
-    /// Mode of angle calculation.
+    /// Range of angle value.
     /// </summary>
-    public enum AngleToMode
+    public enum AngleRange
     {
         ZeroToPi,
         ZeroTo2Pi,
