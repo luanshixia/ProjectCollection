@@ -9,7 +9,7 @@ using System.Windows.Input;
 namespace Dreambuild.Gis.Desktop
 {
     /// <summary>
-    /// PythonConsole.xaml 的交互逻辑
+    /// PythonConsole.xaml code behind
     /// </summary>
     public partial class PythonConsole : UserControl
     {
@@ -82,12 +82,12 @@ namespace Dreambuild.Gis.Desktop
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             StringWriter strw = new StringWriter();
-            strw.WriteLine("CityGIS IronPython 命令行");
-            strw.WriteLine("版本 0.2");
+            strw.WriteLine("CityGIS IronPython Console");
+            strw.WriteLine("Version 0.2");
             strw.WriteLine("by WY");
             strw.WriteLine("--------------------------------------------------");
-            strw.WriteLine("按 Ctrl+Enter 来执行代码.");
-            strw.WriteLine("执行 \'quickref()\' 来获取指南.");
+            strw.WriteLine("Press Ctrl+Enter to run command.");
+            strw.WriteLine("Run \'quickref()\' for help.");
             strw.WriteLine("--------------------------------------------------");
             strw.WriteLine();
             txtCmdHistory.Text = strw.ToString();
@@ -155,7 +155,7 @@ namespace Dreambuild.Gis.Desktop
             try
             {
                 _engine.ExecuteFile(fileName, _scope);
-                EchoLine(string.Format("脚本文件 \'{0}\' 已成功执行.", fileName));
+                EchoLine(string.Format("Script \'{0}\' completed.", fileName));
             }
             catch (Exception ex)
             {
