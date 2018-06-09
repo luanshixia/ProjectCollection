@@ -14,9 +14,13 @@ namespace Dreambuild.Gis.Formats
 
         public static Gpx Load(string fileName)
         {
-            Gpx result = new Gpx();
-            result.Tracks = XDocument.Load(fileName).Root.Elements(ns + "trk").Select(x => GpxTrack.FromXElement(x)).ToList();
-            return result;
+            return new Gpx
+            {
+                Tracks = XDocument
+                    .Load(fileName).Root.Elements(ns + "trk")
+                    .Select(x => GpxTrack.FromXElement(x))
+                    .ToList()
+            };
         }
 
         public void Save(string fileName)
@@ -26,11 +30,18 @@ namespace Dreambuild.Gis.Formats
 
         public Map ToMap()
         {
-            Map map = new Map();
+            var map = new Map();
             map.Layers.Add(new VectorLayer("Node", VectorLayer.GEOTYPE_POINT));
             map.Layers.Add(new VectorLayer("Link", VectorLayer.GEOTYPE_LINEAR));
-            Tracks.SelectMany(t => t.Segs.SelectMany(s => s.Points)).ForEach(p => map.AddFeature("Node", p.ToFeature()));
-            Tracks.SelectMany(t => t.Segs.SelectMany(s => s.ToFeatures())).ForEach(f => map.AddFeature("Link", f));
+
+            this.Tracks
+                .SelectMany(t => t.Segs.SelectMany(s => s.Points))
+                .ForEach(p => map.AddFeature("Node", p.ToFeature()));
+
+            this.Tracks
+                .SelectMany(t => t.Segs.SelectMany(s => s.ToFeatures()))
+                .ForEach(f => map.AddFeature("Link", f));
+
             return map;
         }
     }
@@ -43,11 +54,12 @@ namespace Dreambuild.Gis.Formats
 
         public static GpxTrack FromXElement(XElement xe)
         {
-            GpxTrack track = new GpxTrack();
-            track.Name = xe.Element(Gpx.ns + "name").Value;
-            track.Description = xe.Element(Gpx.ns + "desc").Value;
-            track.Segs = xe.Elements(Gpx.ns + "trkseg").Select(x => GpxTrackSeg.FromXElement(x)).ToList();
-            return track;
+            return new GpxTrack
+            {
+                Name = xe.Element(Gpx.ns + "name").Value,
+                Description = xe.Element(Gpx.ns + "desc").Value,
+                Segs = xe.Elements(Gpx.ns + "trkseg").Select(x => GpxTrackSeg.FromXElement(x)).ToList()
+            };
         }
     }
 
@@ -57,24 +69,24 @@ namespace Dreambuild.Gis.Formats
 
         public static GpxTrackSeg FromXElement(XElement xe)
         {
-            GpxTrackSeg seg = new GpxTrackSeg();
-            seg.Points = xe.Elements(Gpx.ns + "trkpt").Select(x => GpxTrackPoint.FromXElement(x)).ToList();
-            return seg;
+            return new GpxTrackSeg
+            {
+                Points = xe
+                    .Elements(Gpx.ns + "trkpt")
+                    .Select(x => GpxTrackPoint.FromXElement(x))
+                    .ToList()
+            };
         }
 
         public List<IFeature> ToFeatures()
         {
-            List<IFeature> result = new List<IFeature>();
-            for (int i = 0; i < Points.Count - 1; i++)
-            {
-                var pt1 = Points[i];
-                var pt2 = Points[i + 1];
-                Feature f = new Feature();
-                f.GeoData = new List<Vector> { pt1.GetPosition(), pt2.GetPosition() };
-                f["Velocity"] = (pt2.GetPosition().Dist(pt1.GetPosition()) / (pt2.Time - pt1.Time).TotalSeconds).ToString();
-                result.Add(f);
-            }
-            return result;
+            return this.Points
+                .PairwiseSelect((pt1, pt2) => new Feature
+                {
+                    GeoData = new List<Vector> { pt1.GetPosition(), pt2.GetPosition() },
+                    ["Velocity"] = (pt2.GetPosition().Dist(pt1.GetPosition()) / (pt2.Time - pt1.Time).TotalSeconds).ToString()
+                } as IFeature)
+                .ToList();
         }
     }
 
@@ -87,27 +99,29 @@ namespace Dreambuild.Gis.Formats
 
         public static GpxTrackPoint FromXElement(XElement xe)
         {
-            GpxTrackPoint pt = new GpxTrackPoint();
-            pt.Latitude = xe.AttValue("lat").TryParseToDouble();
-            pt.Longitude = xe.AttValue("lon").TryParseToDouble();
-            pt.Elevation = xe.Element(Gpx.ns + "ele").Value.TryParseToDouble();
-            pt.Time = DateTime.Parse(xe.Element(Gpx.ns + "time").Value); //.Replace("T", " ").Replace("Z", ""));
-            return pt;
+            return new GpxTrackPoint
+            {
+                Latitude = xe.AttValue("lat").TryParseToDouble(),
+                Longitude = xe.AttValue("lon").TryParseToDouble(),
+                Elevation = xe.Element(Gpx.ns + "ele").Value.TryParseToDouble(),
+                Time = DateTime.Parse(xe.Element(Gpx.ns + "time").Value) //.Replace("T", " ").Replace("Z", ""));
+            };
         }
 
         public Vector GetPosition()
         {
-            double mag = 1000000;
+            var mag = 1000000;
             return new Vector(Longitude * mag, Latitude * mag);
         }
 
         public IFeature ToFeature()
         {
-            Feature f = new Feature();
-            f.GeoData = new List<Vector> { GetPosition() };
-            f["Elevation"] = Elevation.ToString();
-            f["Time"] = Time.ToString();
-            return f;
+            return new Feature
+            {
+                GeoData = new List<Vector> { GetPosition() },
+                ["Elevation"] = Elevation.ToString(),
+                ["Time"] = Time.ToString()
+            };
         }
     }
 }

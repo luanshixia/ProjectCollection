@@ -87,12 +87,12 @@ namespace Dreambuild.Gis.Desktop
 
         public static void mincolor(byte r, byte g, byte b)
         {
-            _colorTheme.MinColor = System.Windows.Media.Color.FromRgb(r, g, b);
+            _colorTheme.MinColor = Color.FromRgb(r, g, b);
         }
 
         public static void maxcolor(byte r, byte g, byte b)
         {
-            _colorTheme.MaxColor = System.Windows.Media.Color.FromRgb(r, g, b);
+            _colorTheme.MaxColor = Color.FromRgb(r, g, b);
         }
 
         public static void apply()
@@ -480,17 +480,17 @@ namespace Dreambuild.Gis.Desktop
 
         public static void mincolor(byte r, byte g, byte b)
         {
-            _colorTheme.MinColor = System.Windows.Media.Color.FromRgb(r, g, b);
+            _colorTheme.MinColor = Color.FromRgb(r, g, b);
         }
 
         public static void maxcolor(byte r, byte g, byte b)
         {
-            _colorTheme.MaxColor = System.Windows.Media.Color.FromRgb(r, g, b);
+            _colorTheme.MaxColor = Color.FromRgb(r, g, b);
         }
 
         public static void setspotcolor(byte r, byte g, byte b)
         {
-            spotcolor = System.Windows.Media.Color.FromRgb(r, g, b);
+            spotcolor = Color.FromRgb(r, g, b);
         }
 
         public static void applycolor()
@@ -615,7 +615,7 @@ namespace Dreambuild.Gis.Desktop
             var searches = Enumerable.Range(0, 1000).Select(x =>
             {
                 var pts = Enumerable.Range(0, 4).Select(i => cells[rand.Next(0, cells.Count - 1)]).ToList();
-                return System.Tuple.Create(pts, evaluate(pts, 98500));
+                return Tuple.Create(pts, evaluate(pts, 98500));
             }).ToList();
             var mineval = searches.Min(y => y.Item2);
             var target = searches.First(x => x.Item2 == mineval);

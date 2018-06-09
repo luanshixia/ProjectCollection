@@ -41,17 +41,17 @@ namespace Dreambuild.Gis
         {
             if (operation == SpatialQueryOperation.Point)
             {
-                Vector pos = (Vector)param;
+                var pos = (Vector)param;
                 return PointQuery(layer, pos, tol);
             }
             else if (operation == SpatialQueryOperation.Window)
             {
-                Extents extents = (Extents)param;
+                var extents = (Extents)param;
                 return WindowQuery(layer, extents);
             }
             else if (operation == SpatialQueryOperation.Cross)
             {
-                Extents extents = (Extents)param;
+                var extents = (Extents)param;
                 return CrossQuery(layer, extents);
             }
             return null;
@@ -176,7 +176,7 @@ namespace Dreambuild.Gis
 
         public static IEnumerable<IFeature> QueryFeatures(this ILayer layer, string prop, DataQueryOperation operation, object param)
         {
-            return layer.Features.Where(f => FeatureSelector(f, prop, operation, param)).ToList();
+            return layer.Features.Where(f => MapQueryServices.FeatureSelector(f, prop, operation, param)).ToList();
         }
 
         public static IEnumerable<IFeature> FindFeatures(this Map map, string searchWord)
@@ -185,7 +185,7 @@ namespace Dreambuild.Gis
             {
                 foreach (var feature in layer.Features)
                 {
-                    if (FeatureSelector(feature, searchWord))
+                    if (MapQueryServices.FeatureSelector(feature, searchWord))
                     {
                         yield return feature;
                     }
@@ -221,8 +221,7 @@ namespace Dreambuild.Gis
 
         private static bool IsNumber(this object param)
         {
-            double num;
-            return param is int || param is double || param is decimal || param is float || double.TryParse(param.ToString(), out num);
+            return param is int || param is double || param is decimal || param is float || double.TryParse(param.ToString(), out double num);
         }
     }
 

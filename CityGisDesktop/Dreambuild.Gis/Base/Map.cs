@@ -20,13 +20,33 @@ namespace Dreambuild.Gis
 
         #endregion
 
+        #region Properties
+
+        public LayerCollection Layers { get; internal set; }
+        public string Name { get; set; }
+        public Dictionary<string, string> Properties { get; internal set; }
+
+        public string this[string property]
+        {
+            get
+            {
+                return this.Properties.ContainsKey(property) ? this.Properties[property] : string.Empty;
+            }
+            set
+            {
+                this.Properties[property] = value;
+            }
+        }
+
+        #endregion
+
         #region Constructors
 
         public Map()
         {
-            Name = string.Empty;
-            Properties = new Dictionary<string, string>();
-            Layers = new LayerCollection();
+            this.Name = string.Empty;
+            this.Properties = new Dictionary<string, string>();
+            this.Layers = new LayerCollection();
         }
 
         public Map(string fileName)
@@ -36,17 +56,14 @@ namespace Dreambuild.Gis
 
         public Map(XElement xe)
         {
-            if (string.IsNullOrEmpty(xe.AttValue("Stamp")))
-            {
-                _stamp = xe.Descendants("Record").Count() + 1;  // 自动适应旧版
-            }
-            else
-            {
-                _stamp = Convert.ToInt32(xe.AttValue("Stamp"));
-            }
-            Name = xe.AttValue("Name");
-            Properties = new Dictionary<string, string>();
-            Layers = new LayerCollection();
+            this._stamp = string.IsNullOrEmpty(xe.AttValue("Stamp"))
+                ? xe.Descendants("Record").Count() + 1  // legacy format
+                : Convert.ToInt32(xe.AttValue("Stamp"));
+
+            this.Name = xe.AttValue("Name");
+            this.Properties = new Dictionary<string, string>();
+            this.Layers = new LayerCollection();
+
             if (xe.Elements("Properties").Count() > 0)
             {
                 foreach (var prop in xe.Elements("Properties").First().Attributes())
@@ -54,29 +71,10 @@ namespace Dreambuild.Gis
                     Properties.Add(prop.Name.ToString(), prop.Value);
                 }
             }
+
             foreach (var layer in xe.Elements("Table"))
             {
                 Layers.Add(new VectorLayer(layer));
-            }
-        }
-
-        #endregion
-
-        #region Properties
-
-        public LayerCollection Layers { get; private set; }
-        public string Name { get; set; }
-        public Dictionary<string, string> Properties { get; private set; }
-
-        public string this[string property]
-        {
-            get
-            {
-                return Properties.ContainsKey(property) ? Properties[property] : string.Empty;
-            }
-            set
-            {
-                Properties[property] = value;
             }
         }
 
@@ -87,19 +85,13 @@ namespace Dreambuild.Gis
         public event Action<string, IFeature> FeatureAdded;
         protected void OnFeatureAdded(string layer, IFeature f)
         {
-            if (FeatureAdded != null)
-            {
-                FeatureAdded(layer, f);
-            }
+            this.FeatureAdded?.Invoke(layer, f);
         }
 
         public event EventHandler BeforeSave;
         protected void OnBeforeSave()
         {
-            if (BeforeSave != null)
-            {
-                BeforeSave(this, EventArgs.Empty);
-            }
+            this.BeforeSave?.Invoke(this, EventArgs.Empty);
         }
 
         #endregion
@@ -108,14 +100,17 @@ namespace Dreambuild.Gis
 
         public XElement ToXMap()
         {
-            OnBeforeSave();
-            XElement xroot = new XElement("Database");
+            this.OnBeforeSave();
+
+            var xroot = new XElement("Database");
             xroot.SetAttValue("Stamp", _stamp.ToString());
             xroot.SetAttValue("Name", Name);
-            XElement xprop = new XElement("Properties");
-            Properties.ForEach(x => xprop.Add(new XAttribute(x.Key, x.Value)));
+
+            var xprop = new XElement("Properties");
+            this.Properties.ForEach(x => xprop.Add(new XAttribute(x.Key, x.Value)));
             xroot.Add(xprop);
-            Layers.ForEach(x => xroot.Add(x.ToXMap()));
+
+            this.Layers.ForEach(x => xroot.Add(x.ToXMap()));
             return xroot;
         }
 
@@ -129,11 +124,11 @@ namespace Dreambuild.Gis
             var layer = Layers[layerName];
             if (layer != null)
             {
-                feature.FeatId = _stamp.ToString();
+                feature.FeatId = this._stamp.ToString();
                 layer.Features.Add(feature);
-                OnFeatureAdded(layerName, feature);
-                _stamp++;
-                return _stamp - 1;
+                this.OnFeatureAdded(layerName, feature);
+                this._stamp++;
+                return this._stamp - 1;
             }
             else
             {
@@ -222,26 +217,26 @@ namespace Dreambuild.Gis
         public VectorLayer(string name, string geoType)
             : this()
         {
-            Code = string.Empty;
-            _name = name;
-            _geoType = geoType;
+            this.Code = string.Empty;
+            this._name = name;
+            this._geoType = geoType;
         }
 
         public VectorLayer(XElement xe)
         {
-            Code = xe.AttValue("Code");
-            _name = xe.AttValue("Name");
-            _geoType = xe.AttValue("GeoType");
+            this.Code = xe.AttValue("Code");
+            this._name = xe.AttValue("Name");
+            this._geoType = xe.AttValue("GeoType");
 
             foreach (var feature in xe.Elements("Record"))
             {
-                Features.Add(new Feature(feature));
+                this.Features.Add(new Feature(feature));
             }
         }
 
         public override XElement ToXMap()
         {
-            XElement xe = new XElement("Table",
+            var xe = new XElement("Table",
                 new XAttribute("Code", Code),
                 new XAttribute("Name", Name),
                 new XAttribute("GeoType", GeoType));
@@ -305,15 +300,15 @@ namespace Dreambuild.Gis
 
         public Feature(XElement xe)
         {
-            _featId = xe.AttValue("FeatId");
-            _geoData = ParseGeoData(xe.AttValue("Geo"));
+            this._featId = xe.AttValue("FeatId");
+            this._geoData = ParseGeoData(xe.AttValue("Geo"));
 
             if (xe.HasElements)
             {
                 var props = xe.Element("Properties");
                 foreach (var prop in props.Attributes())
                 {
-                    _properties.Add(prop.Name.ToString(), prop.Value);
+                    this._properties.Add(prop.Name.ToString(), prop.Value);
                 }
             }
         }
@@ -339,23 +334,23 @@ namespace Dreambuild.Gis
         {
             get
             {
-                return Properties.ContainsKey(property) ? Properties[property] : string.Empty;
+                return this.Properties.ContainsKey(property) ? this.Properties[property] : string.Empty;
             }
             set
             {
-                Properties[property] = value;
+                this.Properties[property] = value;
             }
         }
 
         public XElement ToXMap(bool withProperties = true)
         {
-            XElement xe = new XElement("Record");
-            xe.Add(new XAttribute("FeatId", FeatId));
-            xe.Add(new XAttribute("Geo", StringifyGeoData(GeoData))); // mod 20130301
+            var xe = new XElement("Record");
+            xe.Add(new XAttribute("FeatId", this.FeatId));
+            xe.Add(new XAttribute("Geo", Feature.StringifyGeoData(GeoData))); // mod 20130301
             if (withProperties)
             {
-                XElement xeProp = new XElement("Properties");
-                foreach (var prop in _properties)
+                var xeProp = new XElement("Properties");
+                foreach (var prop in this._properties)
                 {
                     xeProp.Add(new XAttribute(prop.Key, prop.Value ?? string.Empty));
                 }
@@ -367,7 +362,7 @@ namespace Dreambuild.Gis
 
         public override string ToString() // newly 20140625
         {
-            return string.Format("{0}|{1}", _featId, _geoData.Count);
+            return string.Format("{0}|{1}", this._featId, this._geoData.Count);
         }
 
         // Utils
@@ -411,8 +406,8 @@ namespace Dreambuild.Gis
             }
             else
             {
-                double area = f.Area();
-                double length = f.Length();
+                var area = f.Area();
+                var length = f.Length();
                 if (area < AREA_THRESHOLD * length * length / 16)
                 {
                     return VectorLayer.GEOTYPE_LINEAR;
@@ -439,8 +434,8 @@ namespace Dreambuild.Gis
             {
                 var n = layer.Average(f =>
                 {
-                    double dist = f.GeoData.First().Dist(f.GeoData.Last());
-                    double length = f.Length();
+                    var dist = f.GeoData.First().Dist(f.GeoData.Last());
+                    var length = f.Length();
                     return dist / length;
                 });
                 if (n > GAP_THRESHOLD)
@@ -466,7 +461,7 @@ namespace Dreambuild.Gis
 
         public XElement ToXMap()
         {
-            XElement xe = Feature.ToXMap();
+            var xe = Feature.ToXMap();
             xe.SetAttValue("Layer", Layer);
             xe.SetAttValue("ID", ID);
             return xe;
@@ -478,9 +473,9 @@ namespace Dreambuild.Gis
 
         public FeatureCache(XElement xe)
         {
-            Feature = new Feature(xe);
-            Layer = xe.AttValue("Layer");
-            ID = xe.AttValue("ID");
+            this.Feature = new Feature(xe);
+            this.Layer = xe.AttValue("Layer");
+            this.ID = xe.AttValue("ID");
         }
     }
 
@@ -491,25 +486,27 @@ namespace Dreambuild.Gis
 
         public MapCache()
         {
-            Features = new List<FeatureCache>();
-            Map = new Map();
+            this.Features = new List<FeatureCache>();
+            this.Map = new Map();
         }
 
         public MapCache(Map map)
         {
-            Features = new List<FeatureCache>();
-            Map = map;
+            this.Features = new List<FeatureCache>();
+            this.Map = map;
 
-            int id = 1;
+            var id = 1;
             foreach (VectorLayer layer in map.Layers)
             {
                 foreach (var feature in layer.Features)
                 {
-                    FeatureCache fc = new FeatureCache();
-                    fc.Feature = feature;
-                    fc.Extents = new PointString(feature.GeoData).GetExtents();
-                    fc.Layer = layer.Name;
-                    fc.ID = id.ToString();
+                    var fc = new FeatureCache
+                    {
+                        Feature = feature,
+                        Extents = new PointString(feature.GeoData).GetExtents(),
+                        Layer = layer.Name,
+                        ID = id.ToString()
+                    };
                     Features.Add(fc);
                     id++;
                 }
@@ -523,7 +520,7 @@ namespace Dreambuild.Gis
 
         public static XElement Encode(IEnumerable<FeatureCache> features)
         {
-            XElement xe = new XElement("MapCache");
+            var xe = new XElement("MapCache");
             foreach (var feature in features)
             {
                 xe.Add(feature.ToXMap());
@@ -535,18 +532,18 @@ namespace Dreambuild.Gis
         {
             foreach (var xFeature in xe.Elements())
             {
-                FeatureCache fc = new FeatureCache(xFeature);
+                var fc = new FeatureCache(xFeature);
                 if (!Features.Any(x => x.ID == fc.ID))
                 {
-                    Features.Add(fc);
-                    Map.AddFeature(fc.Layer, fc.Feature);
+                    this.Features.Add(fc);
+                    this.Map.AddFeature(fc.Layer, fc.Feature);
                 }
             }
         }
 
         public XElement FindAndEncode(Extents extents)
         {
-            return Encode(SpatialFind(Features, extents));
+            return MapCache.Encode(MapCache.SpatialFind(this.Features, extents));
         }
     }
 

@@ -291,6 +291,26 @@ namespace Dreambuild.Geometry
                 return new Vector(0, 0, 1);
             }
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj.GetType() == typeof(Vector) && this.Equals((Vector)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public static bool operator ==(Vector left, Vector right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Vector left, Vector right)
+        {
+            return !(left == right);
+        }
     }
 
     /// <summary>

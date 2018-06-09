@@ -12,7 +12,7 @@ namespace Dreambuild.Gis.Formats
 
         public Map GetMap()
         {
-            Map map = new Map();
+            var map = new Map();
             var files = System.IO.Directory.GetFiles(_folder, "*.shp", System.IO.SearchOption.TopDirectoryOnly);
             foreach (var file in files)
             {
