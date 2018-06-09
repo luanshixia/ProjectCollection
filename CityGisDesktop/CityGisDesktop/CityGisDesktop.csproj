@@ -535,7 +535,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="GUIs\" />
     <Folder Include="Web\images\" />
   </ItemGroup>
   <ItemGroup>
