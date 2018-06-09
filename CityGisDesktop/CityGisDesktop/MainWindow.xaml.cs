@@ -292,7 +292,8 @@ namespace Dreambuild.Gis.Desktop
             {
                 b.Background = new SolidColorBrush(Colors.Transparent);
             }
-            btn.Background = new SolidColorBrush(Color.FromArgb(255, 204, 51, 0));
+            //btn.Background = new SolidColorBrush(Color.FromArgb(255, 204, 51, 0));
+            btn.Background = this.FindResource("PrimaryGradientBrush") as LinearGradientBrush;
             _currentButton = btn;
         }
 
@@ -305,7 +306,7 @@ namespace Dreambuild.Gis.Desktop
         void btnZoomE_MouseMove(object sender, MouseEventArgs e)
         {
             Button btn = sender as Button;
-            btn.Background = new SolidColorBrush(Colors.Orange);
+            btn.Background = this.FindResource("PrimaryGradientBrush") as LinearGradientBrush;
         }
 
         void btn_MouseLeave(object sender, MouseEventArgs e)
@@ -325,7 +326,7 @@ namespace Dreambuild.Gis.Desktop
             {
                 return;
             }
-            btn.Background = new SolidColorBrush(Colors.Orange);
+            btn.Background = this.FindResource("PrimaryGradientBrush") as LinearGradientBrush;
         }
 
         private void btnPan_Click(object sender, RoutedEventArgs e)
