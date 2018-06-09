@@ -491,11 +491,11 @@ namespace Dreambuild.Gis.Display
         private ListBox _list = new ListBox { Height = 200, BorderBrush = new SolidColorBrush(Colors.LightGray) };
         private List<IFeature> _findResults = new List<IFeature>();
 
-        private ComboBox _cbbLayers = new ComboBox { Width = 70, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private ComboBox _cbbProps = new ComboBox { Width = 70, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private ComboBox _cbbOperations = new ComboBox { Width = 70, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private TextBox _txtParam = new TextBox { Width = 110, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private Button _btnDoQuery = new Button { Content = "查询", Width = 50, BorderBrush = new SolidColorBrush(Colors.LightGray) };
+        private ComboBox _cbbLayers = new ComboBox { Width = 80, BorderBrush = new SolidColorBrush(Colors.LightGray) };
+        private ComboBox _cbbProps = new ComboBox { Width = 80, BorderBrush = new SolidColorBrush(Colors.LightGray) };
+        private ComboBox _cbbOperations = new ComboBox { Width = 82, BorderBrush = new SolidColorBrush(Colors.LightGray) };
+        private TextBox _txtParam = new TextBox { Width = 140, BorderBrush = new SolidColorBrush(Colors.LightGray) };
+        private Button _btnDoQuery = new Button { Content = "查询", Width = 52, BorderBrush = new SolidColorBrush(Colors.LightGray) };
         private Button _btnResetQuery = new Button { Content = "复位", Width = 50, BorderBrush = new SolidColorBrush(Colors.LightGray) };
         private WrapPanel _queryControls = new WrapPanel();
 

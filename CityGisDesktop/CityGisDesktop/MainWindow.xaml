@@ -4,12 +4,71 @@
         xmlns:local="clr-namespace:Dreambuild.Gis.Desktop"
         xmlns:props="clr-namespace:Dreambuild.Gis.Desktop.Properties"
         xmlns:citygis="clr-namespace:Dreambuild.Gis.Display;assembly=Dreambuild.Gis.Display" 
-        Title="CityGIS Desktop" Height="720" Width="1200" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing" KeyUp="Window_KeyUp" KeyDown="Window_KeyDown">
+        Title="Dreambuild.GIS" Height="720" Width="1200" WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closed="Window_Closed" Closing="Window_Closing" KeyUp="Window_KeyUp" KeyDown="Window_KeyDown">
 
     <DockPanel x:Name="LayoutRoot" Background="White">
         <DockPanel Name="Sidebar" DockPanel.Dock="Left" Width="280">
+            <DockPanel.Resources>
+                <ControlTemplate x:Key="ExpanderToggleButton" TargetType="ToggleButton">
+                    <StackPanel Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" >
+                        <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" />
+                    </StackPanel>
+                </ControlTemplate>
+
+                <!-- Expander style -->
+                <Style TargetType="Expander">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <!-- Control template for expander -->
+                            <ControlTemplate TargetType="Expander">
+                                <StackPanel>
+                                    <Border 
+                                        Name="Head"
+                                        BorderThickness="0" 
+                                        CornerRadius="0">
+                                        <ToggleButton
+                                            Name="HeadButton"
+                                            Foreground="{TemplateBinding Foreground}"
+                                            IsChecked="{Binding Path=IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                            OverridesDefaultStyle="True"
+                                            Template="{StaticResource ExpanderToggleButton}"
+                                            HorizontalContentAlignment="Center">
+                                            <ToggleButton.Background>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                                    <GradientStop  Color="LightGray" Offset="0" />
+                                                    <GradientStop Color="LightSlateGray" Offset="1" />
+                                                </LinearGradientBrush>
+                                            </ToggleButton.Background>
+                                            <ContentPresenter 
+                                                Margin="2" 
+                                                ContentSource="Header" 
+                                                RecognizesAccessKey="True" />
+                                        </ToggleButton>
+                                    </Border>
+                                    <Border 
+                                        Name="Body" 
+                                        Height="0"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="0,0,1,0" 
+                                        CornerRadius="0" >
+                                        <ContentPresenter Margin="2" />
+                                    </Border>
+                                </StackPanel>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsExpanded" Value="True">
+                                        <Setter TargetName="Body" Property="Height" Value="{Binding ElementName=Content, Path=Height}" />
+                                        <Setter TargetName="HeadButton" Property="Foreground" Value="White"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </DockPanel.Resources>
+
             <Border Background="Orange" DockPanel.Dock="Top">
-                <TextBlock Name="AppTitle" Text="CityGIS Desktop" Margin="10" FontSize="20" FontFamily="Georgia" TextAlignment="Center" />
+                <TextBlock Name="AppTitle" Text="Dreambuild.GIS" Margin="10" FontSize="20" FontFamily="Georgia" TextAlignment="Center" />
             </Border>
             <Menu Name="TheMenu" Margin="5" Background="White" DockPanel.Dock="Top">
                 <MenuItem Header="{DynamicResource File}">
@@ -43,18 +102,17 @@
             </Menu>
             <ScrollViewer VerticalScrollBarVisibility="Auto" BorderThickness="0">
                 <StackPanel Name="PanelStack">
-                    <Expander x:Name="LayerPanel" Header="{DynamicResource LayerPanel}" HeaderStringFormat="LayerPanel" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True" />
-                    <Expander x:Name="PropertyPanel" Header="{DynamicResource PropertyPanel}" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True" />
-                    <Expander x:Name="FeaturePanel" Header="{DynamicResource FeaturePanel}" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True" />
-                    <Expander x:Name="SearchPanel" Header="{DynamicResource SearchPanel}" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True" />
-                    <Expander x:Name="DebugPanel" Header="{DynamicResource DebugPanel}" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True">
+                    <Expander x:Name="LayerPanel" Header="{DynamicResource LayerPanel}" Margin="0" Background="WhiteSmoke" BorderBrush="LightGray" IsExpanded="True" />
+                    <Expander x:Name="PropertyPanel" Header="{DynamicResource PropertyPanel}" Margin="0" Background="WhiteSmoke" BorderBrush="LightGray" IsExpanded="True" />
+                    <Expander x:Name="FeaturePanel" Header="{DynamicResource FeaturePanel}" Margin="0" Background="WhiteSmoke" BorderBrush="LightGray" IsExpanded="True" />
+                    <Expander x:Name="SearchPanel" Header="{DynamicResource SearchPanel}" Margin="0" Background="WhiteSmoke" BorderBrush="LightGray" IsExpanded="True" />
+                    <Expander x:Name="DebugPanel" Header="{DynamicResource DebugPanel}" Margin="0" Background="WhiteSmoke" BorderBrush="LightGray" IsExpanded="True">
                         <TextBlock x:Name="FeatureCount" Text="0" />
                     </Expander>
-                    <Expander x:Name="PythonPanel" Header="IronPython Console" Margin="5" Background="Beige" BorderBrush="LightGray" IsExpanded="True">
+                    <Expander x:Name="PythonPanel" Header="IronPython Console" Margin="0" Background="WhiteSmoke" BorderBrush="LightGray" IsExpanded="True">
                         <local:PythonConsole Height="200" Margin="5" />
                     </Expander>
                 </StackPanel>
-
             </ScrollViewer>
         </DockPanel>
         <Grid>
@@ -81,7 +139,7 @@
                 </citygis:MapControl>
             </Border>
             <Border VerticalAlignment="Top" Margin="10,10,10,0" Padding="1">
-  
+
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
                         <GradientStop  Color="#80808080" Offset="0" />
@@ -102,7 +160,6 @@
                 <TextBlock Padding="20,5" Name="Message" Text="CityGIS" Foreground="White" />
             </Border>
             <citygis:ScaleRuler x:Name="SRuler" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,20" Width="200" Height="25"/>
-
         </Grid>
     </DockPanel>
 </Window>
