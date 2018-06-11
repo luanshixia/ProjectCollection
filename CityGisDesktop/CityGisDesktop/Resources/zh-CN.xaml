@@ -28,7 +28,7 @@
     <s:String x:Key="PropertyPanel">属性</s:String>
     <s:String x:Key="FeaturePanel">专题地图</s:String>
     <s:String x:Key="SearchPanel">查询</s:String>
-    <s:String x:Key="DebugPanel">调试与测试</s:String>
+    <s:String x:Key="DebugPanel">输出</s:String>
     <s:String x:Key="Pan">平移</s:String>
     <s:String x:Key="Zoom">矩形缩放</s:String>
     <s:String x:Key="ZoomE">范围缩放</s:String>

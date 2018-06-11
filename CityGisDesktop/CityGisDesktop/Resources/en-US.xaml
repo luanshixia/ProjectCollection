@@ -28,7 +28,7 @@
     <s:String x:Key="PropertyPanel">Properties</s:String>
     <s:String x:Key="FeaturePanel">Features</s:String>
     <s:String x:Key="SearchPanel">Search and Query</s:String>
-    <s:String x:Key="DebugPanel">Debug</s:String>
+    <s:String x:Key="DebugPanel">Output</s:String>
     <s:String x:Key="Pan">Pan</s:String>
     <s:String x:Key="Zoom">Zoom</s:String>
     <s:String x:Key="ZoomE">ZoomE</s:String>

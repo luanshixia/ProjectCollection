@@ -88,12 +88,41 @@
                                         BorderBrush="{TemplateBinding BorderBrush}"
                                         BorderThickness="0,0,1,0" 
                                         CornerRadius="0" >
-                                        <ContentPresenter Margin="2" />
+                                        <ContentPresenter Name="Content" Margin="2" />
                                     </Border>
                                 </StackPanel>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsExpanded" Value="True">
-                                        <Setter TargetName="Body" Property="Height" Value="{Binding ElementName=Content, Path=Height}" />
+                                        <Trigger.EnterActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation
+                                                        Storyboard.TargetName="Body"
+                                                        Storyboard.TargetProperty="Height"
+                                                        To="200"
+                                                        Duration="0:0:0.3">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut" />
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.EnterActions>
+                                        <Trigger.ExitActions>
+                                            <BeginStoryboard>
+                                                <Storyboard>
+                                                    <DoubleAnimation
+                                                        Storyboard.TargetName="Body"
+                                                        Storyboard.TargetProperty="Height"
+                                                        To="0"
+                                                        Duration="0:0:0.3">
+                                                        <DoubleAnimation.EasingFunction>
+                                                            <CubicEase EasingMode="EaseOut" />
+                                                        </DoubleAnimation.EasingFunction>
+                                                    </DoubleAnimation>
+                                                </Storyboard>
+                                            </BeginStoryboard>
+                                        </Trigger.ExitActions>
                                         <Setter TargetName="HeadButton" Property="Foreground" Value="{StaticResource FocusForegroundSolidBrush}"/>
                                     </Trigger>
                                 </ControlTemplate.Triggers>
