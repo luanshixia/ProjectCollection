@@ -13,6 +13,7 @@ namespace Dreambuild.Collections
 
         public SafeDictionary(bool createOnMiss = false, Func<TKey, TValue> valueGenerator = null)
         {
+            this.createOnMiss = createOnMiss;
             if (valueGenerator != null)
             {
                 this.valueGenerator = valueGenerator;
@@ -95,7 +96,7 @@ namespace Dreambuild.Collections
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.internalDictionary.GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,8 @@ namespace JsonCommentsTest
     {
         static void Main(string[] args)
         {
-            var json = GetTestJson("invalid1.json");
+            //var json = GetTestJson("invalid1.json");
+            var json = BuildLargeJson("invalid1.json", 800);
 
             //// JsonConvert.DeserializeObject - JToken
             //var obj = JsonConvert.DeserializeObject(json, JsonExtensions.ObjectSerializationSettings);
@@ -50,11 +52,20 @@ namespace JsonCommentsTest
 
             //Console.WriteLine(jtoken.ToString());
             Console.WriteLine(CountComments(jtoken));
+            var sw = Stopwatch.StartNew();
             StripOutComments(jtoken);
-            Console.WriteLine(jtoken);
+            //Console.WriteLine(jtoken);
             Console.WriteLine(CountComments(jtoken));
+            Console.WriteLine(sw.ElapsedMilliseconds);
 
             Console.ReadLine();
+        }
+
+        static string BuildLargeJson(string inputFile, int repeat)
+        {
+            var inputJson = File.ReadAllText(inputFile);
+            var jsonArray = Enumerable.Repeat(inputJson, repeat);
+            return "[" + string.Join(", ", jsonArray) + "]";
         }
 
         static string GetTestJson(string fileName)

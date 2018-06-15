@@ -18,44 +18,46 @@ namespace Dreambuild.Gis.Helix
 
         public BlockScene(HelixViewport3D viewport, Map map)
         {
-            Viewport = viewport;
-            Map = map;
-            Blocks = new List<Visual3D>();
-            Roads = new List<Visual3D>();
+            this.Viewport = viewport;
+            this.Map = map;
+            this.Blocks = new List<Visual3D>();
+            this.Roads = new List<Visual3D>();
 
-            Init();
+            this.Init();
         }
 
         private void Init()
         {
-            var basePaths = Map.Layers["地块"].Features;
-            foreach (IFeature feature in basePaths)
+            var basePaths = this.Map.Layers["地块"].Features;
+            foreach (var feature in basePaths)
             {
-                double height = 100; //basePath["f"].TryParseToDouble() * FloorHeight;
-                var block = BuildBlock(feature, height);
-                Blocks.Add(block);
-                Viewport.Children.Add(block);
+                var height = 100d; //basePath["f"].TryParseToDouble() * FloorHeight;
+                var block = BlockScene.BuildBlock(feature, height);
+                this.Blocks.Add(block);
+                this.Viewport.Children.Add(block);
             }
 
-            var roadFeatures = Map.Layers["道路"].Features;
-            foreach (IFeature feature in roadFeatures)
+            var roadFeatures = this.Map.Layers["道路"].Features;
+            foreach (var feature in roadFeatures)
             {
-                double width = 30;
-                var road = BuildRoad(feature, width);
-                Roads.Add(road);
-                Viewport.Children.Add(road);
+                var width = 30d;
+                var road = BlockScene.BuildRoad(feature, width);
+                this.Roads.Add(road);
+                this.Viewport.Children.Add(road);
             }
 
-            Viewport.ZoomExtents();
+            this.Viewport.ZoomExtents();
         }
 
         private static ModelVisual3D BuildBlock(IFeature feature, double height)
         {
             var curve = new PointString(feature.GeoData);
-            var mesh = Dreambuild.Geometry3D.MeshBuilder.ExtrudeWithCaps(curve, height).ToMesh().ToWpfMesh();
-            var material = GetBlockMaterial(feature);
-            var model = new GeometryModel3D(mesh, material);
-            model.BackMaterial = material;
+            var mesh = Geometry3D.MeshBuilder.ExtrudeWithCaps(curve, height).ToMesh().ToWpfMesh();
+            var material = BlockScene.GetBlockMaterial(feature);
+            var model = new GeometryModel3D(mesh, material)
+            {
+                BackMaterial = material
+            };
             return new ModelVisual3D { Content = model };
         }
 
@@ -63,33 +65,20 @@ namespace Dreambuild.Gis.Helix
         {
             var curve = new PointString(feature.GeoData);
             var mesh = MeshHelper.Road(new PointString(feature.GeoData), width);
-            var material = GetRoadMaterial(feature);
-            var model = new GeometryModel3D(mesh, material);
-            model.BackMaterial = material;
+            var material = BlockScene.GetRoadMaterial(feature);
+            var model = new GeometryModel3D(mesh, material)
+            {
+                BackMaterial = material
+            };
             return new ModelVisual3D { Content = model };
         }
 
-        //[Obsolete]
-        //private static ModelVisual3D BuildBaseMap(Map map)
-        //{
-        //    var extents = map.GetExtents();
-        //    double width = extents.max.X - extents.min.X;
-        //    double height = extents.max.Y - extents.min.Y;
-        //    double cx = (extents.min.X + extents.max.X) / 2;
-        //    double cy = (extents.min.Y + extents.max.Y) / 2;
-        //    var mapControl = new Dreambuild.Gis.Display.MapControl();
-        //    mapControl.InitializeMap(map);
-        //    VisualBrush brush = new VisualBrush(Dreambuild.Gis.Display.MapControl.Current);
-        //    RectangleVisual3D rect = new RectangleVisual3D { Length = width, Width = height, Origin = new Point3D(cx, cy, 0), Fill = brush };
-        //    return rect;
-        //}
-
         private static Material GetBlockMaterial(IFeature feature)
         {
-            SolidColorBrush brush = new SolidColorBrush(Colors.White) { Opacity = 0.8 };
-            DiffuseMaterial material1 = new DiffuseMaterial(brush);
-            SpecularMaterial material2 = new SpecularMaterial(brush, 90);
-            MaterialGroup material = new MaterialGroup();
+            var brush = new SolidColorBrush(Colors.White) { Opacity = 0.8 };
+            var material1 = new DiffuseMaterial(brush);
+            var material2 = new SpecularMaterial(brush, 90);
+            var material = new MaterialGroup();
             material.Children.Add(material1);
             material.Children.Add(material2);
             return material;
@@ -97,10 +86,10 @@ namespace Dreambuild.Gis.Helix
 
         private static Material GetRoadMaterial(IFeature feature)
         {
-            SolidColorBrush brush = new SolidColorBrush(Colors.Orange);
-            DiffuseMaterial material1 = new DiffuseMaterial(brush);
-            SpecularMaterial material2 = new SpecularMaterial(brush, 90);
-            MaterialGroup material = new MaterialGroup();
+            var brush = new SolidColorBrush(Colors.Orange);
+            var material1 = new DiffuseMaterial(brush);
+            var material2 = new SpecularMaterial(brush, 90);
+            var material = new MaterialGroup();
             material.Children.Add(material1);
             material.Children.Add(material2);
             return material;
@@ -111,7 +100,7 @@ namespace Dreambuild.Gis.Helix
     {
         protected override MeshGeometry3D Tessellate()
         {
-            return Model.Geometry as MeshGeometry3D;
+            return this.Model.Geometry as MeshGeometry3D;
         }
     }
 }

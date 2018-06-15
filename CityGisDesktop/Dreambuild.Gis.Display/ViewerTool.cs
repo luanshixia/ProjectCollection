@@ -267,10 +267,10 @@ namespace Dreambuild.Gis.Display
             {
                 Point pt = e.GetPosition(MapControl.Current);
                 var pos = MapControl.Current.GetWorldCoord(pt);
-                var queryResult = MapDataManager.LatestMap.QueryFeatures(SpatialQueryOperation.Point, pos, 5 * MapControl.Current.Scale);
+                var queryResult = MapDataManager.LatestMap.QueryFeatures(SpatialQueryOperation.Point, pos, 5 * MapControl.Current.Scale).ToList();
                 if (queryResult.Count > 0)
                 {
-                    var single = queryResult.Last().Value;
+                    var single = queryResult.Last();
                     SelectionSet.Select(new [] { single });
                 }
                 else
@@ -319,12 +319,12 @@ namespace Dreambuild.Gis.Display
         {
             Point pt = e.GetPosition(MapControl.Current);
             var pos = MapControl.Current.GetWorldCoord(pt);
-            var queryResult = MapDataManager.LatestMap.QueryFeatures(SpatialQueryOperation.Point, pos, 5 * MapControl.Current.Scale);
+            var queryResult = MapDataManager.LatestMap.QueryFeatures(SpatialQueryOperation.Point, pos, 5 * MapControl.Current.Scale).ToList();
             if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift) // mod 20130222
             {
                 if (queryResult.Count > 0)
                 {
-                    var single = queryResult.Last().Value;
+                    var single = queryResult.Last();
                     if (SelectionSet.Contents.Contains(single))
                     {
                         SelectionSet.SubtractSelection(new [] { single });
@@ -342,7 +342,7 @@ namespace Dreambuild.Gis.Display
             {
                 if (queryResult.Count > 0)
                 {
-                    var single = queryResult.Last().Value;
+                    var single = queryResult.Last();
                     SelectionSet.Select(new [] { single });
                 }
                 else
@@ -425,21 +425,21 @@ namespace Dreambuild.Gis.Display
 
             _mouseDownEnd = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
             var extents = Extents.FromPoints(_mouseDownOrigin, _mouseDownEnd);
-            var queryResult = MapDataManager.LatestMap.QueryFeatures(IsWindow ? SpatialQueryOperation.Window : SpatialQueryOperation.Cross, extents, 0);
-            if (queryResult.Count > 0)
+            var queryResult = MapDataManager.LatestMap.QueryFeatures(IsWindow ? SpatialQueryOperation.Window : SpatialQueryOperation.Cross, extents, 0).ToArray();
+            if (queryResult.Length > 0)
             {
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift 
                     && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control) // mod 20140725
                 {
-                    SelectionSet.SubtractSelection(queryResult.Select(x => x.Value).ToArray());
+                    SelectionSet.SubtractSelection(queryResult);
                 }
                 else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift) // mod 20120810
                 {
-                    SelectionSet.AddSelection(queryResult.Select(x => x.Value).ToArray());
+                    SelectionSet.AddSelection(queryResult);
                 }
                 else
                 {
-                    SelectionSet.Select(queryResult.Select(x => x.Value).ToArray()); // mod 20120725
+                    SelectionSet.Select(queryResult); // mod 20120725
                 }
             }
             else

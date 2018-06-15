@@ -109,7 +109,7 @@ namespace Dreambuild.Collections
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return this.internalDictionary.GetEnumerator();
+            return this.GetEnumerator();
         }
     }
 }

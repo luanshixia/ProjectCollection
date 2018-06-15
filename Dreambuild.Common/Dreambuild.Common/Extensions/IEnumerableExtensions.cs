@@ -399,6 +399,26 @@ namespace Dreambuild.Extensions
         {
             return source.Max(selector: element => element, resultSelector: (element, index) => element, comparison: comparison);
         }
+
+        /// <summary>
+        /// Creates an ILookup.
+        /// </summary>
+        /// <typeparam name="TSource">The element type of the source collection.</typeparam>
+        /// <typeparam name="TKey">The type of key.</typeparam>
+        /// <typeparam name="TValue">The type of value.</typeparam>
+        /// <param name="sources">The source collection.</param>
+        /// <param name="keySelector">The key selector.</param>
+        /// <param name="valuesSelector">The value selector.</param>
+        /// <returns>The ILookup.</returns>
+        public static ILookup<TKey, TValue> ToLookup<TSource, TKey, TValue>(this IEnumerable<TSource> sources, Func<TSource, TKey> keySelector, Func<TSource, IEnumerable<TValue>> valuesSelector)
+        {
+            var result = new FlexLookup<TKey, TValue>();
+            sources.ForEach(element =>
+            {
+                result.AddRange(keySelector(element), valuesSelector(element));
+            });
+            return result;
+        }
     }
 
     /// <summary>
