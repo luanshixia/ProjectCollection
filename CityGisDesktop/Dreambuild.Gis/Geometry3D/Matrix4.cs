@@ -1,14 +1,18 @@
-﻿using Dreambuild.Geometry;
+﻿using Dreambuild.Extensions;
+using Dreambuild.Geometry;
 using System;
+using System.Linq;
 
 namespace Dreambuild.Geometry3D
 {
+    /// <summary>
+    /// 4x4 metrix.
+    /// </summary>
+    /// <remarks>
+    /// Special thanks to THREE.js.
+    /// </remarks>
     public class Matrix4
     {
-        //
-        // Matrix4 class is based on the same class in THREE.js
-        //
-
         public double n11;
         public double n12;
         public double n13;
@@ -30,6 +34,14 @@ namespace Dreambuild.Geometry3D
         {
         }
 
+        public Matrix4(Matrix4 that)
+        {
+            this.n11 = that.n11; this.n12 = that.n12; this.n13 = that.n13; this.n14 = that.n14;
+            this.n21 = that.n21; this.n22 = that.n22; this.n23 = that.n23; this.n24 = that.n24;
+            this.n31 = that.n31; this.n32 = that.n32; this.n33 = that.n33; this.n34 = that.n34;
+            this.n41 = that.n41; this.n42 = that.n42; this.n43 = that.n43; this.n44 = that.n44;
+        }
+
         public Matrix4(double n11, double n12, double n13, double n14, double n21, double n22, double n23, double n24, double n31, double n32, double n33, double n34, double n41, double n42, double n43, double n44)
         {
             this.n11 = n11; this.n12 = n12; this.n13 = n13; this.n14 = n14;
@@ -38,38 +50,7 @@ namespace Dreambuild.Geometry3D
             this.n41 = n41; this.n42 = n42; this.n43 = n43; this.n44 = n44;
         }
 
-        //    THREE.Matrix4 = function ( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
-
-        //    this.set(
-
-        //        ( n11 !== undefined ) ? n11 : 1, n12 || 0, n13 || 0, n14 || 0,
-        //        n21 || 0, ( n22 !== undefined ) ? n22 : 1, n23 || 0, n24 || 0,
-        //        n31 || 0, n32 || 0, ( n33 !== undefined ) ? n33 : 1, n34 || 0,
-        //        n41 || 0, n42 || 0, n43 || 0, ( n44 !== undefined ) ? n44 : 1
-
-        //    );
-
-        //    this.flat = new Array( 16 );
-        //    this.m33 = new THREE.Matrix3();
-
-        //};
-
-        //THREE.Matrix4.prototype = {
-
-        //    constructor: THREE.Matrix4,
-
-        //    set: function ( n11, n12, n13, n14, n21, n22, n23, n24, n31, n32, n33, n34, n41, n42, n43, n44 ) {
-
-        //        this.n11 = n11; this.n12 = n12; this.n13 = n13; this.n14 = n14;
-        //        this.n21 = n21; this.n22 = n22; this.n23 = n23; this.n24 = n24;
-        //        this.n31 = n31; this.n32 = n32; this.n33 = n33; this.n34 = n34;
-        //        this.n41 = n41; this.n42 = n42; this.n43 = n43; this.n44 = n44;
-
-        //        return this;
-
-        //    },
-
-        private static Matrix4 _identity = new Matrix4(
+        private static readonly Matrix4 _identity = new Matrix4(
             1, 0, 0, 0,
             0, 1, 0, 0,
             0, 0, 1, 0,
@@ -77,20 +58,10 @@ namespace Dreambuild.Geometry3D
         );
         public static Matrix4 Identity { get { return _identity; } }
 
-        //copy: function ( m ) {
-
-        //    this.set(
-
-        //        m.n11, m.n12, m.n13, m.n14,
-        //        m.n21, m.n22, m.n23, m.n24,
-        //        m.n31, m.n32, m.n33, m.n34,
-        //        m.n41, m.n42, m.n43, m.n44
-
-        //    );
-
-        //    return this;
-
-        //},
+        public Matrix4 Copy()
+        {
+            return new Matrix4(this);
+        }
 
         public static Matrix4 LookAt(Vector eye, Vector center, Vector up)
         {
@@ -109,7 +80,7 @@ namespace Dreambuild.Geometry3D
 
             var y = z.Cross(x).Normalize();
 
-            Matrix4 m = new Matrix4();
+            var m = new Matrix4();
 
             m.n11 = x.X; m.n12 = y.X; m.n13 = z.X;
             m.n21 = x.Y; m.n22 = y.Y; m.n23 = z.Y;
@@ -120,7 +91,7 @@ namespace Dreambuild.Geometry3D
 
         public static Matrix4 Multiply(Matrix4 a, Matrix4 b)
         {
-            Matrix4 m = new Matrix4();
+            var m = new Matrix4();
 
             double a11 = a.n11, a12 = a.n12, a13 = a.n13, a14 = a.n14,
             a21 = a.n21, a22 = a.n22, a23 = a.n23, a24 = a.n24,
@@ -160,22 +131,9 @@ namespace Dreambuild.Geometry3D
             return Multiply(this, m);
         }
 
-        //multiplyToArray: function ( a, b, r ) {
-
-        //    this.multiply( a, b );
-
-        //    r[ 0 ] = this.n11; r[ 1 ] = this.n21; r[ 2 ] = this.n31; r[ 3 ] = this.n41;
-        //    r[ 4 ] = this.n12; r[ 5 ] = this.n22; r[ 6 ] = this.n32; r[ 7 ] = this.n42;
-        //    r[ 8 ]  = this.n13; r[ 9 ]  = this.n23; r[ 10 ] = this.n33; r[ 11 ] = this.n43;
-        //    r[ 12 ] = this.n14; r[ 13 ] = this.n24; r[ 14 ] = this.n34; r[ 15 ] = this.n44;
-
-        //    return this;
-
-        //},
-
         public Matrix4 MultiplyScalar(double s)
         {
-            Matrix4 m = new Matrix4();
+            var m = new Matrix4();
 
             m.n11 = this.n11 * s; m.n12 = this.n12 * s; m.n13 = this.n13 * s; m.n14 = this.n14 * s;
             m.n21 = this.n21 * s; m.n22 = this.n22 * s; m.n23 = this.n23 * s; m.n24 = this.n24 * s;
@@ -190,69 +148,26 @@ namespace Dreambuild.Geometry3D
             double vx = v.X, vy = v.Y, vz = v.Z,
             d = 1 / (this.n41 * vx + this.n42 * vy + this.n43 * vz + this.n44);
 
-            Vector u = new Vector();
-
-            u.X = (this.n11 * vx + this.n12 * vy + this.n13 * vz + this.n14) * d;
-            u.Y = (this.n21 * vx + this.n22 * vy + this.n23 * vz + this.n24) * d;
-            u.Z = (this.n31 * vx + this.n32 * vy + this.n33 * vz + this.n34) * d;
-
-            return u;
+            return new Vector
+            {
+                X = (this.n11 * vx + this.n12 * vy + this.n13 * vz + this.n14) * d,
+                Y = (this.n21 * vx + this.n22 * vy + this.n23 * vz + this.n24) * d,
+                Z = (this.n31 * vx + this.n32 * vy + this.n33 * vz + this.n34) * d
+            };
         }
 
-        //public Geometry.Computational.Vector3 MultiplyVector3(Geometry.Computational.Vector3 v)
-        //{
-        //    double vx = v.X, vy = v.Y, vz = v.Z,
-        //    d = 1 / (this.n41 * vx + this.n42 * vy + this.n43 * vz + this.n44);
+        public Vector4 MultiplyVector4(Vector4 v)
+        {
+            double vx = v.X, vy = v.Y, vz = v.Z, vw = v.W;
 
-        //    Geometry.Computational.Vector3 u = new Geometry.Computational.Vector3();
-
-        //    u.X = (float)((this.n11 * vx + this.n12 * vy + this.n13 * vz + this.n14) * d);
-        //    u.Y = (float)((this.n21 * vx + this.n22 * vy + this.n23 * vz + this.n24) * d);
-        //    u.Z = (float)((this.n31 * vx + this.n32 * vy + this.n33 * vz + this.n34) * d);
-
-        //    return u;
-        //}
-
-        //multiplyVector4: function ( v ) {
-
-        //    var vx = v.x, vy = v.y, vz = v.z, vw = v.w;
-
-        //    v.x = this.n11 * vx + this.n12 * vy + this.n13 * vz + this.n14 * vw;
-        //    v.y = this.n21 * vx + this.n22 * vy + this.n23 * vz + this.n24 * vw;
-        //    v.z = this.n31 * vx + this.n32 * vy + this.n33 * vz + this.n34 * vw;
-        //    v.w = this.n41 * vx + this.n42 * vy + this.n43 * vz + this.n44 * vw;
-
-        //    return v;
-
-        //},
-
-        //rotateAxis: function ( v ) {
-
-        //    var vx = v.x, vy = v.y, vz = v.z;
-
-        //    v.x = vx * this.n11 + vy * this.n12 + vz * this.n13;
-        //    v.y = vx * this.n21 + vy * this.n22 + vz * this.n23;
-        //    v.z = vx * this.n31 + vy * this.n32 + vz * this.n33;
-
-        //    v.normalize();
-
-        //    return v;
-
-        //},
-
-        //crossVector: function ( a ) {
-
-        //    var v = new THREE.Vector4();
-
-        //    v.x = this.n11 * a.x + this.n12 * a.y + this.n13 * a.z + this.n14 * a.w;
-        //    v.y = this.n21 * a.x + this.n22 * a.y + this.n23 * a.z + this.n24 * a.w;
-        //    v.z = this.n31 * a.x + this.n32 * a.y + this.n33 * a.z + this.n34 * a.w;
-
-        //    v.w = ( a.w ) ? this.n41 * a.x + this.n42 * a.y + this.n43 * a.z + this.n44 * a.w : 1;
-
-        //    return v;
-
-        //},
+            return new Vector4
+            {
+                X = this.n11 * vx + this.n12 * vy + this.n13 * vz + this.n14 * vw,
+                Y = this.n21 * vx + this.n22 * vy + this.n23 * vz + this.n24 * vw,
+                Z = this.n31 * vx + this.n32 * vy + this.n33 * vz + this.n34 * vw,
+                W = this.n41 * vx + this.n42 * vy + this.n43 * vz + this.n44 * vw,
+            };
+        }
 
         public double Determinant()
         {
@@ -301,67 +216,6 @@ namespace Dreambuild.Geometry3D
                 n14, n24, n34, n44
             );
         }
-
-        //clone: function () {
-
-        //    var m = new THREE.Matrix4();
-
-        //    m.n11 = this.n11; m.n12 = this.n12; m.n13 = this.n13; m.n14 = this.n14;
-        //    m.n21 = this.n21; m.n22 = this.n22; m.n23 = this.n23; m.n24 = this.n24;
-        //    m.n31 = this.n31; m.n32 = this.n32; m.n33 = this.n33; m.n34 = this.n34;
-        //    m.n41 = this.n41; m.n42 = this.n42; m.n43 = this.n43; m.n44 = this.n44;
-
-        //    return m;
-
-        //},
-
-        //flatten: function () {
-
-        //    this.flat[ 0 ] = this.n11; this.flat[ 1 ] = this.n21; this.flat[ 2 ] = this.n31; this.flat[ 3 ] = this.n41;
-        //    this.flat[ 4 ] = this.n12; this.flat[ 5 ] = this.n22; this.flat[ 6 ] = this.n32; this.flat[ 7 ] = this.n42;
-        //    this.flat[ 8 ]  = this.n13; this.flat[ 9 ]  = this.n23; this.flat[ 10 ] = this.n33; this.flat[ 11 ] = this.n43;
-        //    this.flat[ 12 ] = this.n14; this.flat[ 13 ] = this.n24; this.flat[ 14 ] = this.n34; this.flat[ 15 ] = this.n44;
-
-        //    return this.flat;
-
-        //},
-
-        //flattenToArray: function ( flat ) {
-
-        //    flat[ 0 ] = this.n11; flat[ 1 ] = this.n21; flat[ 2 ] = this.n31; flat[ 3 ] = this.n41;
-        //    flat[ 4 ] = this.n12; flat[ 5 ] = this.n22; flat[ 6 ] = this.n32; flat[ 7 ] = this.n42;
-        //    flat[ 8 ]  = this.n13; flat[ 9 ]  = this.n23; flat[ 10 ] = this.n33; flat[ 11 ] = this.n43;
-        //    flat[ 12 ] = this.n14; flat[ 13 ] = this.n24; flat[ 14 ] = this.n34; flat[ 15 ] = this.n44;
-
-        //    return flat;
-
-        //},
-
-        //flattenToArrayOffset: function( flat, offset ) {
-
-        //    flat[ offset ] = this.n11;
-        //    flat[ offset + 1 ] = this.n21;
-        //    flat[ offset + 2 ] = this.n31;
-        //    flat[ offset + 3 ] = this.n41;
-
-        //    flat[ offset + 4 ] = this.n12;
-        //    flat[ offset + 5 ] = this.n22;
-        //    flat[ offset + 6 ] = this.n32;
-        //    flat[ offset + 7 ] = this.n42;
-
-        //    flat[ offset + 8 ]  = this.n13;
-        //    flat[ offset + 9 ]  = this.n23;
-        //    flat[ offset + 10 ] = this.n33;
-        //    flat[ offset + 11 ] = this.n43;
-
-        //    flat[ offset + 12 ] = this.n14;
-        //    flat[ offset + 13 ] = this.n24;
-        //    flat[ offset + 14 ] = this.n34;
-        //    flat[ offset + 15 ] = this.n44;
-
-        //    return flat;
-
-        //},
 
         public static Matrix4 Translation(double x, double y, double z)
         {
@@ -437,45 +291,11 @@ namespace Dreambuild.Geometry3D
             );
         }
 
-        //setPosition: function ( v ) {
-
-        //    this.n14 = v.x;
-        //    this.n24 = v.y;
-        //    this.n34 = v.z;
-
-        //    return this;
-
-        //},
-
-        //getPosition: function () {
-
-        //    return THREE.Matrix4.__v1.set( this.n14, this.n24, this.n34 );
-
-        //},
-
-        //getColumnX: function () {
-
-        //    return THREE.Matrix4.__v1.set( this.n11, this.n21, this.n31 );
-
-        //},
-
-        //getColumnY: function () {
-
-        //    return THREE.Matrix4.__v1.set( this.n12, this.n22, this.n32 );
-
-        //},
-
-        //getColumnZ: function() {
-
-        //    return THREE.Matrix4.__v1.set( this.n13, this.n23, this.n33 );
-
-        //},
-
         public Matrix4 Inverse()
         {
             // based on http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
 
-            Matrix4 m = new Matrix4();
+            var m = new Matrix4();
 
             m.n11 = n23 * n34 * n42 - n24 * n33 * n42 + n24 * n32 * n43 - n22 * n34 * n43 - n23 * n32 * n44 + n22 * n33 * n44;
             m.n12 = n14 * n33 * n42 - n13 * n34 * n42 - n14 * n32 * n43 + n12 * n34 * n43 + n13 * n32 * n44 - n12 * n33 * n44;
@@ -498,242 +318,9 @@ namespace Dreambuild.Geometry3D
             return m;
         }
 
-        //setRotationFromEuler: function( v, order ) {
-
-        //    var x = v.x, y = v.y, z = v.z,
-        //    a = Math.cos( x ), b = Math.sin( x ),
-        //    c = Math.cos( y ), d = Math.sin( y ),
-        //    e = Math.cos( z ), f = Math.sin( z );
-
-        //    switch ( order ) {
-
-        //        case 'YXZ':
-
-        //            var ce = c * e, cf = c * f, de = d * e, df = d * f;
-
-        //            this.n11 = ce + df * b;
-        //            this.n12 = de * b - cf;
-        //            this.n13 = a * d;
-
-        //            this.n21 = a * f;
-        //            this.n22 = a * e;
-        //            this.n23 = - b;
-
-        //            this.n31 = cf * b - de;
-        //            this.n32 = df + ce * b;
-        //            this.n33 = a * c;
-        //            break;
-
-        //        case 'ZXY':
-
-        //            var ce = c * e, cf = c * f, de = d * e, df = d * f;
-
-        //            this.n11 = ce - df * b;
-        //            this.n12 = - a * f;
-        //            this.n13 = de + cf * b;
-
-        //            this.n21 = cf + de * b;
-        //            this.n22 = a * e;
-        //            this.n23 = df - ce * b;
-
-        //            this.n31 = - a * d;
-        //            this.n32 = b;
-        //            this.n33 = a * c;
-        //            break;
-
-        //        case 'ZYX':
-
-        //            var ae = a * e, af = a * f, be = b * e, bf = b * f;
-
-        //            this.n11 = c * e;
-        //            this.n12 = be * d - af;
-        //            this.n13 = ae * d + bf;
-
-        //            this.n21 = c * f;
-        //            this.n22 = bf * d + ae;
-        //            this.n23 = af * d - be;
-
-        //            this.n31 = - d;
-        //            this.n32 = b * c;
-        //            this.n33 = a * c;
-        //            break;
-
-        //        case 'YZX':
-
-        //            var ac = a * c, ad = a * d, bc = b * c, bd = b * d;
-
-        //            this.n11 = c * e;
-        //            this.n12 = bd - ac * f;
-        //            this.n13 = bc * f + ad;
-
-        //            this.n21 = f;
-        //            this.n22 = a * e;
-        //            this.n23 = - b * e;
-
-        //            this.n31 = - d * e;
-        //            this.n32 = ad * f + bc;
-        //            this.n33 = ac - bd * f;
-        //            break;
-
-        //        case 'XZY':
-
-        //            var ac = a * c, ad = a * d, bc = b * c, bd = b * d;
-
-        //            this.n11 = c * e;
-        //            this.n12 = - f;
-        //            this.n13 = d * e;
-
-        //            this.n21 = ac * f + bd;
-        //            this.n22 = a * e;
-        //            this.n23 = ad * f - bc;
-
-        //            this.n31 = bc * f - ad;
-        //            this.n32 = b * e;
-        //            this.n33 = bd * f + ac;
-        //            break;
-
-        //        default: // 'XYZ'
-
-        //            var ae = a * e, af = a * f, be = b * e, bf = b * f;
-
-        //            this.n11 = c * e;
-        //            this.n12 = - c * f;
-        //            this.n13 = d;
-
-        //            this.n21 = af + be * d;
-        //            this.n22 = ae - bf * d;
-        //            this.n23 = - b * c;
-
-        //            this.n31 = bf - ae * d;
-        //            this.n32 = be + af * d;
-        //            this.n33 = a * c;
-        //            break;
-
-        //    }
-
-        //    return this;
-
-        //},
-
-
-        //setRotationFromQuaternion: function( q ) {
-
-        //    var x = q.x, y = q.y, z = q.z, w = q.w,
-        //    x2 = x + x, y2 = y + y, z2 = z + z,
-        //    xx = x * x2, xy = x * y2, xz = x * z2,
-        //    yy = y * y2, yz = y * z2, zz = z * z2,
-        //    wx = w * x2, wy = w * y2, wz = w * z2;
-
-        //    this.n11 = 1 - ( yy + zz );
-        //    this.n12 = xy - wz;
-        //    this.n13 = xz + wy;
-
-        //    this.n21 = xy + wz;
-        //    this.n22 = 1 - ( xx + zz );
-        //    this.n23 = yz - wx;
-
-        //    this.n31 = xz - wy;
-        //    this.n32 = yz + wx;
-        //    this.n33 = 1 - ( xx + yy );
-
-        //    return this;
-
-        //},
-
-        //    scale: function ( v ) {
-
-        //        var x = v.x, y = v.y, z = v.z;
-
-        //        this.n11 *= x; this.n12 *= y; this.n13 *= z;
-        //        this.n21 *= x; this.n22 *= y; this.n23 *= z;
-        //        this.n31 *= x; this.n32 *= y; this.n33 *= z;
-        //        this.n41 *= x; this.n42 *= y; this.n43 *= z;
-
-        //        return this;
-
-        //    },
-
-        //    compose: function ( translation, rotation, scale ) {
-
-        //        var mRotation = THREE.Matrix4.__m1;
-        //        var mScale = THREE.Matrix4.__m2;
-
-        //        mRotation.identity();
-        //        mRotation.setRotationFromQuaternion( rotation );
-
-        //        mScale.setScale( scale.x, scale.y, scale.z );
-
-        //        this.multiply( mRotation, mScale );
-
-        //        this.n14 = translation.x;
-        //        this.n24 = translation.y;
-        //        this.n34 = translation.z;
-
-        //        return this;
-
-        //    },
-
-        //    decompose: function ( translation, rotation, scale ) {
-
-        //        // grab the axis vectors
-
-        //        var x = THREE.Matrix4.__v1;
-        //        var y = THREE.Matrix4.__v2;
-        //        var z = THREE.Matrix4.__v3;
-
-        //        x.set( this.n11, this.n21, this.n31 );
-        //        y.set( this.n12, this.n22, this.n32 );
-        //        z.set( this.n13, this.n23, this.n33 );
-
-        //        translation = ( translation instanceof THREE.Vector3 ) ? translation : new THREE.Vector3();
-        //        rotation = ( rotation instanceof THREE.Quaternion ) ? rotation : new THREE.Quaternion();
-        //        scale = ( scale instanceof THREE.Vector3 ) ? scale : new THREE.Vector3();
-
-        //        scale.x = x.length();
-        //        scale.y = y.length();
-        //        scale.z = z.length();
-
-        //        translation.x = this.n14;
-        //        translation.y = this.n24;
-        //        translation.z = this.n34;
-
-        //        // scale the rotation part
-
-        //        var matrix = THREE.Matrix4.__m1;
-
-        //        matrix.copy( this );
-
-        //        matrix.n11 /= scale.x;
-        //        matrix.n21 /= scale.x;
-        //        matrix.n31 /= scale.x;
-
-        //        matrix.n12 /= scale.y;
-        //        matrix.n22 /= scale.y;
-        //        matrix.n32 /= scale.y;
-
-        //        matrix.n13 /= scale.z;
-        //        matrix.n23 /= scale.z;
-        //        matrix.n33 /= scale.z;
-
-        //        rotation.setFromRotationMatrix( matrix );
-
-        //        return [ translation, rotation, scale ];
-
-        //    },
-
-        //    extractPosition: function ( m ) {
-
-        //        this.n14 = m.n14;
-        //        this.n24 = m.n24;
-        //        this.n34 = m.n34;
-
-        //        return this;
-
-        //    },
-
         public Matrix4 ExtractRotation()
         {
-            Matrix4 m = new Matrix4();
+            var m = new Matrix4();
 
             var scaleX = 1 / new Vector(n11, n21, n31).Abs;
             var scaleY = 1 / new Vector(n12, n22, n32).Abs;
@@ -756,49 +343,11 @@ namespace Dreambuild.Geometry3D
             return m;
         }
 
-        //THREE.Matrix4.makeInvert3x3 = function ( m1 ) {
-
-        //    // input:  THREE.Matrix4, output: THREE.Matrix3
-        //    // ( based on http://code.google.com/p/webgl-mjs/ )
-
-        //    var m33 = m1.m33, m33m = m33.m,
-        //    a11 =   m1.n33 * m1.n22 - m1.n32 * m1.n23,
-        //    a21 = - m1.n33 * m1.n21 + m1.n31 * m1.n23,
-        //    a31 =   m1.n32 * m1.n21 - m1.n31 * m1.n22,
-        //    a12 = - m1.n33 * m1.n12 + m1.n32 * m1.n13,
-        //    a22 =   m1.n33 * m1.n11 - m1.n31 * m1.n13,
-        //    a32 = - m1.n32 * m1.n11 + m1.n31 * m1.n12,
-        //    a13 =   m1.n23 * m1.n12 - m1.n22 * m1.n13,
-        //    a23 = - m1.n23 * m1.n11 + m1.n21 * m1.n13,
-        //    a33 =   m1.n22 * m1.n11 - m1.n21 * m1.n12,
-
-        //    det = m1.n11 * a11 + m1.n21 * a12 + m1.n31 * a13,
-
-        //    idet;
-
-        //    // no inverse
-
-        //    if ( det === 0 ) {
-
-        //        console.error( 'THREE.Matrix4.makeInvert3x3: Matrix not invertible.' );
-
-        //    }
-
-        //    idet = 1.0 / det;
-
-        //    m33m[ 0 ] = idet * a11; m33m[ 1 ] = idet * a21; m33m[ 2 ] = idet * a31;
-        //    m33m[ 3 ] = idet * a12; m33m[ 4 ] = idet * a22; m33m[ 5 ] = idet * a32;
-        //    m33m[ 6 ] = idet * a13; m33m[ 7 ] = idet * a23; m33m[ 8 ] = idet * a33;
-
-        //    return m33;
-
-        //}
-
         public static Matrix4 Frustum(double left, double right, double top, double bottom, double near, double far)
         {
             double x, y, a, b, c, d;
 
-            Matrix4 m = new Matrix4();
+            var m = new Matrix4();
 
             x = 2 * near / (right - left);
             y = 2 * near / (top - bottom);
@@ -832,7 +381,7 @@ namespace Dreambuild.Geometry3D
         {
             double x, y, z, w, h, p;
 
-            Matrix4 m = new Matrix4();
+            var m = new Matrix4();
 
             w = right - left;
             h = top - bottom;
@@ -849,13 +398,6 @@ namespace Dreambuild.Geometry3D
 
             return m;
         }
-
-        //THREE.Matrix4.__v1 = new THREE.Vector3();
-        //THREE.Matrix4.__v2 = new THREE.Vector3();
-        //THREE.Matrix4.__v3 = new THREE.Vector3();
-
-        //THREE.Matrix4.__m1 = new THREE.Matrix4();
-        //THREE.Matrix4.__m2 = new THREE.Matrix4();
     }
 
     public static class VectorMatrix4Extensions
@@ -863,6 +405,221 @@ namespace Dreambuild.Geometry3D
         public static Vector Transform(this Vector pt, Matrix4 m)
         {
             return m.MultiplyVector3(pt);
+        }
+    }
+
+    /// <summary>
+    /// Point or vector of 4d.
+    /// </summary>
+    public struct Vector4
+    {
+        public double X;
+        public double Y;
+        public double Z;
+        public double W;
+
+        public Vector4(double x, double y, double z, double w)
+        {
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
+            this.W = w;
+        }
+
+        public double[] Array()
+        {
+            return new[] { X, Y, Z, W };
+        }
+
+        public double Get(int dimension)
+        {
+            return this.Array()[dimension];
+        }
+
+        public bool Equals(Vector4 v)
+        {
+            return this.X.FloatEquals(v.X) && this.Y.FloatEquals(v.Y) && this.Z.FloatEquals(v.Z) && this.W.FloatEquals(v.W);
+        }
+
+        public Vector4 Copy()
+        {
+            // NOTE: structs do not actually need copy. This is conceptual.
+            return this;
+        }
+
+        public double Abs
+        {
+            get
+            {
+                return Math.Sqrt(X * X + Y * Y + Z * Z + W * W);
+            }
+        }
+
+        public Vector4 Unit
+        {
+            get
+            {
+                return new Vector4(X / Abs, Y / Abs, Z / Abs, W / Abs);
+            }
+        }
+
+        public double Mag()
+        {
+            return this.Abs;
+        }
+
+        public double MagSq()
+        {
+            return X * X + Y * Y + Z * Z + W * W;
+        }
+
+        public Vector4 Add(Vector4 v)
+        {
+            return this + v;
+        }
+
+        public Vector4 Sub(Vector4 v)
+        {
+            return this - v;
+        }
+
+        public Vector4 Mult(double n)
+        {
+            return n * this;
+        }
+
+        public Vector4 Div(double n)
+        {
+            return this.Mult(1 / n);
+        }
+
+        public double Dist(Vector4 v)
+        {
+            return this.Sub(v).Mag();
+        }
+
+        public static Vector4 operator +(Vector4 v1, Vector4 v2)
+        {
+            var x = v1.X + v2.X;
+            var y = v1.Y + v2.Y;
+            var z = v1.Z + v2.Z;
+            var w = v1.W + v2.W;
+            return new Vector4(x, y, z, w);
+        }
+
+        public static Vector4 operator -(Vector4 v1, Vector4 v2)
+        {
+            var x = v1.X - v2.X;
+            var y = v1.Y - v2.Y;
+            var z = v1.Z - v2.Z;
+            var w = v1.W - v2.W;
+            return new Vector4(x, y, z, w);
+        }
+
+        public static Vector4 operator *(double lambda, Vector4 v)
+        {
+            return new Vector4(lambda * v.X, lambda * v.Y, lambda * v.Z, lambda * v.W);
+        }
+
+        public double Dot(Vector4 v)
+        {
+            return X * v.X + Y * v.Y + Z * v.Z + W * v.W;
+        }
+
+        public Vector4 Cross(Vector4 v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Vector4 Normalize()
+        {
+            return this.Unit;
+        }
+
+        public Vector4 Limit(double max)
+        {
+            return this.Mag() > max ? this.SetMag(max) : this.Copy();
+        }
+
+        public Vector4 SetMag(double len)
+        {
+            return this.Normalize().Mult(len);
+        }
+
+        public Vector4 Lerp(Vector4 v, double amt)
+        {
+            return this.Add(v.Sub(this).Mult(amt));
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0},{1},{2},{3}", X.ToDecimalString(), Y.ToDecimalString(), Z.ToDecimalString(), W.ToDecimalString());
+        }
+
+        public static Vector4 Parse(string str)
+        {
+            var ns = str.Split(',').Select(s => s.TryParseToDouble()).ToArray();
+            return new Vector4(ns[0], ns[1], ns[2], ns[3]);
+        }
+
+        public static Vector4 Zero
+        {
+            get
+            {
+                return new Vector4(0, 0, 0, 0);
+            }
+        }
+
+        public static Vector4 XAxis
+        {
+            get
+            {
+                return new Vector4(1, 0, 0, 0);
+            }
+        }
+
+        public static Vector4 YAxis
+        {
+            get
+            {
+                return new Vector4(0, 1, 0, 0);
+            }
+        }
+
+        public static Vector4 ZAxis
+        {
+            get
+            {
+                return new Vector4(0, 0, 1, 0);
+            }
+        }
+
+        public static Vector4 WAxis
+        {
+            get
+            {
+                return new Vector4(0, 0, 0, 1);
+            }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj.GetType() == typeof(Vector4) && this.Equals((Vector4)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public static bool operator ==(Vector4 left, Vector4 right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(Vector4 left, Vector4 right)
+        {
+            return !(left == right);
         }
     }
 }

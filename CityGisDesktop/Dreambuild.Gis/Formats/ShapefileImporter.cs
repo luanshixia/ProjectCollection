@@ -1,6 +1,7 @@
 ﻿using Dreambuild.Geometry;
 using EGIS.ShapeFileLib;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace Dreambuild.Gis.Formats
@@ -12,17 +13,17 @@ namespace Dreambuild.Gis.Formats
 
         public ShapefileImporter(string path)
         {
-            _shp = new ShapeFile(path);
-            _fields = _shp.GetAttributeFieldNames();
+            this._shp = new ShapeFile(path);
+            this._fields = this._shp.GetAttributeFieldNames();
         }
 
         public VectorLayer GetVectorLayer()
         {
-            VectorLayer layer = new VectorLayer(System.IO.Path.GetFileNameWithoutExtension(_shp.FilePath), GetGeoType());
-            for (int i = 0; i < _shp.RecordCount; i++)
+            var layer = new VectorLayer(Path.GetFileNameWithoutExtension(this._shp.FilePath), this.GetGeoType());
+            for (var i = 0; i < this._shp.RecordCount; i++)
             {
-                Feature f = new Feature(GetGeoData(_shp.GetShapeDataD(i)[0]));
-                SetProperties(f, _shp.GetAttributeFieldValues(i));
+                var f = new Feature(ShapefileImporter.GetGeoData(this._shp.GetShapeDataD(i)[0]));
+                this.SetProperties(f, this._shp.GetAttributeFieldValues(i));
                 layer.Features.Add(f);
             }
             return layer;
@@ -30,7 +31,7 @@ namespace Dreambuild.Gis.Formats
 
         private string GetGeoType()
         {
-            switch (_shp.ShapeType)
+            switch (this._shp.ShapeType)
             {
                 case ShapeType.Point:
                     return VectorLayer.GEOTYPE_POINT;
@@ -50,9 +51,9 @@ namespace Dreambuild.Gis.Formats
 
         private void SetProperties(IFeature f, string[] data)
         {
-            for (int i = 0; i < _fields.Length; i++)
+            for (var i = 0; i < this._fields.Length; i++)
             {
-                f[_fields[i]] = data[i].Trim(); // trim for fixed-width space
+                f[this._fields[i]] = data[i].Trim(); // trim for fixed-width space
             }
         }
     }

@@ -1,5 +1,4 @@
-﻿
-namespace Dreambuild.Gis.Formats
+﻿namespace Dreambuild.Gis.Formats
 {
     public class MultipleShapefileExporter
     {
@@ -7,12 +6,12 @@ namespace Dreambuild.Gis.Formats
 
         public MultipleShapefileExporter(Map map)
         {
-            _map = map;
+            this._map = map;
         }
 
         public void Export(string folder)
         {
-            foreach (VectorLayer layer in _map.Layers)
+            foreach (VectorLayer layer in this._map.Layers)
             {
                 var exporter = new ShapefileExporter(layer);
                 exporter.Export(folder, layer.Name);

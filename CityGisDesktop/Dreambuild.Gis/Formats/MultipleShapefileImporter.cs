@@ -1,22 +1,23 @@
-﻿
-namespace Dreambuild.Gis.Formats
+﻿namespace Dreambuild.Gis.Formats
 {
+    using System.IO;
+
     public class MultipleShapefileImporter : IMapImporter
     {
         private string _folder;
 
         public MultipleShapefileImporter(string folder)
         {
-            _folder = folder;
+            this._folder = folder;
         }
 
         public Map GetMap()
         {
             var map = new Map();
-            var files = System.IO.Directory.GetFiles(_folder, "*.shp", System.IO.SearchOption.TopDirectoryOnly);
+            var files = Directory.GetFiles(this._folder, "*.shp", SearchOption.TopDirectoryOnly);
             foreach (var file in files)
             {
-                ShapefileImporter importer = new ShapefileImporter(file);
+                var importer = new ShapefileImporter(file);
                 map.Layers.Add(importer.GetVectorLayer());
             }
             return map;

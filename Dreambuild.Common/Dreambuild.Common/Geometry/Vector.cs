@@ -35,9 +35,9 @@ namespace Dreambuild.Geometry
 
         public Vector(double x = 0, double y = 0, double z = 0)
         {
-            X = x;
-            Y = y;
-            Z = z;
+            this.X = x;
+            this.Y = y;
+            this.Z = z;
         }
 
         public double[] Array()
@@ -47,7 +47,7 @@ namespace Dreambuild.Geometry
 
         public double Get(int dimension)
         {
-            return Array()[dimension];
+            return this.Array()[dimension];
         }
 
         public bool Equals(Vector v)
@@ -57,6 +57,7 @@ namespace Dreambuild.Geometry
 
         public Vector Copy()
         {
+            // NOTE: structs do not actually need copy. This is conceptual.
             return this;
         }
 
@@ -78,7 +79,7 @@ namespace Dreambuild.Geometry
 
         public double Mag()
         {
-            return Abs;
+            return this.Abs;
         }
 
         public double MagSq()
@@ -103,7 +104,7 @@ namespace Dreambuild.Geometry
 
         public Vector Div(double n)
         {
-            return Mult(1 / n);
+            return this.Mult(1 / n);
         }
 
         public double Dist(Vector v)
@@ -113,18 +114,18 @@ namespace Dreambuild.Geometry
 
         public static Vector operator +(Vector v1, Vector v2)
         {
-            double a = v1.X + v2.X;
-            double b = v1.Y + v2.Y;
-            double c = v1.Z + v2.Z;
-            return new Vector(a, b, c);
+            var x = v1.X + v2.X;
+            var y = v1.Y + v2.Y;
+            var z = v1.Z + v2.Z;
+            return new Vector(x, y, z);
         }
 
         public static Vector operator -(Vector v1, Vector v2)
         {
-            double a = v1.X - v2.X;
-            double b = v1.Y - v2.Y;
-            double c = v1.Z - v2.Z;
-            return new Vector(a, b, c);
+            var x = v1.X - v2.X;
+            var y = v1.Y - v2.Y;
+            var z = v1.Z - v2.Z;
+            return new Vector(x, y, z);
         }
 
         public static Vector operator *(double lambda, Vector v)
@@ -132,17 +133,17 @@ namespace Dreambuild.Geometry
             return new Vector(lambda * v.X, lambda * v.Y, lambda * v.Z);
         }
 
-        public double Dot(Vector v1)
+        public double Dot(Vector v)
         {
-            return X * v1.X + Y * v1.Y + Z * v1.Z;
+            return X * v.X + Y * v.Y + Z * v.Z;
         }
 
-        public Vector Cross(Vector v1)
+        public Vector Cross(Vector v)
         {
-            double xx = Y * v1.Z - Z * v1.Y;
-            double yy = Z * v1.X - X * v1.Z;
-            double zz = X * v1.Y - Y * v1.X;
-            return new Vector(xx, yy, zz);
+            var x = Y * v.Z - Z * v.Y;
+            var y = Z * v.X - X * v.Z;
+            var z = X * v.Y - Y * v.X;
+            return new Vector(x, y, z);
         }
 
         public double Kross(Vector v)
@@ -152,7 +153,7 @@ namespace Dreambuild.Geometry
 
         public Vector Normalize()
         {
-            return Unit;
+            return this.Unit;
         }
 
         public Vector Limit(double max)

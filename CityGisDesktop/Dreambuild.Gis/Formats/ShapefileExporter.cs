@@ -9,27 +9,27 @@ namespace Dreambuild.Gis.Formats
 
         public ShapefileExporter(VectorLayer layer)
         {
-            _layer = layer;
+            this._layer = layer;
         }
 
         public void Export(string folder, string name)
         {
-            if (_layer.Features.Count == 0)
+            if (this._layer.Features.Count == 0)
             {
                 return;
             }
-            using (var writer = ShapeFileWriter.CreateWriter(folder, name, GetShapeType(), GetFields()))
+            using (var writer = ShapeFileWriter.CreateWriter(folder, name, this.GetShapeType(), this.GetFields()))
             {
-                foreach (var feature in _layer.Features)
+                foreach (var feature in this._layer.Features)
                 {
-                    writer.AddRecord(GetPoints(feature), feature.GeoData.Count, GetFieldData(feature));
+                    writer.AddRecord(ShapefileExporter.GetPoints(feature), feature.GeoData.Count, ShapefileExporter.GetFieldData(feature));
                 }
             }
         }
 
         private ShapeType GetShapeType()
         {
-            switch (_layer.GeoType)
+            switch (this._layer.GeoType)
             {
                 case VectorLayer.GEOTYPE_POINT:
                     return ShapeType.Point;
@@ -44,7 +44,7 @@ namespace Dreambuild.Gis.Formats
 
         private DbfFieldDesc[] GetFields()
         {
-            var props = _layer.Features[0].Properties.Keys.ToList();
+            var props = this._layer.Features[0].Properties.Keys.ToList();
             return props.Select((p, i) => new DbfFieldDesc
             {
                 FieldType = DbfFieldType.Character,

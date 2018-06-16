@@ -35,12 +35,12 @@ namespace Dreambuild.Geometry3D
 
         public Mesh Transform(Matrix4 matrix)
         {
-            for (int i = 0; i < this.Vertices.Count; i++)
+            for (var i = 0; i < this.Vertices.Count; i++)
             {
                 this.Vertices[i] = this.Vertices[i].Transform(matrix);
             }
             var rotation = matrix.ExtractRotation();
-            for (int i = 0; i < this.Normals.Count; i++)
+            for (var i = 0; i < this.Normals.Count; i++)
             {
                 this.Normals[i] = this.Normals[i].Transform(rotation);
             }
@@ -268,7 +268,7 @@ namespace Dreambuild.Geometry3D
             var pointCount = curve.Points.Count;
 
             var mb = new MeshBuilder();
-            for (int i = 0; i < pointCount - 1; i++)
+            for (var i = 0; i < pointCount - 1; i++)
             {
                 mb.AddQuad(points0[i], points0[i + 1], points1[i + 1], points1[i]);
             }
@@ -305,7 +305,7 @@ namespace Dreambuild.Geometry3D
                 return null;
             }
             var mb = new MeshBuilder();
-            for (int i = 0; i < triIndices.Count; i += 3)
+            for (var i = 0; i < triIndices.Count; i += 3)
             {
                 var a = new Vector(points[triIndices[i]].X, points[triIndices[i]].Y, 0);
                 var b = new Vector(points[triIndices[i + 1]].X, points[triIndices[i + 1]].Y, 0);
