@@ -9,32 +9,6 @@ Public Class SnapshotManager
         Me.Path = New DirectoryInfo(path)
     End Sub
 
-    Public Shared Function GetDirectorySize(dir As DirectoryInfo) As Long
-        Dim subDirs = dir.GetDirectories()
-        Dim sumSubDirSize = subDirs.Sum(Function(x) GetDirectorySize(x))
-        Dim files = dir.GetFiles()
-        Dim sumFileSize = files.Sum(Function(x) x.Length)
-        Return sumSubDirSize + sumFileSize
-    End Function
-
-    Public Shared Function GetSizeString(size As Long) As String
-        If size < 1024 Then
-            Return size & " Byte"
-        ElseIf size < 1024 * 1024 Then
-            Return CInt(size / 1024) & " KB"
-        Else
-            Return CInt(size / 1024 / 1024) & " MB"
-        End If
-    End Function
-
-    Public Function GetRecords() As List(Of Record)
-        Dim subDirs = Path.GetDirectories()
-        Dim subDirRecords = subDirs.Select(Function(x) New Record(x) With {.Size = GetDirectorySize(x)})
-        Dim files = Path.GetFiles()
-        Dim fileRecords = files.Select(Function(x) New Record(x))
-        Return subDirRecords.Concat(fileRecords).ToList()
-    End Function
-
     Public Function GetEmptyRecords() As ObservableCollection(Of Record)
         Dim subDirs = Path.GetDirectories()
         Dim subDirRecords = subDirs.Select(Function(x) New Record(x))
@@ -42,17 +16,11 @@ Public Class SnapshotManager
         Dim fileRecords = files.Select(Function(x) New Record(x))
         Return New ObservableCollection(Of Record)(subDirRecords.Concat(fileRecords).ToList())
     End Function
-
-    Public Sub Test()
-        For i = 0 To 100
-            Dim func = Function(x) x * i
-        Next
-    End Sub
 End Class
 
 Public Class Record
     Implements INotifyPropertyChanged
-    Public Property DF As String
+    Public Property Type As String
     Public Property Name As String
     Private sizeValue As Long
     Private propertyChangeCount As Long
@@ -102,14 +70,14 @@ Public Class Record
     End Property
 
     Public Sub New(dir As DirectoryInfo)
-        DF = "D"
+        Type = "D"
         Name = dir.Name
         Size = 0
         dirInfo = dir
     End Sub
 
     Public Sub New(file As FileInfo)
-        DF = "F"
+        Type = "F"
         Name = file.Name
         Size = file.Length
     End Sub
@@ -137,7 +105,7 @@ Public Class Record
                                   Next
                                   Dim files = dir.GetFiles()
                                   Dim sumFileSize = files.Sum(Function(x) x.Length)
-                                  Size = Size + sumFileSize ' 大小累计只计算文件，不计算目录，否则会重复
+                                  Size = Size + sumFileSize ' To avoid duplicates: Only file size accumulates; dirs excluded.
                                   Return sumSubDirSize + sumFileSize
                               End Function)
     End Function

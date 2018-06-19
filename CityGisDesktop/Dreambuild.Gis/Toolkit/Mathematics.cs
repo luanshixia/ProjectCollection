@@ -68,7 +68,7 @@ namespace Dreambuild.Mathematics
     {
         public static Tuple<List<List<double>>, List<double>, int> Perform(IEnumerable<double> data, int gradeCount, int maxSteps)
         {
-            List<double> values = data.OrderBy(x => x).ToList();
+            var values = data.OrderBy(x => x).ToList();
             int n = values.Count;
 
             var deltas = Enumerable.Range(0, values.Count - 1).Select(i => Tuple.Create(i, values[i + 1] - values[i])).ToList();
