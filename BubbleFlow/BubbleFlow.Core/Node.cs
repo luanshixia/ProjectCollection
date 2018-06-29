@@ -19,18 +19,18 @@ namespace BubbleFlow
         public Color StrokeColor { get; set; }
         public Color FontColor { get; set; }
         public Point Position { get; set; }
-        public string OnClick { get; set; }
+        //public string OnClick { get; set; }
         public bool NeedAlert { get; set; }
-        public string LabelText { get; set; } // 可用于显示流程角色 newly 20121029
+        //public string LabelText { get; set; } // 可用于显示流程角色 newly 20121029
 
-        private Ellipse _shape = new Ellipse();
-        private TextBlock _text = new TextBlock();
-        private Storyboard _sb = new Storyboard();
+        private Ellipse RoundShape { get; } = new Ellipse();
+        private TextBlock TextLabel { get; } = new TextBlock();
+        private Storyboard Storyboard { get; } = new Storyboard();
 
         public Node()
         {
-            this.Children.Add(_shape);
-            this.Children.Add(_text);
+            this.Children.Add(RoundShape);
+            this.Children.Add(TextLabel);
 
             this.Cursor = Cursors.Hand;
             this.MouseEnter += new MouseEventHandler(_shape_MouseEnter);
@@ -55,58 +55,57 @@ namespace BubbleFlow
 
         void _shape_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Canvas.SetLeft(_shape, Canvas.GetLeft(_shape) - 1);
-            Canvas.SetTop(_shape, Canvas.GetTop(_shape) - 1);
-            if (!string.IsNullOrEmpty(OnClick))
-            {
-                // System.Windows.Browser.HtmlPage.Window.Eval(OnClick);
-            }
+            Canvas.SetLeft(this.RoundShape, Canvas.GetLeft(this.RoundShape) - 1);
+            Canvas.SetTop(this.RoundShape, Canvas.GetTop(this.RoundShape) - 1);
+            //if (!string.IsNullOrEmpty(OnClick))
+            //{
+            //    // System.Windows.Browser.HtmlPage.Window.Eval(OnClick);
+            //}
         }
 
         void _shape_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Canvas.SetLeft(_shape, Canvas.GetLeft(_shape) + 1);
-            Canvas.SetTop(_shape, Canvas.GetTop(_shape) + 1);
+            Canvas.SetLeft(this.RoundShape, Canvas.GetLeft(this.RoundShape) + 1);
+            Canvas.SetTop(this.RoundShape, Canvas.GetTop(this.RoundShape) + 1);
         }
 
         void _shape_MouseLeave(object sender, MouseEventArgs e)
         {
-            _shape.Opacity = 1;
+            this.RoundShape.Opacity = 1;
         }
 
         void _shape_MouseEnter(object sender, MouseEventArgs e)
         {
-            _shape.Opacity = 0.6;
+            this.RoundShape.Opacity = 0.6;
         }
 
         private void DefaultValue()
         {
-            Text = "Node";
-            FontSize = 12;
-            Size = 100;
-            FillColor = Colors.DarkGray;
-            StrokeColor = Colors.Gray;
-            FontColor = Colors.Black;
-            Position = new Point();
-            OnClick = string.Empty;
+            this.Text = "Node";
+            this.FontSize = 12;
+            this.Size = 100;
+            this.FillColor = Colors.DarkGray;
+            this.StrokeColor = Colors.Gray;
+            this.FontColor = Colors.Black;
+            this.Position = new Point();
         }
 
         public void ReadyControl()
         {
-            _shape.Width = Size;
-            _shape.Height = Size;
-            Canvas.SetLeft(_shape, Position.X - Size / 2);
-            Canvas.SetTop(_shape, Position.Y - Size / 2);
-            _shape.Stroke = new SolidColorBrush(StrokeColor);
-            _shape.StrokeThickness = 1;
-            _shape.Fill = BuildFill(FillColor);
+            this.RoundShape.Width = Size;
+            this.RoundShape.Height = Size;
+            Canvas.SetLeft(this.RoundShape, Position.X - Size / 2);
+            Canvas.SetTop(this.RoundShape, Position.Y - Size / 2);
+            this.RoundShape.Stroke = new SolidColorBrush(StrokeColor);
+            this.RoundShape.StrokeThickness = 1;
+            this.RoundShape.Fill = BuildFill(FillColor);
 
-            _text.Text = WrapText(Text);
-            _text.FontSize = FontSize;
-            _text.Foreground = new SolidColorBrush(FontColor);
-            _text.TextAlignment = TextAlignment.Center;
-            Canvas.SetLeft(_text, Position.X - _text.ActualWidth / 2);
-            Canvas.SetTop(_text, Position.Y - _text.ActualHeight / 2);
+            this.TextLabel.Text = WrapText(Text);
+            this.TextLabel.FontSize = FontSize;
+            this.TextLabel.Foreground = new SolidColorBrush(FontColor);
+            this.TextLabel.TextAlignment = TextAlignment.Center;
+            Canvas.SetLeft(this.TextLabel, Position.X - TextLabel.ActualWidth / 2);
+            Canvas.SetTop(this.TextLabel, Position.Y - TextLabel.ActualHeight / 2);
 
             //if (Children.Any(x => x is Border))
             //{
@@ -119,9 +118,9 @@ namespace BubbleFlow
 
             //}
 
-            if (NeedAlert)
+            if (this.NeedAlert)
             {
-                DoubleAnimation da = new DoubleAnimation
+                var doubleAnimation = new DoubleAnimation
                 {
                     From = 0,
                     To = 1,
@@ -129,29 +128,30 @@ namespace BubbleFlow
                     Duration = new Duration(TimeSpan.Parse("0:0:0.5")),
                     RepeatBehavior = RepeatBehavior.Forever
                 };
-                _sb.Children.Add(da);
-                Storyboard.SetTarget(da, _shape);
-                Storyboard.SetTargetProperty(da, new PropertyPath("Opacity"));
-                _sb.Begin();
+
+                this.Storyboard.Children.Add(doubleAnimation);
+                Storyboard.SetTarget(doubleAnimation, RoundShape);
+                Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath("Opacity"));
+                this.Storyboard.Begin();
             }
             else
             {
-                _sb.Stop();
+                this.Storyboard.Stop();
             }
         }
 
         public void SetText(string text)
         {
             this.Text = text;
-            _text.Text = WrapText(Text);
-            _text.FontSize = FontSize;
-            _text.Foreground = new SolidColorBrush(FontColor);
-            _text.TextAlignment = TextAlignment.Center;
-            Canvas.SetLeft(_text, Position.X - _text.ActualWidth / 2);
-            Canvas.SetTop(_text, Position.Y - _text.ActualHeight / 2);
+            this.TextLabel.Text = Node.WrapText(this.Text);
+            this.TextLabel.FontSize = this.FontSize;
+            this.TextLabel.Foreground = new SolidColorBrush(this.FontColor);
+            this.TextLabel.TextAlignment = TextAlignment.Center;
+            Canvas.SetLeft(this.TextLabel, Position.X - TextLabel.ActualWidth / 2);
+            Canvas.SetTop(this.TextLabel, Position.Y - TextLabel.ActualHeight / 2);
         }
 
-        private string WrapText(string text)
+        private static string WrapText(string text)
         {
             int lineLength = 6;
             var positions = new List<int>();
@@ -165,18 +165,16 @@ namespace BubbleFlow
             return text;
         }
 
-        private RadialGradientBrush BuildFill(Color color)
+        private static RadialGradientBrush BuildFill(Color color)
         {
             var color0 = color;
             color0.A = 128;
-            var rgb = new RadialGradientBrush(color0, color)
+            return new RadialGradientBrush(color0, color)
             {
                 Center = new Point(0.5, 0.1),
                 RadiusX = 0.8,
                 RadiusY = 0.8
             };
-
-            return rgb;
         }
 
         public void Fade(bool fade)
@@ -185,11 +183,11 @@ namespace BubbleFlow
             {
                 var b = (byte)((FillColor.R + FillColor.G + FillColor.B) / 3);
                 var c = new Color { A = 255, R = b, G = b, B = b };
-                _shape.Fill = BuildFill(c);
+                this.RoundShape.Fill = Node.BuildFill(c);
             }
             else
             {
-                _shape.Fill = BuildFill(FillColor);
+                this.RoundShape.Fill = Node.BuildFill(FillColor);
             }
         }
     }

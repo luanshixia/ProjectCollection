@@ -18,10 +18,27 @@ namespace BubbleFlow
 
         public WorkflowJsonObject ToJsonObject()
         {
-            WorkflowJsonObject json = new WorkflowJsonObject();
-            json.nodes = this.Nodes.Select(x => new FlowNodeJsonObject { name = x.Name, user = x.AllowedUsers, role = x.AllowedRoles, xpos = x.FlowChartPositionX, ypos = x.FlowChartPositionY }).ToList();
-            json.connections = this.Nodes.SelectMany(x => x.ToNodes.Select(y => new NodeConnectionJsonObject { from = this.Nodes.IndexOf(x), to = this.Nodes.IndexOf(y), label = GetLabel(x, y) })).ToList();
-            return json;
+            return new WorkflowJsonObject
+            {
+                nodes = this.Nodes
+                    .Select(x => new FlowNodeJsonObject
+                    {
+                        name = x.Name,
+                        user = x.AllowedUsers,
+                        role = x.AllowedRoles,
+                        xpos = x.FlowChartPositionX,
+                        ypos = x.FlowChartPositionY
+                    })
+                    .ToList(),
+                connections = this.Nodes
+                    .SelectMany(x => x.ToNodes.Select(y => new NodeConnectionJsonObject
+                    {
+                        from = this.Nodes.IndexOf(x),
+                        to = this.Nodes.IndexOf(y),
+                        label = GetLabel(x, y)
+                    }))
+                    .ToList()
+            };
         }
 
         private static string GetLabel(FlowNode from, FlowNode to)

@@ -17,28 +17,28 @@ namespace BubbleFlow
         public Color BaseColor { get; set; }
         public Color HighlightColor { get; set; }
 
-        private Line _body = new Line();
-        private Polyline _head = new Polyline();
-        private Storyboard _sb = new Storyboard();
+        private Line BodyShape { get; } = new Line();
+        private Polyline HeadShape { get; } = new Polyline();
+        private Storyboard Storyboard { get; } = new Storyboard();
 
         public Arrow()
         {
-            this.Children.Add(_body);
-            this.Children.Add(_head);
+            this.Children.Add(BodyShape);
+            this.Children.Add(HeadShape);
 
-            DefaultValue();
-            ReadyControl();
+            this.DefaultValue();
+            this.ReadyControl();
         }
 
         private void DefaultValue()
         {
-            StartPoint = new Point();
-            EndPoint = new Point(100, 0);
-            StartOffset = 10;
-            EndOffset = 10;
-            ArrowSize = 10;
-            BaseColor = Colors.Gray;
-            HighlightColor = Colors.Red;
+            this.StartPoint = new Point();
+            this.EndPoint = new Point(100, 0);
+            this.StartOffset = 10;
+            this.EndOffset = 10;
+            this.ArrowSize = 10;
+            this.BaseColor = Colors.Gray;
+            this.HighlightColor = Colors.Red;
         }
 
         public void ReadyControl()
@@ -49,31 +49,30 @@ namespace BubbleFlow
             double r1 = StartOffset / dist;
             double r2 = EndOffset / dist;
 
-            _body.X1 = r1 * dist;
-            _body.Y1 = 0;
-            _body.X2 = dist - r2 * dist;
-            _body.Y2 = 0;
+            this.BodyShape.X1 = r1 * dist;
+            this.BodyShape.Y1 = 0;
+            this.BodyShape.X2 = dist - r2 * dist;
+            this.BodyShape.Y2 = 0;
 
-            _head.Points.Clear();
-            _head.Points.Add(new Point(_body.X2 - ArrowSize, _body.Y2 - 0.5 * ArrowSize));
-            _head.Points.Add(new Point(_body.X2, _body.Y2));
-            _head.Points.Add(new Point(_body.X2 - ArrowSize, _body.Y2 + 0.5 * ArrowSize));
+            this.HeadShape.Points.Clear();
+            this.HeadShape.Points.Add(new Point(BodyShape.X2 - ArrowSize, BodyShape.Y2 - 0.5 * ArrowSize));
+            this.HeadShape.Points.Add(new Point(BodyShape.X2, BodyShape.Y2));
+            this.HeadShape.Points.Add(new Point(BodyShape.X2 - ArrowSize, BodyShape.Y2 + 0.5 * ArrowSize));
 
-            TransformGroup transform = new TransformGroup();
-            RotateTransform rotate = new RotateTransform { Angle = Math.Atan2(dy, dx) * 180 / Math.PI };
-            TranslateTransform translate = new TranslateTransform { X = StartPoint.X, Y = StartPoint.Y };
-            transform.Children.Add(rotate);
-            transform.Children.Add(translate);
-            _body.RenderTransform = transform;
-            _head.RenderTransform = transform;
+            var transform = new TransformGroup();
+            transform.Children.Add(new RotateTransform { Angle = Math.Atan2(dy, dx) * 180 / Math.PI });
+            transform.Children.Add(new TranslateTransform { X = StartPoint.X, Y = StartPoint.Y });
+            this.BodyShape.RenderTransform = transform;
+            this.HeadShape.RenderTransform = transform;
 
-            _body.StrokeThickness = 3;
-            _head.StrokeThickness = 3;
-            SolidColorBrush scb = new SolidColorBrush(BaseColor);
-            _body.Stroke = scb;
-            _head.Stroke = scb;
+            this.BodyShape.StrokeThickness = 3;
+            this.HeadShape.StrokeThickness = 3;
 
-            ColorAnimation ca = new ColorAnimation
+            var solidColorBrush = new SolidColorBrush(color: this.BaseColor);
+            this.BodyShape.Stroke = solidColorBrush;
+            this.HeadShape.Stroke = solidColorBrush;
+
+            var colorAnimation = new ColorAnimation
             {
                 From = Colors.Transparent,
                 To = HighlightColor,
@@ -81,26 +80,21 @@ namespace BubbleFlow
                 Duration = new Duration(TimeSpan.Parse("0:0:0.5")),
                 RepeatBehavior = RepeatBehavior.Forever
             };
-            _sb.Children.Add(ca);
-            Storyboard.SetTarget(ca, scb);
-            Storyboard.SetTargetProperty(ca, new PropertyPath("Color"));
+
+            this.Storyboard.Children.Add(colorAnimation);
+            Storyboard.SetTarget(element: colorAnimation, value: solidColorBrush);
+            Storyboard.SetTargetProperty(element: colorAnimation, path: new PropertyPath("Color"));
         }
 
         public void DoAlert()
         {
-            _sb.Begin();
+            this.Storyboard.Begin();
         }
 
         public void CancelAlert()
         {
-            _sb.Stop();
+            this.Storyboard.Stop();
         }
-    }
-
-    public enum LineMethod
-    {
-        Linear,
-        Bezier
     }
 
     public class BezierLink : Canvas
@@ -115,32 +109,32 @@ namespace BubbleFlow
         //public string LabelText { get; set; }
         //public Color LabelColor { get; set; }
 
-        private Path _body = new Path();
-        private TextBlock _label = new TextBlock();
-        private Storyboard _sb = new Storyboard();
-        private Polyline _head = new Polyline();
+        private Path BodayShape { get; } = new Path();
+        private Polyline HeadShape { get; } = new Polyline();
+        private TextBlock TextLabel { get; } = new TextBlock();
+        private Storyboard Storyboard { get; } = new Storyboard();
 
         public BezierLink()
         {
-            this.Children.Add(_body);
-            this.Children.Add(_head);
-            this.Children.Add(_label);
+            this.Children.Add(BodayShape);
+            this.Children.Add(HeadShape);
+            this.Children.Add(TextLabel);
 
-            DefaultValue();
-            ReadyControl();
+            this.DefaultValue();
+            this.ReadyControl();
         }
 
         private void DefaultValue()
         {
-            StartPoint = new Point();
-            EndPoint = new Point(100, 0);
-            StartOffset = 10;
-            EndOffset = 10;
-            ArrowSize = 10;
-            BaseColor = Colors.Gray;
-            HighlightColor = Colors.Red;
-            //LabelText = string.Empty;
-            //LabelColor = Colors.Gray;
+            this.StartPoint = new Point();
+            this.EndPoint = new Point(100, 0);
+            this.StartOffset = 10;
+            this.EndOffset = 10;
+            this.ArrowSize = 10;
+            this.BaseColor = Colors.Gray;
+            this.HighlightColor = Colors.Red;
+            //this.LabelText = string.Empty;
+            //this.LabelColor = Colors.Gray;
         }
 
         public void ReadyControl()
@@ -148,37 +142,35 @@ namespace BubbleFlow
             double dx = EndPoint.X - StartPoint.X;
             double dy = EndPoint.Y - StartPoint.Y;
             double dist = Math.Sqrt(dx * dx + dy * dy);
-            double cpOffset = dist / 2;
-            double r1 = StartOffset / dist;
-            double r2 = EndOffset / dist;
+            double controlPointOffset = dist / 2;
 
             var start = new Point(StartPoint.X + StartOffset, StartPoint.Y);
             var end = new Point(EndPoint.X - EndOffset, EndPoint.Y);
 
-            var pf = new PathFigure();
-            var bs = new BezierSegment();
-            pf.StartPoint = start;
-            bs.Point3 = end;
-            bs.Point1 = new Point(start.X + cpOffset, start.Y);
-            bs.Point2 = new Point(end.X - cpOffset, end.Y);
-            pf.Segments.Add(bs);
+            var pathFigure = new PathFigure();
+            var bezierSegment = new BezierSegment();
+            pathFigure.StartPoint = start;
+            bezierSegment.Point3 = end;
+            bezierSegment.Point1 = new Point(start.X + controlPointOffset, start.Y);
+            bezierSegment.Point2 = new Point(end.X - controlPointOffset, end.Y);
+            pathFigure.Segments.Add(bezierSegment);
 
-            _head.Points.Clear();
-            _head.Points.Add(new Point(end.X - ArrowSize, end.Y - 0.5 * ArrowSize));
-            _head.Points.Add(new Point(end.X, end.Y));
-            _head.Points.Add(new Point(end.X - ArrowSize, end.Y + 0.5 * ArrowSize));
+            this.HeadShape.Points.Clear();
+            this.HeadShape.Points.Add(new Point(end.X - ArrowSize, end.Y - 0.5 * ArrowSize));
+            this.HeadShape.Points.Add(new Point(end.X, end.Y));
+            this.HeadShape.Points.Add(new Point(end.X - ArrowSize, end.Y + 0.5 * ArrowSize));
 
-            var pg = new PathGeometry();
-            pg.Figures.Add(pf);
-            _body.Data = pg;
+            var pathGeometry = new PathGeometry();
+            pathGeometry.Figures.Add(pathFigure);
+            this.BodayShape.Data = pathGeometry;
 
-            _head.StrokeThickness = 3;
-            _body.StrokeThickness = 3;
+            this.HeadShape.StrokeThickness = 3;
+            this.BodayShape.StrokeThickness = 3;
 
-            var scb = new SolidColorBrush(BaseColor);
-            _body.Stroke = scb;
-            _body.Opacity = 0.8;
-            _head.Stroke = scb;
+            var solidColorBrush = new SolidColorBrush(color: this.BaseColor);
+            this.BodayShape.Stroke = solidColorBrush;
+            this.BodayShape.Opacity = 0.8;
+            this.HeadShape.Stroke = solidColorBrush;
 
             //_label.Text = LabelText;
             //_label.FontSize = 9;
@@ -187,7 +179,7 @@ namespace BubbleFlow
             //Canvas.SetLeft(_label, labelPos.X);
             //Canvas.SetTop(_label, labelPos.Y);
 
-            var ca = new ColorAnimation
+            var colorAnimation = new ColorAnimation
             {
                 From = Colors.Transparent,
                 To = HighlightColor,
@@ -195,19 +187,20 @@ namespace BubbleFlow
                 Duration = new Duration(TimeSpan.Parse("0:0:0.5")),
                 RepeatBehavior = RepeatBehavior.Forever
             };
-            _sb.Children.Add(ca);
-            Storyboard.SetTarget(ca, scb);
-            Storyboard.SetTargetProperty(ca, new PropertyPath("Color"));
+
+            this.Storyboard.Children.Add(colorAnimation);
+            Storyboard.SetTarget(element: colorAnimation, value: solidColorBrush);
+            Storyboard.SetTargetProperty(element: colorAnimation, path: new PropertyPath("Color"));
         }
 
         public void DoAlert()
         {
-            _sb.Begin();
+            this.Storyboard.Begin();
         }
 
         public void CancelAlert()
         {
-            _sb.Stop();
+            this.Storyboard.Stop();
         }
     }
 }
