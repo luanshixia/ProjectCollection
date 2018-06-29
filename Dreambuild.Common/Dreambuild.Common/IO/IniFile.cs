@@ -1,79 +1,50 @@
-﻿using System.Collections.Generic;
+﻿using Dreambuild.Collections;
+using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace Dreambuild.IO
 {
     /// <summary>
-    /// INI file creation and parsing - WY20110830 - WY20170303
+    /// INI file creation and parsing - WY20110830 - WY20170303 - WY20180628
     /// </summary>
     public class IniFile
     {
-        private Dictionary<string, Dictionary<string, string>> _data = new Dictionary<string, Dictionary<string, string>>();
+        public CIDictionary<CIDictionary<string>> Data { get; } = new CIDictionary<CIDictionary<string>>();
 
-        public bool CaseFree { get; private set; }
+        private const string GroupPattern = @"^\[[^\[\]]+\]$";
 
-        public string this[string group, string key]
+        private const string DataPattern = @"^[^=]+=[^=]+$";
+
+        public static IniFile Load(string fileName)
         {
-            get
-            {
-                if (_data.Keys.ContainsX(group, CaseFree))
-                {
-                    if (_data.DictValue(group, CaseFree).Keys.ContainsX(key, CaseFree))
-                    {
-                        return _data.DictValue(group, CaseFree).DictValue(key, CaseFree);
-                    }
-                }
-                return null;
-            }
-            set
-            {
-                if (!_data.Keys.ContainsX(group, CaseFree))
-                {
-                    _data.Add(group, new Dictionary<string, string>());
-                }
-                if (_data.DictValue(group, CaseFree).Keys.ContainsX(key, CaseFree))
-                {
-                    _data.DictValue(group, CaseFree).SetDictValue(key, value, CaseFree);
-                }
-                else
-                {
-                    _data.DictValue(group, CaseFree).Add(key, value);
-                }
-            }
-        }
+            var file = new IniFile();
 
-        public IniFile(bool caseFree = false)
-        {
-            CaseFree = caseFree;
-        }
+            var lines = File
+                .ReadAllLines(fileName)
+                .Select(line => line.Trim())
+                .Where(line => !string.IsNullOrEmpty(line))
+                .ToArray();
 
-        public static IniFile Load(string fileName, bool caseFree = false)
-        {
-            IniFile file = new IniFile(caseFree);
-            string groupPattern = @"^\[[^\[\]]+\]$";
-            string dataPattern = @"^[^=]+=[^=]+$";
-
-            string[] lines = File.ReadAllLines(fileName).Select(x => x.Trim()).Where(x => !string.IsNullOrEmpty(x)).ToArray();
-            string group = "%%%";
+            var group = "%%%";
             foreach (var line in lines)
             {
                 if (line.StartsWith("["))
                 {
-                    if (!System.Text.RegularExpressions.Regex.IsMatch(line, groupPattern))
+                    if (Regex.IsMatch(line, IniFile.GroupPattern))
                     {
-                        continue;
+                        group = line.Trim('[', ']');
+                        file.Data[group] = new CIDictionary<string>();
                     }
-                    group = line.Trim('[', ']');
                 }
                 else
                 {
-                    if (!System.Text.RegularExpressions.Regex.IsMatch(line, dataPattern))
+                    if (Regex.IsMatch(line, IniFile.DataPattern))
                     {
-                        continue;
+                        var parts = line.Split('=').Select(part => part.Trim()).ToArray();
+                        file.Data[group][parts[0]] = parts[1];
                     }
-                    string[] parts = line.Split('=').Select(x => x.Trim()).ToArray();
-                    file[group, parts[0]] = parts[1];
                 }
             }
 
@@ -84,12 +55,12 @@ namespace Dreambuild.IO
         {
             using (var sw = new StreamWriter(new FileStream(fileName, FileMode.OpenOrCreate, FileAccess.Write)))
             {
-                foreach (var group in _data)
+                foreach (var group in this.Data)
                 {
                     sw.WriteLine("[{0}]", group.Key);
-                    foreach (var item in group.Value)
+                    foreach (var entry in group.Value)
                     {
-                        sw.WriteLine("{0}={1}", item.Key, item.Value);
+                        sw.WriteLine("{0}={1}", entry.Key, entry.Value);
                     }
                     sw.WriteLine();
                 }
@@ -98,77 +69,17 @@ namespace Dreambuild.IO
 
         public string[] GetGroups()
         {
-            return _data.Keys.ToArray();
+            return this.Data.Keys.ToArray();
         }
 
         public string[] GetEntries(string group)
         {
-            if (_data.Keys.ContainsX(group, CaseFree))
+            if (this.Data.ContainsKey(group))
             {
-                return _data.DictValue(group, CaseFree).Keys.ToArray();
+                return this.Data[group].Keys.ToArray();
             }
-            else
-            {
-                return new string[0];
-            }
-        }
-    }
 
-    /// <summary>
-    /// Extensions of INI files.
-    /// </summary>
-    public static class IniFileExtensions
-    {
-        public static T CaseFreeDictValue<T>(this Dictionary<string, T> source, string key)
-        {
-            return source.First(x => x.Key.ToUpper() == key.ToUpper()).Value;
-        }
-
-        public static void SetCaseFreeDictValue<T>(this Dictionary<string, T> source, string key, T value)
-        {
-            string realKey = source.First(x => x.Key.ToUpper() == key.ToUpper()).Key;
-            source[realKey] = value;
-        }
-
-        public static T DictValue<T>(this Dictionary<string, T> source, string key, bool caseFree)
-        {
-            if (caseFree)
-            {
-                return source.CaseFreeDictValue(key);
-            }
-            else
-            {
-                return source[key];
-            }
-        }
-
-        public static void SetDictValue<T>(this Dictionary<string, T> source, string key, T value, bool caseFree)
-        {
-            if (caseFree)
-            {
-                source.SetCaseFreeDictValue(key, value);
-            }
-            else
-            {
-                source[key] = value;
-            }
-        }
-
-        public static bool ContainsX(this IEnumerable<string> source, string value, bool caseFree)
-        {
-            if (caseFree)
-            {
-                return source.CaseFreeContains(value);
-            }
-            else
-            {
-                return source.Contains(value);
-            }
-        }
-
-        public static bool CaseFreeContains(this IEnumerable<string> source, string value)
-        {
-            return source.Select(x => x.ToUpper()).Contains(value.ToUpper());
+            return Array.Empty<string>();
         }
     }
 }

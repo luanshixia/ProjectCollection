@@ -34,59 +34,59 @@ Public Class Record
 
     Public Sub UpdateProperty(Optional finishCalculation As Boolean = False)
         Me.calculationFinished = finishCalculation
-        NotifyPropertyChanged("Size")
-        NotifyPropertyChanged("SizeString")
+        Me.NotifyPropertyChanged(NameOf(Size))
+        Me.NotifyPropertyChanged(NameOf(SizeString))
     End Sub
 
     Public Property Size As Long
         Get
-            Return sizeValue
+            Return Me.sizeValue
         End Get
         Set(value As Long)
-            sizeValue = value
-            propertyChangeCount += 1
-            If propertyChangeCount Mod 200 = 0 Then
-                UpdateProperty()
+            Me.sizeValue = value
+            Me.propertyChangeCount += 1
+            If Me.propertyChangeCount Mod 200 = 0 Then
+                Me.UpdateProperty()
             End If
         End Set
     End Property
 
     Public ReadOnly Property SizeString0 As String
         Get
-            If Size < 1024 Then
-                Return Size & " Byte"
-            ElseIf Size < 1024 * 1024 Then
-                Return CInt(Size / 1024) & " KB"
+            If Me.Size < 1024 Then
+                Return Me.Size & " Byte"
+            ElseIf Me.Size < 1024 * 1024 Then
+                Return CInt(Me.Size / 1024) & " KB"
             Else
-                Return CInt(Size / 1024 / 1024) & " MB"
+                Return CInt(Me.Size / 1024 / 1024) & " MB"
             End If
         End Get
     End Property
 
     Public ReadOnly Property SizeString As String
         Get
-            Return IIf(calculationFinished, SizeString0, "(...) " & SizeString0)
+            Return IIf(Me.calculationFinished, Me.SizeString0, "(...) " & Me.SizeString0)
         End Get
     End Property
 
     Public Sub New(dir As DirectoryInfo)
-        Type = "D"
-        Name = dir.Name
-        Size = 0
-        dirInfo = dir
+        Me.Type = "D"
+        Me.Name = dir.Name
+        Me.Size = 0
+        Me.dirInfo = dir
     End Sub
 
     Public Sub New(file As FileInfo)
-        Type = "F"
-        Name = file.Name
-        Size = file.Length
+        Me.Type = "F"
+        Me.Name = file.Name
+        Me.Size = file.Length
     End Sub
 
     Public Async Function SumSize() As Task(Of Long)
-        If dirInfo IsNot Nothing Then
-            Return Await GetDirectorySize(dirInfo)
+        If Me.dirInfo IsNot Nothing Then
+            Return Await Me.GetDirectorySize(dirInfo)
         Else
-            Return Size
+            Return Me.Size
         End If
     End Function
 
@@ -100,7 +100,7 @@ Public Class Record
                                   Dim subDirs = dir.GetDirectories()
                                   Dim sumSubDirSize = 0L
                                   For Each subDir In subDirs
-                                      Dim size = Await GetDirectorySize(subDir)
+                                      Dim size = Await Me.GetDirectorySize(subDir)
                                       sumSubDirSize += size
                                   Next
                                   Dim files = dir.GetFiles()
