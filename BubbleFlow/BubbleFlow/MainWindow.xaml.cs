@@ -1,17 +1,14 @@
-﻿using System;
+﻿using Dreambuild.Extensions;
+using Dreambuild.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Vector = Dreambuild.Geometry.Vector;
 
 namespace BubbleFlow
 {
@@ -201,10 +198,10 @@ namespace BubbleFlow
         }
 
 
-        public void Zoom(TongJi.Geometry.Extent2D extents)
+        public void Zoom(Extents extents)
         {
-            Scale = Math.Max(extents.XRange / this.ActualWidth, extents.YRange / this.ActualHeight);
-            Origin = new Point(this.ActualWidth / 2 - extents.Center.x / Scale, this.ActualHeight / 2 - extents.Center.y / Scale);
+            Scale = Math.Max(extents.Range(0) / this.ActualWidth, extents.Range(1) / this.ActualHeight);
+            Origin = new Point(this.ActualWidth / 2 - extents.Center().X / Scale, this.ActualHeight / 2 - extents.Center().Y / Scale);
             RenderLayers();
         }
 
@@ -218,22 +215,21 @@ namespace BubbleFlow
 
         private void btnZoomE_Click_1(object sender, RoutedEventArgs e)
         {
-            List<TongJi.Geometry.Point2D> points = new List<TongJi.Geometry.Point2D>();
+            var points = new List<Vector>();
             foreach (var child in MyCanvas.Children)
             {
-                if (child is Node)
+                if (child is Node node)
                 {
-                    Node node = child as Node;
-                    points.Add(new TongJi.Geometry.Point2D(node.Position.X, node.Position.Y));
+                    points.Add(new Vector(node.Position.X, node.Position.Y));
                 }
             }
             if (points.Count == 0)
             {
                 return;
             }
-            TongJi.Geometry.Polygon poly = new TongJi.Geometry.Polygon(points);
-            var extents = poly.GetExtent();
-            TongJi.Geometry.Extent2D et = new TongJi.Geometry.Extent2D(extents.min.x - 200, extents.min.y - 200, extents.max.x + 200, extents.max.y + 200);
+            var poly = new PointString(points);
+            var extents = poly.GetExtents();
+            var et = new Extents(extents.Min.Value.Add(new Vector(-200, -200)), extents.Max.Value.Add(new Vector(200, 200)));
             Zoom(et);
         }
 

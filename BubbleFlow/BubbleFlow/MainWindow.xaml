@@ -26,9 +26,9 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate>
-                            <StackPanel Name="stack" Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" >
+                            <Border Name="stack" Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" >
                                 <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" />
-                            </StackPanel>
+                            </Border>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>

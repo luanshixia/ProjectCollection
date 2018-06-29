@@ -15,7 +15,7 @@ namespace BubbleFlow
         public static string ToJson(WorkflowJsonObject workflowJson)
         {
             JsonObject json = new JsonObject(new List<KeyValuePair<string,JsonValue>>());
-            
+
             JsonArray jsonnodes = new JsonArray(new List<JsonValue>());
             JsonArray jsonconns = new JsonArray(new List<JsonValue>());
 
@@ -45,7 +45,7 @@ namespace BubbleFlow
             foreach (var conn in workflowJson.connections)
             {
                 JsonObject jsonConnVals = new JsonObject(new List<KeyValuePair<string, JsonValue>>());
-                
+
                 JsonPrimitive value_from = new JsonPrimitive(conn.from);
                 JsonPrimitive value_to = new JsonPrimitive(conn.to);
                 JsonPrimitive value_label = new JsonPrimitive(conn.label);
@@ -67,41 +67,53 @@ namespace BubbleFlow
         public static WorkflowJsonObject ParseJson(string json)
         {
             var data = JsonValue.Parse(json);
-            var result = new WorkflowJsonObject();
-            result.nodes = new List<FlowNodeJsonObject>();
-            result.connections = new List<NodeConnectionJsonObject>();
-            result.labels = new List<TextLabelJsonObject>();
+            var result = new WorkflowJsonObject
+            {
+                nodes = new List<FlowNodeJsonObject>(),
+                connections = new List<NodeConnectionJsonObject>(),
+                labels = new List<TextLabelJsonObject>()
+            };
+
             foreach (JsonValue node in data["nodes"])
             {
-                var nodeResult = new FlowNodeJsonObject();
-                nodeResult.id = node["id"];
-                nodeResult.name = node["name"];
-                nodeResult.user = node["user"];
-                nodeResult.role = node["role"];
-                nodeResult.xpos = node["xpos"];
-                nodeResult.ypos = node["ypos"];
-                nodeResult.status = node["status"];
+                var nodeResult = new FlowNodeJsonObject
+                {
+                    id = node["id"],
+                    name = node["name"],
+                    user = node["user"],
+                    role = node["role"],
+                    xpos = node["xpos"],
+                    ypos = node["ypos"],
+                    status = node["status"]
+                };
                 result.nodes.Add(nodeResult);
             }
+
             foreach (JsonValue conn in data["connections"])
             {
-                var connResult = new NodeConnectionJsonObject();
-                connResult.from = conn["from"];
-                connResult.to = conn["to"];
-                connResult.label = conn["label"];
+                var connResult = new NodeConnectionJsonObject
+                {
+                    from = conn["from"],
+                    to = conn["to"],
+                    label = conn["label"]
+                };
                 result.connections.Add(connResult);
             }
+
             foreach (JsonValue label in data["labels"])
             {
-                var labelResult = new TextLabelJsonObject();
-                labelResult.text = label["text"];
-                labelResult.xpos = label["xpos"];
-                labelResult.ypos = label["ypos"];
-                labelResult.centerAligned = label["centerAligned"];
-                labelResult.fontSize = label["fontSize"];
-                labelResult.fontFamily = label["fontFamily"];
+                var labelResult = new TextLabelJsonObject
+                {
+                    text = label["text"],
+                    xpos = label["xpos"],
+                    ypos = label["ypos"],
+                    centerAligned = label["centerAligned"],
+                    fontSize = label["fontSize"],
+                    fontFamily = label["fontFamily"]
+                };
                 result.labels.Add(labelResult);
             }
+
             result.id = data["id"];
             return result;
         }
@@ -113,13 +125,16 @@ namespace BubbleFlow
 
             foreach (var node in flow.nodes)
             {
-                Node nodeMark = new Node();
-                nodeMark.Text = node.name;
-                //if (node.pos.Length > 0)
-                //{
-                //    nodeMark.Position = ParsePoint(node.pos);
-                //}
-                nodeMark.Position = new Point(node.xpos, node.ypos);
+                var nodeMark = new Node
+                {
+                    Text = node.name,
+                    //if (node.pos.Length > 0)
+                    //{
+                    //    nodeMark.Position = ParsePoint(node.pos);
+                    //}
+                    Position = new Point(node.xpos, node.ypos)
+                };
+
                 if (node.status == "passed")
                 {
                     nodeMark.FillColor = Color.FromArgb(255, 200, 250, 100);
@@ -137,12 +152,14 @@ namespace BubbleFlow
 
             foreach (var conn in flow.connections)
             {
+                var arrow = new BezierLink
+                {
+                    StartPoint = ParsePoint(flow.nodes[conn.from]),
+                    EndPoint = ParsePoint(flow.nodes[conn.to]),
+                    StartOffset = NodeSize / 2,
+                    EndOffset = NodeSize / 2
+                };
                 //Arrow arrow = new Arrow();
-                BezierLink arrow = new BezierLink();
-                arrow.StartPoint = ParsePoint(flow.nodes[conn.from]);
-                arrow.EndPoint = ParsePoint(flow.nodes[conn.to]);
-                arrow.StartOffset = NodeSize / 2;
-                arrow.EndOffset = NodeSize / 2;
                 //arrow.ArrowSize = NodeSize / 10;
                 //arrow.LabelText = conn.label;
 
@@ -152,10 +169,13 @@ namespace BubbleFlow
 
             foreach (var label in flow.labels)
             {
-                TextBlock textLabel = new TextBlock();
-                textLabel.Text = label.text;
-                textLabel.FontSize = 9;
-                textLabel.Foreground = new SolidColorBrush(Colors.Gray);
+                var textLabel = new TextBlock
+                {
+                    Text = label.text,
+                    FontSize = 9,
+                    Foreground = new SolidColorBrush(Colors.Gray)
+                };
+
                 Canvas.SetLeft(textLabel, label.xpos);
                 Canvas.SetTop(textLabel, label.ypos);
                 canvas.Children.Add(textLabel);

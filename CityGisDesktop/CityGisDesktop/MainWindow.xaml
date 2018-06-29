@@ -31,7 +31,7 @@
         <SolidColorBrush x:Key="FocusForegroundSolidBrush" Color="{StaticResource FocusForegroundColor}" />
         <SolidColorBrush x:Key="MenuBackgroundSolidBrush" Color="{StaticResource MenuBackgroundColor}" />
         <SolidColorBrush x:Key="MenuForegroundSolidBrush" Color="{StaticResource MenuForegroundColor}" />
-        
+
         <LinearGradientBrush x:Key="PrimaryGradientBrush" StartPoint="0,0" EndPoint="0,1">
             <GradientStop Color="{StaticResource PrimaryColor}" Offset="0" />
             <GradientStop Color="{StaticResource PrimaryDimmedColor}" Offset="1" />
@@ -46,9 +46,9 @@
         </LinearGradientBrush>
 
         <ControlTemplate x:Key="FlatButton">
-            <StackPanel Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" >
+            <Border Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" >
                 <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" />
-            </StackPanel>
+            </Border>
         </ControlTemplate>
     </Window.Resources>
 

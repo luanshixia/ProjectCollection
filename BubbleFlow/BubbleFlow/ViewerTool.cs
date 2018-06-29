@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dreambuild.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Windows;
@@ -21,16 +22,23 @@ namespace BubbleFlow
         {
             base.MouseWheelHandler(sender, e);
 
-            Point basePoint = e.GetPosition(MainWindow.Current);
-            int index = FindScaleIndex(MainWindow.Current.Scale);
+            var basePoint = e.GetPosition(MainWindow.Current);
+            int index = WheelScalingTool.FindScaleIndex(MainWindow.Current.Scale);
             index += e.Delta / 120;
-            if (index > _zoomLevels.Length - 1) index = _zoomLevels.Length - 1;
-            else if (index < 0) index = 0;
+            if (index > _zoomLevels.Length - 1)
+            {
+                index = _zoomLevels.Length - 1;
+            }
+            else if (index < 0)
+            {
+                index = 0;
+            }
+
             double scale = _zoomLevels[index];
             MainWindow.Current.ScaleCanvas(scale, basePoint);
         }
 
-        private int FindScaleIndex(double scale)
+        private static int FindScaleIndex(double scale)
         {
             for (int i = 0; i < _zoomLevels.Length; i++)
             {
@@ -39,6 +47,7 @@ namespace BubbleFlow
                     return i;
                 }
             }
+
             return _zoomLevels.Length - 1;
         }
     }
@@ -57,8 +66,8 @@ namespace BubbleFlow
         {
             if (_isDragging)
             {
-                Point pos = e.GetPosition(MainWindow.Current);
-                Point vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
+                var pos = e.GetPosition(MainWindow.Current);
+                var vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
                 MainWindow.Current.PanCanvas(vector);
                 _mouseDownTemp = pos;
             }
@@ -108,86 +117,41 @@ namespace BubbleFlow
     {
         public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
         {
-            deletePreNode();
-        }
-
-        private void deletePreNode()
-        {
-            Node preNode = MainWindow.Current.nodes.Last().Key;
+            var preNode = MainWindow.Current.nodes.Last().Key;
             MainWindow.Current.MyCanvas.Children.Remove(preNode);
             MainWindow.Current.nodes.Remove(preNode);
         }
 
         public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
         {
-            Point catchPos = GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
-            
-            Node node = new Node();
-            node.Position = new Point(catchPos.X + 1, catchPos.Y + 1);
+            var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+            var node = new Node
+            {
+                Position = new Point(catchPos.X + 1, catchPos.Y + 1)
+            };
+
             Canvas.SetZIndex(node, 100);
             MainWindow.Current.MyCanvas.Children.Add(node);
 
             string name = node.Text;
             int s = 1;
-            while (MainWindow.Current.nodes.Values.ToList().Any(n => n.name == name))
+            while (MainWindow.Current.nodes.Values.Any(n => n.name == name))
             {
                 name = string.Format("{0}{1}", node.Text, s.ToString());
                 s++;
             }
+
             node.SetText(name);
             node.ReadyControl();
 
-            FlowNodeJsonObject nodeJson = new FlowNodeJsonObject();
-            nodeJson.name = name;
-            nodeJson.role = string.Empty;
-            nodeJson.user = string.Empty;
+            var nodeJson = new FlowNodeJsonObject
+            {
+                name = name,
+                role = string.Empty,
+                user = string.Empty
+            };
 
             MainWindow.Current.nodes.Add(node, nodeJson);
-        }
-
-        public Point GetCatchPoint(Point pos)
-        {
-            string str_x = pos.X.ToString().Split('.')[0];
-            double ix = 0;
-            if (pos.X >= 0)
-            {
-                ix = str_x.Length > 1 ? Convert.ToDouble(str_x.Substring(0, str_x.Length - 1)) : 0;
-            }
-            else
-            {
-                ix = str_x.Length > 2 ? Convert.ToDouble(str_x.Substring(0, str_x.Length - 1)) : 0;
-            }
-            double ix1 = Convert.ToDouble(str_x.Substring(str_x.Length - 1, 1));
-            if (ix1 >= 5 && ix >= 0)
-            {
-                ix += 1;
-            }
-            else if (ix1 >= 5 && ix < 0)
-            {
-                ix -= 1;
-            }
-            string str_y = pos.Y.ToString().Split('.')[0];
-            double iy = 0;
-            if (pos.Y >= 0)
-            {
-                iy = str_y.Length > 1 ? Convert.ToDouble(str_y.Substring(0, str_y.Length - 1)) : 0;
-            }
-            else
-            {
-                iy = str_y.Length > 2 ? Convert.ToDouble(str_y.Substring(0, str_y.Length - 1)) : 0;
-            }
-            double iy1 = Convert.ToDouble(str_y.Substring(str_y.Length - 1, 1));
-            if (iy1 >= 5 && iy >= 0)
-            {
-                iy += 1;
-            }
-            else if (iy1 >= 5 && iy < 0)
-            {
-                iy -= 1;
-            }
-            Point catchPos = new Point(ix * 10, iy * 10);
-
-            return catchPos;
         }
     }
 
@@ -225,9 +189,8 @@ namespace BubbleFlow
             _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
             foreach (var child in MainWindow.Current.MyCanvas.Children)
             {
-                if (child is Node)
+                if (child is Node node)
                 {
-                    Node node = child as Node;
                     if (node.IsPointInNode(_mouseDownTemp))
                     {
                         _isAnyPicked = true;
@@ -271,7 +234,7 @@ namespace BubbleFlow
                 }
                 MainWindow.Current.MyCanvas.Children.Add(border);
                 _isTbAdd = true;
-            }            
+            }
         }
 
         public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
@@ -282,17 +245,19 @@ namespace BubbleFlow
                 if (_startNode != null && _endNode != null)
                 {
                     double NodeSize = _startNode.Size;
-                    BezierLink arrow = new BezierLink();
-                    arrow.StartPoint = _startNode.Position;
-                    arrow.EndPoint = _endNode.Position;
-                    arrow.StartOffset = NodeSize / 2;
-                    arrow.EndOffset = NodeSize / 2;
+                    var arrow = new BezierLink
+                    {
+                        StartPoint = _startNode.Position,
+                        EndPoint = _endNode.Position,
+                        StartOffset = NodeSize / 2,
+                        EndOffset = NodeSize / 2
+                    };
 
                     arrow.ReadyControl();
                     Canvas.SetZIndex(arrow, 100);
                     MainWindow.Current.MyCanvas.Children.Add(arrow);
 
-                    NodeConnectionJsonObject conn = new NodeConnectionJsonObject();
+                    var conn = new NodeConnectionJsonObject();
                     conn.from = MainWindow.Current.nodes.Keys.ToList().IndexOf(_startNode);
                     conn.to = MainWindow.Current.nodes.Keys.ToList().IndexOf(_endNode);
                     conn.label = string.Empty;
@@ -339,9 +304,9 @@ namespace BubbleFlow
         {
             if (!_isAnyPicked)
             {
-                Point pos = e.GetPosition(MainWindow.Current.MyCanvas);
-                Point vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
-                TranslateTransform translate = new TranslateTransform { X = vector.X, Y = vector.Y };
+                var pos = e.GetPosition(MainWindow.Current.MyCanvas);
+                var vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
+                var translate = new TranslateTransform { X = vector.X, Y = vector.Y };
                 border.RenderTransform = translate;
             }
             if (_isConnectionExist || _isSelfSelected)
@@ -384,9 +349,8 @@ namespace BubbleFlow
         {
             if (_isDragging && _isPickedAny)
             {
-                Point catchPos = GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
-
-                Point vector = new Point(catchPos.X - _mouseDownTemp.X, catchPos.Y - _mouseDownTemp.Y);
+                var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+                var vector = new Point(catchPos.X - _mouseDownTemp.X, catchPos.Y - _mouseDownTemp.Y);
                 translate = new TranslateTransform { X = vector.X, Y = vector.Y };
                 _movingNode.RenderTransform = translate;
 
@@ -397,12 +361,11 @@ namespace BubbleFlow
         public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
         {
             _isDragging = true;
-            _mouseDownTemp = GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+            _mouseDownTemp = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
             foreach (var child in MainWindow.Current.MyCanvas.Children)
             {
-                if (child is Node)
+                if (child is Node node)
                 {
-                    Node node = child as Node;
                     if (node.IsPointInNode(e.GetPosition(MainWindow.Current.MyCanvas)))
                     {
                         _movingNode = node;
@@ -418,12 +381,12 @@ namespace BubbleFlow
         {
             if (_isPickedAny)
             {
-                Point catchPos = GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+                var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
 
                 translate = new TranslateTransform { X = 0, Y = 0 };
                 _movingNode.RenderTransform = translate;
 
-                _movingNode.Position = GetCatchPoint(new Point(_originPos.X + catchPos.X - _mouseDownTemp.X, _originPos.Y + catchPos.Y - _mouseDownTemp.Y));
+                _movingNode.Position = MoveNodeTool.GetCatchPoint(new Point(_originPos.X + catchPos.X - _mouseDownTemp.X, _originPos.Y + catchPos.Y - _mouseDownTemp.Y));
                 _movingNode.ReadyControl();
 
                 SetConnectionPosition(_movingNode.Position);
@@ -435,8 +398,8 @@ namespace BubbleFlow
         public void SetConnectionPosition(Point catchPos)
         {
             int index = MainWindow.Current.nodes.Keys.ToList().IndexOf(_movingNode);
-            Dictionary<NodeConnectionJsonObject, BezierLink> fromConns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
-            Dictionary<NodeConnectionJsonObject, BezierLink> toConns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
+            var fromConns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
+            var toConns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
 
             MainWindow.Current.connections.ForEach(c =>
             {
@@ -449,11 +412,13 @@ namespace BubbleFlow
                     toConns.Add(c.Key, c.Value);
                 }
             });
+
             fromConns.ForEach(c =>
             {
                 c.Value.StartPoint = catchPos;
                 c.Value.ReadyControl();
             });
+
             toConns.ForEach(c =>
             {
                 c.Value.EndPoint = catchPos;
@@ -461,7 +426,7 @@ namespace BubbleFlow
             });
         }
 
-        public Point GetCatchPoint(Point pos)
+        public static Point GetCatchPoint(Point pos)
         {
             string str_x = pos.X.ToString().Split('.')[0];
             double ix = 0;
@@ -501,9 +466,8 @@ namespace BubbleFlow
             {
                 iy -= 1;
             }
-            Point catchPos = new Point(ix * 10, iy * 10);
-            
-            return catchPos;
+
+            return new Point(ix * 10, iy * 10);
         }
     }
 
@@ -517,18 +481,18 @@ namespace BubbleFlow
 
         public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
         {
-            Point pos = e.GetPosition(MainWindow.Current.MyCanvas);
+            var pos = e.GetPosition(MainWindow.Current.MyCanvas);
             foreach (var child in MainWindow.Current.MyCanvas.Children)
             {
-                if (child is Node)
+                if (child is Node node)
                 {
-                    Node node = child as Node;
                     if (node.IsPointInNode(pos))
                     {
                         if (MainWindow.Current.CurrentNode != null)
                         {
                             MainWindow.Current.CurrentNode.SetColor(_defaultColor);
                         }
+
                         MainWindow.Current.CurrentNode = node;
                         node.SetColor(_highlightColor);
                         break;
@@ -549,12 +513,11 @@ namespace BubbleFlow
 
         public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
         {
-            Point _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
+            var _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
             foreach (var child in MainWindow.Current.MyCanvas.Children)
             {
-                if (child is Node)
+                if (child is Node node)
                 {
-                    Node node = child as Node;
                     if (node.IsPointInNode(_mouseDownTemp))
                     {
                         currentNode = MainWindow.Current.CurrentNode;
@@ -578,11 +541,12 @@ namespace BubbleFlow
         {
             string name = nodeInfow.GetNodeName();
             int s = 1;
-            while (MainWindow.Current.nodes.Keys.Where(n=>n!=currentNode).ToList().Any(n => n.Text == name))
+            while (MainWindow.Current.nodes.Keys.Where(n => n != currentNode).ToList().Any(n => n.Text == name))
             {
                 name = string.Format("{0}{1}", nodeInfow.GetNodeName(), s.ToString());
                 s++;
             }
+
             currentNodeJson.name = name;
             currentNodeJson.role = nodeInfow.GetNodeRole();
             currentNodeJson.user = nodeInfow.GetNodeUser();
@@ -626,9 +590,8 @@ namespace BubbleFlow
             _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
             foreach (var child in MainWindow.Current.MyCanvas.Children)
             {
-                if (child is Node)
+                if (child is Node node)
                 {
-                    Node node = child as Node;
                     if (node.IsPointInNode(_mouseDownTemp))
                     {
                         _isAnyPicked = true;
@@ -664,7 +627,7 @@ namespace BubbleFlow
                 }
                 MainWindow.Current.MyCanvas.Children.Add(border);
                 _isTbAdd = true;
-            }            
+            }
         }
 
         public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
@@ -677,7 +640,7 @@ namespace BubbleFlow
                 {
                     int start = MainWindow.Current.nodes.Keys.ToList().IndexOf(_startNode);
                     int end = MainWindow.Current.nodes.Keys.ToList().IndexOf(_endNode);
-                    if (MainWindow.Current.connections.Keys.Any(x=>x.from == start))
+                    if (MainWindow.Current.connections.Keys.Any(x => x.from == start))
                     {
                         MainWindow.Current.connections.Keys.Where(x => x.from == start).ForEach(x =>
                         {
@@ -685,12 +648,12 @@ namespace BubbleFlow
                             {
                                 _currentConn = x;
                                 isfindconn = true;
-                            }                                
-                        });                        
+                            }
+                        });
                     }
                     else
                     {
-                        isfindconn = false;                        
+                        isfindconn = false;
                     }
 
                     if (!isfindconn)
@@ -734,9 +697,9 @@ namespace BubbleFlow
         {
             if (!_isAnyPicked)
             {
-                Point pos = e.GetPosition(MainWindow.Current.MyCanvas);
-                Point vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
-                TranslateTransform translate = new TranslateTransform { X = vector.X, Y = vector.Y };
+                var pos = e.GetPosition(MainWindow.Current.MyCanvas);
+                var vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
+                var translate = new TranslateTransform { X = vector.X, Y = vector.Y };
                 border.RenderTransform = translate;
             }
             if (!_isConnectionExist)

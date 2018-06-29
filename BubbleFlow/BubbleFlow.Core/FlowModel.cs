@@ -9,12 +9,7 @@ namespace BubbleFlow
         public string Name { get; set; }
         public DateTime CreateTime { get; set; }
         public DateTime ModifyTime { get; set; }
-        public List<FlowNode> Nodes { get; private set; }
-
-        public Workflow()
-        {
-            Nodes = new List<FlowNode>();
-        }
+        public List<FlowNode> Nodes { get; set; }
 
         public WorkflowJsonObject ToJsonObject()
         {

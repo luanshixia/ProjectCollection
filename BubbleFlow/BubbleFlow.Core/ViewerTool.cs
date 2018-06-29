@@ -1,43 +1,12 @@
-﻿using System;
+﻿using Dreambuild.Extensions;
+using System;
 using System.Collections.Generic;
-using System.Net;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
 using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 
 namespace BubbleFlow
 {
-    public static class LocalExtensions
-    {
-        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
-        {
-            foreach (T element in source)
-            {
-                action(element);
-            }
-        }
-
-        public static double TryParseToDouble(this string source)
-        {
-            double result = 0;
-            double.TryParse(source, out result);
-            return result;
-        }
-
-        public static int TryParseToInt32(this string source)
-        {
-            int result = 0;
-            int.TryParse(source, out result);
-            return result;
-        }
-    }
-
     public static class ViewerToolManager
     {
         private static DateTime _time = new DateTime(1, 1, 1, 1, 0, 0, 0, 0);

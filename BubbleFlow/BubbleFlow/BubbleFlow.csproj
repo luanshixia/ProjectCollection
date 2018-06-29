@@ -123,6 +123,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Dreambuild.Common\Dreambuild.Common\Dreambuild.Common.csproj">
+      <Project>{8610cb80-d172-490f-a9a0-fad4df6743cf}</Project>
+      <Name>Dreambuild.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BubbleFlow.Core\BubbleFlow.Core.csproj">
       <Project>{e0610852-9b8f-4f0f-8035-bbd32a0e1343}</Project>
       <Name>BubbleFlow.Core</Name>

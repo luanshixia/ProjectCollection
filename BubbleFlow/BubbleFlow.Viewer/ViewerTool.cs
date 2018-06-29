@@ -21,16 +21,23 @@ namespace BubbleFlow.Viewer
         {
             base.MouseWheelHandler(sender, e);
 
-            Point basePoint = e.GetPosition(MainWindow.Current);
-            int index = FindScaleIndex(MainWindow.Current.Scale);
+            var basePoint = e.GetPosition(MainWindow.Current);
+            int index = WheelScalingTool.FindScaleIndex(MainWindow.Current.Scale);
             index += e.Delta / 120;
-            if (index > _zoomLevels.Length - 1) index = _zoomLevels.Length - 1;
-            else if (index < 0) index = 0;
+            if (index > _zoomLevels.Length - 1)
+            {
+                index = _zoomLevels.Length - 1;
+            }
+            else if (index < 0)
+            {
+                index = 0;
+            }
+
             double scale = _zoomLevels[index];
             MainWindow.Current.ScaleCanvas(scale, basePoint);
         }
 
-        private int FindScaleIndex(double scale)
+        private static int FindScaleIndex(double scale)
         {
             for (int i = 0; i < _zoomLevels.Length; i++)
             {
@@ -39,6 +46,7 @@ namespace BubbleFlow.Viewer
                     return i;
                 }
             }
+
             return _zoomLevels.Length - 1;
         }
     }
@@ -52,8 +60,8 @@ namespace BubbleFlow.Viewer
         {
             if (_isDragging)
             {
-                Point pos = e.GetPosition(MainWindow.Current);
-                Point vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
+                var pos = e.GetPosition(MainWindow.Current);
+                var vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
                 MainWindow.Current.PanCanvas(vector);
                 _mouseDownTemp = pos;
             }
