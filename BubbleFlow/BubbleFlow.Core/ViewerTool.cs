@@ -1,15 +1,16 @@
 ﻿using Dreambuild.Extensions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace BubbleFlow
 {
     public static class ViewerToolManager
     {
-        private static DateTime _time = new DateTime(1, 1, 1, 1, 0, 0, 0, 0);
         private static ViewerTool _exclusiveTool;
         public static ViewerTool ExclusiveTool
         {
@@ -29,7 +30,7 @@ namespace BubbleFlow
         }
 
         private static List<ViewerTool> _overlayTools = new List<ViewerTool>();
-        public static System.Collections.ObjectModel.ReadOnlyCollection<ViewerTool> OverlayTools
+        public static ReadOnlyCollection<ViewerTool> OverlayTools
         {
             get
             {
@@ -72,25 +73,21 @@ namespace BubbleFlow
             _overlayTools.Clear();
         }
 
-        public static void SetFrameworkElement(FrameworkElement element)
+        public static void SetFrameworkElement(FrameworkElement element) // mod 20180629
         {
             element.MouseMove += (s, args) => Tools.ForEach(t => t.MouseMoveHandler(s, args));
-            element.MouseLeftButtonDown += (s, args) =>
+            element.MouseDown += (s, args) =>
             {
-                DateTime nextTime = DateTime.Now;
-                TimeSpan span = nextTime - _time;
-                if (span.TotalMilliseconds <= 300)
+                if (args.ClickCount >= 2)
                 {
-                    Tools.ForEach(t => t.MouseLDoubleClickHandler(s, args));
+                    Tools.ForEach(t => t.MouseDoubleClickHandler(s, args));
                 }
                 else
                 {
-                    Tools.ForEach(t => t.MouseLDownHandler(s, args));
+                    Tools.ForEach(t => t.MouseDownHandler(s, args));
                 }
-                _time = nextTime;
             };
-            element.MouseLeftButtonUp += (s, args) => Tools.ForEach(t => t.MouseLUpHandler(s, args));
-            //element.MouseLeftButtonDown += (s, args) => Tools.ForEach(t => t.MouseLDoubleClickHandler(s, args));
+            element.MouseUp += (s, args) => Tools.ForEach(t => t.MouseUpHandler(s, args));
             element.MouseWheel += (s, args) => Tools.ForEach(t => t.MouseWheelHandler(s, args));
             element.KeyDown += (s, args) => Tools.ForEach(t => t.KeyDownHandler(s, args));
         }
@@ -98,7 +95,9 @@ namespace BubbleFlow
 
     public abstract class ViewerTool
     {
-        public virtual IEnumerable<UIElement> TempElements { get { yield break; } }
+        public virtual IEnumerable<UIElement> CanvasElements { get { yield break; } } // mod 20140707
+        public virtual IEnumerable<UIElement> WorldElements { get { yield break; } } // newly 20140707
+        public virtual ContextMenu ContextMenu { get { return null; } } // newly 20140623
 
         public virtual void Render()
         {
@@ -108,15 +107,15 @@ namespace BubbleFlow
         {
         }
 
-        public virtual void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public virtual void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
         }
 
-        public virtual void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public virtual void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
         }
 
-        public virtual void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public virtual void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
         }
 
@@ -148,11 +147,19 @@ namespace BubbleFlow
             _tools = tools;
         }
 
-        public override IEnumerable<UIElement> TempElements
+        public override IEnumerable<UIElement> CanvasElements
         {
             get
             {
-                return _tools.SelectMany(x => x.TempElements);
+                return _tools.SelectMany(x => x.CanvasElements);
+            }
+        }
+
+        public override IEnumerable<UIElement> WorldElements
+        {
+            get
+            {
+                return _tools.SelectMany(x => x.WorldElements);
             }
         }
 
@@ -166,19 +173,19 @@ namespace BubbleFlow
             _tools.ForEach(x => x.MouseMoveHandler(sender, e));
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            _tools.ForEach(x => x.MouseLDownHandler(sender, e));
+            _tools.ForEach(x => x.MouseDownHandler(sender, e));
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            _tools.ForEach(x => x.MouseLUpHandler(sender, e));
+            _tools.ForEach(x => x.MouseUpHandler(sender, e));
         }
 
-        public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
-            _tools.ForEach(x => x.MouseLDoubleClickHandler(sender, e));
+            _tools.ForEach(x => x.MouseDoubleClickHandler(sender, e));
         }
 
         public override void MouseWheelHandler(object sender, MouseWheelEventArgs e)

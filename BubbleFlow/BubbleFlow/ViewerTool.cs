@@ -57,9 +57,12 @@ namespace BubbleFlow
         private bool _isDragging = false;
         private Point _mouseDownTemp;
 
-        public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = false;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                _isDragging = false;
+            }
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
@@ -73,15 +76,21 @@ namespace BubbleFlow
             }
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = true;
-            _mouseDownTemp = e.GetPosition(MainWindow.Current);
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                _isDragging = true;
+                _mouseDownTemp = e.GetPosition(MainWindow.Current);
+            }
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = false;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                _isDragging = false;
+            }
         }
 
         public void StartDrag(Point mousePos)
@@ -115,43 +124,49 @@ namespace BubbleFlow
 
     public class AddNodeTool : ViewerTool
     {
-        public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
-            var preNode = MainWindow.Current.nodes.Last().Key;
-            MainWindow.Current.MyCanvas.Children.Remove(preNode);
-            MainWindow.Current.nodes.Remove(preNode);
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                var preNode = MainWindow.Current.Nodes.Last().Key;
+                MainWindow.Current.MyCanvas.Children.Remove(preNode);
+                MainWindow.Current.Nodes.Remove(preNode);
+            }
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
-            var node = new Node
+            if (e.ChangedButton == MouseButton.Left)
             {
-                Position = new Point(catchPos.X + 1, catchPos.Y + 1)
-            };
+                var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+                var node = new Node
+                {
+                    Position = new Point(catchPos.X + 1, catchPos.Y + 1)
+                };
 
-            Canvas.SetZIndex(node, 100);
-            MainWindow.Current.MyCanvas.Children.Add(node);
+                Canvas.SetZIndex(node, 100);
+                MainWindow.Current.MyCanvas.Children.Add(node);
 
-            string name = node.Text;
-            int s = 1;
-            while (MainWindow.Current.nodes.Values.Any(n => n.name == name))
-            {
-                name = string.Format("{0}{1}", node.Text, s.ToString());
-                s++;
+                string name = node.Text;
+                int s = 1;
+                while (MainWindow.Current.Nodes.Values.Any(n => n.name == name))
+                {
+                    name = string.Format("{0}{1}", node.Text, s.ToString());
+                    s++;
+                }
+
+                node.SetText(name);
+                node.ReadyControl();
+
+                var nodeJson = new FlowNodeJsonObject
+                {
+                    name = name,
+                    role = string.Empty,
+                    user = string.Empty
+                };
+
+                MainWindow.Current.Nodes.Add(node, nodeJson);
             }
-
-            node.SetText(name);
-            node.ReadyControl();
-
-            var nodeJson = new FlowNodeJsonObject
-            {
-                name = name,
-                role = string.Empty,
-                user = string.Empty
-            };
-
-            MainWindow.Current.nodes.Add(node, nodeJson);
         }
     }
 
@@ -170,131 +185,137 @@ namespace BubbleFlow
         private TextBlock tb = new TextBlock();
         private Point _mouseDownTemp;
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            _isStarted = true;
-            if (_isTbAdd)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                MainWindow.Current.MyCanvas.Children.Remove(border);
-                _isTbAdd = false;
-            }
-
-            if (_isFinished)
-            {
-                count = 0;
-                _isFinished = false;
-            }
-            _isAnyPicked = false;
-
-            _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
-            foreach (var child in MainWindow.Current.MyCanvas.Children)
-            {
-                if (child is Node node)
+                _isStarted = true;
+                if (_isTbAdd)
                 {
-                    if (node.IsPointInNode(_mouseDownTemp))
-                    {
-                        _isAnyPicked = true;
-                        count++;
+                    MainWindow.Current.MyCanvas.Children.Remove(border);
+                    _isTbAdd = false;
+                }
 
-                        if (count == 1)
+                if (_isFinished)
+                {
+                    count = 0;
+                    _isFinished = false;
+                }
+                _isAnyPicked = false;
+
+                _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
+                foreach (var child in MainWindow.Current.MyCanvas.Children)
+                {
+                    if (child is Node node)
+                    {
+                        if (node.IsPointInNode(_mouseDownTemp))
                         {
-                            _startNode = node;
-                            break;
-                        }
-                        else
-                        {
-                            if (node != _startNode)
+                            _isAnyPicked = true;
+                            count++;
+
+                            if (count == 1)
                             {
-                                _endNode = node;
-                                _isSelfSelected = false;
+                                _startNode = node;
                                 break;
                             }
                             else
                             {
-                                _isSelfSelected = true;
+                                if (node != _startNode)
+                                {
+                                    _endNode = node;
+                                    _isSelfSelected = false;
+                                    break;
+                                }
+                                else
+                                {
+                                    _isSelfSelected = true;
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            if (!_isAnyPicked)
-            {
-                border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                border.Child = tb;
-                Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                if (count == 0)
+                if (!_isAnyPicked)
                 {
-                    tb.Text = "当前未选中任何StartNode\n请重新选择StartNode";
-                }
-                else
-                {
-                    tb.Text = "当前未选中任何EndNode\n请重新选择EndNode";
-                }
-                MainWindow.Current.MyCanvas.Children.Add(border);
-                _isTbAdd = true;
-            }
-        }
-
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (count == 2)
-            {
-                _isFinished = true;
-                if (_startNode != null && _endNode != null)
-                {
-                    double NodeSize = _startNode.Size;
-                    var arrow = new BezierLink
+                    border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
+                    border.Child = tb;
+                    Canvas.SetLeft(border, _mouseDownTemp.X + 10);
+                    Canvas.SetTop(border, _mouseDownTemp.Y + 10);
+                    if (count == 0)
                     {
-                        StartPoint = _startNode.Position,
-                        EndPoint = _endNode.Position,
-                        StartOffset = NodeSize / 2,
-                        EndOffset = NodeSize / 2
-                    };
-
-                    arrow.ReadyControl();
-                    Canvas.SetZIndex(arrow, 100);
-                    MainWindow.Current.MyCanvas.Children.Add(arrow);
-
-                    var conn = new NodeConnectionJsonObject();
-                    conn.from = MainWindow.Current.nodes.Keys.ToList().IndexOf(_startNode);
-                    conn.to = MainWindow.Current.nodes.Keys.ToList().IndexOf(_endNode);
-                    conn.label = string.Empty;
-                    if (!MainWindow.Current.connections.Any(c => c.Key.from == conn.from && c.Key.to == conn.to))
-                    {
-                        MainWindow.Current.connections.Add(conn, arrow);
-                        _isConnectionExist = false;
+                        tb.Text = "当前未选中任何StartNode\n请重新选择StartNode";
                     }
                     else
                     {
-                        _isConnectionExist = true;
-                        border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                        border.Child = tb;
-                        Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                        Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                        tb.Text = "当前Connection已经存在!";
-                        if (!_isTbAdd)
-                        {
-                            MainWindow.Current.MyCanvas.Children.Add(border);
-                        }
-                        _isTbAdd = true;
-                        MainWindow.Current.MyCanvas.Children.Remove(arrow);
+                        tb.Text = "当前未选中任何EndNode\n请重新选择EndNode";
                     }
+                    MainWindow.Current.MyCanvas.Children.Add(border);
+                    _isTbAdd = true;
+                }
+            }
+        }
 
-                    if (_isSelfSelected)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                if (count == 2)
+                {
+                    _isFinished = true;
+                    if (_startNode != null && _endNode != null)
                     {
-                        border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                        border.Child = tb;
-                        Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                        Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                        tb.Text = "所选的EndNode与StartNode相同!";
-                        if (!_isTbAdd)
+                        double NodeSize = _startNode.Size;
+                        var arrow = new BezierLink
                         {
-                            MainWindow.Current.MyCanvas.Children.Add(border);
+                            StartPoint = _startNode.Position,
+                            EndPoint = _endNode.Position,
+                            StartOffset = NodeSize / 2,
+                            EndOffset = NodeSize / 2
+                        };
+
+                        arrow.ReadyControl();
+                        Canvas.SetZIndex(arrow, 100);
+                        MainWindow.Current.MyCanvas.Children.Add(arrow);
+
+                        var conn = new NodeConnectionJsonObject();
+                        conn.from = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_startNode);
+                        conn.to = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_endNode);
+                        conn.label = string.Empty;
+                        if (!MainWindow.Current.Connections.Any(c => c.Key.from == conn.from && c.Key.to == conn.to))
+                        {
+                            MainWindow.Current.Connections.Add(conn, arrow);
+                            _isConnectionExist = false;
                         }
-                        _isTbAdd = true;
-                        MainWindow.Current.MyCanvas.Children.Remove(arrow);
+                        else
+                        {
+                            _isConnectionExist = true;
+                            border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
+                            border.Child = tb;
+                            Canvas.SetLeft(border, _mouseDownTemp.X + 10);
+                            Canvas.SetTop(border, _mouseDownTemp.Y + 10);
+                            tb.Text = "当前Connection已经存在!";
+                            if (!_isTbAdd)
+                            {
+                                MainWindow.Current.MyCanvas.Children.Add(border);
+                            }
+                            _isTbAdd = true;
+                            MainWindow.Current.MyCanvas.Children.Remove(arrow);
+                        }
+
+                        if (_isSelfSelected)
+                        {
+                            border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
+                            border.Child = tb;
+                            Canvas.SetLeft(border, _mouseDownTemp.X + 10);
+                            Canvas.SetTop(border, _mouseDownTemp.Y + 10);
+                            tb.Text = "所选的EndNode与StartNode相同!";
+                            if (!_isTbAdd)
+                            {
+                                MainWindow.Current.MyCanvas.Children.Add(border);
+                            }
+                            _isTbAdd = true;
+                            MainWindow.Current.MyCanvas.Children.Remove(arrow);
+                        }
                     }
                 }
             }
@@ -340,9 +361,12 @@ namespace BubbleFlow
         private bool _isPickedAny = false;
         TranslateTransform translate;
 
-        public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = false;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                _isDragging = false;
+            }
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
@@ -358,50 +382,56 @@ namespace BubbleFlow
             }
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = true;
-            _mouseDownTemp = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
-            foreach (var child in MainWindow.Current.MyCanvas.Children)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                if (child is Node node)
+                _isDragging = true;
+                _mouseDownTemp = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+                foreach (var child in MainWindow.Current.MyCanvas.Children)
                 {
-                    if (node.IsPointInNode(e.GetPosition(MainWindow.Current.MyCanvas)))
+                    if (child is Node node)
                     {
-                        _movingNode = node;
-                        _isPickedAny = true;
-                        _originPos = node.Position;
-                        break;
+                        if (node.IsPointInNode(e.GetPosition(MainWindow.Current.MyCanvas)))
+                        {
+                            _movingNode = node;
+                            _isPickedAny = true;
+                            _originPos = node.Position;
+                            break;
+                        }
                     }
                 }
             }
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            if (_isPickedAny)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+                if (_isPickedAny)
+                {
+                    var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
 
-                translate = new TranslateTransform { X = 0, Y = 0 };
-                _movingNode.RenderTransform = translate;
+                    translate = new TranslateTransform { X = 0, Y = 0 };
+                    _movingNode.RenderTransform = translate;
 
-                _movingNode.Position = MoveNodeTool.GetCatchPoint(new Point(_originPos.X + catchPos.X - _mouseDownTemp.X, _originPos.Y + catchPos.Y - _mouseDownTemp.Y));
-                _movingNode.ReadyControl();
+                    _movingNode.Position = MoveNodeTool.GetCatchPoint(new Point(_originPos.X + catchPos.X - _mouseDownTemp.X, _originPos.Y + catchPos.Y - _mouseDownTemp.Y));
+                    _movingNode.ReadyControl();
 
-                SetConnectionPosition(_movingNode.Position);
+                    SetConnectionPosition(_movingNode.Position);
+                }
+                _isDragging = false;
+                _isPickedAny = false;
             }
-            _isDragging = false;
-            _isPickedAny = false;
         }
 
         public void SetConnectionPosition(Point catchPos)
         {
-            int index = MainWindow.Current.nodes.Keys.ToList().IndexOf(_movingNode);
+            int index = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_movingNode);
             var fromConns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
             var toConns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
 
-            MainWindow.Current.connections.ForEach(c =>
+            MainWindow.Current.Connections.ForEach(c =>
             {
                 if (c.Key.from == index)
                 {
@@ -479,23 +509,26 @@ namespace BubbleFlow
         private Color _defaultColor = Colors.Gray;
         private Color _highlightColor = Colors.Orange;
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            var pos = e.GetPosition(MainWindow.Current.MyCanvas);
-            foreach (var child in MainWindow.Current.MyCanvas.Children)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                if (child is Node node)
+                var pos = e.GetPosition(MainWindow.Current.MyCanvas);
+                foreach (var child in MainWindow.Current.MyCanvas.Children)
                 {
-                    if (node.IsPointInNode(pos))
+                    if (child is Node node)
                     {
-                        if (MainWindow.Current.CurrentNode != null)
+                        if (node.IsPointInNode(pos))
                         {
-                            MainWindow.Current.CurrentNode.SetColor(_defaultColor);
-                        }
+                            if (MainWindow.Current.CurrentNode != null)
+                            {
+                                MainWindow.Current.CurrentNode.SetColor(_defaultColor);
+                            }
 
-                        MainWindow.Current.CurrentNode = node;
-                        node.SetColor(_highlightColor);
-                        break;
+                            MainWindow.Current.CurrentNode = node;
+                            node.SetColor(_highlightColor);
+                            break;
+                        }
                     }
                 }
             }
@@ -511,27 +544,30 @@ namespace BubbleFlow
         public FlowNodeJsonObject currentNodeJson = new FlowNodeJsonObject();
         private NodeInfoWindow nodeInfow;
 
-        public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
-            var _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
-            foreach (var child in MainWindow.Current.MyCanvas.Children)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                if (child is Node node)
+                var _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
+                foreach (var child in MainWindow.Current.MyCanvas.Children)
                 {
-                    if (node.IsPointInNode(_mouseDownTemp))
+                    if (child is Node node)
                     {
-                        currentNode = MainWindow.Current.CurrentNode;
-                        currentNodeJson = MainWindow.Current.nodes[currentNode];
+                        if (node.IsPointInNode(_mouseDownTemp))
+                        {
+                            currentNode = MainWindow.Current.CurrentNode;
+                            currentNodeJson = MainWindow.Current.Nodes[currentNode];
 
-                        nodeInfow = new NodeInfoWindow();
-                        nodeInfow.SetNodeName(currentNodeJson.name);
-                        nodeInfow.SetNodeRole(currentNodeJson.role);
-                        nodeInfow.SetNodeUser(currentNodeJson.user);
-                        nodeInfow.Show();
+                            nodeInfow = new NodeInfoWindow();
+                            nodeInfow.SetNodeName(currentNodeJson.name);
+                            nodeInfow.SetNodeRole(currentNodeJson.role);
+                            nodeInfow.SetNodeUser(currentNodeJson.user);
+                            nodeInfow.Show();
 
-                        nodeInfow.OKButton.Click += new RoutedEventHandler(OKButton_Click);
+                            nodeInfow.OKButton.Click += new RoutedEventHandler(OKButton_Click);
 
-                        break;
+                            break;
+                        }
                     }
                 }
             }
@@ -541,7 +577,7 @@ namespace BubbleFlow
         {
             string name = nodeInfow.GetNodeName();
             int s = 1;
-            while (MainWindow.Current.nodes.Keys.Where(n => n != currentNode).ToList().Any(n => n.Text == name))
+            while (MainWindow.Current.Nodes.Keys.Where(n => n != currentNode).ToList().Any(n => n.Text == name))
             {
                 name = string.Format("{0}{1}", nodeInfow.GetNodeName(), s.ToString());
                 s++;
@@ -571,115 +607,121 @@ namespace BubbleFlow
         private TextBlock tb = new TextBlock();
         private Point _mouseDownTemp;
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            _isStarted = true;
-            if (_isTbAdd)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                MainWindow.Current.MyCanvas.Children.Remove(border);
-                _isTbAdd = false;
-            }
-
-            if (_isFinished)
-            {
-                count = 0;
-                _isFinished = false;
-            }
-            _isAnyPicked = false;
-
-            _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
-            foreach (var child in MainWindow.Current.MyCanvas.Children)
-            {
-                if (child is Node node)
+                _isStarted = true;
+                if (_isTbAdd)
                 {
-                    if (node.IsPointInNode(_mouseDownTemp))
-                    {
-                        _isAnyPicked = true;
-                        count++;
+                    MainWindow.Current.MyCanvas.Children.Remove(border);
+                    _isTbAdd = false;
+                }
 
-                        if (count == 1)
+                if (_isFinished)
+                {
+                    count = 0;
+                    _isFinished = false;
+                }
+                _isAnyPicked = false;
+
+                _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
+                foreach (var child in MainWindow.Current.MyCanvas.Children)
+                {
+                    if (child is Node node)
+                    {
+                        if (node.IsPointInNode(_mouseDownTemp))
                         {
-                            _startNode = node;
-                            break;
-                        }
-                        else
-                        {
-                            _endNode = node;
-                            break;
+                            _isAnyPicked = true;
+                            count++;
+
+                            if (count == 1)
+                            {
+                                _startNode = node;
+                                break;
+                            }
+                            else
+                            {
+                                _endNode = node;
+                                break;
+                            }
                         }
                     }
                 }
-            }
 
-            if (!_isAnyPicked)
-            {
-                border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                border.Child = tb;
-                Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                if (count == 0)
+                if (!_isAnyPicked)
                 {
-                    tb.Text = "当前未选中任何StartNode\n请重新选择StartNode";
+                    border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
+                    border.Child = tb;
+                    Canvas.SetLeft(border, _mouseDownTemp.X + 10);
+                    Canvas.SetTop(border, _mouseDownTemp.Y + 10);
+                    if (count == 0)
+                    {
+                        tb.Text = "当前未选中任何StartNode\n请重新选择StartNode";
+                    }
+                    else
+                    {
+                        tb.Text = "当前未选中任何EndNode\n请重新选择EndNode";
+                    }
+                    MainWindow.Current.MyCanvas.Children.Add(border);
+                    _isTbAdd = true;
                 }
-                else
-                {
-                    tb.Text = "当前未选中任何EndNode\n请重新选择EndNode";
-                }
-                MainWindow.Current.MyCanvas.Children.Add(border);
-                _isTbAdd = true;
             }
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            if (count == 2)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _isFinished = true;
-                bool isfindconn = false;
-                if (_startNode != null && _endNode != null)
+                if (count == 2)
                 {
-                    int start = MainWindow.Current.nodes.Keys.ToList().IndexOf(_startNode);
-                    int end = MainWindow.Current.nodes.Keys.ToList().IndexOf(_endNode);
-                    if (MainWindow.Current.connections.Keys.Any(x => x.from == start))
+                    _isFinished = true;
+                    bool isfindconn = false;
+                    if (_startNode != null && _endNode != null)
                     {
-                        MainWindow.Current.connections.Keys.Where(x => x.from == start).ForEach(x =>
+                        int start = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_startNode);
+                        int end = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_endNode);
+                        if (MainWindow.Current.Connections.Keys.Any(x => x.from == start))
                         {
-                            if (x.to == end)
+                            MainWindow.Current.Connections.Keys.Where(x => x.from == start).ForEach(x =>
                             {
-                                _currentConn = x;
-                                isfindconn = true;
-                            }
-                        });
-                    }
-                    else
-                    {
-                        isfindconn = false;
-                    }
-
-                    if (!isfindconn)
-                    {
-                        border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                        border.Child = tb;
-                        Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                        Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                        tb.Text = "当前所选Connection不存在!";
-                        if (!_isTbAdd)
-                        {
-                            MainWindow.Current.MyCanvas.Children.Add(border);
+                                if (x.to == end)
+                                {
+                                    _currentConn = x;
+                                    isfindconn = true;
+                                }
+                            });
                         }
-                        _isTbAdd = true;
-                        _isConnectionExist = false;
-                    }
+                        else
+                        {
+                            isfindconn = false;
+                        }
 
-                    else
-                    {
-                        _isConnectionExist = true;
+                        if (!isfindconn)
+                        {
+                            border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
+                            border.Child = tb;
+                            Canvas.SetLeft(border, _mouseDownTemp.X + 10);
+                            Canvas.SetTop(border, _mouseDownTemp.Y + 10);
+                            tb.Text = "当前所选Connection不存在!";
+                            if (!_isTbAdd)
+                            {
+                                MainWindow.Current.MyCanvas.Children.Add(border);
+                            }
+                            _isTbAdd = true;
+                            _isConnectionExist = false;
+                        }
 
-                        _connectionInfow = new ConnectionInfoWindow();
-                        _connectionInfow.SetConnection(_currentConn.label);
-                        _connectionInfow.Show();
+                        else
+                        {
+                            _isConnectionExist = true;
 
-                        _connectionInfow.OKButton.Click += new RoutedEventHandler(OKButton_Click);
+                            _connectionInfow = new ConnectionInfoWindow();
+                            _connectionInfow.SetConnection(_currentConn.label);
+                            _connectionInfow.Show();
+
+                            _connectionInfow.OKButton.Click += new RoutedEventHandler(OKButton_Click);
+                        }
                     }
                 }
             }
@@ -690,7 +732,7 @@ namespace BubbleFlow
             string connectionInfo = _connectionInfow.GetConnection();
             _currentConn.label = connectionInfo;
             //MainWindow.Current.connections[_currentConn].LabelText = connectionInfo;
-            MainWindow.Current.connections[_currentConn].ReadyControl();
+            MainWindow.Current.Connections[_currentConn].ReadyControl();
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)

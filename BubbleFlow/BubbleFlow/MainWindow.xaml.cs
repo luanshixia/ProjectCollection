@@ -20,28 +20,21 @@ namespace BubbleFlow
         public static MainWindow Current { get; private set; }
         public Point Origin { get; private set; }
         public Node CurrentNode { get; set; }
-        public List<Line> Griddings = new List<Line>();
+        public double Scale { get; set; }
 
-        public Dictionary<Node, FlowNodeJsonObject> nodes = new Dictionary<Node, FlowNodeJsonObject>();
-        public Dictionary<NodeConnectionJsonObject, BezierLink> connections = new Dictionary<NodeConnectionJsonObject, BezierLink>();
+        public Dictionary<Node, FlowNodeJsonObject> Nodes { get; } = new Dictionary<Node, FlowNodeJsonObject>();
+        public Dictionary<NodeConnectionJsonObject, BezierLink> Connections { get; } = new Dictionary<NodeConnectionJsonObject, BezierLink>();
+        public List<BoolExpression> Expressions { get; } = new List<BoolExpression>();
 
+        private List<Line> GridLines = new List<Line>();
         private Button[] _radioButtons;
         private Button _currentButton;
-        private TestResultWindow trw = new TestResultWindow();
-        private QueryFlowNameWindow qfnw;
-
-        public double Scale { get; set; }
-        //public static Uri SiteBaseUri { get; private set; }
-        private string flowName;
-
-        public List<BoolExpression> Exprs = new List<BoolExpression>();
-        private string workflowId = new Guid().ToString();
 
         public MainWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
 
-            Current = this;
+            MainWindow.Current = this;
 
             _radioButtons = new Button[] { btnAddConnection, btnEditConnection, btnAddNode, btnMoveNode, btnSubmit, btnPan, btnSubmit1 };
             SetButtonsHover();
@@ -52,27 +45,24 @@ namespace BubbleFlow
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
             ViewerToolManager.SetFrameworkElement(this);
 
-            AddGriddingToCanvas();
+            AddGridLinesToCanvas();
             MouseMove += new MouseEventHandler(MainPage_MouseMove);
-
-            //SiteBaseUri = new Uri(Application.Current.Host.Source, "../");
         }
 
         public void InitNodesAndConnections(WorkflowJsonObject flow)
         {
-            workflowId = flow.id;
-            nodes.Clear();
-            connections.Clear();
+            //var workflowId = flow.id;
+            Nodes.Clear();
+            Connections.Clear();
             foreach (var node in flow.nodes)
             {
-                foreach (var x in MyCanvas.Children)
+                foreach (var child in MyCanvas.Children)
                 {
-                    if (x is Node)
+                    if (child is Node nodeMark)
                     {
-                        Node nodeMark = x as Node;
                         if (nodeMark.Text == node.name)
                         {
-                            nodes.Add(nodeMark, node);
+                            Nodes.Add(nodeMark, node);
                             break;
                         }
                     }
@@ -82,14 +72,13 @@ namespace BubbleFlow
             {
                 Point start = new Point(flow.nodes[conn.from].xpos, flow.nodes[conn.from].ypos);
                 Point end = new Point(flow.nodes[conn.to].xpos, flow.nodes[conn.to].ypos);
-                foreach (var x in MyCanvas.Children)
+                foreach (var child in MyCanvas.Children)
                 {
-                    if (x is BezierLink)
+                    if (child is BezierLink arrow)
                     {
-                        BezierLink arrow = x as BezierLink;
                         if (arrow.StartPoint == start && arrow.EndPoint == end)
                         {
-                            connections.Add(conn, arrow);
+                            Connections.Add(conn, arrow);
                             break;
                         }
                     }
@@ -99,31 +88,31 @@ namespace BubbleFlow
 
         public void InitToolbarForModify()
         {
-            btnAddConnection.Visibility = System.Windows.Visibility.Collapsed;
-            btnAddNode.Visibility = System.Windows.Visibility.Collapsed;
-            btnDeleteNode.Visibility = System.Windows.Visibility.Collapsed;
-            btnEditConnection.Visibility = System.Windows.Visibility.Collapsed;
-            btnSubmit.Visibility = System.Windows.Visibility.Collapsed;
-            btnZoomE.Visibility = System.Windows.Visibility.Collapsed;
-            btnSubmit1.Visibility = System.Windows.Visibility.Visible;
+            btnAddConnection.Visibility = Visibility.Collapsed;
+            btnAddNode.Visibility = Visibility.Collapsed;
+            btnDeleteNode.Visibility = Visibility.Collapsed;
+            btnEditConnection.Visibility = Visibility.Collapsed;
+            btnSubmit.Visibility = Visibility.Collapsed;
+            btnZoomE.Visibility = Visibility.Collapsed;
+            btnSubmit1.Visibility = Visibility.Visible;
         }
 
-        public void AddGriddingToCanvas()
+        public void AddGridLinesToCanvas()
         {
-            Griddings.Clear();
+            GridLines.Clear();
             int count = 10000;
             for (int i = 0; i <= count; i++)
             {
                 Line vline = new Line { X1 = 0, X2 = 0, Y1 = 0, Y2 = 100000, StrokeThickness = 0.2 };
                 vline.Stroke = new SolidColorBrush(Colors.DarkGray);
-                Griddings.Add(vline);
+                GridLines.Add(vline);
                 Canvas.SetLeft(vline, i * 10 - 50000);
                 Canvas.SetTop(vline, -50000);
                 MyCanvas.Children.Add(vline);
 
                 Line hline = new Line { X1 = 0, X2 = 100000, Y1 = 0, Y2 = 0, StrokeThickness = 0.2 };
                 hline.Stroke = new SolidColorBrush(Colors.DarkGray);
-                Griddings.Add(hline);
+                GridLines.Add(hline);
                 Canvas.SetLeft(hline, -50000);
                 Canvas.SetTop(hline, i * 10 - 50000);
                 MyCanvas.Children.Add(hline);
@@ -265,14 +254,14 @@ namespace BubbleFlow
         {
             if (CurrentNode != null)
             {
-                int index = nodes.Keys.ToList().IndexOf(CurrentNode);
+                int index = Nodes.Keys.ToList().IndexOf(CurrentNode);
                 Dictionary<NodeConnectionJsonObject, BezierLink> conns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
 
                 MyCanvas.Children.Remove(CurrentNode);
-                nodes.Remove(CurrentNode);
+                Nodes.Remove(CurrentNode);
                 CurrentNode = null;
 
-                connections.ForEach(c =>
+                Connections.ForEach(c =>
                 {
                     if (c.Key.from == index || c.Key.to == index)
                     {
@@ -290,7 +279,7 @@ namespace BubbleFlow
                 conns.ForEach(c =>
                 {
                     MyCanvas.Children.Remove(c.Value);
-                    connections.Remove(c.Key);
+                    Connections.Remove(c.Key);
                 });
             }
 
@@ -329,9 +318,9 @@ namespace BubbleFlow
             transform.Children.Add(translate);
             MyCanvas.RenderTransform = transform;
             ViewerToolManager.Tools.ForEach(t => t.Render());
-            if (!MyCanvas.Children.Contains(Griddings[0]))
+            if (!MyCanvas.Children.Contains(GridLines[0]))
             {
-                AddGriddingToCanvas();
+                AddGridLinesToCanvas();
             }
         }
 
@@ -360,15 +349,17 @@ namespace BubbleFlow
 
         private void btnSubmit1_Click(object sender, RoutedEventArgs e)
         {
-            nodes.ForEach(nodePair =>
+            Nodes.ForEach(nodePair =>
             {
                 nodePair.Value.xpos = nodePair.Key.Position.X;
                 nodePair.Value.ypos = nodePair.Key.Position.Y;
             });
-            WorkflowJsonObject json = new WorkflowJsonObject();
-            json.nodes = nodes.Values.ToList();
-            json.connections = connections.Keys.ToList();
-            var data = DataManager.ToJson(json);
+
+            var data = DataManager.ToJson(new WorkflowJsonObject
+            {
+                nodes = Nodes.Values.ToList(),
+                connections = Connections.Keys.ToList()
+            });
 
             //WebClient wc = new WebClient();
             ////Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/SaveFlow?data={0}", data));
@@ -380,27 +371,28 @@ namespace BubbleFlow
 
         private void btnSubmit_Click_1(object sender, RoutedEventArgs e)
         {
-            Exprs.Clear();
+            Expressions.Clear();
             InitialiseExpression();
 
             bool flag = false;
-            if (Exprs.Count == 0)
+            if (Expressions.Count == 0)
             {
                 flag = true;
             }
-            if (Exprs.Count > 0 && Exprs.All(x => x.GetValue()))
+            if (Expressions.Count > 0 && Expressions.All(x => x.GetValue()))
             {
                 flag = true;
             }
 
             if (flag)
             {
-                qfnw = new QueryFlowNameWindow();
+                var qfnw = new QueryFlowNameWindow();
                 qfnw.Show();
                 qfnw.OKButton.Click += new RoutedEventHandler(OKButton_Click);
             }
             else
             {
+                var trw = new TestResultWindow();
                 trw.SetInfomation("当前流程中存在无效结点,请调整后再重新提交!");
                 trw.Show();
                 btnSubmit.Background = new SolidColorBrush(Colors.Transparent);
@@ -409,16 +401,18 @@ namespace BubbleFlow
 
         void OKButton_Click(object sender, RoutedEventArgs e)
         {
-            flowName = qfnw.GetFlowName();
-            nodes.ForEach(nodePair =>
+            //var flowName = qfnw.GetFlowName();
+            Nodes.ForEach(nodePair =>
             {
                 nodePair.Value.xpos = nodePair.Key.Position.X;
                 nodePair.Value.ypos = nodePair.Key.Position.Y;
             });
-            WorkflowJsonObject json = new WorkflowJsonObject();
-            json.nodes = nodes.Values.ToList();
-            json.connections = connections.Keys.ToList();
-            var data = DataManager.ToJson(json);
+
+            var data = DataManager.ToJson(new WorkflowJsonObject
+            {
+                nodes = Nodes.Values.ToList(),
+                connections = Connections.Keys.ToList()
+            });
 
             //WebClient wc = new WebClient();
             //Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/NewFlowFromJson")); // mod 20130605 // mod 20130621
@@ -437,16 +431,16 @@ namespace BubbleFlow
         {
             BoolExpression exp1 = new BoolExpression(GetRule1());
             BoolExpression exp2 = new BoolExpression(GetRule2());
-            Exprs.Add(exp1);
-            Exprs.Add(exp2);
+            Expressions.Add(exp1);
+            Expressions.Add(exp2);
         }
 
         public Func<bool> GetRule1()
         {
-            foreach (var node in nodes.Keys)
+            foreach (var node in Nodes.Keys)
             {
-                int index = nodes.Keys.ToList().IndexOf(node);
-                if (connections.Keys.All(c => c.from != index && c.to != index))
+                int index = Nodes.Keys.ToList().IndexOf(node);
+                if (Connections.Keys.All(c => c.from != index && c.to != index))
                 {
                     return () => false;
                 }
@@ -458,14 +452,14 @@ namespace BubbleFlow
         {
             int startcount = 0;
             int endcount = 0;
-            foreach (var node in nodes.Keys)
+            foreach (var node in Nodes.Keys)
             {
-                int index = nodes.Keys.ToList().IndexOf(node);
-                if (connections.Keys.All(c => c.to != index) && connections.Keys.Any(c => c.from == index))
+                int index = Nodes.Keys.ToList().IndexOf(node);
+                if (Connections.Keys.All(c => c.to != index) && Connections.Keys.Any(c => c.from == index))
                 {
                     startcount++;
                 }
-                if (connections.Keys.All(c => c.from != index) && connections.Keys.Any(c => c.to == index))
+                if (Connections.Keys.All(c => c.from != index) && Connections.Keys.Any(c => c.to == index))
                 {
                     endcount++;
                 }

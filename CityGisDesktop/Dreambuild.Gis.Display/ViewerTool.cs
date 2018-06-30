@@ -2,6 +2,7 @@
 using Dreambuild.Geometry;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -37,7 +38,7 @@ namespace Dreambuild.Gis.Display
         }
 
         private static List<ViewerTool> _overlayTools = new List<ViewerTool>();
-        public static System.Collections.ObjectModel.ReadOnlyCollection<ViewerTool> OverlayTools
+        public static ReadOnlyCollection<ViewerTool> OverlayTools
         {
             get
             {
@@ -68,14 +69,35 @@ namespace Dreambuild.Gis.Display
 
         public static void RemoveTool(ViewerTool tool)
         {
-            tool.ExitToolHandler();
-            _overlayTools.Remove(tool);
+            if (_overlayTools.Remove(tool))
+            {
+                tool.ExitToolHandler();
+            }
         }
 
         public static void ClearTools()
         {
             _overlayTools.ForEach(x => x.ExitToolHandler());
             _overlayTools.Clear();
+        }
+
+        public static void SetFrameworkElement(FrameworkElement element)
+        {
+            element.MouseMove += (s, args) => Tools.ForEach(t => t.MouseMoveHandler(s, args));
+            element.MouseLeftButtonDown += (s, args) =>
+            {
+                if (args.ClickCount >= 2)
+                {
+                    Tools.ForEach(t => t.MouseLDoubleClickHandler(s, args));
+                }
+                else
+                {
+                    Tools.ForEach(t => t.MouseLDownHandler(s, args));
+                }
+            };
+            element.MouseLeftButtonUp += (s, args) => Tools.ForEach(t => t.MouseLUpHandler(s, args));
+            element.MouseWheel += (s, args) => Tools.ForEach(t => t.MouseWheelHandler(s, args));
+            element.KeyDown += (s, args) => Tools.ForEach(t => t.KeyDownHandler(s, args));
         }
     }
 
@@ -112,7 +134,11 @@ namespace Dreambuild.Gis.Display
         {
         }
 
-        public virtual void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public virtual void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
+        {
+        }
+
+        public virtual void MouseWheelHandler(object sender, MouseWheelEventArgs e)
         {
         }
 
@@ -122,15 +148,15 @@ namespace Dreambuild.Gis.Display
 
         public virtual void EnterToolHandler()
         {
-            CanvasElements.ForEach(x => MapControl.Current.Children.Add(x));
-            WorldElements.ForEach(x => MapControl.Current.MarkLayer.Children.Add(x));
-            MapControl.Current.ContextMenu = ContextMenu;
+            this.CanvasElements.ForEach(element => MapControl.Current.Children.Add(element));
+            this.WorldElements.ForEach(element => MapControl.Current.MarkLayer.Children.Add(element));
+            MapControl.Current.ContextMenu = this.ContextMenu;
         }
 
         public virtual void ExitToolHandler()
         {
-            CanvasElements.ForEach(x => MapControl.Current.Children.Remove(x));
-            WorldElements.ForEach(x => MapControl.Current.MarkLayer.Children.Remove(x));
+            this.CanvasElements.ForEach(element => MapControl.Current.Children.Remove(element));
+            this.WorldElements.ForEach(element => MapControl.Current.MarkLayer.Children.Remove(element));
             MapControl.Current.ContextMenu = null;
         }
     }
@@ -193,9 +219,14 @@ namespace Dreambuild.Gis.Display
             _tools.ForEach(x => x.MouseLUpHandler(sender, e));
         }
 
-        public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public override void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             _tools.ForEach(x => x.MouseLDoubleClickHandler(sender, e));
+        }
+
+        public override void MouseWheelHandler(object sender, MouseWheelEventArgs e)
+        {
+            _tools.ForEach(x => x.MouseWheelHandler(sender, e));
         }
 
         public override void KeyDownHandler(object sender, KeyEventArgs e)
@@ -599,7 +630,7 @@ namespace Dreambuild.Gis.Display
             this.Render();
         }
 
-        public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public override void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             _isEnded = true;
             _isStarted = false;
@@ -721,7 +752,7 @@ namespace Dreambuild.Gis.Display
             this.Render();
         }
 
-        public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public override void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             _isEnded = true;
             _isStarted = false;
@@ -1030,7 +1061,7 @@ namespace Dreambuild.Gis.Display
             this.Render();
         }
 
-        public override void MouseLDoubleClickHandler(object sender, MouseEventArgs e)
+        public override void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             _isStarted = false;
             _isDragging = false;

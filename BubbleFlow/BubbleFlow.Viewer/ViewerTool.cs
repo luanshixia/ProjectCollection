@@ -67,15 +67,21 @@ namespace BubbleFlow.Viewer
             }
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = true;
-            _mouseDownTemp = e.GetPosition(MainWindow.Current);
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                _isDragging = true;
+                _mouseDownTemp = e.GetPosition(MainWindow.Current);
+            }
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = false;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                _isDragging = false;
+            }
         }
     }
 }
