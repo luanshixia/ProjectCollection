@@ -166,7 +166,7 @@ namespace BubbleFlow
             }
         }
 
-        private void SubmitAction(object sender, RoutedEventArgs e)
+        private void SubmitAction()
         {
             //var flowName = qfnw.GetFlowName();
             Nodes.ForEach(nodePair =>
@@ -369,16 +369,11 @@ namespace BubbleFlow
 
             if (flag)
             {
-                var qfnw = new QueryFlowNameWindow();
-                qfnw.Show();
-                qfnw.OKButton.Click += new RoutedEventHandler(SubmitAction);
+                SubmitAction();
             }
             else
             {
-                var trw = new TestResultWindow();
-                trw.SetInfomation("Invalid node(s) detected.");
-                trw.Show();
-                SubmitButton.Background = new SolidColorBrush(Colors.Transparent);
+                MessageBox.Show("Invalid node(s) detected.");
             }
         }
 
@@ -407,6 +402,21 @@ namespace BubbleFlow
         public void SetExpression(Func<bool> expr)
         {
             _expression = expr;
+        }
+    }
+
+    public static class Gui
+    {
+        /// <summary>
+        /// Shows a multi-inputs window.
+        /// </summary>
+        /// <param name="title">The title.</param>
+        /// <param name="entries">The input entries.</param>
+        public static void MultiInputs(string title, Dictionary<string, string> entries)
+        {
+            var mi = new MultiInputs();
+            mi.Ready(entries, title);
+            mi.ShowDialog();
         }
     }
 }

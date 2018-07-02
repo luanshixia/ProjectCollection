@@ -54,17 +54,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="QueryFlowNameWindow.xaml.cs">
-      <DependentUpon>QueryFlowNameWindow.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TestResultWindow.xaml.cs">
-      <DependentUpon>TestResultWindow.xaml</DependentUpon>
+    <Compile Include="MultiInputs.xaml.cs">
+      <DependentUpon>MultiInputs.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewerTool.cs" />
-    <Page Include="ConnectionInfoWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -73,34 +66,20 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConnectionInfoWindow.xaml.cs">
-      <DependentUpon>ConnectionInfoWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="NodeInfoWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
+    <Page Include="MultiInputs.xaml">
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="QueryFlowNameWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Resources\ControlsAndStyles.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="TestResultWindow.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NodeInfoWindow.xaml.cs">
-      <DependentUpon>NodeInfoWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

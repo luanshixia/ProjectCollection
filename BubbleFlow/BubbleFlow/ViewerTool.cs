@@ -1,16 +1,11 @@
 ﻿using Dreambuild.Extensions;
 using System;
 using System.Collections.Generic;
-using System.Net;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Ink;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
-using System.Linq;
 
 namespace BubbleFlow
 {
@@ -243,11 +238,11 @@ namespace BubbleFlow
                     Canvas.SetTop(border, _mouseDownTemp.Y + 10);
                     if (count == 0)
                     {
-                        tb.Text = "当前未选中任何StartNode\n请重新选择StartNode";
+                        tb.Text = "No start node selected.";
                     }
                     else
                     {
-                        tb.Text = "当前未选中任何EndNode\n请重新选择EndNode";
+                        tb.Text = "No end node selected.";
                     }
                     MainWindow.Current.MyCanvas.Children.Add(border);
                     _isTbAdd = true;
@@ -293,7 +288,7 @@ namespace BubbleFlow
                             border.Child = tb;
                             Canvas.SetLeft(border, _mouseDownTemp.X + 10);
                             Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                            tb.Text = "当前Connection已经存在!";
+                            tb.Text = "Link already exists!";
                             if (!_isTbAdd)
                             {
                                 MainWindow.Current.MyCanvas.Children.Add(border);
@@ -308,7 +303,7 @@ namespace BubbleFlow
                             border.Child = tb;
                             Canvas.SetLeft(border, _mouseDownTemp.X + 10);
                             Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                            tb.Text = "所选的EndNode与StartNode相同!";
+                            tb.Text = "Identical start and end nodes.";
                             if (!_isTbAdd)
                             {
                                 MainWindow.Current.MyCanvas.Children.Add(border);
@@ -501,9 +496,6 @@ namespace BubbleFlow
         }
     }
 
-    /// <summary>
-    /// 单击结点高亮选中（准备删除，或查看属性）
-    /// </summary>
     public class SelectNodeTool : ViewerTool
     {
         private Color _defaultColor = Colors.Gray;
@@ -535,14 +527,10 @@ namespace BubbleFlow
         }
     }
 
-    /// <summary>
-    /// 双击结点，更改结点信息
-    /// </summary>
     public class EditNodeTool : ViewerTool
     {
         public Node currentNode = new Node();
         public FlowNodeJsonObject currentNodeJson = new FlowNodeJsonObject();
-        private NodeInfoWindow nodeInfow;
 
         public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
@@ -558,13 +546,13 @@ namespace BubbleFlow
                             currentNode = MainWindow.Current.CurrentNode;
                             currentNodeJson = MainWindow.Current.Nodes[currentNode];
 
-                            nodeInfow = new NodeInfoWindow();
-                            nodeInfow.SetNodeName(currentNodeJson.name);
-                            nodeInfow.SetNodeRole(currentNodeJson.role);
-                            nodeInfow.SetNodeUser(currentNodeJson.user);
-                            nodeInfow.Show();
+                            var inputs = new[] { "Name", "Role", "User" }.ToDictionary(field => field, field => string.Empty);
+                            Gui.MultiInputs("Node info", inputs);
 
-                            nodeInfow.OKButton.Click += new RoutedEventHandler(OKButton_Click);
+                            currentNodeJson.name = inputs["Name"];
+                            currentNodeJson.role = inputs["Role"];
+                            currentNodeJson.user = inputs["User"];
+                            currentNode.SetText(inputs["Name"]);
 
                             break;
                         }
@@ -572,27 +560,10 @@ namespace BubbleFlow
                 }
             }
         }
-
-        void OKButton_Click(object sender, RoutedEventArgs e)
-        {
-            string name = nodeInfow.GetNodeName();
-            int s = 1;
-            while (MainWindow.Current.Nodes.Keys.Where(n => n != currentNode).ToList().Any(n => n.Text == name))
-            {
-                name = string.Format("{0}{1}", nodeInfow.GetNodeName(), s.ToString());
-                s++;
-            }
-
-            currentNodeJson.name = name;
-            currentNodeJson.role = nodeInfow.GetNodeRole();
-            currentNodeJson.user = nodeInfow.GetNodeUser();
-            currentNode.SetText(name);
-        }
     }
 
     public class EditConnectionTool : ViewerTool
     {
-        private ConnectionInfoWindow _connectionInfow;
         private NodeConnectionJsonObject _currentConn;
         private Node _startNode;
         private Node _endNode;
@@ -657,11 +628,11 @@ namespace BubbleFlow
                     Canvas.SetTop(border, _mouseDownTemp.Y + 10);
                     if (count == 0)
                     {
-                        tb.Text = "当前未选中任何StartNode\n请重新选择StartNode";
+                        tb.Text = "No start node selected.";
                     }
                     else
                     {
-                        tb.Text = "当前未选中任何EndNode\n请重新选择EndNode";
+                        tb.Text = "No end node selected.";
                     }
                     MainWindow.Current.MyCanvas.Children.Add(border);
                     _isTbAdd = true;
@@ -703,7 +674,7 @@ namespace BubbleFlow
                             border.Child = tb;
                             Canvas.SetLeft(border, _mouseDownTemp.X + 10);
                             Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                            tb.Text = "当前所选Connection不存在!";
+                            tb.Text = "Link not exists!";
                             if (!_isTbAdd)
                             {
                                 MainWindow.Current.MyCanvas.Children.Add(border);
@@ -716,23 +687,14 @@ namespace BubbleFlow
                         {
                             _isConnectionExist = true;
 
-                            _connectionInfow = new ConnectionInfoWindow();
-                            _connectionInfow.SetConnection(_currentConn.label);
-                            _connectionInfow.Show();
-
-                            _connectionInfow.OKButton.Click += new RoutedEventHandler(OKButton_Click);
+                            var inputs = new Dictionary<string, string> { { "Label", _currentConn.label } };
+                            Gui.MultiInputs("Link info", inputs);
+                            _currentConn.label = inputs["Label"];
+                            MainWindow.Current.Connections[_currentConn].ReadyControl();
                         }
                     }
                 }
             }
-        }
-
-        void OKButton_Click(object sender, RoutedEventArgs e)
-        {
-            string connectionInfo = _connectionInfow.GetConnection();
-            _currentConn.label = connectionInfo;
-            //MainWindow.Current.connections[_currentConn].LabelText = connectionInfo;
-            MainWindow.Current.Connections[_currentConn].ReadyControl();
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
