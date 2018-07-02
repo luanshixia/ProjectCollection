@@ -7,31 +7,44 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="720" Width="1200" Loaded="MainWindow_Loaded" KeyUp="MainWindow_KeyUp" KeyDown="MainWindow_KeyDown" MouseMove="MainWindow_MouseMove" FontFamily="Microsoft YaHei">
     <Window.Resources>
-        <LinearGradientBrush x:Key="brush1" StartPoint="0,0" EndPoint="0,1">
-            <GradientStop  Color="#80808080" Offset="0" />
-            <GradientStop Color="#80000000" Offset="1" />
-        </LinearGradientBrush>
-        <ControlTemplate x:Key="expanderHeader">
-            <Button Content="{TemplateBinding ContentControl.Content}" />
-        </ControlTemplate>
+        <ResourceDictionary Source="Resources/ControlsAndStyles.xaml" />
     </Window.Resources>
 
     <Grid Name="layoutRoot" Background="White" ShowGridLines="True">
         <Grid.Resources>
             <Style TargetType="Button">
                 <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Foreground" Value="{StaticResource DefaultForegroundSolidBrush}" />
                 <Setter Property="Padding" Value="20,3" />
-                <Setter Property="Margin" Value="2" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate>
-                            <Border Name="stack" Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" >
-                                <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" />
-                            </Border>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="13" />
+                <Setter Property="Template" Value="{StaticResource FlatButton}" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource FocusForegroundSolidBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="ToggleButton">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{StaticResource DefaultForegroundSolidBrush}" />
+                <Setter Property="Padding" Value="20,3" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="13" />
+                <Setter Property="Template" Value="{StaticResource FlatButton}" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource FocusForegroundSolidBrush}" />
+                    </Trigger>
+                </Style.Triggers>
             </Style>
         </Grid.Resources>
 
@@ -42,20 +55,14 @@
         </Border>
 
         <!--Toolbar-->
-        <Border Margin="10,10,10,0" Height="28" VerticalAlignment="Top">
-            <Border.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop  Color="#80808080" Offset="0" />
-                    <GradientStop Color="#80000000" Offset="1" />
-                </LinearGradientBrush>
-            </Border.Background>
+        <Border Margin="0" VerticalAlignment="Top" Opacity="0.9" Background="{StaticResource SecondaryGradientBrush}">
             <StackPanel Name="Toolbar" Orientation="Horizontal">
-                <Button Name="PanButton" Content="Pan" ToolTip="Pan" Click="PanButton_Click" />
+                <ToggleButton Name="PanButton" Content="Pan" ToolTip="Pan" Click="PanButton_Click" IsChecked="True" />
                 <Button Name="ZoomExtentsButton" Content="Zoom to fit" ToolTip="Zoom to fit" Click="ZoomExtentsButton_Click" />
-                <Button Name="AddNodeButton" Content="Add node" ToolTip="Add node" Click="AddNodeButton_Click" />
-                <Button Name="AddConnectionButton" Content="Add link" ToolTip="Add link" Click="AddConnectionButton_Click" />
-                <Button Name="EditConnectionButton" Content="Edit link" ToolTip="Edit link" Click="EditConnectionButton_Click" />
-                <Button Name="MoveNodeButton" Content="Move node" ToolTip="Move node" Click="MoveNodeButton_Click" />
+                <ToggleButton Name="AddNodeButton" Content="Add node" ToolTip="Add node" Click="AddNodeButton_Click" />
+                <ToggleButton Name="AddConnectionButton" Content="Add link" ToolTip="Add link" Click="AddConnectionButton_Click" />
+                <ToggleButton Name="EditConnectionButton" Content="Edit link" ToolTip="Edit link" Click="EditConnectionButton_Click" />
+                <ToggleButton Name="MoveNodeButton" Content="Move node" ToolTip="Move node" Click="MoveNodeButton_Click" />
                 <Button Name="DeleteNodeButton" Content="Delete node" ToolTip="Delete node" Click="DeleteNodeButton_Click" />
                 <Button Name="SubmitButton" Content="Submit" ToolTip="Submit" Click="SubmitButton_Click" />
             </StackPanel>

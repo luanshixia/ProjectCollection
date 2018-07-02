@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -25,10 +26,7 @@ namespace BubbleFlow
         public Dictionary<Node, FlowNodeJsonObject> Nodes { get; } = new Dictionary<Node, FlowNodeJsonObject>();
         public Dictionary<NodeConnectionJsonObject, BezierLink> Connections { get; } = new Dictionary<NodeConnectionJsonObject, BezierLink>();
         public List<BoolExpression> Expressions { get; } = new List<BoolExpression>();
-
-        private List<Line> GridLines = new List<Line>();
-        private Button[] _radioButtons;
-        private Button _currentButton;
+        private List<Line> GridLines { get; } = new List<Line>();
 
         public MainWindow()
         {
@@ -36,14 +34,7 @@ namespace BubbleFlow
 
             MainWindow.Current = this;
 
-            _radioButtons = new Button[] { AddConnectionButton, EditConnectionButton, AddNodeButton, MoveNodeButton, SubmitButton, PanButton };
-            SetButtonsHover();
-            SetRadioButton(PanButton);
-
-            this.Scale = 1;
-            ViewerToolManager.AddTool(new WheelScalingTool());
-            ViewerToolManager.ExclusiveTool = new PanCanvasTool();
-            ViewerToolManager.SetFrameworkElement(this);
+            this.InitializeTool();
 
             this.AddGridLinesToCanvas();
         }
@@ -51,8 +42,8 @@ namespace BubbleFlow
         private void InitNodesAndConnections(WorkflowJsonObject flow)
         {
             //var workflowId = flow.id;
-            Nodes.Clear();
-            Connections.Clear();
+
+            this.Nodes.Clear();
             foreach (var node in flow.nodes)
             {
                 foreach (var child in MyCanvas.Children)
@@ -61,23 +52,25 @@ namespace BubbleFlow
                     {
                         if (nodeMark.Text == node.name)
                         {
-                            Nodes.Add(nodeMark, node);
+                            this.Nodes.Add(nodeMark, node);
                             break;
                         }
                     }
                 }
             }
+
+            this.Connections.Clear();
             foreach (var conn in flow.connections)
             {
-                Point start = new Point(flow.nodes[conn.from].xpos, flow.nodes[conn.from].ypos);
-                Point end = new Point(flow.nodes[conn.to].xpos, flow.nodes[conn.to].ypos);
+                var start = new Point(flow.nodes[conn.from].xpos, flow.nodes[conn.from].ypos);
+                var end = new Point(flow.nodes[conn.to].xpos, flow.nodes[conn.to].ypos);
                 foreach (var child in MyCanvas.Children)
                 {
                     if (child is BezierLink arrow)
                     {
                         if (arrow.StartPoint == start && arrow.EndPoint == end)
                         {
-                            Connections.Add(conn, arrow);
+                            this.Connections.Add(conn, arrow);
                             break;
                         }
                     }
@@ -109,65 +102,28 @@ namespace BubbleFlow
 
         private void InitializeTool()
         {
+            var toggleButtons = this.Toolbar.Children
+                .Cast<ButtonBase>()
+                .Where(button => button is ToggleButton)
+                .Cast<ToggleButton>()
+                .ToArray();
+
+            toggleButtons.ForEach(toggleButton => toggleButton.Click += (sender, e) =>
+            {
+                toggleButtons.ForEach(other => other.IsChecked = false);
+                (sender as ToggleButton).IsChecked = true;
+            });
+
+            this.Scale = 1;
+            ViewerToolManager.AddTool(new WheelScalingTool());
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
-            SetRadioButton(PanButton);
+            ViewerToolManager.SetFrameworkElement(this);
         }
 
-        private void SetRadioButton(Button btn)
+        private void ResetTool()
         {
-            foreach (var b in _radioButtons)
-            {
-                b.Background = new SolidColorBrush(Colors.Transparent);
-            }
-            btn.Background = new SolidColorBrush(Color.FromArgb(255, 204, 51, 0));
-            _currentButton = btn;
+            ViewerToolManager.ExclusiveTool = new PanCanvasTool();
         }
-
-        private void SetButtonsHover()
-        {
-            foreach (var btn in _radioButtons)
-            {
-                btn.MouseMove += new MouseEventHandler(btn_MouseMove);
-                btn.MouseLeave += new MouseEventHandler(btn_MouseLeave);
-            }
-            ZoomExtentsButton.MouseMove += new MouseEventHandler(btnZoomE_MouseMove);
-            ZoomExtentsButton.MouseLeave += new MouseEventHandler(btnZoomE_MouseLeave);
-            DeleteNodeButton.MouseMove += new MouseEventHandler(btnZoomE_MouseMove);
-            DeleteNodeButton.MouseLeave += new MouseEventHandler(btnZoomE_MouseLeave);
-        }
-
-        void btnZoomE_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Button btn = sender as Button;
-            btn.Background = new SolidColorBrush(Colors.Transparent);
-        }
-
-        void btnZoomE_MouseMove(object sender, MouseEventArgs e)
-        {
-            Button btn = sender as Button;
-            btn.Background = new SolidColorBrush(Colors.Orange);
-        }
-
-        void btn_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn == _currentButton)
-            {
-                return;
-            }
-            btn.Background = new SolidColorBrush(Colors.Transparent);
-        }
-
-        void btn_MouseMove(object sender, MouseEventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn == _currentButton)
-            {
-                return;
-            }
-            btn.Background = new SolidColorBrush(Colors.Orange);
-        }
-
 
         private void Zoom(Extents extents)
         {
@@ -296,7 +252,7 @@ namespace BubbleFlow
         {
             if (e.Key == Key.Escape)
             {
-                InitializeTool();
+                ResetTool();
             }
         }
 
@@ -318,9 +274,6 @@ namespace BubbleFlow
         private void PanButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
-
-            Button btn = sender as Button;
-            SetRadioButton(btn);
         }
 
         private void ZoomExtentsButton_Click(object sender, RoutedEventArgs e)
@@ -346,25 +299,21 @@ namespace BubbleFlow
         private void AddNodeButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new AddNodeTool();
-            SetRadioButton(sender as Button);
         }
 
         private void AddConnectionButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new AddConnectionTool();
-            SetRadioButton(sender as Button);
         }
 
         private void EditConnectionButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new EditConnectionTool();
-            SetRadioButton(sender as Button);
         }
 
         private void MoveNodeButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new MoveNodeTool();
-            SetRadioButton(sender as Button);
         }
 
         private void DeleteNodeButton_Click(object sender, RoutedEventArgs e)
@@ -401,7 +350,6 @@ namespace BubbleFlow
             }
 
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
-            this.SetRadioButton(PanButton);
         }
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
