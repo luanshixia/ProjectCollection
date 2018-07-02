@@ -36,20 +36,19 @@ namespace BubbleFlow
 
             MainWindow.Current = this;
 
-            _radioButtons = new Button[] { btnAddConnection, btnEditConnection, btnAddNode, btnMoveNode, btnSubmit, btnPan, btnSubmit1 };
+            _radioButtons = new Button[] { AddConnectionButton, EditConnectionButton, AddNodeButton, MoveNodeButton, SubmitButton, PanButton };
             SetButtonsHover();
-            SetRadioButton(btnPan);
+            SetRadioButton(PanButton);
 
-            Scale = 1;
+            this.Scale = 1;
             ViewerToolManager.AddTool(new WheelScalingTool());
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
             ViewerToolManager.SetFrameworkElement(this);
 
-            AddGridLinesToCanvas();
-            MouseMove += new MouseEventHandler(MainPage_MouseMove);
+            this.AddGridLinesToCanvas();
         }
 
-        public void InitNodesAndConnections(WorkflowJsonObject flow)
+        private void InitNodesAndConnections(WorkflowJsonObject flow)
         {
             //var workflowId = flow.id;
             Nodes.Clear();
@@ -86,49 +85,32 @@ namespace BubbleFlow
             }
         }
 
-        public void InitToolbarForModify()
+        private void AddGridLinesToCanvas()
         {
-            btnAddConnection.Visibility = Visibility.Collapsed;
-            btnAddNode.Visibility = Visibility.Collapsed;
-            btnDeleteNode.Visibility = Visibility.Collapsed;
-            btnEditConnection.Visibility = Visibility.Collapsed;
-            btnSubmit.Visibility = Visibility.Collapsed;
-            btnZoomE.Visibility = Visibility.Collapsed;
-            btnSubmit1.Visibility = Visibility.Visible;
-        }
-
-        public void AddGridLinesToCanvas()
-        {
-            GridLines.Clear();
+            this.GridLines.Clear();
             int count = 10000;
             for (int i = 0; i <= count; i++)
             {
-                Line vline = new Line { X1 = 0, X2 = 0, Y1 = 0, Y2 = 100000, StrokeThickness = 0.2 };
+                var vline = new Line { X1 = 0, X2 = 0, Y1 = 0, Y2 = 100000, StrokeThickness = 0.2 };
                 vline.Stroke = new SolidColorBrush(Colors.DarkGray);
-                GridLines.Add(vline);
+                this.GridLines.Add(vline);
                 Canvas.SetLeft(vline, i * 10 - 50000);
                 Canvas.SetTop(vline, -50000);
-                MyCanvas.Children.Add(vline);
+                this.MyCanvas.Children.Add(vline);
 
-                Line hline = new Line { X1 = 0, X2 = 100000, Y1 = 0, Y2 = 0, StrokeThickness = 0.2 };
+                var hline = new Line { X1 = 0, X2 = 100000, Y1 = 0, Y2 = 0, StrokeThickness = 0.2 };
                 hline.Stroke = new SolidColorBrush(Colors.DarkGray);
-                GridLines.Add(hline);
+                this.GridLines.Add(hline);
                 Canvas.SetLeft(hline, -50000);
                 Canvas.SetTop(hline, i * 10 - 50000);
-                MyCanvas.Children.Add(hline);
+                this.MyCanvas.Children.Add(hline);
             }
         }
 
-        void MainPage_MouseMove(object sender, MouseEventArgs e)
-        {
-            Point pos = e.GetPosition(this.MyCanvas);
-            Message.Text = string.Format("{0},{1}", pos.X.ToString("0.00"), pos.Y.ToString("0.00"));
-        }
-
-        public void InitializeTool()
+        private void InitializeTool()
         {
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
-            SetRadioButton(btnPan);
+            SetRadioButton(PanButton);
         }
 
         private void SetRadioButton(Button btn)
@@ -148,10 +130,10 @@ namespace BubbleFlow
                 btn.MouseMove += new MouseEventHandler(btn_MouseMove);
                 btn.MouseLeave += new MouseEventHandler(btn_MouseLeave);
             }
-            btnZoomE.MouseMove += new MouseEventHandler(btnZoomE_MouseMove);
-            btnZoomE.MouseLeave += new MouseEventHandler(btnZoomE_MouseLeave);
-            btnDeleteNode.MouseMove += new MouseEventHandler(btnZoomE_MouseMove);
-            btnDeleteNode.MouseLeave += new MouseEventHandler(btnZoomE_MouseLeave);
+            ZoomExtentsButton.MouseMove += new MouseEventHandler(btnZoomE_MouseMove);
+            ZoomExtentsButton.MouseLeave += new MouseEventHandler(btnZoomE_MouseLeave);
+            DeleteNodeButton.MouseMove += new MouseEventHandler(btnZoomE_MouseMove);
+            DeleteNodeButton.MouseLeave += new MouseEventHandler(btnZoomE_MouseLeave);
         }
 
         void btnZoomE_MouseLeave(object sender, MouseEventArgs e)
@@ -187,14 +169,153 @@ namespace BubbleFlow
         }
 
 
-        public void Zoom(Extents extents)
+        private void Zoom(Extents extents)
         {
             Scale = Math.Max(extents.Range(0) / this.ActualWidth, extents.Range(1) / this.ActualHeight);
             Origin = new Point(this.ActualWidth / 2 - extents.Center().X / Scale, this.ActualHeight / 2 - extents.Center().Y / Scale);
             RenderLayers();
         }
 
-        private void btnPan_Click_1(object sender, RoutedEventArgs e)
+        internal void PanCanvas(Point vector)
+        {
+            this.Origin = new Point(Origin.X + vector.X, Origin.Y + vector.Y);
+            this.RenderLayers();
+        }
+
+        internal void ScaleCanvas(double scale, Point basePoint)
+        {
+            double scale0 = this.Scale;
+            double vx = basePoint.X - Origin.X;
+            double vy = basePoint.Y - Origin.Y;
+            double v1x = (scale0 / scale) * vx;
+            double v1y = (scale0 / scale) * vy;
+            double v2x = vx - v1x;
+            double v2y = vy - v1y;
+
+            this.Scale = scale;
+            this.Origin = new Point(Origin.X + v2x, Origin.Y + v2y);
+            this.RenderLayers();
+        }
+
+        private void RenderLayers()
+        {
+            var transform = new TransformGroup();
+            transform.Children.Add(new ScaleTransform { CenterX = 0, CenterY = 0, ScaleX = 1 / Scale, ScaleY = 1 / Scale });
+            transform.Children.Add(new TranslateTransform { X = Origin.X, Y = Origin.Y });
+            this.MyCanvas.RenderTransform = transform;
+            ViewerToolManager.Tools.ForEach(tool => tool.Render());
+            if (!this.MyCanvas.Children.Contains(this.GridLines[0]))
+            {
+                this.AddGridLinesToCanvas();
+            }
+        }
+
+        private void SubmitAction(object sender, RoutedEventArgs e)
+        {
+            //var flowName = qfnw.GetFlowName();
+            Nodes.ForEach(nodePair =>
+            {
+                nodePair.Value.xpos = nodePair.Key.Position.X;
+                nodePair.Value.ypos = nodePair.Key.Position.Y;
+            });
+
+            var data = DataManager.ToJson(new WorkflowJsonObject
+            {
+                nodes = Nodes.Values.ToList(),
+                connections = Connections.Keys.ToList()
+            });
+
+            //WebClient wc = new WebClient();
+            //Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/NewFlowFromJson")); // mod 20130605 // mod 20130621
+            //wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
+            //wc.UploadStringAsync(uri, "POST", "name=" + flowName + "&data=" + data);
+            //wc.UploadStringCompleted += new UploadStringCompletedEventHandler(wc_UploadStringCompleted);
+        }
+
+        //void wc_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
+        //{
+        //    Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/FlowList")); // mod 20130605
+        //    System.Windows.Browser.HtmlPage.Window.Eval(string.Format("location='{0}'", uri.ToString()));
+        //}
+
+        private void InitializeExpression()
+        {
+            this.Expressions.Add(new BoolExpression(this.GetRule1()));
+            this.Expressions.Add(new BoolExpression(this.GetRule2()));
+        }
+
+        private Func<bool> GetRule1()
+        {
+            foreach (var node in this.Nodes.Keys)
+            {
+                int index = this.Nodes.Keys.ToList().IndexOf(node);
+                if (this.Connections.Keys.All(c => c.from != index && c.to != index))
+                {
+                    return () => false;
+                }
+            }
+            return () => true;
+        }
+
+        private Func<bool> GetRule2()
+        {
+            int startcount = 0;
+            int endcount = 0;
+            foreach (var node in this.Nodes.Keys)
+            {
+                int index = this.Nodes.Keys.ToList().IndexOf(node);
+                if (this.Connections.Keys.All(c => c.to != index) && this.Connections.Keys.Any(c => c.from == index))
+                {
+                    startcount++;
+                }
+                if (this.Connections.Keys.All(c => c.from != index) && this.Connections.Keys.Any(c => c.to == index))
+                {
+                    endcount++;
+                }
+            }
+            if (startcount == 1 && endcount == 1)
+            {
+                return () => true;
+            }
+            return () => false;
+        }
+
+        #region General event handlers
+
+        private void MyCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+
+        }
+
+        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MainWindow_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Escape)
+            {
+                InitializeTool();
+            }
+        }
+
+        private void MainWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            ViewerToolManager.Tools.ForEach(x => x.KeyDownHandler(sender, e));
+        }
+
+        private void MainWindow_MouseMove(object sender, MouseEventArgs e)
+        {
+            var pos = e.GetPosition(this.MyCanvas);
+            Message.Text = string.Format("{0},{1}", pos.X.ToString("0.00"), pos.Y.ToString("0.00"));
+        }
+
+        #endregion
+
+        #region Command event handlers
+
+        private void PanButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
 
@@ -202,7 +323,7 @@ namespace BubbleFlow
             SetRadioButton(btn);
         }
 
-        private void btnZoomE_Click_1(object sender, RoutedEventArgs e)
+        private void ZoomExtentsButton_Click(object sender, RoutedEventArgs e)
         {
             var points = new List<Vector>();
             foreach (var child in MyCanvas.Children)
@@ -219,43 +340,39 @@ namespace BubbleFlow
             var poly = new PointString(points);
             var extents = poly.GetExtents();
             var et = new Extents(extents.Min.Value.Add(new Vector(-200, -200)), extents.Max.Value.Add(new Vector(200, 200)));
-            Zoom(et);
+            this.Zoom(et);
         }
 
-        private void btnAddNode_Click_1(object sender, RoutedEventArgs e)
+        private void AddNodeButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new AddNodeTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
+            SetRadioButton(sender as Button);
         }
 
-        private void btnEditConnection_Click_1(object sender, RoutedEventArgs e)
-        {
-            ViewerToolManager.ExclusiveTool = new EditConnectionTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
-        }
-
-        private void btnAddConnection_Click_1(object sender, RoutedEventArgs e)
+        private void AddConnectionButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new AddConnectionTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
+            SetRadioButton(sender as Button);
         }
 
-        private void btnMoveNode_Click_1(object sender, RoutedEventArgs e)
+        private void EditConnectionButton_Click(object sender, RoutedEventArgs e)
+        {
+            ViewerToolManager.ExclusiveTool = new EditConnectionTool();
+            SetRadioButton(sender as Button);
+        }
+
+        private void MoveNodeButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new MoveNodeTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
+            SetRadioButton(sender as Button);
         }
 
-        private void btnDeleteNode_Click_1(object sender, RoutedEventArgs e)
+        private void DeleteNodeButton_Click(object sender, RoutedEventArgs e)
         {
             if (CurrentNode != null)
             {
                 int index = Nodes.Keys.ToList().IndexOf(CurrentNode);
-                Dictionary<NodeConnectionJsonObject, BezierLink> conns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
+                var conns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
 
                 MyCanvas.Children.Remove(CurrentNode);
                 Nodes.Remove(CurrentNode);
@@ -284,95 +401,13 @@ namespace BubbleFlow
             }
 
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
-            Button btn = btnPan;
-            SetRadioButton(btn);
+            this.SetRadioButton(PanButton);
         }
 
-        public void PanCanvas(Point vector)
-        {
-            Origin = new Point(Origin.X + vector.X, Origin.Y + vector.Y);
-            RenderLayers();
-        }
-
-        public void ScaleCanvas(double scale, Point basePoint)
-        {
-            double scale0 = this.Scale;
-            double vx = basePoint.X - Origin.X;
-            double vy = basePoint.Y - Origin.Y;
-            double v1x = (scale0 / scale) * vx;
-            double v1y = (scale0 / scale) * vy;
-            double v2x = vx - v1x;
-            double v2y = vy - v1y;
-
-            Scale = scale;
-            Origin = new Point(Origin.X + v2x, Origin.Y + v2y);
-            RenderLayers();
-        }
-
-        public void RenderLayers()
-        {
-            TranslateTransform translate = new TranslateTransform { X = Origin.X, Y = Origin.Y };
-            ScaleTransform scale = new ScaleTransform { CenterX = 0, CenterY = 0, ScaleX = 1 / Scale, ScaleY = 1 / Scale };
-            TransformGroup transform = new TransformGroup();
-            transform.Children.Add(scale);
-            transform.Children.Add(translate);
-            MyCanvas.RenderTransform = transform;
-            ViewerToolManager.Tools.ForEach(t => t.Render());
-            if (!MyCanvas.Children.Contains(GridLines[0]))
-            {
-                AddGridLinesToCanvas();
-            }
-        }
-
-        private void MyCanvas_SizeChanged_1(object sender, SizeChangedEventArgs e)
-        {
-
-        }
-
-        private void UserControl_Loaded_1(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void UserControl_KeyUp_1(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Escape)
-            {
-                InitializeTool();
-            }
-        }
-
-        private void UserControl_KeyDown_1(object sender, KeyEventArgs e)
-        {
-            ViewerToolManager.Tools.ForEach(x => x.KeyDownHandler(sender, e));
-        }
-
-        private void btnSubmit1_Click(object sender, RoutedEventArgs e)
-        {
-            Nodes.ForEach(nodePair =>
-            {
-                nodePair.Value.xpos = nodePair.Key.Position.X;
-                nodePair.Value.ypos = nodePair.Key.Position.Y;
-            });
-
-            var data = DataManager.ToJson(new WorkflowJsonObject
-            {
-                nodes = Nodes.Values.ToList(),
-                connections = Connections.Keys.ToList()
-            });
-
-            //WebClient wc = new WebClient();
-            ////Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/SaveFlow?data={0}", data));
-            //Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/SaveFlow")); // mod 20130621
-            //wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            //wc.UploadStringAsync(uri, "POST", "data=" + data);
-            //wc.UploadStringCompleted += new UploadStringCompletedEventHandler(wc_UploadStringCompleted);
-        }
-
-        private void btnSubmit_Click_1(object sender, RoutedEventArgs e)
+        private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             Expressions.Clear();
-            InitialiseExpression();
+            InitializeExpression();
 
             bool flag = false;
             if (Expressions.Count == 0)
@@ -388,88 +423,18 @@ namespace BubbleFlow
             {
                 var qfnw = new QueryFlowNameWindow();
                 qfnw.Show();
-                qfnw.OKButton.Click += new RoutedEventHandler(OKButton_Click);
+                qfnw.OKButton.Click += new RoutedEventHandler(SubmitAction);
             }
             else
             {
                 var trw = new TestResultWindow();
-                trw.SetInfomation("当前流程中存在无效结点,请调整后再重新提交!");
+                trw.SetInfomation("Invalid node(s) detected.");
                 trw.Show();
-                btnSubmit.Background = new SolidColorBrush(Colors.Transparent);
+                SubmitButton.Background = new SolidColorBrush(Colors.Transparent);
             }
         }
 
-        void OKButton_Click(object sender, RoutedEventArgs e)
-        {
-            //var flowName = qfnw.GetFlowName();
-            Nodes.ForEach(nodePair =>
-            {
-                nodePair.Value.xpos = nodePair.Key.Position.X;
-                nodePair.Value.ypos = nodePair.Key.Position.Y;
-            });
-
-            var data = DataManager.ToJson(new WorkflowJsonObject
-            {
-                nodes = Nodes.Values.ToList(),
-                connections = Connections.Keys.ToList()
-            });
-
-            //WebClient wc = new WebClient();
-            //Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/NewFlowFromJson")); // mod 20130605 // mod 20130621
-            //wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            //wc.UploadStringAsync(uri, "POST", "name=" + flowName + "&data=" + data);
-            //wc.UploadStringCompleted += new UploadStringCompletedEventHandler(wc_UploadStringCompleted);
-        }
-
-        //void wc_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
-        //{
-        //    Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/FlowList")); // mod 20130605
-        //    System.Windows.Browser.HtmlPage.Window.Eval(string.Format("location='{0}'", uri.ToString()));
-        //}
-
-        public void InitialiseExpression()
-        {
-            BoolExpression exp1 = new BoolExpression(GetRule1());
-            BoolExpression exp2 = new BoolExpression(GetRule2());
-            Expressions.Add(exp1);
-            Expressions.Add(exp2);
-        }
-
-        public Func<bool> GetRule1()
-        {
-            foreach (var node in Nodes.Keys)
-            {
-                int index = Nodes.Keys.ToList().IndexOf(node);
-                if (Connections.Keys.All(c => c.from != index && c.to != index))
-                {
-                    return () => false;
-                }
-            }
-            return () => true;
-        }
-
-        public Func<bool> GetRule2()
-        {
-            int startcount = 0;
-            int endcount = 0;
-            foreach (var node in Nodes.Keys)
-            {
-                int index = Nodes.Keys.ToList().IndexOf(node);
-                if (Connections.Keys.All(c => c.to != index) && Connections.Keys.Any(c => c.from == index))
-                {
-                    startcount++;
-                }
-                if (Connections.Keys.All(c => c.from != index) && Connections.Keys.Any(c => c.to == index))
-                {
-                    endcount++;
-                }
-            }
-            if (startcount == 1 && endcount == 1)
-            {
-                return () => true;
-            }
-            return () => false;
-        }
+        #endregion
     }
 
     public class BoolExpression

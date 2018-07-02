@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BubbleFlow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1200" Loaded="UserControl_Loaded_1" KeyUp="UserControl_KeyUp_1" KeyDown="UserControl_KeyDown_1" FontFamily="Microsoft YaHei">
+        Title="MainWindow" Height="720" Width="1200" Loaded="MainWindow_Loaded" KeyUp="MainWindow_KeyUp" KeyDown="MainWindow_KeyDown" MouseMove="MainWindow_MouseMove" FontFamily="Microsoft YaHei">
     <Window.Resources>
         <LinearGradientBrush x:Key="brush1" StartPoint="0,0" EndPoint="0,1">
             <GradientStop  Color="#80808080" Offset="0" />
@@ -35,13 +35,13 @@
             </Style>
         </Grid.Resources>
 
-        <!--流程图区域-->
+        <!--Canvas-->
         <Border BorderThickness="1" BorderBrush="DarkGray">
-            <Canvas x:Name="MyCanvas" SizeChanged="MyCanvas_SizeChanged_1" >
+            <Canvas x:Name="MyCanvas" SizeChanged="MyCanvas_SizeChanged" >
             </Canvas>
         </Border>
 
-        <!--工具栏-->
+        <!--Toolbar-->
         <Border Margin="10,10,10,0" Height="28" VerticalAlignment="Top">
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
@@ -50,70 +50,20 @@
                 </LinearGradientBrush>
             </Border.Background>
             <StackPanel Name="Toolbar" Orientation="Horizontal">
-                <Button Name="btnPan" Click="btnPan_Click_1">
-                    平移
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="平移"></ToolTip>
-                    </ToolTipService.ToolTip>
-                </Button>
-                <Button Name="btnZoomE" Click="btnZoomE_Click_1">
-                    最佳大小
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="最佳大小"></ToolTip>
-                    </ToolTipService.ToolTip>
-                </Button>
-                <Button Name="btnAddNode" Click="btnAddNode_Click_1">
-                    添加结点
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="添加结点"></ToolTip>
-                    </ToolTipService.ToolTip>
-                </Button>
-                <Button Name="btnAddConnection" Click="btnAddConnection_Click_1">
-                    添加连线
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="添加连线"></ToolTip>
-                    </ToolTipService.ToolTip>
-                </Button>
-                <Button Name="btnEditConnection" Click="btnEditConnection_Click_1">
-                    编辑连线
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="编辑连线"></ToolTip>
-                    </ToolTipService.ToolTip>
-                </Button>
-                <Button Name="btnMoveNode" Click="btnMoveNode_Click_1">
-                    移动结点
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="移动结点"></ToolTip>
-                    </ToolTipService.ToolTip>
-                </Button>
-                <Button Name="btnDeleteNode" Click="btnDeleteNode_Click_1">
-                    删除结点
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="删除结点"></ToolTip>
-                    </ToolTipService.ToolTip>
-                </Button>
-                <Button Name="btnSubmit" Click="btnSubmit_Click_1">
-                    提交流程图
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="提交流程图"></ToolTip>
-                    </ToolTipService.ToolTip>
-                </Button>
-                <Button Name="btnSubmit1" Click="btnSubmit1_Click" Visibility="Collapsed">
-                    提交流程图
-                    <ToolTipService.ToolTip>
-                        <ToolTip Content="提交流程图"></ToolTip>
-                    </ToolTipService.ToolTip>
-                </Button>
+                <Button Name="PanButton" Content="Pan" ToolTip="Pan" Click="PanButton_Click" />
+                <Button Name="ZoomExtentsButton" Content="Zoom to fit" ToolTip="Zoom to fit" Click="ZoomExtentsButton_Click" />
+                <Button Name="AddNodeButton" Content="Add node" ToolTip="Add node" Click="AddNodeButton_Click" />
+                <Button Name="AddConnectionButton" Content="Add link" ToolTip="Add link" Click="AddConnectionButton_Click" />
+                <Button Name="EditConnectionButton" Content="Edit link" ToolTip="Edit link" Click="EditConnectionButton_Click" />
+                <Button Name="MoveNodeButton" Content="Move node" ToolTip="Move node" Click="MoveNodeButton_Click" />
+                <Button Name="DeleteNodeButton" Content="Delete node" ToolTip="Delete node" Click="DeleteNodeButton_Click" />
+                <Button Name="SubmitButton" Content="Submit" ToolTip="Submit" Click="SubmitButton_Click" />
             </StackPanel>
         </Border>
 
-        <!--坐标栏-->
+        <!--Coordinates-->
         <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,20" Background="#80000000">
             <TextBlock Padding="20,5" Name="Message" Text="Workflow Editor" Foreground="White" />
         </Border>
-
-        <!--比例尺栏-->
-        <!--<local:ScaleRuler x:Name="SRuler" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,20,20" Width="200" Height="25"/>-->
-
     </Grid>
 </Window>
