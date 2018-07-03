@@ -15,18 +15,13 @@ namespace BubbleFlow.Viewer
         public Point Origin { get; private set; }
         public double Scale { get; set; }
 
-        //public Viewbox viewbox1 = new Viewbox();
-        //public ScrollViewer scrollViewer1 = new ScrollViewer { HorizontalScrollBarVisibility = ScrollBarVisibility.Auto, VerticalScrollBarVisibility = ScrollBarVisibility.Auto, BorderThickness = new Thickness(0) };
-        //public Canvas MyCanvas = new Canvas();
-
         public MainWindow()
         {
             InitializeComponent();
 
-            Current = this;
+            MainWindow.Current = this;
 
-            //Zoom(false);
-            Scale = 1;
+            this.Scale = 1;
             ViewerToolManager.AddTool(new WheelScalingTool());
             ViewerToolManager.AddTool(new PanCanvasTool());
             ViewerToolManager.SetFrameworkElement(this);
@@ -34,32 +29,22 @@ namespace BubbleFlow.Viewer
 
         public void AddAssist()
         {
-            Ellipse ell = new Ellipse { Width = 100, Height = 100, Fill = new SolidColorBrush(Colors.Black) };
-            Canvas.SetLeft(ell, 100);
-            Canvas.SetTop(ell, 100);
-            MyCanvas.Children.Add(ell);
-        }
+            var ellipse = new Ellipse
+            {
+                Width = 100,
+                Height = 100,
+                Fill = new SolidColorBrush(Colors.Black)
+            };
 
-        public void Zoom(bool extents)
-        {
-            if (extents)
-            {
-                //scrollViewer1.Content = null;
-                //viewbox1.Child = MyCanvas;
-                //border1.Child = viewbox1;
-            }
-            else
-            {
-                //viewbox1.Child = null;
-                //scrollViewer1.Content = MyCanvas;
-                //border1.Child = scrollViewer1;
-            }
+            Canvas.SetLeft(ellipse, 100);
+            Canvas.SetTop(ellipse, 100);
+            MyCanvas.Children.Add(ellipse);
         }
 
         public void PanCanvas(Point vector)
         {
-            Origin = new Point(Origin.X + vector.X, Origin.Y + vector.Y);
-            RenderLayers();
+            this.Origin = new Point(Origin.X + vector.X, Origin.Y + vector.Y);
+            this.RenderLayers();
         }
 
         public void ScaleCanvas(double scale, Point basePoint)
@@ -73,23 +58,20 @@ namespace BubbleFlow.Viewer
             double v2x = vx - v1x;
             double v2y = vy - v1y;
 
-            Scale = scale;
-            Origin = new Point(Origin.X + v2x, Origin.Y + v2y);
+            this.Scale = scale;
+            this.Origin = new Point(Origin.X + v2x, Origin.Y + v2y);
 
-            RenderLayers();
+            this.RenderLayers();
         }
 
         public void RenderLayers()
         {
-            TranslateTransform translate = new TranslateTransform { X = Origin.X, Y = Origin.Y };
-            ScaleTransform scale = new ScaleTransform { CenterX = 0, CenterY = 0, ScaleX = 1 / Scale, ScaleY = 1 / Scale };
-            TransformGroup transform = new TransformGroup();
-            transform.Children.Add(scale);
-            transform.Children.Add(translate);
+            var transform = new TransformGroup();
+            transform.Children.Add(new ScaleTransform { CenterX = 0, CenterY = 0, ScaleX = 1 / Scale, ScaleY = 1 / Scale });
+            transform.Children.Add(new TranslateTransform { X = Origin.X, Y = Origin.Y });
             MyCanvas.RenderTransform = transform;
 
-            //MainPage.Current.SRuler.SetScaleRulerValue(Scale);
-            ViewerToolManager.Tools.ForEach(t => t.Render());
+            ViewerToolManager.Tools.ForEach(tool => tool.Render());
         }
     }
 }
