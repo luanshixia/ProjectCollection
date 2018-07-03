@@ -2,6 +2,7 @@
 using Dreambuild.Geometry;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,7 +13,7 @@ using System.Windows.Media.Imaging;
 namespace Dreambuild.Gis.Display
 {
     /// <summary>
-    /// 地图控件
+    /// The map control.
     /// </summary>
     public class MapControl : Canvas
     {
@@ -22,8 +23,8 @@ namespace Dreambuild.Gis.Display
         public List<Map> Maps { get; private set; }
 
         public List<MapLayer> Layers { get; private set; }
-        public List<MapLayer> TempLayers { get { return new List<MapLayer> { SelectionLayer, GridLayer, MarkLayer, BaseLayer, AnimationLayer }; } }
-        public List<MapLayer> LabelLayers { get { return Layers.Where(x => x.LabelLayer != null).Select(x => x.LabelLayer).ToList(); } }
+        public List<MapLayer> TempLayers => new List<MapLayer> { SelectionLayer, GridLayer, MarkLayer, BaseLayer, AnimationLayer };
+        public List<MapLayer> LabelLayers => Layers.Where(x => x.LabelLayer != null).Select(x => x.LabelLayer).ToList();
 
         public Point Origin { get; private set; }
         public double Scale { get; set; }
@@ -31,19 +32,13 @@ namespace Dreambuild.Gis.Display
 
         public static MapControl Current { get; private set; }
         public bool IsMapInitialized { get { return Map != null; } }
-        private static double[] _zoomLevels;
-        private DateTime _time = new DateTime(1, 1, 1, 1, 0, 0, 0, 0);
+        private static double[] _zoomLevels = Enumerable.Range(-15, 31).Select(i => Math.Pow(2, i)).Reverse().ToArray(); // newly 20130403
 
         public MapLayer SelectionLayer { get; private set; }
         public MapLayer MarkLayer { get; private set; }
         public MapLayer GridLayer { get; private set; }
         public MapLayer BaseLayer { get; private set; }
         public DrawingMapLayer AnimationLayer { get; private set; } // newly 20130505
-
-        static MapControl() // newly 20130403
-        {
-            _zoomLevels = Enumerable.Range(-15, 31).Select(i => Math.Pow(2, i)).Reverse().ToArray();
-        }
 
         public MapControl()
         {
@@ -77,38 +72,26 @@ namespace Dreambuild.Gis.Display
         public event Action NeedToInitializeViewerTools;
         protected void OnNeedToInitializeViewerTools()
         {
-            if (NeedToInitializeViewerTools != null)
-            {
-                NeedToInitializeViewerTools();
-            }
+            NeedToInitializeViewerTools?.Invoke();
         }
 
         public event Action LayersChanged;
         protected void OnLayersChanged()
         {
-            if (LayersChanged != null)
-            {
-                LayersChanged();
-            }
+            LayersChanged?.Invoke();
         }
 
         public event Action ViewChanged;
         protected void OnViewChanged()
         {
-            if (ViewChanged != null)
-            {
-                ViewChanged();
-            }
+            ViewChanged?.Invoke();
         }
 
         public event Action ChildrenChanged;
         protected override void OnVisualChildrenChanged(DependencyObject visualAdded, DependencyObject visualRemoved)
         {
             base.OnVisualChildrenChanged(visualAdded, visualRemoved);
-            if (ChildrenChanged != null)
-            {
-                ChildrenChanged();
-            }
+            ChildrenChanged?.Invoke();
         }
 
         #endregion
@@ -154,7 +137,7 @@ namespace Dreambuild.Gis.Display
         {
             get
             {
-                List<Tuple<Map, List<MapLayer>>> result = new List<Tuple<Map, List<MapLayer>>>();
+                var result = new List<Tuple<Map, List<MapLayer>>>();
                 foreach (var map in AllMaps)
                 {
                     result.Add(Tuple.Create(map, Layers.Where(x => map.Layers.Contains(x.LayerData)).ToList()));
@@ -165,7 +148,7 @@ namespace Dreambuild.Gis.Display
 
         public MapLayer AddLayer(VectorLayer layer)
         {
-            MapLayer mLayer = new DrawingMapLayer(); // mod 20130308
+            var mLayer = new DrawingMapLayer(); // mod 20130308
             //MapLayer mLayer = new MapLayer();
             mLayer.SetData(layer);
             MapControl.Current.Layers.Add(mLayer);
@@ -196,7 +179,7 @@ namespace Dreambuild.Gis.Display
 
             foreach (VectorLayer layer in map.Layers)
             {
-                MapLayer mLayer = new DrawingMapLayer(); // mod 20130302
+                var mLayer = new DrawingMapLayer(); // mod 20130302
                 //MapLayer mLayer = new MapLayer();
                 mLayer.SetData(layer);
                 mLayer.AppendProperties(); // newly 20120319
@@ -220,7 +203,7 @@ namespace Dreambuild.Gis.Display
 
             foreach (VectorLayer layer in Map.Layers)
             {
-                MapLayer mLayer = new DrawingMapLayer(); // mod 20130302
+                var mLayer = new DrawingMapLayer(); // mod 20130302
                 //MapLayer mLayer = new MapLayer();
                 mLayer.SetData(layer);
                 mLayer.AppendProperties(); // newly 20120319
@@ -239,7 +222,7 @@ namespace Dreambuild.Gis.Display
 
         void MapControl_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            Point basePoint = e.GetPosition(this);
+            var basePoint = e.GetPosition(this);
             int index = FindScaleIndex(Scale);
             index += e.Delta / 120;
             if (index > _zoomLevels.Length - 1) index = _zoomLevels.Length - 1;
@@ -266,9 +249,9 @@ namespace Dreambuild.Gis.Display
             {
                 if (!(ViewerToolManager.ExclusiveTool is PanCanvasTool))
                 {
-                    PanCanvasTool pct = new PanCanvasTool();
-                    pct.StartDrag(e.GetPosition(MapControl.Current));
-                    ViewerToolManager.AddTool(pct);
+                    var panCanvasTool = new PanCanvasTool();
+                    panCanvasTool.StartDrag(e.GetPosition(MapControl.Current));
+                    ViewerToolManager.AddTool(panCanvasTool);
                 }
             }
             ViewerToolManager.Tools.ForEach(t => t.MouseDownHandler(sender, e));
@@ -283,14 +266,10 @@ namespace Dreambuild.Gis.Display
         {
             ViewerToolManager.Tools.ForEach(t => t.MouseLDownHandler(sender, e));
 
-            DateTime nextTime = DateTime.Now;
-            TimeSpan span = nextTime - _time;
-            if (span.TotalMilliseconds <= 300)
+            if (e.ClickCount >= 2)
             {
                 ViewerToolManager.Tools.ForEach(t => t.MouseLDoubleClickHandler(sender, e));
             }
-
-            _time = nextTime;
         }
 
         void MapControl_MouseMove(object sender, MouseEventArgs e)
@@ -342,7 +321,7 @@ namespace Dreambuild.Gis.Display
             this.Zoom(extents);
         }
 
-        private int FindScaleIndex(double scale)
+        private static int FindScaleIndex(double scale)
         {
             for (int i = 0; i < _zoomLevels.Length; i++)
             {
@@ -389,20 +368,18 @@ namespace Dreambuild.Gis.Display
 
         public void RenderLayers() // mod 20130226
         {
-            TranslateTransform translate = new TranslateTransform { X = Origin.X, Y = Origin.Y };
-            ScaleTransform scale = new ScaleTransform { CenterX = 0, CenterY = 0, ScaleX = 1 / Scale, ScaleY = -1 / Scale };
-            TransformGroup MapTransform = new TransformGroup(); // mod 20130301
-            MapTransform.Children.Add(scale);
-            MapTransform.Children.Add(translate);
+            var transform = new TransformGroup(); // mod 20130301
+            transform.Children.Add(new ScaleTransform { CenterX = 0, CenterY = 0, ScaleX = 1 / Scale, ScaleY = -1 / Scale });
+            transform.Children.Add(new TranslateTransform { X = Origin.X, Y = Origin.Y });
             //MapTransform.Freeze();
 
             foreach (MapLayer layer in Layers) // mod 20130302 精简，通过MapLayer.SetMagFactor()
             {
-                layer.RenderTransform = MapTransform;
+                layer.RenderTransform = transform;
             }
 
-            TempLayers.ForEach(x => x.RenderTransform = MapTransform);
-            LabelLayers.ForEach(x => x.RenderTransform = MapTransform);
+            TempLayers.ForEach(x => x.RenderTransform = transform);
+            LabelLayers.ForEach(x => x.RenderTransform = transform);
             base.Clip = new RectangleGeometry { Rect = new Rect(0, 0, ActualWidth, ActualHeight) };
 
             OnViewChanged();
@@ -416,15 +393,17 @@ namespace Dreambuild.Gis.Display
                 width = (int)this.ActualWidth;
                 height = (int)this.ActualHeight;
             }
+
             double dpi = 96;
             double mag = dpi / 96;
             double dpix = width / this.ActualWidth * dpi;
             double dpiy = height / this.ActualHeight * dpi;
-            RenderTargetBitmap bmp = new RenderTargetBitmap(Convert.ToInt32(width * mag), Convert.ToInt32(height * mag), dpix, dpiy, PixelFormats.Pbgra32);
+            var bmp = new RenderTargetBitmap(Convert.ToInt32(width * mag), Convert.ToInt32(height * mag), dpix, dpiy, PixelFormats.Pbgra32);
             bmp.Render(this);
-            JpegBitmapEncoder encoder = new JpegBitmapEncoder();
-            using (System.IO.FileStream fs = new System.IO.FileStream(fileName, System.IO.FileMode.OpenOrCreate))
+
+            using (var fs = new FileStream(fileName, FileMode.OpenOrCreate))
             {
+                var encoder = new JpegBitmapEncoder();
                 encoder.Frames.Add(BitmapFrame.Create(bmp));
                 encoder.Save(fs);
             }
@@ -450,7 +429,9 @@ namespace Dreambuild.Gis.Display
 
         public List<MapLayer> FindMapLayers(params string[] layerNames) // todo: 使用此函数代替现有用法。// mod 20140618 support multiple names
         {
-            return Layers.Where(x => layerNames.Contains(x.LayerData.Name)).ToList();
+            return this.Layers
+                .Where(x => layerNames.Contains(x.LayerData.Name))
+                .ToList();
         }
 
         public FrameworkElement FindFeatureElement(IFeature feature) // newly 20140716
