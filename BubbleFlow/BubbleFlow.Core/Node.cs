@@ -104,6 +104,8 @@ namespace BubbleFlow
             this.TextLabel.FontSize = FontSize;
             this.TextLabel.Foreground = new SolidColorBrush(FontColor);
             this.TextLabel.TextAlignment = TextAlignment.Center;
+            this.Measure(this.DesiredSize);
+            this.Arrange(new Rect(0, 0, this.DesiredSize.Width, this.DesiredSize.Height));
             Canvas.SetLeft(this.TextLabel, Position.X - TextLabel.ActualWidth / 2);
             Canvas.SetTop(this.TextLabel, Position.Y - TextLabel.ActualHeight / 2);
 

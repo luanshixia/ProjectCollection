@@ -141,21 +141,11 @@ namespace BubbleFlow
 
                 Canvas.SetZIndex(node, 100);
                 MainWindow.Current.MyCanvas.Children.Add(node);
-
-                string name = node.Text;
-                int s = 1;
-                while (MainWindow.Current.Nodes.Values.Any(n => n.name == name))
-                {
-                    name = string.Format("{0}{1}", node.Text, s.ToString());
-                    s++;
-                }
-
-                node.SetText(name);
                 node.ReadyControl();
 
                 var nodeJson = new FlowNodeJsonObject
                 {
-                    name = name,
+                    name = node.Text,
                     role = string.Empty,
                     user = string.Empty
                 };
@@ -544,11 +534,12 @@ namespace BubbleFlow
                         if (node.IsPointInNode(_mouseDownTemp))
                         {
                             currentNode = MainWindow.Current.CurrentNode;
-                            currentNodeJson = MainWindow.Current.Nodes[currentNode];
 
                             var inputs = new[] { "Name", "Role", "User" }.ToDictionary(field => field, field => string.Empty);
+                            inputs["Name"] = currentNode.Text;
                             Gui.MultiInputs("Node info", inputs);
 
+                            currentNodeJson = MainWindow.Current.Nodes[currentNode];
                             currentNodeJson.name = inputs["Name"];
                             currentNodeJson.role = inputs["Role"];
                             currentNodeJson.user = inputs["User"];

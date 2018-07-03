@@ -1,8 +1,10 @@
 ﻿using Dreambuild.Extensions;
+using Dreambuild.Gis.Desktop.Properties;
 using Dreambuild.Gis.Desktop.Utils;
 using Dreambuild.Gis.Display;
 using Dreambuild.Gis.Formats;
 using Dreambuild.Utils;
+using Microsoft.Win32;
 using System;
 using System.Linq;
 using System.Windows;
@@ -10,6 +12,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
+using FolderBrowserDialog = System.Windows.Forms.FolderBrowserDialog;
 
 namespace Dreambuild.Gis.Desktop
 {
@@ -34,14 +37,13 @@ namespace Dreambuild.Gis.Desktop
         {
             LocalizationHelper.SetLocale(_locale);
             InitializeComponent();
-            Current = this;
 
-            //AddPanel("LayerPanel", _mapLayerControl,2);
+            MainWindow.Current = this;
+
             SearchPanel.Content = _searchControl;
             PropertyPanel.Content = _propertyControl;
             FeaturePanel.Content = _featureControl;
             LayerPanel.Content = _mapLayerControl;
-            //SelectionSet.SelectionChanged += () => _featureInfoControl.UpdateInfo();
 
             this.InitializeTool();
 
@@ -124,39 +126,53 @@ namespace Dreambuild.Gis.Desktop
         public void AddPanel(string key, FrameworkElement panelControl, int order = -1)
         {
             string name = LocalizationHelper.GetString(key);
-            Expander exp = new Expander { Header = name, HeaderStringFormat = key, Margin = new Thickness(5), Background = Brushes.Beige, BorderBrush = Brushes.LightGray, IsExpanded = true };
-            exp.Content = panelControl;
+            var expander = new Expander
+            {
+                Header = name,
+                HeaderStringFormat = key,
+                Content = panelControl,
+                Margin = new Thickness(5),
+                Background = Brushes.Beige,
+                BorderBrush = Brushes.LightGray,
+                IsExpanded = true
+            };
+
             if (order == -1)
             {
-                PanelStack.Children.Add(exp);
+                PanelStack.Children.Add(expander);
             }
             else
             {
-                PanelStack.Children.Insert(order, exp);
+                PanelStack.Children.Insert(order, expander);
             }
         }
 
         public void HidePanel(params string[] names)
         {
-            foreach (Expander exp in PanelStack.Children)
+            foreach (Expander expander in PanelStack.Children)
             {
-                if (names.Contains(exp.Header.ToString()))
+                if (names.Contains(expander.Header.ToString()))
                 {
-                    exp.Visibility = System.Windows.Visibility.Collapsed;
+                    expander.Visibility = Visibility.Collapsed;
                 }
             }
         }
 
         public void HideMenu()
         {
-            TheMenu.Visibility = System.Windows.Visibility.Collapsed;
+            TheMenu.Visibility = Visibility.Collapsed;
         }
 
         private bool PromptSaveChanges()
         {
             if (MapDataManager.IsHashChanged())
             {
-                var result = MessageBox.Show("Changes are not saved. Save now?", "Warning", MessageBoxButton.YesNoCancel, MessageBoxImage.Question);
+                var result = MessageBox.Show(
+                    messageBoxText: "Changes are not saved. Save now?",
+                    caption: "Warning",
+                    button: MessageBoxButton.YesNoCancel,
+                    icon: MessageBoxImage.Question);
+
                 if (result == MessageBoxResult.Yes)
                 {
                     MenuItem_Save(null, null);
@@ -166,6 +182,7 @@ namespace Dreambuild.Gis.Desktop
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -184,7 +201,13 @@ namespace Dreambuild.Gis.Desktop
             {
                 return;
             }
-            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog { Title = "Choose file", Filter = "City Information Markup Language (*.ciml)|*.ciml" };
+
+            var ofd = new OpenFileDialog
+            {
+                Title = "Choose file",
+                Filter = "City Information Markup Language (*.ciml)|*.ciml"
+            };
+
             if (ofd.ShowDialog() == true)
             {
                 MapDataManager.Open(ofd.FileName);
@@ -193,7 +216,12 @@ namespace Dreambuild.Gis.Desktop
 
         private void ImportDxfMap()
         {
-            Microsoft.Win32.OpenFileDialog ofd = new Microsoft.Win32.OpenFileDialog { Title = "Choose file", Filter = "AutoCAD DXF (*.dxf)|*.dxf" };
+            var ofd = new OpenFileDialog
+            {
+                Title = "Choose file",
+                Filter = "AutoCAD DXF (*.dxf)|*.dxf"
+            };
+
             if (ofd.ShowDialog() == true)
             {
                 var importer = new DxfImporter(ofd.FileName);
@@ -203,17 +231,22 @@ namespace Dreambuild.Gis.Desktop
 
         private void ImportShpMap()
         {
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog { Description = "Choose Shapefile folder." };
-            if (System.IO.Directory.Exists(Properties.Settings.Default.LatestShpFolder))
+            var fbd = new FolderBrowserDialog
             {
-                fbd.SelectedPath = Properties.Settings.Default.LatestShpFolder;
+                Description = "Choose Shapefile folder."
+            };
+
+            if (System.IO.Directory.Exists(Settings.Default.LatestShpFolder))
+            {
+                fbd.SelectedPath = Settings.Default.LatestShpFolder;
             }
+
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 var importer = new MultipleShapefileImporter(fbd.SelectedPath);
                 MapDataManager.Import(importer.GetMap());
-                Properties.Settings.Default.LatestShpFolder = fbd.SelectedPath;
-                Properties.Settings.Default.Save();
+                Settings.Default.LatestShpFolder = fbd.SelectedPath;
+                Settings.Default.Save();
             }
         }
 
@@ -387,7 +420,11 @@ namespace Dreambuild.Gis.Desktop
             }
             else if (header.Contains("Shapefile"))
             {
-                System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog { Description = "Choose Shapefile folder." };
+                var fbd = new FolderBrowserDialog
+                {
+                    Description = "Choose Shapefile folder."
+                };
+
                 if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     var exporter = new MultipleShapefileExporter(MapDataManager.LatestMap);
@@ -396,7 +433,11 @@ namespace Dreambuild.Gis.Desktop
             }
             else if (header.Contains("Image"))
             {
-                Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog { Filter = "JPEG Image (*.jpg)|*.jpg" };
+                var sfd = new SaveFileDialog
+                {
+                    Filter = "JPEG Image (*.jpg)|*.jpg"
+                };
+
                 if (sfd.ShowDialog() == true)
                 {
                     MapControl.Current.SaveImage(sfd.FileName);
@@ -420,8 +461,11 @@ namespace Dreambuild.Gis.Desktop
 
         private void MenuItem_SaveAs(object sender, RoutedEventArgs e)
         {
-            Microsoft.Win32.SaveFileDialog sfd = new Microsoft.Win32.SaveFileDialog();
-            sfd.Filter = "City Information Markup Language (*.ciml)|*.ciml";
+            var sfd = new SaveFileDialog
+            {
+                Filter = "City Information Markup Language (*.ciml)|*.ciml"
+            };
+
             if (sfd.ShowDialog() == true)
             {
                 MapDataManager.SaveAs(sfd.FileName);
@@ -440,7 +484,9 @@ namespace Dreambuild.Gis.Desktop
 
         private void MenuItem_About(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show(string.Format("{0}\n Powered by CityGIS technology\nAuthor: WANG Yang\ndreambuild@qq.com\nCopyright 2014", MainWindow.DemoInstance.Name), "About");
+            MessageBox.Show(
+                messageBoxText: $"{MainWindow.DemoInstance.Name}\n Powered by CityGIS technology\nAuthor: WANG Yang\ndreambuild@qq.com\nCopyright 2014",
+                caption: "About");
         }
 
         private void MenuItem_SwitchLanguage(object sender, RoutedEventArgs e)
@@ -448,7 +494,7 @@ namespace Dreambuild.Gis.Desktop
             _locale = _locale == "zh-CN" ? "en-US" : "zh-CN";
             LocalizationHelper.SetLocale(_locale);
 
-            RefreshLanguage();
+            this.RefreshLanguage();
         }
 
         #endregion
@@ -457,28 +503,24 @@ namespace Dreambuild.Gis.Desktop
 
         public void RefreshLanguage()
         {
-            StackPanel stackPanel = MainWindow.Current.FindName("PanelStack") as StackPanel;
-            foreach (var obj in stackPanel.Children)
+            var stackPanel = MainWindow.Current.FindName("PanelStack") as StackPanel;
+            foreach (var element in stackPanel.Children)
             {
-                Expander expander = obj as Expander;
-                if (expander != null)
+                if (element is Expander expander)
                 {
-                    // 换标题
                     if (!string.IsNullOrEmpty(expander.HeaderStringFormat))
                     {
                         expander.Header = LocalizationHelper.GetString(expander.HeaderStringFormat);
                     }
-                    // 换内容
-                    ILanguageSwitcher switcher = expander.Content as ILanguageSwitcher;
-                    if (switcher != null)
+
+                    if (expander.Content is ILanguageSwitcher switcher)
                     {
                         switcher.RefreshLanguage();
                     }
                 }
             }
 
-            var languageSwitcher = MainWindow.DemoInstance as ILanguageSwitcher;
-            if (languageSwitcher != null)
+            if (MainWindow.DemoInstance is ILanguageSwitcher languageSwitcher)
             {
                 languageSwitcher.RefreshLanguage();
             }
