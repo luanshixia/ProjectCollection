@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -27,10 +28,6 @@ namespace Dreambuild.Gis.Desktop
         private PropertyPanelControl _propertyControl = new PropertyPanelControl();
         private FeaturePanelControl _featureControl = new FeaturePanelControl();
 
-        private Button[] _radioButtons;
-        private Button[] _clickButtons;
-        private Button _currentButton;
-
         private string _locale = AppConfig.GetValue("Language");
 
         public MainWindow()
@@ -46,11 +43,7 @@ namespace Dreambuild.Gis.Desktop
             LayerPanel.Content = _mapLayerControl;
             //SelectionSet.SelectionChanged += () => _featureInfoControl.UpdateInfo();
 
-            _radioButtons = new Button[] { btnPan, btnZoom, btnSelect, btnSelectRect, btnMeasure, btnMeasureArea };
-            _clickButtons = new Button[] { btnZoomE };
-            SetButtonsHover();
-            SetRadioButton(btnPan);
-            InitializeTool();
+            this.InitializeTool();
 
             MapDataManager.MapDataChanged += MapDataManager_MapDataChanged;
             SelectionSet.SelectionChanged += SelectionSet_SelectionChanged;
@@ -68,19 +61,13 @@ namespace Dreambuild.Gis.Desktop
         public event Action BeforeMapShow; // newly 20140624
         protected void OnBeforeMapShow()
         {
-            if (BeforeMapShow != null)
-            {
-                BeforeMapShow();
-            }
+            BeforeMapShow?.Invoke();
         }
 
         public event Action AfterMapShow;
         protected void OnAfterMapShow()
         {
-            if (AfterMapShow != null)
-            {
-                AfterMapShow();
-            }
+            AfterMapShow?.Invoke();
         }
 
         #endregion
@@ -89,8 +76,24 @@ namespace Dreambuild.Gis.Desktop
 
         private void InitializeTool()
         {
+            var toggleButtons = this.Toolbar.Children
+                .Cast<ButtonBase>()
+                .Where(button => button is ToggleButton)
+                .Cast<ToggleButton>()
+                .ToArray();
+
+            toggleButtons.ForEach(toggleButton => toggleButton.Click += (sender, e) =>
+            {
+                toggleButtons.ForEach(other => other.IsChecked = false);
+                (sender as ToggleButton).IsChecked = true;
+            });
+
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
-            SetRadioButton(btnPan);
+        }
+
+        private void ResetTool()
+        {
+            ViewerToolManager.ExclusiveTool = new PanCanvasTool();
         }
 
         private void LoadDemo()
@@ -249,7 +252,7 @@ namespace Dreambuild.Gis.Desktop
 
         void MapControl_NeedToInitializeViewerTools()
         {
-            this.InitializeTool();
+            this.ResetTool();
         }
 
         void SelectionSet_SelectionChanged()
@@ -261,7 +264,7 @@ namespace Dreambuild.Gis.Desktop
         {
             this.OnBeforeMapShow();
             this.MyCanvas.InitializeMap(MapDataManager.LatestMap);
-            this.InitializeTool();
+            this.ResetTool();
             this._mapLayerControl.Update();
             this._searchControl.ResetQuery();
             MyCanvas.TempLayers.ForEach(x => x.Children.Clear());
@@ -272,108 +275,39 @@ namespace Dreambuild.Gis.Desktop
 
         #region Toolbar event handlers
 
-        private void SetButtonsHover()
-        {
-            foreach (var btn in _radioButtons)
-            {
-                btn.MouseMove += new MouseEventHandler(btn_MouseMove);
-                btn.MouseLeave += new MouseEventHandler(btn_MouseLeave);
-            }
-            foreach (var btn in _clickButtons)
-            {
-                btn.MouseMove += new MouseEventHandler(btnZoomE_MouseMove);
-                btn.MouseLeave += new MouseEventHandler(btnZoomE_MouseLeave);
-            }
-        }
-
-        private void SetRadioButton(Button btn)
-        {
-            foreach (var b in _radioButtons)
-            {
-                b.Background = new SolidColorBrush(Colors.Transparent);
-            }
-            //btn.Background = new SolidColorBrush(Color.FromArgb(255, 204, 51, 0));
-            btn.Background = this.FindResource("PrimaryGradientBrush") as LinearGradientBrush;
-            _currentButton = btn;
-        }
-
-        void btnZoomE_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Button btn = sender as Button;
-            btn.Background = new SolidColorBrush(Colors.Transparent);
-        }
-
-        void btnZoomE_MouseMove(object sender, MouseEventArgs e)
-        {
-            Button btn = sender as Button;
-            btn.Background = this.FindResource("PrimaryGradientBrush") as LinearGradientBrush;
-        }
-
-        void btn_MouseLeave(object sender, MouseEventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn == _currentButton)
-            {
-                return;
-            }
-            btn.Background = new SolidColorBrush(Colors.Transparent);
-        }
-
-        void btn_MouseMove(object sender, MouseEventArgs e)
-        {
-            Button btn = sender as Button;
-            if (btn == _currentButton)
-            {
-                return;
-            }
-            btn.Background = this.FindResource("PrimaryGradientBrush") as LinearGradientBrush;
-        }
-
-        private void btnPan_Click(object sender, RoutedEventArgs e)
+        private void PanButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
         }
 
-        private void btnZoom_Click(object sender, RoutedEventArgs e)
+        private void ZoomButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new RectScaleTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
         }
 
-        private void btnZoomE_Click(object sender, RoutedEventArgs e)
+        private void ZoomExtentsButton_Click(object sender, RoutedEventArgs e)
         {
             MyCanvas.ZoomExtents();
         }
 
-        private void btnSelect_Click(object sender, RoutedEventArgs e)
+        private void SelectButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new SelectionTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
         }
 
-        private void btnMeasure_Click(object sender, RoutedEventArgs e)
-        {
-            ViewerToolManager.ExclusiveTool = new MeasureTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
-        }
-
-        private void btnAreaMeasure_Click(object sender, RoutedEventArgs e)
-        {
-            ViewerToolManager.ExclusiveTool = new AreaMeasureTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
-        }
-
-        private void btnSelectRect_Click(object sender, RoutedEventArgs e)
+        private void RectSelectButton_Click(object sender, RoutedEventArgs e)
         {
             ViewerToolManager.ExclusiveTool = new RectSelectionTool();
-            Button btn = sender as Button;
-            SetRadioButton(btn);
+        }
+
+        private void MeasureButton_Click(object sender, RoutedEventArgs e)
+        {
+            ViewerToolManager.ExclusiveTool = new MeasureTool();
+        }
+
+        private void AreaMeasureButton_Click(object sender, RoutedEventArgs e)
+        {
+            ViewerToolManager.ExclusiveTool = new AreaMeasureTool();
         }
 
         #endregion
@@ -389,7 +323,7 @@ namespace Dreambuild.Gis.Desktop
         {
             if (e.Key == Key.Escape)
             {
-                InitializeTool();
+                ResetTool();
                 SelectionSet.ClearSelection(); // newly 20120725
             }
         }

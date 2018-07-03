@@ -75,6 +75,32 @@
                     <Setter Property="Margin" Value="0" />
                     <Setter Property="Padding" Value="13" />
                     <Setter Property="Template" Value="{StaticResource FlatButton}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource FocusForegroundSolidBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+                <Style TargetType="ToggleButton">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="Foreground" Value="{StaticResource DefaultForegroundSolidBrush}" />
+                    <Setter Property="Padding" Value="20,3" />
+                    <Setter Property="Margin" Value="0" />
+                    <Setter Property="Padding" Value="13" />
+                    <Setter Property="Template" Value="{StaticResource FlatButton}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                            <Setter Property="Foreground" Value="{StaticResource FocusForegroundSolidBrush}" />
+                        </Trigger>
+                    </Style.Triggers>
                 </Style>
             </Grid.Resources>
 
@@ -84,13 +110,13 @@
             </Border>
             <Border VerticalAlignment="Top" Margin="0" Opacity="0.9" Background="{StaticResource SecondaryGradientBrush}">
                 <StackPanel Name="Toolbar" Orientation="Horizontal">
-                    <Button Name="btnPan" Content="{DynamicResource Pan}" Click="btnPan_Click" />
-                    <Button Name="btnZoom" Content="{DynamicResource Zoom}" Click="btnZoom_Click" />
-                    <Button Name="btnZoomE" Content="{DynamicResource ZoomE}" Click="btnZoomE_Click" />
-                    <Button Name="btnSelect" Content="{DynamicResource Select}" Click="btnSelect_Click" />
-                    <Button Name="btnSelectRect" Content="{DynamicResource SelectRect}" Click="btnSelectRect_Click" />
-                    <Button Name="btnMeasure" Content="{DynamicResource Measure}" Click="btnMeasure_Click" />
-                    <Button Name="btnMeasureArea" Content="{DynamicResource MeasureArea}" Click="btnAreaMeasure_Click" />
+                    <ToggleButton Name="PanButton" Content="{DynamicResource Pan}" Click="PanButton_Click" IsChecked="True" />
+                    <ToggleButton Name="ZoomButton" Content="{DynamicResource Zoom}" Click="ZoomButton_Click" />
+                    <Button Name="ZoomExtentsButton" Content="{DynamicResource ZoomE}" Click="ZoomExtentsButton_Click" />
+                    <ToggleButton Name="SelectButton" Content="{DynamicResource Select}" Click="SelectButton_Click" />
+                    <ToggleButton Name="RectSelectButton" Content="{DynamicResource SelectRect}" Click="RectSelectButton_Click" />
+                    <ToggleButton Name="MeasureButton" Content="{DynamicResource Measure}" Click="MeasureButton_Click" />
+                    <ToggleButton Name="AreaMeasureButton" Content="{DynamicResource MeasureArea}" Click="AreaMeasureButton_Click" />
                 </StackPanel>
             </Border>
             <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,20" Background="#80000000">
