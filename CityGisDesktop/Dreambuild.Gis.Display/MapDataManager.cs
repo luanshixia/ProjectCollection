@@ -15,10 +15,7 @@ namespace Dreambuild.Gis.Display
         public static event Action MapDataChanged;
         public static void OnMapDataChanged()
         {
-            if (MapDataChanged != null)
-            {
-                MapDataChanged();
-            }
+            MapDataChanged?.Invoke();
         }
 
         static MapDataManager()

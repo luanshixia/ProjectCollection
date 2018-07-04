@@ -1,4 +1,5 @@
-﻿using Dreambuild.Extensions;
+﻿using Dreambuild.Collections;
+using Dreambuild.Extensions;
 using Dreambuild.Geometry;
 using System;
 using System.Collections.Generic;
@@ -20,11 +21,11 @@ namespace BubbleFlow
     {
         public static MainWindow Current { get; private set; }
         public Point Origin { get; private set; }
-        public Node CurrentNode { get; set; }
+        public NodeBubble CurrentNode { get; set; }
         public double Scale { get; set; }
 
-        public Dictionary<Node, FlowNodeJsonObject> Nodes { get; } = new Dictionary<Node, FlowNodeJsonObject>();
-        public Dictionary<NodeConnectionJsonObject, BezierLink> Connections { get; } = new Dictionary<NodeConnectionJsonObject, BezierLink>();
+        public Dictionary<Guid, NodeBubble> Bubbles { get; } = new Dictionary<Guid, NodeBubble>();
+        public DoubleDictionary<Guid, Guid, BezierLink> Arrows { get; } = new DoubleDictionary<Guid, Guid, BezierLink>();
         public List<BoolExpression> Expressions { get; } = new List<BoolExpression>();
         private List<Line> GridLines { get; } = new List<Line>();
 
@@ -34,49 +35,50 @@ namespace BubbleFlow
 
             MainWindow.Current = this;
 
+            DataManager.New();
             this.InitializeTool();
 
             this.AddGridLinesToCanvas();
         }
 
-        private void InitNodesAndConnections(WorkflowJsonObject flow)
-        {
-            //var workflowId = flow.id;
+        //private void InitNodesAndConnections(Workflow flow)
+        //{
+        //    //var workflowId = flow.id;
 
-            this.Nodes.Clear();
-            foreach (var node in flow.nodes)
-            {
-                foreach (var child in MyCanvas.Children)
-                {
-                    if (child is Node nodeMark)
-                    {
-                        if (nodeMark.Text == node.name)
-                        {
-                            this.Nodes.Add(nodeMark, node);
-                            break;
-                        }
-                    }
-                }
-            }
+        //    this.Nodes.Clear();
+        //    foreach (var node in flow.Nodes)
+        //    {
+        //        foreach (var child in MyCanvas.Children)
+        //        {
+        //            if (child is NodeBubble bubble)
+        //            {
+        //                if (bubble.Text == node.Name)
+        //                {
+        //                    this.Nodes.Add(bubble, node);
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //    }
 
-            this.Connections.Clear();
-            foreach (var conn in flow.connections)
-            {
-                var start = new Point(flow.nodes[conn.from].xpos, flow.nodes[conn.from].ypos);
-                var end = new Point(flow.nodes[conn.to].xpos, flow.nodes[conn.to].ypos);
-                foreach (var child in MyCanvas.Children)
-                {
-                    if (child is BezierLink arrow)
-                    {
-                        if (arrow.StartPoint == start && arrow.EndPoint == end)
-                        {
-                            this.Connections.Add(conn, arrow);
-                            break;
-                        }
-                    }
-                }
-            }
-        }
+        //    this.Links.Clear();
+        //    foreach (var link in flow.Links)
+        //    {
+        //        var start = flow.NodesStore[link.From].GetPosition();
+        //        var end = flow.NodesStore[link.To].GetPosition();
+        //        foreach (var child in MyCanvas.Children)
+        //        {
+        //            if (child is BezierLink arrow)
+        //            {
+        //                if (arrow.StartPoint == start && arrow.EndPoint == end)
+        //                {
+        //                    this.Links.Add(link, arrow);
+        //                    break;
+        //                }
+        //            }
+        //        }
+        //    }
+        //}
 
         private void AddGridLinesToCanvas()
         {
@@ -169,17 +171,17 @@ namespace BubbleFlow
         private void SubmitAction()
         {
             //var flowName = qfnw.GetFlowName();
-            Nodes.ForEach(nodePair =>
-            {
-                nodePair.Value.xpos = nodePair.Key.Position.X;
-                nodePair.Value.ypos = nodePair.Key.Position.Y;
-            });
+            //Nodes.ForEach(nodePair =>
+            //{
+            //    nodePair.Value.xpos = nodePair.Key.Position.X;
+            //    nodePair.Value.ypos = nodePair.Key.Position.Y;
+            //});
 
-            var data = DataManager.ToJson(new WorkflowJsonObject
-            {
-                nodes = Nodes.Values.ToList(),
-                connections = Connections.Keys.ToList()
-            });
+            //var data = DataManager.ToJson(new Workflow
+            //{
+            //    Nodes = Nodes.Values.ToList(),
+            //    Links = Connections.Keys.ToList()
+            //});
 
             //WebClient wc = new WebClient();
             //Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/NewFlowFromJson")); // mod 20130605 // mod 20130621
@@ -194,47 +196,47 @@ namespace BubbleFlow
         //    System.Windows.Browser.HtmlPage.Window.Eval(string.Format("location='{0}'", uri.ToString()));
         //}
 
-        private void InitializeExpression()
-        {
-            this.Expressions.Add(new BoolExpression(this.GetRule1()));
-            this.Expressions.Add(new BoolExpression(this.GetRule2()));
-        }
+        //private void InitializeExpression()
+        //{
+        //    this.Expressions.Add(new BoolExpression(this.GetRule1()));
+        //    this.Expressions.Add(new BoolExpression(this.GetRule2()));
+        //}
 
-        private Func<bool> GetRule1()
-        {
-            foreach (var node in this.Nodes.Keys)
-            {
-                int index = this.Nodes.Keys.ToList().IndexOf(node);
-                if (this.Connections.Keys.All(c => c.from != index && c.to != index))
-                {
-                    return () => false;
-                }
-            }
-            return () => true;
-        }
+        //private Func<bool> GetRule1()
+        //{
+        //    foreach (var node in this.Nodes.Keys)
+        //    {
+        //        int index = this.Nodes.Keys.ToList().IndexOf(node);
+        //        if (this.Links.Keys.All(c => c.From != index && c.To != index))
+        //        {
+        //            return () => false;
+        //        }
+        //    }
+        //    return () => true;
+        //}
 
-        private Func<bool> GetRule2()
-        {
-            int startcount = 0;
-            int endcount = 0;
-            foreach (var node in this.Nodes.Keys)
-            {
-                int index = this.Nodes.Keys.ToList().IndexOf(node);
-                if (this.Connections.Keys.All(c => c.to != index) && this.Connections.Keys.Any(c => c.from == index))
-                {
-                    startcount++;
-                }
-                if (this.Connections.Keys.All(c => c.from != index) && this.Connections.Keys.Any(c => c.to == index))
-                {
-                    endcount++;
-                }
-            }
-            if (startcount == 1 && endcount == 1)
-            {
-                return () => true;
-            }
-            return () => false;
-        }
+        //private Func<bool> GetRule2()
+        //{
+        //    int startcount = 0;
+        //    int endcount = 0;
+        //    foreach (var node in this.Nodes.Keys)
+        //    {
+        //        int index = this.Nodes.Keys.ToList().IndexOf(node);
+        //        if (this.Links.Keys.All(c => c.To != index) && this.Links.Keys.Any(c => c.From == index))
+        //        {
+        //            startcount++;
+        //        }
+        //        if (this.Links.Keys.All(c => c.From != index) && this.Links.Keys.Any(c => c.To == index))
+        //        {
+        //            endcount++;
+        //        }
+        //    }
+        //    if (startcount == 1 && endcount == 1)
+        //    {
+        //        return () => true;
+        //    }
+        //    return () => false;
+        //}
 
         #region General event handlers
 
@@ -281,7 +283,7 @@ namespace BubbleFlow
             var points = new List<Vector>();
             foreach (var child in MyCanvas.Children)
             {
-                if (child is Node node)
+                if (child is NodeBubble node)
                 {
                     points.Add(new Vector(node.Position.X, node.Position.Y));
                 }
@@ -318,34 +320,20 @@ namespace BubbleFlow
 
         private void DeleteNodeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (CurrentNode != null)
+            if (this.CurrentNode != null)
             {
-                int index = Nodes.Keys.ToList().IndexOf(CurrentNode);
-                var conns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
+                var nodeID = this.CurrentNode.NodeID;
+                this.MyCanvas.Children.Remove(this.CurrentNode);
+                this.Bubbles.Remove(nodeID);
+                this.CurrentNode = null;
 
-                MyCanvas.Children.Remove(CurrentNode);
-                Nodes.Remove(CurrentNode);
-                CurrentNode = null;
-
-                Connections.ForEach(c =>
+                this.Arrows.RealValues.ForEach(arrow =>
                 {
-                    if (c.Key.from == index || c.Key.to == index)
+                    if (arrow.FromNodeID == nodeID || arrow.ToNodeID == nodeID)
                     {
-                        conns.Add(c.Key, c.Value);
+                        this.MyCanvas.Children.Remove(arrow);
+                        this.Arrows.Remove(arrow.FromNodeID, arrow.ToNodeID);
                     }
-                    if (c.Key.from > index)
-                    {
-                        c.Key.from -= 1;
-                    }
-                    if (c.Key.to > index)
-                    {
-                        c.Key.to -= 1;
-                    }
-                });
-                conns.ForEach(c =>
-                {
-                    MyCanvas.Children.Remove(c.Value);
-                    Connections.Remove(c.Key);
                 });
             }
 
@@ -355,7 +343,7 @@ namespace BubbleFlow
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
             Expressions.Clear();
-            InitializeExpression();
+            //InitializeExpression();
 
             bool flag = false;
             if (Expressions.Count == 0)

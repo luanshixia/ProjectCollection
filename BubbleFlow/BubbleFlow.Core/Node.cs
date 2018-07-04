@@ -10,8 +10,14 @@ using System.Windows.Shapes;
 
 namespace BubbleFlow
 {
-    public class Node : Canvas
+    public class NodeBubble : Canvas
     {
+        public Guid NodeID
+        {
+            get => (Guid)this.Tag;
+            set => this.Tag = value;
+        }
+
         public string Text { get; set; }
         public double FontSize { get; set; }
         public double Size { get; set; }
@@ -27,7 +33,7 @@ namespace BubbleFlow
         private TextBlock TextLabel { get; } = new TextBlock();
         private Storyboard Storyboard { get; } = new Storyboard();
 
-        public Node()
+        public NodeBubble()
         {
             this.Children.Add(RoundShape);
             this.Children.Add(TextLabel);
@@ -145,7 +151,7 @@ namespace BubbleFlow
         public void SetText(string text)
         {
             this.Text = text;
-            this.TextLabel.Text = Node.WrapText(this.Text);
+            this.TextLabel.Text = NodeBubble.WrapText(this.Text);
             this.TextLabel.FontSize = this.FontSize;
             this.TextLabel.Foreground = new SolidColorBrush(this.FontColor);
             this.TextLabel.TextAlignment = TextAlignment.Center;
@@ -185,11 +191,11 @@ namespace BubbleFlow
             {
                 var b = (byte)((FillColor.R + FillColor.G + FillColor.B) / 3);
                 var c = new Color { A = 255, R = b, G = b, B = b };
-                this.RoundShape.Fill = Node.BuildFill(c);
+                this.RoundShape.Fill = NodeBubble.BuildFill(c);
             }
             else
             {
-                this.RoundShape.Fill = Node.BuildFill(FillColor);
+                this.RoundShape.Fill = NodeBubble.BuildFill(FillColor);
             }
         }
     }

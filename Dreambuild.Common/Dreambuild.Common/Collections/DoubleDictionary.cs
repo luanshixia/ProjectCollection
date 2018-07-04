@@ -36,6 +36,8 @@ namespace Dreambuild.Collections
 
         public ICollection<SafeDictionary<TKey2, TValue>> Values => this.internalDictionary.Values;
 
+        public ICollection<TValue> RealValues => this.internalDictionary.Values.SelectMany(value => value.Values).ToList();
+
         public int Count => this.internalDictionary.Count;
 
         public bool IsReadOnly => false;
@@ -70,6 +72,11 @@ namespace Dreambuild.Collections
             return this.internalDictionary.ContainsKey(key);
         }
 
+        public bool ContainsKeys(TKey1 key1, TKey2 key2)
+        {
+            return this.internalDictionary.ContainsKey(key1) && this.internalDictionary[key1].ContainsKey(key2);
+        }
+
         void ICollection<KeyValuePair<TKey1, SafeDictionary<TKey2, TValue>>>.CopyTo(KeyValuePair<TKey1, SafeDictionary<TKey2, TValue>>[] array, int arrayIndex)
         {
             throw new NotImplementedException();
@@ -85,19 +92,29 @@ namespace Dreambuild.Collections
             return this.internalDictionary.Remove(key);
         }
 
+        public bool Remove(TKey1 key1, TKey2 key2)
+        {
+            if (this.internalDictionary.ContainsKey(key1))
+            {
+                return this.internalDictionary[key1].Remove(key2);
+            }
+
+            return false;
+        }
+
         bool ICollection<KeyValuePair<TKey1, SafeDictionary<TKey2, TValue>>>.Remove(KeyValuePair<TKey1, SafeDictionary<TKey2, TValue>> item)
         {
             throw new NotImplementedException();
         }
 
-        public bool TryGetValue(TKey1 key, out SafeDictionary<TKey2, TValue> value)
+        bool IDictionary<TKey1, SafeDictionary<TKey2, TValue>>.TryGetValue(TKey1 key, out SafeDictionary<TKey2, TValue> value)
         {
             return this.internalDictionary.TryGetValue(key, out value);
         }
 
         public bool TryGetValue(TKey1 key1, TKey2 key2, out TValue value)
         {
-            if (this.internalDictionary.ContainsKey(key1) && this[key1].ContainsKey(key2))
+            if (this.ContainsKeys(key1, key2))
             {
                 value = this[key1][key2];
                 return true;

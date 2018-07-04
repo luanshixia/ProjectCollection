@@ -1,4 +1,5 @@
 ﻿using Dreambuild.Extensions;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -119,46 +120,52 @@ namespace BubbleFlow
 
     public class AddNodeTool : ViewerTool
     {
-        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                var preNode = MainWindow.Current.Nodes.Last().Key;
-                MainWindow.Current.MyCanvas.Children.Remove(preNode);
-                MainWindow.Current.Nodes.Remove(preNode);
-            }
-        }
+        //public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
+        //{
+        //    if (e.ChangedButton == MouseButton.Left)
+        //    {
+        //        var previousBubble = MainWindow.Current.Bubbles.Last().Value;
+        //        MainWindow.Current.MyCanvas.Children.Remove(previousBubble);
+        //        MainWindow.Current.Bubbles.Remove(previousBubble);
+        //    }
+        //}
 
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
-                var node = new Node
+                var clickPoint = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+
+                var node = new FlowNode
                 {
-                    Position = new Point(catchPos.X + 1, catchPos.Y + 1)
+                    ID = Guid.NewGuid(),
+                    Name = "New node",
+                    Metadata = new FlowElementMetadata
+                    {
+                        Left = clickPoint.X,
+                        Top = clickPoint.Y
+                    }
                 };
 
-                Canvas.SetZIndex(node, 100);
-                MainWindow.Current.MyCanvas.Children.Add(node);
-                node.ReadyControl();
-
-                var nodeJson = new FlowNodeJsonObject
+                var bubble = new NodeBubble
                 {
-                    name = node.Text,
-                    role = string.Empty,
-                    user = string.Empty
+                    NodeID = node.ID,
+                    Text = node.Name,
+                    Position = clickPoint
                 };
 
-                MainWindow.Current.Nodes.Add(node, nodeJson);
+                Canvas.SetZIndex(bubble, 100);
+                MainWindow.Current.MyCanvas.Children.Add(bubble);
+                MainWindow.Current.Bubbles.Add(node.ID, bubble);
+                bubble.ReadyControl();
             }
         }
     }
 
     public class AddConnectionTool : ViewerTool
     {
-        private Node _startNode;
-        private Node _endNode;
+        private NodeBubble _startNode;
+        private NodeBubble _endNode;
         private int count = 0;
         private bool _isFinished = false;
         private bool _isAnyPicked = false;
@@ -191,7 +198,7 @@ namespace BubbleFlow
                 _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
                 foreach (var child in MainWindow.Current.MyCanvas.Children)
                 {
-                    if (child is Node node)
+                    if (child is NodeBubble node)
                     {
                         if (node.IsPointInNode(_mouseDownTemp))
                         {
@@ -262,13 +269,16 @@ namespace BubbleFlow
                         Canvas.SetZIndex(arrow, 100);
                         MainWindow.Current.MyCanvas.Children.Add(arrow);
 
-                        var conn = new NodeConnectionJsonObject();
-                        conn.from = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_startNode);
-                        conn.to = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_endNode);
-                        conn.label = string.Empty;
-                        if (!MainWindow.Current.Connections.Any(c => c.Key.from == conn.from && c.Key.to == conn.to))
+                        var link = new FlowLink
                         {
-                            MainWindow.Current.Connections.Add(conn, arrow);
+                            From = _startNode.NodeID,
+                            To = _endNode.NodeID,
+                            Label = string.Empty
+                        };
+
+                        if (!MainWindow.Current.Arrows.ContainsKeys(link.From, link.To))
+                        {
+                            MainWindow.Current.Arrows.Add(link.From, link.To, arrow);
                             _isConnectionExist = false;
                         }
                         else
@@ -342,7 +352,7 @@ namespace BubbleFlow
         private bool _isDragging = false;
         private Point _mouseDownTemp;
         private Point _originPos;
-        private Node _movingNode = new Node();
+        private NodeBubble _movingNode = new NodeBubble();
         private bool _isPickedAny = false;
         TranslateTransform translate;
 
@@ -375,7 +385,7 @@ namespace BubbleFlow
                 _mouseDownTemp = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
                 foreach (var child in MainWindow.Current.MyCanvas.Children)
                 {
-                    if (child is Node node)
+                    if (child is NodeBubble node)
                     {
                         if (node.IsPointInNode(e.GetPosition(MainWindow.Current.MyCanvas)))
                         {
@@ -412,32 +422,20 @@ namespace BubbleFlow
 
         public void SetConnectionPosition(Point catchPos)
         {
-            int index = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_movingNode);
-            var fromConns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
-            var toConns = new Dictionary<NodeConnectionJsonObject, BezierLink>();
+            var nodeID = _movingNode.NodeID;
 
-            MainWindow.Current.Connections.ForEach(c =>
+            MainWindow.Current.Arrows.RealValues.ForEach(arrow =>
             {
-                if (c.Key.from == index)
+                if (arrow.FromNodeID == nodeID)
                 {
-                    fromConns.Add(c.Key, c.Value);
+                    arrow.StartPoint = catchPos;
+                    arrow.ReadyControl();
                 }
-                else if (c.Key.to == index)
+                else if (arrow.ToNodeID == nodeID)
                 {
-                    toConns.Add(c.Key, c.Value);
+                    arrow.EndPoint = catchPos;
+                    arrow.ReadyControl();
                 }
-            });
-
-            fromConns.ForEach(c =>
-            {
-                c.Value.StartPoint = catchPos;
-                c.Value.ReadyControl();
-            });
-
-            toConns.ForEach(c =>
-            {
-                c.Value.EndPoint = catchPos;
-                c.Value.ReadyControl();
             });
         }
 
@@ -498,7 +496,7 @@ namespace BubbleFlow
                 var pos = e.GetPosition(MainWindow.Current.MyCanvas);
                 foreach (var child in MainWindow.Current.MyCanvas.Children)
                 {
-                    if (child is Node node)
+                    if (child is NodeBubble node)
                     {
                         if (node.IsPointInNode(pos))
                         {
@@ -519,201 +517,31 @@ namespace BubbleFlow
 
     public class EditNodeTool : ViewerTool
     {
-        public Node currentNode = new Node();
-        public FlowNodeJsonObject currentNodeJson = new FlowNodeJsonObject();
-
         public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                var _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
-                foreach (var child in MainWindow.Current.MyCanvas.Children)
+                var bubble = MainWindow.Current.CurrentNode;
+
+                var inputs = new[] { "Name", "Role", "User" }.ToDictionary(field => field, field => string.Empty);
+                inputs["Name"] = bubble.Text;
+                Gui.MultiInputs("Node info", inputs);
+
+                var node = DataManager.CurrentDocument.NodesStore[bubble.NodeID];
+                node.Name = inputs["Name"];
+                node.Properties = new JObject
                 {
-                    if (child is Node node)
-                    {
-                        if (node.IsPointInNode(_mouseDownTemp))
-                        {
-                            currentNode = MainWindow.Current.CurrentNode;
+                    { "role", inputs["Role"] },
+                    { "user", inputs["User"] }
+                };
 
-                            var inputs = new[] { "Name", "Role", "User" }.ToDictionary(field => field, field => string.Empty);
-                            inputs["Name"] = currentNode.Text;
-                            Gui.MultiInputs("Node info", inputs);
-
-                            currentNodeJson = MainWindow.Current.Nodes[currentNode];
-                            currentNodeJson.name = inputs["Name"];
-                            currentNodeJson.role = inputs["Role"];
-                            currentNodeJson.user = inputs["User"];
-                            currentNode.SetText(inputs["Name"]);
-
-                            break;
-                        }
-                    }
-                }
+                bubble.SetText(inputs["Name"]);
             }
         }
     }
 
     public class EditConnectionTool : ViewerTool
     {
-        private NodeConnectionJsonObject _currentConn;
-        private Node _startNode;
-        private Node _endNode;
-        private int count = 0;
-        private bool _isFinished = false;
-        private bool _isAnyPicked = false;
-        private bool _isTbAdd = false;
-        private bool _isStarted = false;
-        //private bool _isSelfSelected = false;
-        private bool _isConnectionExist = false;
-        private Border border = new Border { BorderThickness = new Thickness(1), BorderBrush = new SolidColorBrush(Colors.DarkGray) };
-        private TextBlock tb = new TextBlock();
-        private Point _mouseDownTemp;
-
-        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                _isStarted = true;
-                if (_isTbAdd)
-                {
-                    MainWindow.Current.MyCanvas.Children.Remove(border);
-                    _isTbAdd = false;
-                }
-
-                if (_isFinished)
-                {
-                    count = 0;
-                    _isFinished = false;
-                }
-                _isAnyPicked = false;
-
-                _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
-                foreach (var child in MainWindow.Current.MyCanvas.Children)
-                {
-                    if (child is Node node)
-                    {
-                        if (node.IsPointInNode(_mouseDownTemp))
-                        {
-                            _isAnyPicked = true;
-                            count++;
-
-                            if (count == 1)
-                            {
-                                _startNode = node;
-                                break;
-                            }
-                            else
-                            {
-                                _endNode = node;
-                                break;
-                            }
-                        }
-                    }
-                }
-
-                if (!_isAnyPicked)
-                {
-                    border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                    border.Child = tb;
-                    Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                    Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                    if (count == 0)
-                    {
-                        tb.Text = "No start node selected.";
-                    }
-                    else
-                    {
-                        tb.Text = "No end node selected.";
-                    }
-                    MainWindow.Current.MyCanvas.Children.Add(border);
-                    _isTbAdd = true;
-                }
-            }
-        }
-
-        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                if (count == 2)
-                {
-                    _isFinished = true;
-                    bool isfindconn = false;
-                    if (_startNode != null && _endNode != null)
-                    {
-                        int start = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_startNode);
-                        int end = MainWindow.Current.Nodes.Keys.ToList().IndexOf(_endNode);
-                        if (MainWindow.Current.Connections.Keys.Any(x => x.from == start))
-                        {
-                            MainWindow.Current.Connections.Keys.Where(x => x.from == start).ForEach(x =>
-                            {
-                                if (x.to == end)
-                                {
-                                    _currentConn = x;
-                                    isfindconn = true;
-                                }
-                            });
-                        }
-                        else
-                        {
-                            isfindconn = false;
-                        }
-
-                        if (!isfindconn)
-                        {
-                            border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                            border.Child = tb;
-                            Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                            Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                            tb.Text = "Link not exists!";
-                            if (!_isTbAdd)
-                            {
-                                MainWindow.Current.MyCanvas.Children.Add(border);
-                            }
-                            _isTbAdd = true;
-                            _isConnectionExist = false;
-                        }
-
-                        else
-                        {
-                            _isConnectionExist = true;
-
-                            var inputs = new Dictionary<string, string> { { "Label", _currentConn.label } };
-                            Gui.MultiInputs("Link info", inputs);
-                            _currentConn.label = inputs["Label"];
-                            MainWindow.Current.Connections[_currentConn].ReadyControl();
-                        }
-                    }
-                }
-            }
-        }
-
-        public override void MouseMoveHandler(object sender, MouseEventArgs e)
-        {
-            if (!_isAnyPicked)
-            {
-                var pos = e.GetPosition(MainWindow.Current.MyCanvas);
-                var vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
-                var translate = new TranslateTransform { X = vector.X, Y = vector.Y };
-                border.RenderTransform = translate;
-            }
-            if (!_isConnectionExist)
-            {
-                _isConnectionExist = true;
-                MainWindow.Current.MyCanvas.Children.Remove(border);
-                _isTbAdd = false;
-            }
-        }
-
-        public override void ExitToolHandler()
-        {
-            base.ExitToolHandler();
-
-            if (_isTbAdd && _isStarted)
-            {
-                MainWindow.Current.MyCanvas.Children.Remove(border);
-                _isTbAdd = false;
-            }
-        }
+        // TODO: don't want to look into this mess. Will revamp it using direct link pick rather than nodes pick.
     }
 }

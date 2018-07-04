@@ -156,7 +156,11 @@ namespace Dreambuild.Extensions
         /// <param name="resultSelector">The result selector function.</param>
         /// <param name="method">The match method.</param>
         /// <returns>The result collection.</returns>
-        public static IEnumerable<TResult> Match<T1, T2, TResult>(this IEnumerable<T1> first, IEnumerable<T2> second, Func<T1, T2, TResult> resultSelector, MatchMethod method = MatchMethod.Shortest) // newly 20130424
+        public static IEnumerable<TResult> Match<T1, T2, TResult>(
+            this IEnumerable<T1> first,
+            IEnumerable<T2> second,
+            Func<T1, T2, TResult> resultSelector,
+            MatchMethod method = MatchMethod.Shortest) // newly 20130424
         {
             if (method == MatchMethod.Shortest)
             {
@@ -211,7 +215,9 @@ namespace Dreambuild.Extensions
         /// <param name="collection">The collection.</param>
         /// <param name="equalityComparer">The equality comparer.</param>
         /// <returns>A dictionary representing the counting result.</returns>
-        public static IDictionary<TElement, int> CountElements<TElement>(this IEnumerable<TElement> collection, IEqualityComparer<TElement> equalityComparer)
+        public static IDictionary<TElement, int> CountElements<TElement>(
+            this IEnumerable<TElement> collection,
+            IEqualityComparer<TElement> equalityComparer)
         {
             return collection
                 .GroupBy(element => element, equalityComparer)
@@ -289,7 +295,11 @@ namespace Dreambuild.Extensions
         /// <param name="resultSelector">The result selector.</param>
         /// <param name="comparison">The comparison.</param>
         /// <returns>The result.</returns>
-        public static TResult Min<TSource, TCompare, TResult>(this IEnumerable<TSource> source, Func<TSource, TCompare> selector, Func<TSource, int, TResult> resultSelector, Comparison<TCompare> comparison = null)
+        public static TResult Min<TSource, TCompare, TResult>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TCompare> selector,
+            Func<TSource, int, TResult> resultSelector,
+            Comparison<TCompare> comparison = null)
         {
             if (source.IsNullOrEmpty())
             {
@@ -339,7 +349,11 @@ namespace Dreambuild.Extensions
         /// <param name="resultSelector">The result selector.</param>
         /// <param name="comparison">The comparison.</param>
         /// <returns>The result.</returns>
-        public static TResult Max<TSource, TCompare, TResult>(this IEnumerable<TSource> source, Func<TSource, TCompare> selector, Func<TSource, int, TResult> resultSelector, Comparison<TCompare> comparison = null)
+        public static TResult Max<TSource, TCompare, TResult>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TCompare> selector,
+            Func<TSource, int, TResult> resultSelector,
+            Comparison<TCompare> comparison = null)
         {
             if (source.IsNullOrEmpty())
             {
@@ -406,17 +420,51 @@ namespace Dreambuild.Extensions
         /// <typeparam name="TSource">The element type of the source collection.</typeparam>
         /// <typeparam name="TKey">The type of key.</typeparam>
         /// <typeparam name="TValue">The type of value.</typeparam>
-        /// <param name="sources">The source collection.</param>
+        /// <param name="source">The source collection.</param>
         /// <param name="keySelector">The key selector.</param>
         /// <param name="valuesSelector">The value selector.</param>
         /// <returns>The ILookup.</returns>
-        public static ILookup<TKey, TValue> ToLookup<TSource, TKey, TValue>(this IEnumerable<TSource> sources, Func<TSource, TKey> keySelector, Func<TSource, IEnumerable<TValue>> valuesSelector)
+        public static ILookup<TKey, TValue> ToLookup<TSource, TKey, TValue>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            Func<TSource, IEnumerable<TValue>> valuesSelector)
         {
             var result = new FlexLookup<TKey, TValue>();
-            sources.ForEach(element =>
+            source.ForEach(element =>
             {
                 result.AddRange(keySelector(element), valuesSelector(element));
             });
+            return result;
+        }
+
+        /// <summary>
+        /// Creates a DoubleDictionary.
+        /// </summary>
+        /// <typeparam name="TSource">The element type of the source collection.</typeparam>
+        /// <typeparam name="TKey1">The type of key 1.</typeparam>
+        /// <typeparam name="TKey2">The type of key 2.</typeparam>
+        /// <typeparam name="TValue">The type of value.</typeparam>
+        /// <param name="source">The source collection.</param>
+        /// <param name="key1Selector">The key 1 selector.</param>
+        /// <param name="key2Selector">The key 2 selector.</param>
+        /// <param name="valueSelector">The value selector.</param>
+        /// <returns></returns>
+        public static DoubleDictionary<TKey1, TKey2, TValue> ToDoubleDictionary<TSource, TKey1, TKey2, TValue>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey1> key1Selector,
+            Func<TSource, TKey2> key2Selector,
+            Func<TSource, TValue> valueSelector)
+        {
+            var result = new DoubleDictionary<TKey1, TKey2, TValue>();
+            foreach (var element in source)
+            {
+                var key1 = key1Selector(element);
+                var key2 = key2Selector(element);
+                var value = valueSelector(element);
+
+                result[key1][key2] = value;
+            }
+
             return result;
         }
     }

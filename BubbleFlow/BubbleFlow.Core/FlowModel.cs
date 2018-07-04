@@ -1,4 +1,8 @@
-﻿using System;
+﻿using Dreambuild.Collections;
+using Dreambuild.Extensions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,141 +10,94 @@ namespace BubbleFlow
 {
     public class Workflow
     {
+        public Guid ID { get; set; }
         public string Name { get; set; }
-        public DateTime CreateTime { get; set; }
-        public DateTime ModifyTime { get; set; }
-        public List<FlowNode> Nodes { get; set; }
+        public WorkflowMetadata Metadata { get; set; }
+        public JToken Properties { get; set; }
 
-        public WorkflowJsonObject ToJsonObject()
+        [JsonIgnore]
+        public Dictionary<Guid, FlowNode> NodesStore { get; internal set; }
+
+        public List<FlowNode> Nodes
         {
-            return new WorkflowJsonObject
-            {
-                nodes = this.Nodes
-                    .Select(x => new FlowNodeJsonObject
-                    {
-                        name = x.Name,
-                        user = x.AllowedUsers,
-                        role = x.AllowedRoles,
-                        xpos = x.FlowChartPositionX,
-                        ypos = x.FlowChartPositionY
-                    })
-                    .ToList(),
-                connections = this.Nodes
-                    .SelectMany(x => x.ToNodes.Select(y => new NodeConnectionJsonObject
-                    {
-                        from = this.Nodes.IndexOf(x),
-                        to = this.Nodes.IndexOf(y),
-                        label = GetLabel(x, y)
-                    }))
-                    .ToList()
-            };
+            get => this.NodesStore.Values.ToList();
+            set => this.NodesStore = value.ToDictionary(node => node.ID, node => node);
         }
 
-        private static string GetLabel(FlowNode from, FlowNode to)
+        [JsonIgnore]
+        public DoubleDictionary<Guid, Guid, FlowLink> LinksStore { get; internal set; }
+
+        public List<FlowLink> Links
         {
-            if (string.IsNullOrEmpty(from.ToLabels))
-            {
-                return string.Empty;
-            }
-            var labels = from.ToLabels.Split('|');
-            int index = from.ToNodes.IndexOf(to);
-            if (index >= labels.Length)
-            {
-                return string.Empty;
-            }
-            return labels[from.ToNodes.IndexOf(to)];
+            get => this.LinksStore.RealValues.ToList();
+            set => this.LinksStore = value.ToDoubleDictionary(link => link.From, link => link.To, link => link);
         }
 
-        public void DeleteNode(FlowNode node)
+        public List<FlowLabel> Labels { get; set; }
+
+        public static Workflow FromJson(string json)
         {
-            Nodes.Remove(node);
-            Nodes.ForEach(x => x.ToNodes.Remove(node));
+            return JsonConvert.DeserializeObject<Workflow>(json);
+        }
+
+        public string ToJson()
+        {
+            return JsonConvert.SerializeObject(this);
         }
     }
 
     public class FlowNode
     {
+        public Guid ID { get; set; }
         public string Name { get; set; }
-        //public List<FlowNode> FromNodes { get; set; }
-        public List<FlowNode> ToNodes { get; set; }
-        public string DisplayPage { get; set; }
-        public string AllowedUsers { get; set; }
-        public string AllowedRoles { get; set; }
-        //public string FlowChartPosition { get; set; }
-        public double FlowChartPositionX { get; set; }
-        public double FlowChartPositionY { get; set; }
-        public string ToLabels { get; set; }
+        public FlowNodeStatus Status { get; set; }
+        public FlowElementMetadata Metadata { get; set; }
+        public JToken Properties { get; set; }
 
-        public FlowNode()
-        {
-            ToNodes = new List<FlowNode>();
-        }
-
-        public FlowNode(string name, string users = "*", string roles = "*")
-        {
-            Name = name;
-            //FromNodes = new List<FlowNode>();
-            ToNodes = new List<FlowNode>();
-            AllowedUsers = users;
-            AllowedRoles = roles;
-        }
-
-        public void ConnectTo(FlowNode node)
-        {
-            this.ToNodes.Add(node);
-        }
+        //public string user { get; set; }
+        //public string role { get; set; }
+        //public double xpos { get; set; }
+        //public double ypos { get; set; }
+        //public string status { get; set; } // "passed", "current", "unreached"
     }
 
-    public class WorkflowJsonObject
+    public class FlowLink
     {
-        public string id { get; set; }
-        public List<FlowNodeJsonObject> nodes { get; set; }
-        public List<NodeConnectionJsonObject> connections { get; set; }
-        public List<TextLabelJsonObject> labels { get; set; }
-
-        public void MoveNodesToPositive()
-        {
-            double nodeSize = 100;
-            double minx = nodes.Min(x => x.xpos) - 1 * nodeSize;
-            double miny = nodes.Min(x => x.ypos) - 1 * nodeSize;
-            if (minx < 0)
-            {
-                nodes.ForEach(x => x.xpos += -minx);
-                labels.ForEach(x => x.xpos += -minx);
-            }
-            if (miny < 0)
-            {
-                nodes.ForEach(x => x.ypos += -miny);
-                labels.ForEach(x => x.ypos += -miny);
-            }
-        }
+        public Guid From { get; set; }
+        public Guid To { get; set; }
+        public string Label { get; set; }
     }
 
-    public class FlowNodeJsonObject
+    public class FlowLabel
     {
-        public string id { get; set; }
-        public string name { get; set; }
-        public string user { get; set; }
-        public string role { get; set; }
-        public double xpos { get; set; }
-        public double ypos { get; set; }
-        public string status { get; set; } // "passed", "current", "unreached"
+        public string Text { get; set; }
+        public FlowElementMetadata Metadata { get; set; }
+
+        //public double xpos { get; set; }
+        //public double ypos { get; set; }
+        //public bool centerAligned { get; set; }
+        //public double fontSize { get; set; }
+        //public string fontFamily { get; set; }
     }
 
-    public class NodeConnectionJsonObject
+    public class WorkflowMetadata
     {
-        public int from { get; set; }
-        public int to { get; set; }
-        public string label { get; set; }
+        public string FontFamily { get; set; }
+        public double? FontSize { get; set; }
     }
 
-    public class TextLabelJsonObject
+    public class FlowElementMetadata
     {
-        public string text { get; set; }
-        public double xpos { get; set; }
-        public double ypos { get; set; }
-        public bool centerAligned { get; set; }
-        public double fontSize { get; set; }
-        public string fontFamily { get; set; }
+        public double Left { get; set; }
+        public double Top { get; set; }
+        public string FontFamily { get; set; }
+        public double? FontSize { get; set; }
+    }
+
+    public enum FlowNodeStatus
+    {
+        Default,
+        Active,
+        Completed
     }
 }

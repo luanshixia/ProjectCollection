@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Json;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,172 +12,93 @@ namespace BubbleFlow
     {
         public const double NodeSize = 100;
 
-        public static string ToJson(WorkflowJsonObject workflowJson)
+        public static string CurrentFileName { get; private set; }
+
+        public static Workflow CurrentDocument { get; private set; }
+
+        public static void New()
         {
-            JsonObject json = new JsonObject(new List<KeyValuePair<string,JsonValue>>());
-
-            JsonArray jsonnodes = new JsonArray(new List<JsonValue>());
-            JsonArray jsonconns = new JsonArray(new List<JsonValue>());
-
-            foreach (var node in workflowJson.nodes)
+            DataManager.CurrentFileName = null;
+            DataManager.CurrentDocument = new Workflow
             {
-                JsonObject jsonNodeVals = new JsonObject(new List<KeyValuePair<string, JsonValue>>());
-
-                JsonPrimitive value_id = new JsonPrimitive(node.id);
-                JsonPrimitive value_name = new JsonPrimitive(node.name);
-                JsonPrimitive value_user = new JsonPrimitive(node.user);
-                JsonPrimitive value_role = new JsonPrimitive(node.role);
-                JsonPrimitive value_xpos = new JsonPrimitive(node.xpos);
-                JsonPrimitive value_ypos = new JsonPrimitive(node.ypos);
-                JsonPrimitive value_status = new JsonPrimitive("");
-
-                jsonNodeVals.Add(new KeyValuePair<string, JsonValue>("id", value_id));
-                jsonNodeVals.Add(new KeyValuePair<string, JsonValue>("name", value_name));
-                jsonNodeVals.Add(new KeyValuePair<string, JsonValue>("user", value_user));
-                jsonNodeVals.Add(new KeyValuePair<string, JsonValue>("role", value_role));
-                jsonNodeVals.Add(new KeyValuePair<string, JsonValue>("xpos", value_xpos));
-                jsonNodeVals.Add(new KeyValuePair<string, JsonValue>("ypos", value_ypos));
-                jsonNodeVals.Add(new KeyValuePair<string, JsonValue>("status", value_status));
-
-                jsonnodes.Add(jsonNodeVals);
-            }
-
-            foreach (var conn in workflowJson.connections)
-            {
-                JsonObject jsonConnVals = new JsonObject(new List<KeyValuePair<string, JsonValue>>());
-
-                JsonPrimitive value_from = new JsonPrimitive(conn.from);
-                JsonPrimitive value_to = new JsonPrimitive(conn.to);
-                JsonPrimitive value_label = new JsonPrimitive(conn.label);
-
-                jsonConnVals.Add(new KeyValuePair<string, JsonValue>("from", value_from));
-                jsonConnVals.Add(new KeyValuePair<string, JsonValue>("to", value_to));
-                jsonConnVals.Add(new KeyValuePair<string, JsonValue>("label", value_label));
-
-                jsonconns.Add(jsonConnVals);
-            }
-
-            json.Add(new KeyValuePair<string, JsonValue>("id", workflowJson.id));
-            json.Add(new KeyValuePair<string, JsonValue>("nodes", jsonnodes));
-            json.Add(new KeyValuePair<string, JsonValue>("connections", jsonconns));
-
-            return json.ToString();
-        }
-
-        public static WorkflowJsonObject ParseJson(string json)
-        {
-            var data = JsonValue.Parse(json);
-            var result = new WorkflowJsonObject
-            {
-                nodes = new List<FlowNodeJsonObject>(),
-                connections = new List<NodeConnectionJsonObject>(),
-                labels = new List<TextLabelJsonObject>()
+                ID = Guid.NewGuid(),
+                Name = "Untitled workflow",
+                Metadata = new WorkflowMetadata
+                {
+                    FontFamily = "Arial",
+                    FontSize = 16
+                },
+                Nodes = new List<FlowNode>(),
+                Links = new List<FlowLink>(),
+                Labels = new List<FlowLabel>()
             };
-
-            foreach (JsonValue node in data["nodes"])
-            {
-                var nodeResult = new FlowNodeJsonObject
-                {
-                    id = node["id"],
-                    name = node["name"],
-                    user = node["user"],
-                    role = node["role"],
-                    xpos = node["xpos"],
-                    ypos = node["ypos"],
-                    status = node["status"]
-                };
-                result.nodes.Add(nodeResult);
-            }
-
-            foreach (JsonValue conn in data["connections"])
-            {
-                var connResult = new NodeConnectionJsonObject
-                {
-                    from = conn["from"],
-                    to = conn["to"],
-                    label = conn["label"]
-                };
-                result.connections.Add(connResult);
-            }
-
-            foreach (JsonValue label in data["labels"])
-            {
-                var labelResult = new TextLabelJsonObject
-                {
-                    text = label["text"],
-                    xpos = label["xpos"],
-                    ypos = label["ypos"],
-                    centerAligned = label["centerAligned"],
-                    fontSize = label["fontSize"],
-                    fontFamily = label["fontFamily"]
-                };
-                result.labels.Add(labelResult);
-            }
-
-            result.id = data["id"];
-            return result;
         }
 
-        public static void DrawToCanvas(Canvas canvas, WorkflowJsonObject flow)
+        public static void Open(string fileName)
         {
-            flow.MoveNodesToPositive();
+            DataManager.CurrentFileName = fileName;
+            DataManager.CurrentDocument = Workflow.FromJson(File.ReadAllText(fileName));
+        }
+
+        public static void SaveAs(string fileName)
+        {
+            DataManager.CurrentFileName = fileName;
+            File.WriteAllText(fileName, DataManager.CurrentDocument.ToJson());
+        }
+
+        public static void DrawToCanvas(this Workflow flow, Canvas canvas)
+        {
+            //flow.MoveNodesToPositive();
             canvas.Children.Clear();
 
-            foreach (var node in flow.nodes)
+            foreach (var node in flow.Nodes)
             {
-                var nodeMark = new Node
+                var bubble = new NodeBubble
                 {
-                    Text = node.name,
-                    //if (node.pos.Length > 0)
-                    //{
-                    //    nodeMark.Position = ParsePoint(node.pos);
-                    //}
-                    Position = new Point(node.xpos, node.ypos)
+                    Text = node.Name,
+                    Position = node.GetPosition()
                 };
 
-                if (node.status == "passed")
+                if (node.Status == FlowNodeStatus.Completed)
                 {
-                    nodeMark.FillColor = Color.FromArgb(255, 200, 250, 100);
+                    bubble.FillColor = Color.FromArgb(255, 200, 250, 100);
                 }
-                else if (node.status == "current")
+                else if (node.Status == FlowNodeStatus.Active)
                 {
-                    nodeMark.FillColor = Colors.Orange;
-                    nodeMark.NeedAlert = true;
+                    bubble.FillColor = Colors.Orange;
+                    bubble.NeedAlert = true;
                 }
 
-                nodeMark.ReadyControl();
-                Canvas.SetZIndex(nodeMark, 100);
-                canvas.Children.Add(nodeMark);
+                bubble.ReadyControl();
+                Canvas.SetZIndex(bubble, 100);
+                canvas.Children.Add(bubble);
             }
 
-            foreach (var conn in flow.connections)
+            foreach (var link in flow.Links)
             {
                 var arrow = new BezierLink
                 {
-                    StartPoint = ParsePoint(flow.nodes[conn.from]),
-                    EndPoint = ParsePoint(flow.nodes[conn.to]),
-                    StartOffset = NodeSize / 2,
-                    EndOffset = NodeSize / 2
+                    StartPoint = flow.NodesStore[link.From].GetPosition(),
+                    EndPoint = flow.NodesStore[link.To].GetPosition(),
+                    StartOffset = DataManager.NodeSize / 2,
+                    EndOffset = DataManager.NodeSize / 2
                 };
-                //Arrow arrow = new Arrow();
-                //arrow.ArrowSize = NodeSize / 10;
-                //arrow.LabelText = conn.label;
 
                 arrow.ReadyControl();
                 canvas.Children.Add(arrow);
             }
 
-            foreach (var label in flow.labels)
+            foreach (var label in flow.Labels)
             {
                 var textLabel = new TextBlock
                 {
-                    Text = label.text,
+                    Text = label.Text,
                     FontSize = 9,
                     Foreground = new SolidColorBrush(Colors.Gray)
                 };
 
-                Canvas.SetLeft(textLabel, label.xpos);
-                Canvas.SetTop(textLabel, label.ypos);
+                Canvas.SetLeft(textLabel, label.Metadata.Left);
+                Canvas.SetTop(textLabel, label.Metadata.Top);
                 canvas.Children.Add(textLabel);
             }
 
@@ -185,15 +106,27 @@ namespace BubbleFlow
             //canvas.Height = flow.nodes.Max(x => x.ypos) + 2 * NodeSize;
         }
 
-        private static Point ParsePoint(string pointStr)
+        public static Point GetPosition(this FlowNode node)
         {
-            var coords = pointStr.Split(',').Select(x => Convert.ToInt32(x)).ToArray();
-            return new Point(coords[0], coords[1]);
+            return new Point(node.Metadata.Left, node.Metadata.Top);
         }
 
-        private static Point ParsePoint(FlowNodeJsonObject node)
+        public static void MoveNodesToPositive(this Workflow flow)
         {
-            return new Point(node.xpos, node.ypos);
+            double minLeft = flow.Nodes.Min(node => node.Metadata.Left) - 1 * DataManager.NodeSize;
+            double minTop = flow.Nodes.Min(node => node.Metadata.Top) - 1 * DataManager.NodeSize;
+
+            if (minLeft < 0)
+            {
+                flow.Nodes.ForEach(node => node.Metadata.Left += -minLeft);
+                flow.Labels.ForEach(label => label.Metadata.Left += -minLeft);
+            }
+
+            if (minTop < 0)
+            {
+                flow.Nodes.ForEach(node => node.Metadata.Top += -minTop);
+                flow.Labels.ForEach(label => label.Metadata.Top += -minTop);
+            }
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 
 namespace BubbleFlow
 {
+    [Obsolete]
     public class Arrow : Canvas
     {
         public Point StartPoint { get; set; }
@@ -99,6 +100,34 @@ namespace BubbleFlow
 
     public class BezierLink : Canvas
     {
+        public Guid FromNodeID
+        {
+            get
+            {
+                var (from, _) = ((Guid, Guid))this.Tag;
+                return from;
+            }
+            set
+            {
+                var (_, to) = ((Guid, Guid))this.Tag;
+                this.Tag = (value, to);
+            }
+        }
+
+        public Guid ToNodeID
+        {
+            get
+            {
+                var (_, to) = ((Guid, Guid))this.Tag;
+                return to;
+            }
+            set
+            {
+                var (from, _) = ((Guid, Guid))this.Tag;
+                this.Tag = (from, value);
+            }
+        }
+
         public Point StartPoint { get; set; }
         public Point EndPoint { get; set; }
         public double StartOffset { get; set; }
