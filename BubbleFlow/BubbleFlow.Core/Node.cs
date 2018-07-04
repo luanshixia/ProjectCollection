@@ -25,9 +25,7 @@ namespace BubbleFlow
         public Color StrokeColor { get; set; }
         public Color FontColor { get; set; }
         public Point Position { get; set; }
-        //public string OnClick { get; set; }
         public bool NeedAlert { get; set; }
-        //public string LabelText { get; set; } // 可用于显示流程角色 newly 20121029
 
         private Ellipse RoundShape { get; } = new Ellipse();
         private TextBlock TextLabel { get; } = new TextBlock();
@@ -63,10 +61,6 @@ namespace BubbleFlow
         {
             Canvas.SetLeft(this.RoundShape, Canvas.GetLeft(this.RoundShape) - 1);
             Canvas.SetTop(this.RoundShape, Canvas.GetTop(this.RoundShape) - 1);
-            //if (!string.IsNullOrEmpty(OnClick))
-            //{
-            //    // System.Windows.Browser.HtmlPage.Window.Eval(OnClick);
-            //}
         }
 
         void _shape_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -114,17 +108,6 @@ namespace BubbleFlow
             this.Arrange(new Rect(0, 0, this.DesiredSize.Width, this.DesiredSize.Height));
             Canvas.SetLeft(this.TextLabel, Position.X - TextLabel.ActualWidth / 2);
             Canvas.SetTop(this.TextLabel, Position.Y - TextLabel.ActualHeight / 2);
-
-            //if (Children.Any(x => x is Border))
-            //{
-            //    Children.Remove(Children.First(x => x is Border));
-            //}
-            //if (!string.IsNullOrEmpty(LabelText))
-            //{
-            //    // 绘制标签，可用于显示流程角色。
-            //    Border b = new Border { CornerRadius = new CornerRadius(10), Height = 20, Width = 80, Background = new SolidColorBrush(Colors.DarkGray) };
-
-            //}
 
             if (this.NeedAlert)
             {

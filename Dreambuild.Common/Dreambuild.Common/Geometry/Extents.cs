@@ -28,6 +28,12 @@ namespace Dreambuild.Geometry
             this.Max = max;
         }
 
+        public Extents(IEnumerable<Vector> points)
+        {
+            this.Min = new Vector(points.Min(point => point.X), points.Min(point => point.Y), points.Min(point => point.Z));
+            this.Max = new Vector(points.Max(point => point.X), points.Max(point => point.Y), points.Max(point => point.Z));
+        }
+
         public Extents Copy()
         {
             return new Extents(this.Min, this.Max);
@@ -74,6 +80,11 @@ namespace Dreambuild.Geometry
         {
             var center = this.Center();
             return new Extents(center.Add(this.Min.Value.Sub(center).Mult(factor)), center.Add(this.Max.Value.Sub(center).Mult(factor)));
+        }
+
+        public Extents Offset(double amount)
+        {
+            return new Extents(this.Min.Value.Add(new Vector(-amount, -amount)), this.Max.Value.Add(new Vector(amount, amount)));
         }
 
         public double Range(int dimension)

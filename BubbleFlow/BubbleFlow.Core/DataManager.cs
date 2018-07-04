@@ -40,6 +40,11 @@ namespace BubbleFlow
             DataManager.CurrentDocument = Workflow.FromJson(File.ReadAllText(fileName));
         }
 
+        public static bool Validate()
+        {
+            return true;
+        }
+
         public static void SaveAs(string fileName)
         {
             DataManager.CurrentFileName = fileName;
@@ -101,9 +106,6 @@ namespace BubbleFlow
                 Canvas.SetTop(textLabel, label.Metadata.Top);
                 canvas.Children.Add(textLabel);
             }
-
-            //canvas.Width = flow.nodes.Max(x => x.xpos) + 2 * NodeSize;
-            //canvas.Height = flow.nodes.Max(x => x.ypos) + 2 * NodeSize;
         }
 
         public static Point GetPosition(this FlowNode node)

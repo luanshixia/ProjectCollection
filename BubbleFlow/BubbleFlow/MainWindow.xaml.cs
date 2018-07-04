@@ -1,6 +1,7 @@
 ﻿using Dreambuild.Collections;
 using Dreambuild.Extensions;
 using Dreambuild.Geometry;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -168,33 +169,46 @@ namespace BubbleFlow
             }
         }
 
-        private void SubmitAction()
+        private void Submit()
         {
-            //var flowName = qfnw.GetFlowName();
-            //Nodes.ForEach(nodePair =>
-            //{
-            //    nodePair.Value.xpos = nodePair.Key.Position.X;
-            //    nodePair.Value.ypos = nodePair.Key.Position.Y;
-            //});
-
-            //var data = DataManager.ToJson(new Workflow
-            //{
-            //    Nodes = Nodes.Values.ToList(),
-            //    Links = Connections.Keys.ToList()
-            //});
-
-            //WebClient wc = new WebClient();
-            //Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/NewFlowFromJson")); // mod 20130605 // mod 20130621
-            //wc.Headers[HttpRequestHeader.ContentType] = "application/x-www-form-urlencoded";
-            //wc.UploadStringAsync(uri, "POST", "name=" + flowName + "&data=" + data);
-            //wc.UploadStringCompleted += new UploadStringCompletedEventHandler(wc_UploadStringCompleted);
+            if (DataManager.Validate())
+            {
+                this.Save();
+            }
         }
 
-        //void wc_UploadStringCompleted(object sender, UploadStringCompletedEventArgs e)
-        //{
-        //    Uri uri = new Uri(SiteBaseUri, string.Format("Workflow/FlowList")); // mod 20130605
-        //    System.Windows.Browser.HtmlPage.Window.Eval(string.Format("location='{0}'", uri.ToString()));
-        //}
+        private void Save()
+        {
+            if (DataManager.CurrentFileName == null)
+            {
+                var saveFileDialog = new SaveFileDialog
+                {
+                    Filter = "JSON files (.json)|*.json|All files (*.*)|*.*"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    DataManager.SaveAs(saveFileDialog.FileName);
+                }
+
+                return;
+            }
+
+            DataManager.SaveAs(DataManager.CurrentFileName);
+        }
+
+        private void Open()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "JSON files (.json)|*.json|All files (*.*)|*.*"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                DataManager.Open(openFileDialog.FileName);
+            }
+        }
 
         //private void InitializeExpression()
         //{
@@ -280,22 +294,20 @@ namespace BubbleFlow
 
         private void ZoomExtentsButton_Click(object sender, RoutedEventArgs e)
         {
-            var points = new List<Vector>();
-            foreach (var child in MyCanvas.Children)
-            {
-                if (child is NodeBubble node)
-                {
-                    points.Add(new Vector(node.Position.X, node.Position.Y));
-                }
-            }
-            if (points.Count == 0)
+            var bubblePositions = this.MyCanvas.Children
+                .Cast<UIElement>()
+                .Where(element => element is NodeBubble)
+                .Cast<NodeBubble>()
+                .Select(bubble => new Vector(bubble.Position.X, bubble.Position.Y))
+                .ToArray();
+
+            if (bubblePositions.Length == 0)
             {
                 return;
             }
-            var poly = new PointString(points);
-            var extents = poly.GetExtents();
-            var et = new Extents(extents.Min.Value.Add(new Vector(-200, -200)), extents.Max.Value.Add(new Vector(200, 200)));
-            this.Zoom(et);
+
+            var extents = new Extents(bubblePositions);
+            this.Zoom(extents.Offset(200));
         }
 
         private void AddNodeButton_Click(object sender, RoutedEventArgs e)
@@ -357,7 +369,7 @@ namespace BubbleFlow
 
             if (flag)
             {
-                SubmitAction();
+                Submit();
             }
             else
             {

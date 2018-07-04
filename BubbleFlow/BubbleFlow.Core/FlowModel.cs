@@ -53,12 +53,6 @@ namespace BubbleFlow
         public FlowNodeStatus Status { get; set; }
         public FlowElementMetadata Metadata { get; set; }
         public JToken Properties { get; set; }
-
-        //public string user { get; set; }
-        //public string role { get; set; }
-        //public double xpos { get; set; }
-        //public double ypos { get; set; }
-        //public string status { get; set; } // "passed", "current", "unreached"
     }
 
     public class FlowLink
@@ -72,12 +66,6 @@ namespace BubbleFlow
     {
         public string Text { get; set; }
         public FlowElementMetadata Metadata { get; set; }
-
-        //public double xpos { get; set; }
-        //public double ypos { get; set; }
-        //public bool centerAligned { get; set; }
-        //public double fontSize { get; set; }
-        //public string fontFamily { get; set; }
     }
 
     public class WorkflowMetadata

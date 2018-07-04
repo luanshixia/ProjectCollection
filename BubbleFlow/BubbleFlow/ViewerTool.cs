@@ -120,16 +120,6 @@ namespace BubbleFlow
 
     public class AddNodeTool : ViewerTool
     {
-        //public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
-        //{
-        //    if (e.ChangedButton == MouseButton.Left)
-        //    {
-        //        var previousBubble = MainWindow.Current.Bubbles.Last().Value;
-        //        MainWindow.Current.MyCanvas.Children.Remove(previousBubble);
-        //        MainWindow.Current.Bubbles.Remove(previousBubble);
-        //    }
-        //}
-
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
