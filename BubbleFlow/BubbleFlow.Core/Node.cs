@@ -46,11 +46,6 @@ namespace BubbleFlow
             this.ReadyControl();
         }
 
-        public bool IsPointInNode(Point pt)
-        {
-            return (Position.X - pt.X) * (Position.X - pt.X) + (Position.Y - pt.Y) * (Position.Y - pt.Y) <= (Size / 2) * (Size / 2);
-        }
-
         public void SetColor(Color color)
         {
             this.FillColor = color;

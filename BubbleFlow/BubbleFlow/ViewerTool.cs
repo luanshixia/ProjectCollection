@@ -108,11 +108,11 @@ namespace BubbleFlow
             base.ExitToolHandler();
 
             var tools = ViewerToolManager.Tools.ToList();
-            tools.ForEach(t =>
+            tools.ForEach(tool =>
             {
-                if (t is SelectNodeTool || t is EditNodeTool)
+                if (tool is SelectNodeTool || tool is EditNodeTool)
                 {
-                    ViewerToolManager.RemoveTool(t);
+                    ViewerToolManager.RemoveTool(tool);
                 }
             });
         }
@@ -124,7 +124,7 @@ namespace BubbleFlow
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                var clickPoint = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+                var clickPoint = e.GetPosition(MainWindow.Current.MyCanvas);
 
                 var node = new FlowNode
                 {
@@ -159,24 +159,23 @@ namespace BubbleFlow
         private int count = 0;
         private bool _isFinished = false;
         private bool _isAnyPicked = false;
-        private bool _isTbAdd = false;
+        //private bool _isTbAdd = false;
         private bool _isStarted = false;
         private bool _isSelfSelected = false;
         private bool _isConnectionExist = false;
-        private Border border = new Border { BorderThickness = new Thickness(1), BorderBrush = new SolidColorBrush(Colors.DarkGray) };
-        private TextBlock tb = new TextBlock();
-        private Point _mouseDownTemp;
+        //private Border border = new Border { BorderThickness = new Thickness(1), BorderBrush = new SolidColorBrush(Colors.DarkGray) };
+        //private TextBlock tb = new TextBlock();
 
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
                 _isStarted = true;
-                if (_isTbAdd)
-                {
-                    MainWindow.Current.MyCanvas.Children.Remove(border);
-                    _isTbAdd = false;
-                }
+                //if (_isTbAdd)
+                //{
+                //    MainWindow.Current.MyCanvas.Children.Remove(border);
+                //    _isTbAdd = false;
+                //}
 
                 if (_isFinished)
                 {
@@ -185,55 +184,51 @@ namespace BubbleFlow
                 }
                 _isAnyPicked = false;
 
-                _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
-                foreach (var child in MainWindow.Current.MyCanvas.Children)
+                if (e.OriginalSource is FrameworkElement element)
                 {
-                    if (child is NodeBubble node)
+                    if (element.Parent is NodeBubble bubble)
                     {
-                        if (node.IsPointInNode(_mouseDownTemp))
-                        {
-                            _isAnyPicked = true;
-                            count++;
+                        _isAnyPicked = true;
+                        count++;
 
-                            if (count == 1)
+                        if (count == 1)
+                        {
+                            _startNode = bubble;
+                        }
+                        else
+                        {
+                            if (bubble != _startNode)
                             {
-                                _startNode = node;
-                                break;
+                                _endNode = bubble;
+                                _isSelfSelected = false;
                             }
                             else
                             {
-                                if (node != _startNode)
-                                {
-                                    _endNode = node;
-                                    _isSelfSelected = false;
-                                    break;
-                                }
-                                else
-                                {
-                                    _isSelfSelected = true;
-                                }
+                                _isSelfSelected = true;
                             }
                         }
                     }
                 }
 
-                if (!_isAnyPicked)
-                {
-                    border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                    border.Child = tb;
-                    Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                    Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                    if (count == 0)
-                    {
-                        tb.Text = "No start node selected.";
-                    }
-                    else
-                    {
-                        tb.Text = "No end node selected.";
-                    }
-                    MainWindow.Current.MyCanvas.Children.Add(border);
-                    _isTbAdd = true;
-                }
+                // TODO: use status bar to show this info.
+
+                //if (!_isAnyPicked)
+                //{
+                //    border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
+                //    border.Child = tb;
+                //    Canvas.SetLeft(border, _mouseDownTemp.X + 10);
+                //    Canvas.SetTop(border, _mouseDownTemp.Y + 10);
+                //    if (count == 0)
+                //    {
+                //        tb.Text = "No start node selected.";
+                //    }
+                //    else
+                //    {
+                //        tb.Text = "No end node selected.";
+                //    }
+                //    MainWindow.Current.MyCanvas.Children.Add(border);
+                //    _isTbAdd = true;
+                //}
             }
         }
 
@@ -274,65 +269,35 @@ namespace BubbleFlow
                         else
                         {
                             _isConnectionExist = true;
-                            border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                            border.Child = tb;
-                            Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                            Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                            tb.Text = "Link already exists!";
-                            if (!_isTbAdd)
-                            {
-                                MainWindow.Current.MyCanvas.Children.Add(border);
-                            }
-                            _isTbAdd = true;
+                            //border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
+                            //border.Child = tb;
+                            //Canvas.SetLeft(border, _mouseDownTemp.X + 10);
+                            //Canvas.SetTop(border, _mouseDownTemp.Y + 10);
+                            //tb.Text = "Link already exists!";
+                            //if (!_isTbAdd)
+                            //{
+                            //    MainWindow.Current.MyCanvas.Children.Add(border);
+                            //}
+                            //_isTbAdd = true;
                             MainWindow.Current.MyCanvas.Children.Remove(arrow);
                         }
 
                         if (_isSelfSelected)
                         {
-                            border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
-                            border.Child = tb;
-                            Canvas.SetLeft(border, _mouseDownTemp.X + 10);
-                            Canvas.SetTop(border, _mouseDownTemp.Y + 10);
-                            tb.Text = "Identical start and end nodes.";
-                            if (!_isTbAdd)
-                            {
-                                MainWindow.Current.MyCanvas.Children.Add(border);
-                            }
-                            _isTbAdd = true;
+                            //border.RenderTransform = new TranslateTransform { X = 0, Y = 0 };
+                            //border.Child = tb;
+                            //Canvas.SetLeft(border, _mouseDownTemp.X + 10);
+                            //Canvas.SetTop(border, _mouseDownTemp.Y + 10);
+                            //tb.Text = "Identical start and end nodes.";
+                            //if (!_isTbAdd)
+                            //{
+                            //    MainWindow.Current.MyCanvas.Children.Add(border);
+                            //}
+                            //_isTbAdd = true;
                             MainWindow.Current.MyCanvas.Children.Remove(arrow);
                         }
                     }
                 }
-            }
-        }
-
-        public override void MouseMoveHandler(object sender, MouseEventArgs e)
-        {
-            if (!_isAnyPicked)
-            {
-                var pos = e.GetPosition(MainWindow.Current.MyCanvas);
-                var vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
-                var translate = new TranslateTransform { X = vector.X, Y = vector.Y };
-                border.RenderTransform = translate;
-            }
-            if (_isConnectionExist || _isSelfSelected)
-            {
-                _isSelfSelected = false;
-                _isConnectionExist = false;
-                MainWindow.Current.MyCanvas.Children.Remove(border);
-                _isTbAdd = false;
-                _isConnectionExist = false;
-            }
-        }
-
-        public override void ExitToolHandler()
-        {
-            base.ExitToolHandler();
-
-            if (_isTbAdd && _isStarted)
-            {
-                MainWindow.Current.MyCanvas.Children.Remove(border);
-                _isTbAdd = false;
             }
         }
     }
@@ -358,7 +323,7 @@ namespace BubbleFlow
         {
             if (_isDragging && _isPickedAny)
             {
-                var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+                var catchPos = e.GetPosition(MainWindow.Current.MyCanvas);
                 var vector = new Point(catchPos.X - _mouseDownTemp.X, catchPos.Y - _mouseDownTemp.Y);
                 translate = new TranslateTransform { X = vector.X, Y = vector.Y };
                 _movingNode.RenderTransform = translate;
@@ -372,18 +337,14 @@ namespace BubbleFlow
             if (e.ChangedButton == MouseButton.Left)
             {
                 _isDragging = true;
-                _mouseDownTemp = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
-                foreach (var child in MainWindow.Current.MyCanvas.Children)
+                _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
+                if (e.OriginalSource is FrameworkElement element)
                 {
-                    if (child is NodeBubble node)
+                    if (element.Parent is NodeBubble bubble)
                     {
-                        if (node.IsPointInNode(e.GetPosition(MainWindow.Current.MyCanvas)))
-                        {
-                            _movingNode = node;
-                            _isPickedAny = true;
-                            _originPos = node.Position;
-                            break;
-                        }
+                        _movingNode = bubble;
+                        _isPickedAny = true;
+                        _originPos = bubble.Position;
                     }
                 }
             }
@@ -395,12 +356,12 @@ namespace BubbleFlow
             {
                 if (_isPickedAny)
                 {
-                    var catchPos = MoveNodeTool.GetCatchPoint(e.GetPosition(MainWindow.Current.MyCanvas));
+                    var catchPos = e.GetPosition(MainWindow.Current.MyCanvas);
 
                     translate = new TranslateTransform { X = 0, Y = 0 };
                     _movingNode.RenderTransform = translate;
 
-                    _movingNode.Position = MoveNodeTool.GetCatchPoint(new Point(_originPos.X + catchPos.X - _mouseDownTemp.X, _originPos.Y + catchPos.Y - _mouseDownTemp.Y));
+                    _movingNode.Position = new Point(_originPos.X + catchPos.X - _mouseDownTemp.X, _originPos.Y + catchPos.Y - _mouseDownTemp.Y);
                     _movingNode.ReadyControl();
 
                     SetConnectionPosition(_movingNode.Position);
@@ -410,7 +371,7 @@ namespace BubbleFlow
             }
         }
 
-        public void SetConnectionPosition(Point catchPos)
+        private void SetConnectionPosition(Point catchPos)
         {
             var nodeID = _movingNode.NodeID;
 
@@ -428,50 +389,6 @@ namespace BubbleFlow
                 }
             });
         }
-
-        public static Point GetCatchPoint(Point pos)
-        {
-            string str_x = pos.X.ToString().Split('.')[0];
-            double ix = 0;
-            if (pos.X >= 0)
-            {
-                ix = str_x.Length > 1 ? Convert.ToDouble(str_x.Substring(0, str_x.Length - 1)) : 0;
-            }
-            else
-            {
-                ix = str_x.Length > 2 ? Convert.ToDouble(str_x.Substring(0, str_x.Length - 1)) : 0;
-            }
-            double ix1 = Convert.ToDouble(str_x.Substring(str_x.Length - 1, 1));
-            if (ix1 >= 5 && ix >= 0)
-            {
-                ix += 1;
-            }
-            else if (ix1 >= 5 && ix < 0)
-            {
-                ix -= 1;
-            }
-            string str_y = pos.Y.ToString().Split('.')[0];
-            double iy = 0;
-            if (pos.Y >= 0)
-            {
-                iy = str_y.Length > 1 ? Convert.ToDouble(str_y.Substring(0, str_y.Length - 1)) : 0;
-            }
-            else
-            {
-                iy = str_y.Length > 2 ? Convert.ToDouble(str_y.Substring(0, str_y.Length - 1)) : 0;
-            }
-            double iy1 = Convert.ToDouble(str_y.Substring(str_y.Length - 1, 1));
-            if (iy1 >= 5 && iy >= 0)
-            {
-                iy += 1;
-            }
-            else if (iy1 >= 5 && iy < 0)
-            {
-                iy -= 1;
-            }
-
-            return new Point(ix * 10, iy * 10);
-        }
     }
 
     public class SelectNodeTool : ViewerTool
@@ -483,22 +400,17 @@ namespace BubbleFlow
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                var pos = e.GetPosition(MainWindow.Current.MyCanvas);
-                foreach (var child in MainWindow.Current.MyCanvas.Children)
+                if (e.OriginalSource is FrameworkElement element)
                 {
-                    if (child is NodeBubble node)
+                    if (element.Parent is NodeBubble bubble)
                     {
-                        if (node.IsPointInNode(pos))
+                        if (MainWindow.Current.SelectedBubble != null)
                         {
-                            if (MainWindow.Current.CurrentNode != null)
-                            {
-                                MainWindow.Current.CurrentNode.SetColor(_defaultColor);
-                            }
-
-                            MainWindow.Current.CurrentNode = node;
-                            node.SetColor(_highlightColor);
-                            break;
+                            MainWindow.Current.SelectedBubble.SetColor(_defaultColor);
                         }
+
+                        MainWindow.Current.SelectedBubble = bubble;
+                        bubble.SetColor(_highlightColor);
                     }
                 }
             }
@@ -511,7 +423,7 @@ namespace BubbleFlow
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                var bubble = MainWindow.Current.CurrentNode;
+                var bubble = MainWindow.Current.SelectedBubble;
 
                 var inputs = new[] { "Name", "Role", "User" }.ToDictionary(field => field, field => string.Empty);
                 inputs["Name"] = bubble.Text;

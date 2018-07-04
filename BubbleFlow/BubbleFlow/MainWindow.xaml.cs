@@ -22,7 +22,7 @@ namespace BubbleFlow
     {
         public static MainWindow Current { get; private set; }
         public Point Origin { get; private set; }
-        public NodeBubble CurrentNode { get; set; }
+        public NodeBubble SelectedBubble { get; set; }
         public double Scale { get; set; }
 
         public Dictionary<Guid, NodeBubble> Bubbles { get; } = new Dictionary<Guid, NodeBubble>();
@@ -332,12 +332,12 @@ namespace BubbleFlow
 
         private void DeleteNodeButton_Click(object sender, RoutedEventArgs e)
         {
-            if (this.CurrentNode != null)
+            if (this.SelectedBubble != null)
             {
-                var nodeID = this.CurrentNode.NodeID;
-                this.MyCanvas.Children.Remove(this.CurrentNode);
+                var nodeID = this.SelectedBubble.NodeID;
+                this.MyCanvas.Children.Remove(this.SelectedBubble);
                 this.Bubbles.Remove(nodeID);
-                this.CurrentNode = null;
+                this.SelectedBubble = null;
 
                 this.Arrows.RealValues.ForEach(arrow =>
                 {
