@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BubbleFlow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="720" Width="1200" Loaded="MainWindow_Loaded" KeyUp="MainWindow_KeyUp" KeyDown="MainWindow_KeyDown" MouseMove="MainWindow_MouseMove" FontFamily="Microsoft YaHei">
+        Title="BubbleFlow" Height="720" Width="1200" Loaded="MainWindow_Loaded" KeyUp="MainWindow_KeyUp" KeyDown="MainWindow_KeyDown" MouseMove="MainWindow_MouseMove">
     <Window.Resources>
         <ResourceDictionary Source="Resources/ControlsAndStyles.xaml" />
     </Window.Resources>
