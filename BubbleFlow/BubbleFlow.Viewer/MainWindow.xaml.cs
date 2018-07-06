@@ -41,9 +41,9 @@ namespace BubbleFlow.Viewer
             MyCanvas.Children.Add(ellipse);
         }
 
-        public void PanCanvas(Point vector)
+        public void PanCanvas(Vector displacement)
         {
-            this.Origin = new Point(Origin.X + vector.X, Origin.Y + vector.Y);
+            this.Origin += displacement;
             this.RenderLayers();
         }
 

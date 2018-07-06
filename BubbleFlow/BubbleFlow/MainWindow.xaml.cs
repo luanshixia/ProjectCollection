@@ -135,9 +135,9 @@ namespace BubbleFlow
             RenderLayers();
         }
 
-        internal void PanCanvas(Point vector)
+        internal void PanCanvas(System.Windows.Vector displacement)
         {
-            this.Origin = new Point(Origin.X + vector.X, Origin.Y + vector.Y);
+            this.Origin += displacement;
             this.RenderLayers();
         }
 

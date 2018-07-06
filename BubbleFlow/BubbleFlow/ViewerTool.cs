@@ -12,7 +12,7 @@ namespace BubbleFlow
 {
     public class WheelScalingTool : ViewerTool
     {
-        private static double[] _zoomLevels = new double[] { 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625 };
+        private static readonly double[] ZoomLevels = new double[] { 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125, 0.015625 };
 
         public override void MouseWheelHandler(object sender, MouseWheelEventArgs e)
         {
@@ -21,54 +21,53 @@ namespace BubbleFlow
             var basePoint = e.GetPosition(MainWindow.Current);
             int index = WheelScalingTool.FindScaleIndex(MainWindow.Current.Scale);
             index += e.Delta / 120;
-            if (index > _zoomLevels.Length - 1)
+            if (index > ZoomLevels.Length - 1)
             {
-                index = _zoomLevels.Length - 1;
+                index = ZoomLevels.Length - 1;
             }
             else if (index < 0)
             {
                 index = 0;
             }
 
-            double scale = _zoomLevels[index];
+            double scale = ZoomLevels[index];
             MainWindow.Current.ScaleCanvas(scale, basePoint);
         }
 
         private static int FindScaleIndex(double scale)
         {
-            for (int i = 0; i < _zoomLevels.Length; i++)
+            for (int i = 0; i < ZoomLevels.Length; i++)
             {
-                if (scale > _zoomLevels[i] * 0.75)
+                if (scale > ZoomLevels[i] * 0.75)
                 {
                     return i;
                 }
             }
 
-            return _zoomLevels.Length - 1;
+            return ZoomLevels.Length - 1;
         }
     }
 
     public class PanCanvasTool : ViewerTool
     {
-        private bool _isDragging = false;
-        private Point _mouseDownTemp;
+        private bool IsDragging = false;
+        private Point PreviousPosition;
 
         public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = false;
+                this.IsDragging = false;
             }
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            if (_isDragging)
+            if (this.IsDragging)
             {
-                var pos = e.GetPosition(MainWindow.Current);
-                var vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
-                MainWindow.Current.PanCanvas(vector);
-                _mouseDownTemp = pos;
+                var position = e.GetPosition(MainWindow.Current);
+                MainWindow.Current.PanCanvas(position - this.PreviousPosition);
+                this.PreviousPosition = position;
             }
         }
 
@@ -76,8 +75,8 @@ namespace BubbleFlow
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = true;
-                _mouseDownTemp = e.GetPosition(MainWindow.Current);
+                this.IsDragging = true;
+                this.PreviousPosition = e.GetPosition(MainWindow.Current);
             }
         }
 
@@ -85,7 +84,7 @@ namespace BubbleFlow
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = false;
+                this.IsDragging = false;
             }
         }
 
@@ -233,6 +232,7 @@ namespace BubbleFlow
     public class MoveNodeTool : ViewerTool
     {
         private bool IsDragging = false;
+        private Point PreviousPosition;
         private NodeBubble BubbleToMove;
 
         public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
@@ -248,9 +248,11 @@ namespace BubbleFlow
             if (this.IsDragging && this.BubbleToMove != null)
             {
                 var position = e.GetPosition(MainWindow.Current.MyCanvas);
-                this.BubbleToMove.Position = position;
+                this.BubbleToMove.Position += position - this.PreviousPosition;
                 this.BubbleToMove.ReadyControl();
                 this.UpdateAllLinks(position);
+
+                this.PreviousPosition = position;
             }
         }
 
@@ -258,18 +260,17 @@ namespace BubbleFlow
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                this.IsDragging = true;
                 if (e.OriginalSource is FrameworkElement element)
                 {
                     if (element.Parent is NodeBubble bubble)
                     {
+                        this.IsDragging = true;
+                        this.PreviousPosition = e.GetPosition(MainWindow.Current.MyCanvas);
                         this.BubbleToMove = bubble;
 
                         return;
                     }
                 }
-
-                this.BubbleToMove = null;
             }
         }
 
