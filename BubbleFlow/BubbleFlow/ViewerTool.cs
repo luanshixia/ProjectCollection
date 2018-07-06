@@ -128,6 +128,11 @@ namespace BubbleFlow
                     {
                         Left = clickPoint.X,
                         Top = clickPoint.Y
+                    },
+                    Properties = new JObject
+                    {
+                        { "role", string.Empty },
+                        { "user", string.Empty }
                     }
                 };
 
@@ -139,45 +144,40 @@ namespace BubbleFlow
                 };
 
                 Canvas.SetZIndex(bubble, 100);
+                bubble.ReadyControl();
+
                 MainWindow.Current.MyCanvas.Children.Add(bubble);
                 MainWindow.Current.Bubbles.Add(node.ID, bubble);
-                bubble.ReadyControl();
+                DataManager.CurrentDocument.NodesStore.Add(node.ID, node);
             }
         }
     }
 
-    public class AddConnectionTool : ViewerTool
+    public class AddLinkTool : ViewerTool
     {
-        private NodeBubble _startNode;
-        private NodeBubble _endNode;
-        private int count = 0;
-        private bool _isFinished = false;
+        private NodeBubble StartNode;
+        private NodeBubble EndNode;
+        private int ClickCount = 0;
 
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                if (_isFinished)
-                {
-                    count = 0;
-                    _isFinished = false;
-                }
-
                 if (e.OriginalSource is FrameworkElement element)
                 {
                     if (element.Parent is NodeBubble bubble)
                     {
-                        count++;
+                        this.ClickCount++;
 
-                        if (count == 1)
+                        if (this.ClickCount == 1)
                         {
-                            _startNode = bubble;
+                            this.StartNode = bubble;
                         }
                         else
                         {
-                            if (bubble != _startNode)
+                            if (bubble != this.StartNode)
                             {
-                                _endNode = bubble;
+                                this.EndNode = bubble;
                             }
                         }
                     }
@@ -191,35 +191,39 @@ namespace BubbleFlow
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                if (count == 2)
+                if (this.ClickCount >= 2)
                 {
-                    _isFinished = true;
-                    if (_startNode != null && _endNode != null)
+                    if (this.StartNode != null && this.EndNode != null)
                     {
-                        double NodeSize = _startNode.Size;
-                        var arrow = new BezierLink
+                        if (!MainWindow.Current.Arrows.ContainsKeys(this.StartNode.NodeID, this.EndNode.NodeID))
                         {
-                            StartPoint = _startNode.Position,
-                            EndPoint = _endNode.Position,
-                            StartOffset = NodeSize / 2,
-                            EndOffset = NodeSize / 2
-                        };
+                            var link = new FlowLink
+                            {
+                                From = this.StartNode.NodeID,
+                                To = this.EndNode.NodeID,
+                                Label = string.Empty
+                            };
 
-                        arrow.ReadyControl();
-                        Canvas.SetZIndex(arrow, 100);
-                        MainWindow.Current.MyCanvas.Children.Add(arrow);
+                            var arrow = new BezierLink
+                            {
+                                StartPoint = this.StartNode.Position,
+                                EndPoint = this.EndNode.Position,
+                                StartOffset = DataManager.NodeSize / 2,
+                                EndOffset = DataManager.NodeSize / 2,
+                                Tag = (link.From, link.To)
+                            };
 
-                        var link = new FlowLink
-                        {
-                            From = _startNode.NodeID,
-                            To = _endNode.NodeID,
-                            Label = string.Empty
-                        };
+                            Canvas.SetZIndex(arrow, 100);
+                            arrow.ReadyControl();
 
-                        if (!MainWindow.Current.Arrows.ContainsKeys(link.From, link.To))
-                        {
+                            MainWindow.Current.MyCanvas.Children.Add(arrow);
                             MainWindow.Current.Arrows.Add(link.From, link.To, arrow);
+                            DataManager.CurrentDocument.LinksStore.Add(link.From, link.To, link);
                         }
+
+                        this.ClickCount = 0;
+                        this.StartNode = null;
+                        this.EndNode = null;
                     }
                 }
             }
@@ -279,6 +283,10 @@ namespace BubbleFlow
                     this.BubbleToMove.Position = position;
                     this.BubbleToMove.ReadyControl();
                     this.UpdateAllLinks(position);
+
+                    var node = DataManager.CurrentDocument.NodesStore[this.BubbleToMove.NodeID];
+                    node.Metadata.Left = position.X;
+                    node.Metadata.Top = position.Y;
                 }
 
                 this.IsDragging = false;
@@ -342,25 +350,27 @@ namespace BubbleFlow
             if (e.ChangedButton == MouseButton.Left)
             {
                 var bubble = MainWindow.Current.SelectedBubble;
+                var node = DataManager.CurrentDocument.NodesStore[bubble.NodeID];
 
-                var inputs = new[] { "Name", "Role", "User" }.ToDictionary(field => field, field => string.Empty);
-                inputs["Name"] = bubble.Text;
+                var inputs = new Dictionary<string, string>
+                {
+                    { "Name", node.Name },
+                    { "Role", node.Properties["role"].ToObject<string>() },
+                    { "User", node.Properties["user"].ToObject<string>() }
+                };
+
                 Gui.MultiInputs("Node info", inputs);
 
-                var node = DataManager.CurrentDocument.NodesStore[bubble.NodeID];
                 node.Name = inputs["Name"];
-                node.Properties = new JObject
-                {
-                    { "role", inputs["Role"] },
-                    { "user", inputs["User"] }
-                };
+                node.Properties["role"] = inputs["Role"];
+                node.Properties["user"] = inputs["User"];
 
                 bubble.SetText(inputs["Name"]);
             }
         }
     }
 
-    public class EditConnectionTool : ViewerTool
+    public class EditLinkTool : ViewerTool
     {
         // TODO: don't want to look into this mess. Will revamp it using direct link pick rather than nodes pick.
     }

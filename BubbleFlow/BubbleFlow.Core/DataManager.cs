@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Dreambuild.Collections;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,8 +29,8 @@ namespace BubbleFlow
                     FontFamily = "Arial",
                     FontSize = 16
                 },
-                Nodes = new List<FlowNode>(),
-                Links = new List<FlowLink>(),
+                NodesStore = new Dictionary<Guid, FlowNode>(),
+                LinksStore = new DoubleDictionary<Guid, Guid, FlowLink>(),
                 Labels = new List<FlowLabel>()
             };
         }

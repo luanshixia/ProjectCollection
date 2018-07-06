@@ -317,12 +317,12 @@ namespace BubbleFlow
 
         private void AddConnectionButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewerToolManager.ExclusiveTool = new AddConnectionTool();
+            ViewerToolManager.ExclusiveTool = new AddLinkTool();
         }
 
         private void EditConnectionButton_Click(object sender, RoutedEventArgs e)
         {
-            ViewerToolManager.ExclusiveTool = new EditConnectionTool();
+            ViewerToolManager.ExclusiveTool = new EditLinkTool();
         }
 
         private void MoveNodeButton_Click(object sender, RoutedEventArgs e)
