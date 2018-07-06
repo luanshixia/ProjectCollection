@@ -228,31 +228,25 @@ namespace BubbleFlow
 
     public class MoveNodeTool : ViewerTool
     {
-        private bool _isDragging = false;
-        private Point _mouseDownTemp;
-        private Point _originPos;
-        private NodeBubble _movingNode = new NodeBubble();
-        private bool _isPickedAny = false;
-        TranslateTransform translate;
+        private bool IsDragging = false;
+        private NodeBubble BubbleToMove;
 
         public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = false;
+                this.IsDragging = false;
             }
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            if (_isDragging && _isPickedAny)
+            if (this.IsDragging && this.BubbleToMove != null)
             {
-                var catchPos = e.GetPosition(MainWindow.Current.MyCanvas);
-                var vector = new Point(catchPos.X - _mouseDownTemp.X, catchPos.Y - _mouseDownTemp.Y);
-                translate = new TranslateTransform { X = vector.X, Y = vector.Y };
-                _movingNode.RenderTransform = translate;
-
-                SetConnectionPosition(new Point(_movingNode.Position.X + vector.X, _movingNode.Position.Y + vector.Y));
+                var position = e.GetPosition(MainWindow.Current.MyCanvas);
+                this.BubbleToMove.Position = position;
+                this.BubbleToMove.ReadyControl();
+                this.UpdateAllLinks(position);
             }
         }
 
@@ -260,17 +254,18 @@ namespace BubbleFlow
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = true;
-                _mouseDownTemp = e.GetPosition(MainWindow.Current.MyCanvas);
+                this.IsDragging = true;
                 if (e.OriginalSource is FrameworkElement element)
                 {
                     if (element.Parent is NodeBubble bubble)
                     {
-                        _movingNode = bubble;
-                        _isPickedAny = true;
-                        _originPos = bubble.Position;
+                        this.BubbleToMove = bubble;
+
+                        return;
                     }
                 }
+
+                this.BubbleToMove = null;
             }
         }
 
@@ -278,37 +273,31 @@ namespace BubbleFlow
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                if (_isPickedAny)
+                if (this.BubbleToMove != null)
                 {
-                    var catchPos = e.GetPosition(MainWindow.Current.MyCanvas);
-
-                    translate = new TranslateTransform { X = 0, Y = 0 };
-                    _movingNode.RenderTransform = translate;
-
-                    _movingNode.Position = new Point(_originPos.X + catchPos.X - _mouseDownTemp.X, _originPos.Y + catchPos.Y - _mouseDownTemp.Y);
-                    _movingNode.ReadyControl();
-
-                    SetConnectionPosition(_movingNode.Position);
+                    var position = e.GetPosition(MainWindow.Current.MyCanvas);
+                    this.BubbleToMove.Position = position;
+                    this.BubbleToMove.ReadyControl();
+                    this.UpdateAllLinks(position);
                 }
-                _isDragging = false;
-                _isPickedAny = false;
+
+                this.IsDragging = false;
+                this.BubbleToMove = null;
             }
         }
 
-        private void SetConnectionPosition(Point catchPos)
+        private void UpdateAllLinks(Point position)
         {
-            var nodeID = _movingNode.NodeID;
-
             MainWindow.Current.Arrows.RealValues.ForEach(arrow =>
             {
-                if (arrow.FromNodeID == nodeID)
+                if (arrow.FromNodeID == this.BubbleToMove.NodeID)
                 {
-                    arrow.StartPoint = catchPos;
+                    arrow.StartPoint = position;
                     arrow.ReadyControl();
                 }
-                else if (arrow.ToNodeID == nodeID)
+                else if (arrow.ToNodeID == this.BubbleToMove.NodeID)
                 {
-                    arrow.EndPoint = catchPos;
+                    arrow.EndPoint = position;
                     arrow.ReadyControl();
                 }
             });
@@ -317,26 +306,31 @@ namespace BubbleFlow
 
     public class SelectNodeTool : ViewerTool
     {
-        private Color _defaultColor = Colors.Gray;
-        private Color _highlightColor = Colors.Orange;
+        // TODO: move the colors to Node class when CanvasIndentifiableElement base class is done.
+        private static readonly Color DefaultColor = Colors.Gray;
+        private static readonly Color HighlightColor = Colors.Orange;
 
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
             {
+                if (MainWindow.Current.SelectedBubble != null)
+                {
+                    MainWindow.Current.SelectedBubble.SetColor(DefaultColor);
+                }
+
                 if (e.OriginalSource is FrameworkElement element)
                 {
                     if (element.Parent is NodeBubble bubble)
                     {
-                        if (MainWindow.Current.SelectedBubble != null)
-                        {
-                            MainWindow.Current.SelectedBubble.SetColor(_defaultColor);
-                        }
-
                         MainWindow.Current.SelectedBubble = bubble;
-                        bubble.SetColor(_highlightColor);
+                        bubble.SetColor(HighlightColor);
+
+                        return;
                     }
                 }
+
+                MainWindow.Current.SelectedBubble = null;
             }
         }
     }
