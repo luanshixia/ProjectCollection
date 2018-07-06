@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Markup;
 using System.Windows.Media;
@@ -285,10 +286,9 @@ namespace Dreambuild.Gis.Display
         {
             if (_isDragging)
             {
-                Point pos = e.GetPosition(MapControl.Current);
-                Point vector = new Point(pos.X - _mouseDownTemp.X, pos.Y - _mouseDownTemp.Y);
-                MapControl.Current.PanCanvas(vector);
-                _mouseDownTemp = pos;
+                var position = e.GetPosition(MapControl.Current);
+                MapControl.Current.PanCanvas(position - _mouseDownTemp);
+                _mouseDownTemp = position;
             }
         }
 
@@ -302,7 +302,7 @@ namespace Dreambuild.Gis.Display
                 if (queryResult.Count > 0)
                 {
                     var single = queryResult.Last();
-                    SelectionSet.Select(new [] { single });
+                    SelectionSet.Select(new[] { single });
                 }
                 else
                 {
@@ -358,11 +358,11 @@ namespace Dreambuild.Gis.Display
                     var single = queryResult.Last();
                     if (SelectionSet.Contents.Contains(single))
                     {
-                        SelectionSet.SubtractSelection(new [] { single });
+                        SelectionSet.SubtractSelection(new[] { single });
                     }
                     else
                     {
-                        SelectionSet.AddSelection(new [] { single });
+                        SelectionSet.AddSelection(new[] { single });
                     }
                 }
                 else
@@ -374,7 +374,7 @@ namespace Dreambuild.Gis.Display
                 if (queryResult.Count > 0)
                 {
                     var single = queryResult.Last();
-                    SelectionSet.Select(new [] { single });
+                    SelectionSet.Select(new[] { single });
                 }
                 else
                 {
@@ -392,20 +392,20 @@ namespace Dreambuild.Gis.Display
         private bool _isDragging = false;
         private Geometry.Vector _mouseDownOrigin;
         private Geometry.Vector _mouseDownEnd;
-        private Rectangle _selRect = new Rectangle();
-        private bool IsWindow { get { return _mouseDownEnd.X >= _mouseDownOrigin.X; } }
+        private readonly Rectangle Rect = new Rectangle();
+        private bool IsWindow => _mouseDownEnd.X >= _mouseDownOrigin.X;
 
-        private static SolidColorBrush _black = new SolidColorBrush(Colors.Black);
-        private static SolidColorBrush _blue = new SolidColorBrush(new Color { A = 128, G = 128, B = 255 });
-        private static SolidColorBrush _green = new SolidColorBrush(new Color { A = 128, G = 255 });
-        private static DoubleCollection _continuous = new DoubleCollection { 1, 0 };
-        private static DoubleCollection _dashed = new DoubleCollection { 3, 3 };
+        private static readonly SolidColorBrush BLACK = new SolidColorBrush(Colors.Black);
+        private static readonly SolidColorBrush BLUE = new SolidColorBrush(new Color { A = 128, G = 128, B = 255 });
+        private static readonly SolidColorBrush GREEN = new SolidColorBrush(new Color { A = 128, G = 255 });
+        private static readonly DoubleCollection CONTINUOUS = new DoubleCollection { 1, 0 };
+        private static readonly DoubleCollection DASHED = new DoubleCollection { 3, 3 };
 
         public override IEnumerable<UIElement> CanvasElements
         {
             get
             {
-                yield return _selRect;
+                yield return this.Rect;
             }
         }
 
@@ -414,24 +414,24 @@ namespace Dreambuild.Gis.Display
             Point p1 = MapControl.Current.GetCanvasCoord(_mouseDownOrigin);
             Point p2 = MapControl.Current.GetCanvasCoord(_mouseDownEnd);
 
-            _selRect.Width = Math.Abs(p1.X - p2.X);
-            _selRect.Height = Math.Abs(p1.Y - p2.Y);
-            Canvas.SetLeft(_selRect, Math.Min(p1.X, p2.X));
-            Canvas.SetTop(_selRect, Math.Min(p1.Y, p2.Y));
+            this.Rect.Width = Math.Abs(p1.X - p2.X);
+            this.Rect.Height = Math.Abs(p1.Y - p2.Y);
+            Canvas.SetLeft(this.Rect, Math.Min(p1.X, p2.X));
+            Canvas.SetTop(this.Rect, Math.Min(p1.Y, p2.Y));
 
             if (IsWindow)
             {
-                _selRect.Stroke = _black;
-                _selRect.StrokeDashArray = _continuous;
-                _selRect.StrokeThickness = 1;
-                _selRect.Fill = _blue;
+                this.Rect.Stroke = BLACK;
+                this.Rect.StrokeDashArray = CONTINUOUS;
+                this.Rect.StrokeThickness = 1;
+                this.Rect.Fill = BLUE;
             }
             else
             {
-                _selRect.Stroke = _black;
-                _selRect.StrokeDashArray = _dashed;
-                _selRect.StrokeThickness = 1;
-                _selRect.Fill = _green;
+                this.Rect.Stroke = BLACK;
+                this.Rect.StrokeDashArray = DASHED;
+                this.Rect.StrokeThickness = 1;
+                this.Rect.Fill = GREEN;
             }
         }
 
@@ -439,7 +439,7 @@ namespace Dreambuild.Gis.Display
         {
             if (_isDragging)
             {
-                _selRect.Visibility = Visibility.Visible;
+                this.Rect.Visibility = Visibility.Visible;
                 _mouseDownEnd = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
                 this.Render();
             }
@@ -459,7 +459,7 @@ namespace Dreambuild.Gis.Display
             var queryResult = MapDataManager.LatestMap.QueryFeatures(IsWindow ? SpatialQueryOperation.Window : SpatialQueryOperation.Cross, extents, 0).ToArray();
             if (queryResult.Length > 0)
             {
-                if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift 
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
                     && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control) // mod 20140725
                 {
                     SelectionSet.SubtractSelection(queryResult);
@@ -479,7 +479,7 @@ namespace Dreambuild.Gis.Display
             }
 
             _isDragging = false;
-            _selRect.Visibility = Visibility.Collapsed;
+            this.Rect.Visibility = Visibility.Collapsed;
         }
     }
 
@@ -493,7 +493,7 @@ namespace Dreambuild.Gis.Display
         private bool _isStarted = false;
         private Point _mouseDownOrigin;
         private Point _mouseDownEnd;
-        private Rectangle currentRect = new Rectangle();
+        private readonly Rectangle Rect = new Rectangle();
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
@@ -501,7 +501,7 @@ namespace Dreambuild.Gis.Display
             {
                 _isMoving = true;
 
-                currentRect.Visibility = Visibility.Visible;
+                Rect.Visibility = Visibility.Visible;
 
                 Point pos = e.GetPosition(MapControl.Current);
                 _mouseDownEnd = pos;
@@ -509,13 +509,13 @@ namespace Dreambuild.Gis.Display
                 double width = Math.Abs(pos.X - _mouseDownOrigin.X);
                 double height = Math.Abs(pos.Y - _mouseDownOrigin.Y);
 
-                currentRect.Width = width;
-                currentRect.Height = height;
+                Rect.Width = width;
+                Rect.Height = height;
 
-                Canvas.SetLeft(currentRect, Math.Min(_mouseDownOrigin.X, _mouseDownEnd.X));
-                Canvas.SetTop(currentRect, Math.Min(_mouseDownOrigin.Y, _mouseDownEnd.Y));
+                Canvas.SetLeft(Rect, Math.Min(_mouseDownOrigin.X, _mouseDownEnd.X));
+                Canvas.SetTop(Rect, Math.Min(_mouseDownOrigin.Y, _mouseDownEnd.Y));
 
-                currentRect.Stroke = new SolidColorBrush(new Color { A = 255, R = 255 });
+                Rect.Stroke = new SolidColorBrush(new Color { A = 255, R = 255 });
             }
         }
 
@@ -527,7 +527,7 @@ namespace Dreambuild.Gis.Display
                 _isDragging = true;
                 _mouseDownOrigin = e.GetPosition(MapControl.Current);
 
-                MapControl.Current.Children.Add(currentRect);
+                MapControl.Current.Children.Add(Rect);
             }
             else
             {
@@ -550,8 +550,8 @@ namespace Dreambuild.Gis.Display
                     _isMoving = false;
                 }
 
-                MapControl.Current.Children.Remove(currentRect);
-                currentRect.Visibility = Visibility.Collapsed;
+                MapControl.Current.Children.Remove(Rect);
+                Rect.Visibility = Visibility.Collapsed;
                 _isDragging = false;
             }
         }
@@ -559,7 +559,7 @@ namespace Dreambuild.Gis.Display
         public override void ExitToolHandler()
         {
             base.ExitToolHandler();
-            MapControl.Current.Children.Remove(currentRect);
+            MapControl.Current.Children.Remove(Rect);
         }
     }
 
@@ -576,8 +576,8 @@ namespace Dreambuild.Gis.Display
         private Geometry.Vector _mouseDownOrigin;
         private Geometry.Vector _mouseDownEnd;
 
-        private static SolidColorBrush _strokeBrush = new SolidColorBrush(new Color { A = 255, B = 255, R = 128 });
-        private static SolidColorBrush _fillBrush = new SolidColorBrush(new Color { A = 64, B = 255, R = 128 });
+        private static readonly SolidColorBrush _strokeBrush = new SolidColorBrush(new Color { A = 255, B = 255, R = 128 });
+        private static readonly SolidColorBrush _fillBrush = new SolidColorBrush(new Color { A = 64, B = 255, R = 128 });
 
         private TextBlock _areaLabel = new TextBlock();
         private System.Windows.Shapes.Polygon _measurePolygon = new System.Windows.Shapes.Polygon { Stroke = _strokeBrush, Fill = _fillBrush, StrokeThickness = 2, StrokeLineJoin = PenLineJoin.Bevel };
@@ -695,12 +695,15 @@ namespace Dreambuild.Gis.Display
         private Geometry.Vector _mouseDownEnd = new Geometry.Vector();
         private Geometry.Vector _tempMouseDownEnd = new Geometry.Vector();
 
-        private static SolidColorBrush _strokeBrush = new SolidColorBrush(new Color { A = 255, R = 255, B = 255 });
-        private System.Windows.Shapes.Polyline _measureLine = new System.Windows.Shapes.Polyline { Stroke = _strokeBrush, StrokeThickness = 4, StrokeLineJoin = PenLineJoin.Bevel };
-        private TextBlock _tempLabel = new TextBlock();
+        private readonly Polyline _measureLine = new Polyline
+        {
+            Stroke = new SolidColorBrush(new Color { A = 255, R = 255, B = 255 }),
+            StrokeThickness = 4,
+            StrokeLineJoin = PenLineJoin.Bevel
+        };
 
-        private Dictionary<TextBlock, Geometry.Vector> _labels = new Dictionary<TextBlock, Geometry.Vector>();
-        private List<Geometry.Vector> _clickPoints = new List<Geometry.Vector>();
+        private readonly Dictionary<TextBlock, Geometry.Vector> _labels = new Dictionary<TextBlock, Geometry.Vector>();
+        private readonly List<Geometry.Vector> _clickPoints = new List<Geometry.Vector>();
 
         public override IEnumerable<UIElement> CanvasElements
         {
@@ -791,12 +794,12 @@ namespace Dreambuild.Gis.Display
                 _clickPoints.Add(_mouseDownEnd);
 
                 double distance = Enumerable.Range(0, _clickPoints.Count - 1).Sum(i => _clickPoints[i].Dist(_clickPoints[i + 1]));
-                _tempLabel = new TextBlock { Text = distance.ToString("0.000") + "m" };
-                Canvas.SetLeft(_tempLabel, MapControl.Current.GetCanvasCoord(_mouseDownEnd).X + 10);
-                Canvas.SetTop(_tempLabel, MapControl.Current.GetCanvasCoord(_mouseDownEnd).Y + 15);
+                var tempLabel = new TextBlock { Text = distance.ToString("0.000") + "m" };
+                Canvas.SetLeft(tempLabel, MapControl.Current.GetCanvasCoord(_mouseDownEnd).X + 10);
+                Canvas.SetTop(tempLabel, MapControl.Current.GetCanvasCoord(_mouseDownEnd).Y + 15);
 
-                _labels.Add(_tempLabel, _mouseDownEnd);
-                MapControl.Current.Children.Add(_tempLabel);
+                _labels.Add(tempLabel, _mouseDownEnd);
+                MapControl.Current.Children.Add(tempLabel);
             }
         }
     }
@@ -815,43 +818,57 @@ namespace Dreambuild.Gis.Display
     public class CursorTipTool : ViewerTool // todo: when this is on, app exit has issue.
     {
         public string Tip { get; set; }
-        private System.Windows.Controls.Primitives.Popup _popup = new System.Windows.Controls.Primitives.Popup { Placement = System.Windows.Controls.Primitives.PlacementMode.Relative, PlacementTarget = MapControl.Current };
-        private Border _border = new Border { BorderBrush = Brushes.Gray, BorderThickness = new Thickness(1) };
-        private TextBlock _txtTip = new TextBlock { Padding = new Thickness(5), Background = Brushes.Pink };
-        private Point _pos;
+
+        private Point Position;
+
+        private Popup ToolTipPopup = new Popup
+        {
+            Placement = PlacementMode.Relative,
+            PlacementTarget = MapControl.Current
+        };
+
+        private TextBlock ToolTipTextBlock = new TextBlock
+        {
+            Padding = new Thickness(5),
+            Background = Brushes.Pink
+        };
 
         public CursorTipTool(string tip)
         {
-            Tip = tip;
-            _border.Child = _txtTip;
-            _popup.Child = _border;
+            this.Tip = tip;
+            this.ToolTipPopup.Child = new Border
+            {
+                BorderBrush = Brushes.Gray,
+                BorderThickness = new Thickness(1),
+                Child = this.ToolTipTextBlock
+            };
         }
 
         public override void Render()
         {
             base.Render();
 
-            _txtTip.Text = Tip;
-            _popup.HorizontalOffset = _pos.X + 20;
-            _popup.VerticalOffset = _pos.Y;
+            this.ToolTipTextBlock.Text = this.Tip;
+            this.ToolTipPopup.HorizontalOffset = this.Position.X + 20;
+            this.ToolTipPopup.VerticalOffset = this.Position.Y;
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            _pos = e.GetPosition(MapControl.Current);
+            this.Position = e.GetPosition(MapControl.Current);
             this.Render();
         }
 
         public override void EnterToolHandler() // newly 20140624
         {
             base.EnterToolHandler();
-            _popup.IsOpen = true;
+            this.ToolTipPopup.IsOpen = true;
         }
 
         public override void ExitToolHandler()
         {
             base.ExitToolHandler();
-            _popup.IsOpen = false;
+            this.ToolTipPopup.IsOpen = false;
         }
     }
 
@@ -866,39 +883,36 @@ namespace Dreambuild.Gis.Display
         public event Action<Geometry.Vector> PointPicked;
         protected void OnPointPicked(Geometry.Vector p)
         {
-            if (PointPicked != null)
-            {
-                PointPicked(p);
-            }
+            this.PointPicked?.Invoke(p);
         }
 
         public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
         {
             var pos = e.GetPosition(MapControl.Current);
             var point = MapControl.Current.GetWorldCoord(pos);
-            Point = point;
-            OnPointPicked(point);
-            Picked = true;
+            this.Point = point;
+            this.OnPointPicked(point);
+            this.Picked = true;
         }
 
         public override void KeyDownHandler(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
             {
-                Picked = true;
+                this.Picked = true;
             }
         }
 
         public override void EnterToolHandler()
         {
             base.EnterToolHandler();
-            MapControl.Current.Cursor = System.Windows.Input.Cursors.Cross;
+            MapControl.Current.Cursor = Cursors.Cross;
         }
 
         public override void ExitToolHandler()
         {
             base.ExitToolHandler();
-            MapControl.Current.Cursor = System.Windows.Input.Cursors.Arrow;
+            MapControl.Current.Cursor = Cursors.Arrow;
         }
     }
 
@@ -915,22 +929,24 @@ namespace Dreambuild.Gis.Display
         private bool _isStarted = false;
         private Geometry.Vector _mouseDownOrigin;
         private Geometry.Vector _mouseDownEnd;
-        private Rectangle _rect = new Rectangle { Stroke = new SolidColorBrush(new Color { A = 255, R = 255 }), StrokeThickness = 3 };
+
+        private readonly Rectangle Rect = new Rectangle
+        {
+            Stroke = new SolidColorBrush(new Color { A = 255, R = 255 }),
+            StrokeThickness = 3
+        };
 
         public event Action<Extents> Completed;
         protected void OnCompleted(Extents extents)
         {
-            if (Completed != null)
-            {
-                Completed(Extents);
-            }
+            this.Completed?.Invoke(Extents);
         }
 
         public override IEnumerable<UIElement> CanvasElements
         {
             get
             {
-                yield return _rect;
+                yield return Rect;
             }
         }
 
@@ -939,10 +955,10 @@ namespace Dreambuild.Gis.Display
             Point p1 = MapControl.Current.GetCanvasCoord(_mouseDownOrigin);
             Point p2 = MapControl.Current.GetCanvasCoord(_mouseDownEnd);
 
-            _rect.Width = Math.Abs(p1.X - p2.X);
-            _rect.Height = Math.Abs(p1.Y - p2.Y);
-            Canvas.SetLeft(_rect, Math.Min(p1.X, p2.X));
-            Canvas.SetTop(_rect, Math.Min(p1.Y, p2.Y));
+            Rect.Width = Math.Abs(p1.X - p2.X);
+            Rect.Height = Math.Abs(p1.Y - p2.Y);
+            Canvas.SetLeft(Rect, Math.Min(p1.X, p2.X));
+            Canvas.SetTop(Rect, Math.Min(p1.Y, p2.Y));
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
@@ -950,7 +966,7 @@ namespace Dreambuild.Gis.Display
             if (_isDragging)
             {
                 _isMoving = true;
-                _rect.Visibility = Visibility.Visible;
+                Rect.Visibility = Visibility.Visible;
 
                 Point pos = e.GetPosition(MapControl.Current);
                 _mouseDownEnd = MapControl.Current.GetWorldCoord(pos);
@@ -984,7 +1000,7 @@ namespace Dreambuild.Gis.Display
                     _isMoving = false;
                 }
 
-                _rect.Visibility = Visibility.Collapsed;
+                Rect.Visibility = Visibility.Collapsed;
                 _isDragging = false;
             }
         }
@@ -1011,16 +1027,20 @@ namespace Dreambuild.Gis.Display
         private bool _isStarted = false;
         private Geometry.Vector _pos = new Geometry.Vector();
 
-        private System.Windows.Shapes.Polygon _poly = new System.Windows.Shapes.Polygon { Stroke = _strokeBrush, Fill = _fillBrush, StrokeThickness = 2, StrokeLineJoin = PenLineJoin.Bevel };
+        private readonly Polygon _poly = new Polygon
+        {
+            Stroke = _strokeBrush,
+            Fill = _fillBrush,
+            StrokeThickness = 2,
+            StrokeLineJoin = PenLineJoin.Bevel
+        };
+
         private List<Geometry.Vector> _pts = new List<Geometry.Vector>();
 
         public event Action<List<Geometry.Vector>> Completed;
         protected void OnCompleted(List<Geometry.Vector> pts)
         {
-            if (Completed != null)
-            {
-                Completed(pts);
-            }
+            this.Completed?.Invoke(pts);
         }
 
         public override IEnumerable<UIElement> CanvasElements
@@ -1197,10 +1217,7 @@ namespace Dreambuild.Gis.Display
         protected void OnCompleted(FrameworkElement element)
         {
             UpdateElement();
-            if (Completed != null)
-            {
-                Completed(element);
-            }
+            this.Completed?.Invoke(element);
         }
 
         public override IEnumerable<UIElement> CanvasElements

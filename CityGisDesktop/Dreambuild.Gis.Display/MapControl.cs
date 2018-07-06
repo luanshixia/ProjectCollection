@@ -291,9 +291,9 @@ namespace Dreambuild.Gis.Display
             return scale / 2;
         }
 
-        public void PanCanvas(Point vector)
+        public void PanCanvas(System.Windows.Vector displacement)
         {
-            Origin = new Point(Origin.X + vector.X, Origin.Y + vector.Y);
+            Origin += displacement;
             RenderLayers();
         }
 
@@ -313,9 +313,9 @@ namespace Dreambuild.Gis.Display
 
         public void LocateCanvas(Geometry.Vector location)
         {
-            double ext = 500;
-            var pt1 = new Geometry.Vector(location.X + ext, location.Y + ext);
-            var pt2 = new Geometry.Vector(location.X - ext, location.Y - ext);
+            double radius = 500;
+            var pt1 = new Geometry.Vector(location.X + radius, location.Y + radius);
+            var pt2 = new Geometry.Vector(location.X - radius, location.Y - radius);
             var extents = Extents.FromPoints(pt2, pt1);
 
             this.Zoom(extents);
