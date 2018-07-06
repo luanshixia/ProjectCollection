@@ -42,60 +42,42 @@ namespace BubbleFlow
             this.AddGridLinesToCanvas();
         }
 
-        //private void InitNodesAndConnections(Workflow flow)
-        //{
-        //    //var workflowId = flow.id;
-
-        //    this.Nodes.Clear();
-        //    foreach (var node in flow.Nodes)
-        //    {
-        //        foreach (var child in MyCanvas.Children)
-        //        {
-        //            if (child is NodeBubble bubble)
-        //            {
-        //                if (bubble.Text == node.Name)
-        //                {
-        //                    this.Nodes.Add(bubble, node);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-
-        //    this.Links.Clear();
-        //    foreach (var link in flow.Links)
-        //    {
-        //        var start = flow.NodesStore[link.From].GetPosition();
-        //        var end = flow.NodesStore[link.To].GetPosition();
-        //        foreach (var child in MyCanvas.Children)
-        //        {
-        //            if (child is BezierLink arrow)
-        //            {
-        //                if (arrow.StartPoint == start && arrow.EndPoint == end)
-        //                {
-        //                    this.Links.Add(link, arrow);
-        //                    break;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}
-
         private void AddGridLinesToCanvas()
         {
             this.GridLines.Clear();
             int count = 10000;
+            //var strokeBrush = new SolidColorBrush(Colors.DarkGray);
             for (int i = 0; i <= count; i++)
             {
-                var vline = new Line { X1 = 0, X2 = 0, Y1 = 0, Y2 = 100000, StrokeThickness = 0.2 };
-                vline.Stroke = new SolidColorBrush(Colors.DarkGray);
+                var vline = new Line
+                {
+                    X1 = 0,
+                    Y1 = 0,
+                    X2 = 0,
+                    Y2 = 100000,
+                    Stroke = new SolidColorBrush(Colors.LightGray),
+                    StrokeThickness = 1,
+                    SnapsToDevicePixels = true
+                };
+
+                //RenderOptions.SetEdgeMode(vline, EdgeMode.Aliased);
                 this.GridLines.Add(vline);
                 Canvas.SetLeft(vline, i * 10 - 50000);
                 Canvas.SetTop(vline, -50000);
                 this.MyCanvas.Children.Add(vline);
 
-                var hline = new Line { X1 = 0, X2 = 100000, Y1 = 0, Y2 = 0, StrokeThickness = 0.2 };
-                hline.Stroke = new SolidColorBrush(Colors.DarkGray);
+                var hline = new Line
+                {
+                    X1 = 0,
+                    Y1 = 0,
+                    X2 = 100000,
+                    Y2 = 0,
+                    Stroke = new SolidColorBrush(Colors.LightGray),
+                    StrokeThickness = 1,
+                    SnapsToDevicePixels = true
+                };
+
+                //RenderOptions.SetEdgeMode(hline, EdgeMode.Aliased);
                 this.GridLines.Add(hline);
                 Canvas.SetLeft(hline, -50000);
                 Canvas.SetTop(hline, i * 10 - 50000);
@@ -163,10 +145,10 @@ namespace BubbleFlow
             transform.Children.Add(new TranslateTransform { X = Origin.X, Y = Origin.Y });
             this.MyCanvas.RenderTransform = transform;
             ViewerToolManager.Tools.ForEach(tool => tool.Render());
-            if (!this.MyCanvas.Children.Contains(this.GridLines[0]))
-            {
-                this.AddGridLinesToCanvas();
-            }
+            //if (!this.MyCanvas.Children.Contains(this.GridLines[0]))
+            //{
+            //    this.AddGridLinesToCanvas();
+            //}
         }
 
         private void Submit()
@@ -207,6 +189,7 @@ namespace BubbleFlow
             if (openFileDialog.ShowDialog() == true)
             {
                 DataManager.Open(openFileDialog.FileName);
+                DataManager.CurrentDocument.DrawToCanvas(this.MyCanvas);
             }
         }
 
@@ -337,6 +320,7 @@ namespace BubbleFlow
                 var nodeID = this.SelectedBubble.NodeID;
                 this.MyCanvas.Children.Remove(this.SelectedBubble);
                 this.Bubbles.Remove(nodeID);
+                DataManager.CurrentDocument.NodesStore.Remove(nodeID);
                 this.SelectedBubble = null;
 
                 this.Arrows.RealValues.ForEach(arrow =>
@@ -345,6 +329,7 @@ namespace BubbleFlow
                     {
                         this.MyCanvas.Children.Remove(arrow);
                         this.Arrows.Remove(arrow.FromNodeID, arrow.ToNodeID);
+                        DataManager.CurrentDocument.LinksStore.Remove(arrow.FromNodeID, arrow.ToNodeID);
                     }
                 });
             }
