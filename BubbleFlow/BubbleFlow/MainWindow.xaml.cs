@@ -45,43 +45,39 @@ namespace BubbleFlow
         private void AddGridLinesToCanvas()
         {
             this.GridLines.Clear();
-            int count = 10000;
-            //var strokeBrush = new SolidColorBrush(Colors.DarkGray);
-            for (int i = 0; i <= count; i++)
+
+            var radius = 10000;
+            var interval = 25;
+
+            for (var x = - radius; x <= radius; x += interval)
             {
-                var vline = new Line
+                var line = new Line
                 {
-                    X1 = 0,
-                    Y1 = 0,
-                    X2 = 0,
-                    Y2 = 100000,
-                    Stroke = new SolidColorBrush(Colors.LightGray),
-                    StrokeThickness = 1,
-                    SnapsToDevicePixels = true
+                    X1 = x,
+                    Y1 = -radius,
+                    X2 = x,
+                    Y2 = radius,
+                    Stroke = new SolidColorBrush(x == 0 ? Colors.DarkGray : Colors.LightGray),
+                    StrokeThickness = x == 0 ? 2 : 1,
+                    //SnapsToDevicePixels = true
                 };
 
-                //RenderOptions.SetEdgeMode(vline, EdgeMode.Aliased);
-                this.GridLines.Add(vline);
-                Canvas.SetLeft(vline, i * 10 - 50000);
-                Canvas.SetTop(vline, -50000);
-                this.MyCanvas.Children.Add(vline);
+                this.GridLines.Add(line);
+                this.MyCanvas.Children.Add(line);
 
-                var hline = new Line
+                line = new Line
                 {
-                    X1 = 0,
-                    Y1 = 0,
-                    X2 = 100000,
-                    Y2 = 0,
-                    Stroke = new SolidColorBrush(Colors.LightGray),
-                    StrokeThickness = 1,
-                    SnapsToDevicePixels = true
+                    X1 = -radius,
+                    Y1 = x,
+                    X2 = radius,
+                    Y2 = x,
+                    Stroke = new SolidColorBrush(x == 0 ? Colors.DarkGray : Colors.LightGray),
+                    StrokeThickness = x == 0 ? 2 : 1,
+                    //SnapsToDevicePixels = true
                 };
 
-                //RenderOptions.SetEdgeMode(hline, EdgeMode.Aliased);
-                this.GridLines.Add(hline);
-                Canvas.SetLeft(hline, -50000);
-                Canvas.SetTop(hline, i * 10 - 50000);
-                this.MyCanvas.Children.Add(hline);
+                this.GridLines.Add(line);
+                this.MyCanvas.Children.Add(line);
             }
         }
 
