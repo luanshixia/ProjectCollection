@@ -50,11 +50,43 @@ namespace BubbleFlow
 
             (bool, string) IsConnectedGraph(Workflow flow)
             {
+                var degrees = flow.Nodes.ToDictionary(node => node.ID, node => 0);
+
+                flow.Links.ForEach(link =>
+                {
+                    degrees[link.From]++;
+                    degrees[link.To]++;
+                });
+
+                if (degrees.Values.Any(count => count == 0))
+                {
+                    return (false, "Dangling node(s) detected. All nodes must be conencted.");
+                }
+
                 return (true, null);
             }
 
             (bool, string) HasSingleStartSingleEnd(Workflow flow)
             {
+                var outgoingDegrees = flow.Nodes.ToDictionary(node => node.ID, node => 0);
+                var incomingDegrees = flow.Nodes.ToDictionary(node => node.ID, node => 0);
+
+                flow.Links.ForEach(link =>
+                {
+                    outgoingDegrees[link.From]++;
+                    incomingDegrees[link.To]++;
+                });
+
+                if (outgoingDegrees.Values.Where(count => count == 0).Count() != 1)
+                {
+                    return (false, "The graph has 0 or more than 1 end nodes. It must have exactly 1.");
+                }
+
+                if (incomingDegrees.Values.Where(count => count == 0).Count() != 1)
+                {
+                    return (false, "The graph has 0 or more than 1 start nodes. It must have exactly 1.");
+                }
+
                 return (true, null);
             }
 

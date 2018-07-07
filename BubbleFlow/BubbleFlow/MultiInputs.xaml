@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BubbleFlow"
         mc:Ignorable="d"
-        Height="300" Width="400" Background="WhiteSmoke" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" Title="Inputs" ResizeMode="NoResize">
+        Height="300" Width="400" Background="WhiteSmoke" WindowStartupLocation="CenterOwner" ShowInTaskbar="False" Title="Inputs" ResizeMode="NoResize">
     <Grid>
         <Border BorderBrush="Gray" BorderThickness="1" Margin="12,12,12,41">
             <ScrollViewer Background="White">

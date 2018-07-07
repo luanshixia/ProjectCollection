@@ -150,7 +150,9 @@ namespace BubbleFlow
             }
             else
             {
-                MessageBox.Show("Workflow validation has failed. Violation(s):\n" + string.Join("\n", messages));
+                MessageBox.Show(
+                    messageBoxText: "Workflow validation has failed. Violation(s):\n" + string.Join("\n", messages),
+                    caption: "BubbleFlow");
             }
         }
 
@@ -296,31 +298,6 @@ namespace BubbleFlow
         }
 
         #endregion
-    }
-
-    public class BoolExpression
-    {
-        private Func<bool> _expression;
-
-        public BoolExpression()
-        {
-            _expression = new Func<bool>(() => true);
-        }
-
-        public BoolExpression(Func<bool> expression)
-        {
-            _expression = expression;
-        }
-
-        public bool GetValue()
-        {
-            return _expression();
-        }
-
-        public void SetExpression(Func<bool> expr)
-        {
-            _expression = expr;
-        }
     }
 
     public static class Gui
