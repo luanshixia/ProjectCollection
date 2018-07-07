@@ -2,6 +2,7 @@
 using Dreambuild.Extensions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,12 +38,23 @@ namespace BubbleFlow
 
         public static Workflow FromJson(string json)
         {
-            return JsonConvert.DeserializeObject<Workflow>(json);
+            return JsonConvert.DeserializeObject<Workflow>(
+                value: json,
+                settings: new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                });
         }
 
         public string ToJson()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(
+                value: this,
+                settings: new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver(),
+                    Formatting = Formatting.Indented
+                });
         }
     }
 
