@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -27,7 +26,6 @@ namespace BubbleFlow
 
         public Dictionary<Guid, NodeBubble> Bubbles { get; } = new Dictionary<Guid, NodeBubble>();
         public DoubleDictionary<Guid, Guid, BezierLink> Arrows { get; } = new DoubleDictionary<Guid, Guid, BezierLink>();
-        public List<BoolExpression> Expressions { get; } = new List<BoolExpression>();
         private List<Line> GridLines { get; } = new List<Line>();
 
         public MainWindow()
@@ -108,9 +106,9 @@ namespace BubbleFlow
 
         private void Zoom(Extents extents)
         {
-            Scale = Math.Max(extents.Range(0) / this.ActualWidth, extents.Range(1) / this.ActualHeight);
-            Origin = new Point(this.ActualWidth / 2 - extents.Center().X / Scale, this.ActualHeight / 2 - extents.Center().Y / Scale);
-            RenderLayers();
+            this.Scale = Math.Max(extents.Range(0) / this.ActualWidth, extents.Range(1) / this.ActualHeight);
+            this.Origin = new Point(this.ActualWidth / 2 - extents.Center().X / this.Scale, this.ActualHeight / 2 - extents.Center().Y / this.Scale);
+            this.RenderLayers();
         }
 
         internal void PanCanvas(System.Windows.Vector displacement)
@@ -141,17 +139,18 @@ namespace BubbleFlow
             transform.Children.Add(new TranslateTransform { X = Origin.X, Y = Origin.Y });
             this.MyCanvas.RenderTransform = transform;
             ViewerToolManager.Tools.ForEach(tool => tool.Render());
-            //if (!this.MyCanvas.Children.Contains(this.GridLines[0]))
-            //{
-            //    this.AddGridLinesToCanvas();
-            //}
         }
 
         private void Submit()
         {
-            if (DataManager.Validate())
+            var (succeeded, messages) = DataManager.Validate();
+            if (succeeded)
             {
                 this.Save();
+            }
+            else
+            {
+                MessageBox.Show("Workflow validation has failed. Violation(s):\n" + string.Join("\n", messages));
             }
         }
 
@@ -189,48 +188,6 @@ namespace BubbleFlow
             }
         }
 
-        //private void InitializeExpression()
-        //{
-        //    this.Expressions.Add(new BoolExpression(this.GetRule1()));
-        //    this.Expressions.Add(new BoolExpression(this.GetRule2()));
-        //}
-
-        //private Func<bool> GetRule1()
-        //{
-        //    foreach (var node in this.Nodes.Keys)
-        //    {
-        //        int index = this.Nodes.Keys.ToList().IndexOf(node);
-        //        if (this.Links.Keys.All(c => c.From != index && c.To != index))
-        //        {
-        //            return () => false;
-        //        }
-        //    }
-        //    return () => true;
-        //}
-
-        //private Func<bool> GetRule2()
-        //{
-        //    int startcount = 0;
-        //    int endcount = 0;
-        //    foreach (var node in this.Nodes.Keys)
-        //    {
-        //        int index = this.Nodes.Keys.ToList().IndexOf(node);
-        //        if (this.Links.Keys.All(c => c.To != index) && this.Links.Keys.Any(c => c.From == index))
-        //        {
-        //            startcount++;
-        //        }
-        //        if (this.Links.Keys.All(c => c.From != index) && this.Links.Keys.Any(c => c.To == index))
-        //        {
-        //            endcount++;
-        //        }
-        //    }
-        //    if (startcount == 1 && endcount == 1)
-        //    {
-        //        return () => true;
-        //    }
-        //    return () => false;
-        //}
-
         #region General event handlers
 
         private void MyCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -259,7 +216,7 @@ namespace BubbleFlow
         private void MainWindow_MouseMove(object sender, MouseEventArgs e)
         {
             var pos = e.GetPosition(this.MyCanvas);
-            Message.Text = string.Format("{0:0.00},{1:0.00}", pos.X, pos.Y);
+            this.Message.Text = string.Format("{0:0.00},{1:0.00}", pos.X, pos.Y);
         }
 
         #endregion
@@ -335,27 +292,7 @@ namespace BubbleFlow
 
         private void SubmitButton_Click(object sender, RoutedEventArgs e)
         {
-            Expressions.Clear();
-            //InitializeExpression();
-
-            bool flag = false;
-            if (Expressions.Count == 0)
-            {
-                flag = true;
-            }
-            if (Expressions.Count > 0 && Expressions.All(x => x.GetValue()))
-            {
-                flag = true;
-            }
-
-            if (flag)
-            {
-                Submit();
-            }
-            else
-            {
-                MessageBox.Show("Invalid node(s) detected.");
-            }
+            this.Submit();
         }
 
         #endregion

@@ -41,9 +41,38 @@ namespace BubbleFlow
             DataManager.CurrentDocument = Workflow.FromJson(File.ReadAllText(fileName));
         }
 
-        public static bool Validate()
+        public static (bool, string[]) Validate(Workflow document = null)
         {
-            return true;
+            if (document == null)
+            {
+                document = DataManager.CurrentDocument;
+            }
+
+            (bool, string) IsConnectedGraph(Workflow flow)
+            {
+                return (true, null);
+            }
+
+            (bool, string) HasSingleStartSingleEnd(Workflow flow)
+            {
+                return (true, null);
+            }
+
+            var validations = new Func<Workflow, (bool, string)>[]
+            {
+                IsConnectedGraph,
+                HasSingleStartSingleEnd
+            };
+
+            var validationResults = validations
+                .Select(validation => validation(document))
+                .ToArray();
+
+            return
+            (
+                validationResults.All(result => result.Item1),
+                validationResults.Select(result => result.Item2).Where(message => message != null).ToArray()
+            );
         }
 
         public static void SaveAs(string fileName)
