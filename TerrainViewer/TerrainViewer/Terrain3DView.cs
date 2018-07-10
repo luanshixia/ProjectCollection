@@ -232,12 +232,18 @@ namespace TongJi.Drawing.Viewer3D
             // 更新道路
             for (int i = 0; i < _roads.Count; i++)
             {
-                RoadModel roadModel = new RoadModel();
-                roadModel.RoadColor = RoadColor;
-                roadModel.Offset = _model.Offset;
-                Road road = new Road();
-                road.Width = _roads[i].Width;
-                road.Points = new Point3D[_roads[i].Points.Length];
+                var roadModel = new RoadModel
+                {
+                    RoadColor = RoadColor,
+                    Offset = _model.Offset
+                };
+
+                var road = new Road
+                {
+                    Width = _roads[i].Width,
+                    Points = new Point3D[_roads[i].Points.Length]
+                };
+
                 for (int j = 0; j < _roads[i].Points.Length; j++)
                 {
                     road.Points[j] = _roads[i].Points[j];
@@ -255,7 +261,39 @@ namespace TongJi.Drawing.Viewer3D
     {
         public Brush Brush { get; set; }
 
-        private double GetElevation(TerrainModel model, double x, double y)
+        public ElevationTexture()
+        {
+            this.Brush = GradientBrushes.Rainbow;
+        }
+
+        public ElevationTexture(int gradientSteps)
+        {
+            if (gradientSteps > 0)
+            {
+                this.Brush = BrushHelper.CreateSteppedGradientBrush(GradientBrushes.Rainbow, gradientSteps);
+            }
+            else
+            {
+                this.Brush = GradientBrushes.Rainbow;
+            }
+        }
+
+        public override void Calculate(TerrainModel model, MeshGeometry3D mesh)
+        {
+            base.TextureCoordinates = new PointCollection(mesh.Positions
+                .Select(p =>
+                {
+                    double x = p.X + model.Offset.X;
+                    double y = p.Y + model.Offset.Y;
+                    double u = (GetElevation(model, x, y) - model.MinimumZ) / (model.MaximumZ - model.MinimumZ);
+                    u = u > 1 ? 1 : u < 0 ? 0 : u;
+                    return new Point(u, u);
+                }));
+
+            base.Material = MaterialHelper.CreateMaterial(Brush);
+        }
+
+        private static double GetElevation(TerrainModel model, double x, double y)
         {
             double colWidth = (model.Right - model.Left) / (model.Width - 1);
             int col = (int)((x - model.Left) / colWidth);
@@ -277,37 +315,6 @@ namespace TongJi.Drawing.Viewer3D
             double u = (x - model.Left) / colWidth - col;
             double v = model.Height - 1 - (y - model.Bottom) / rowWidth - row;
             return (1 - u) * (1 - v) * lbElevation + (1 - u) * v * ltElevation + u * (1 - v) * rbElevation + u * v * rtElevation;
-        }
-
-        public ElevationTexture()
-        {
-            Brush = GradientBrushes.Rainbow;
-        }
-
-        public ElevationTexture(int gradientSteps)
-        {
-            if (gradientSteps > 0)
-                Brush = BrushHelper.CreateSteppedGradientBrush(GradientBrushes.Rainbow, gradientSteps);
-            else
-                Brush = GradientBrushes.Rainbow;
-        }
-
-        public override void Calculate(TerrainModel model, MeshGeometry3D mesh)
-        {
-            var texcoords = new PointCollection();
-            foreach (var p in mesh.Positions)
-            {
-                double x = p.X + model.Offset.X;
-                double y = p.Y + model.Offset.Y;
-                double u = (GetElevation(model, x, y) - model.MinimumZ) / (model.MaximumZ - model.MinimumZ);
-                if (u >= 1)
-                    u = 1;
-                if (u <= 0)
-                    u = 0;
-                texcoords.Add(new Point(u, u));
-            }
-            TextureCoordinates = texcoords;
-            Material = MaterialHelper.CreateMaterial(Brush);
         }
     }
 }

@@ -3,18 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:t="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         xmlns:my="clr-namespace:TongJi.Drawing.Viewer3D"
-        Title="同济筑城 - 地形查看器" Height="600" Width="800" WindowStartupLocation="CenterScreen" FontFamily="宋体">
+        Title="Terrain viewer" Height="600" Width="800" WindowStartupLocation="CenterScreen">
     <Grid>
-        <t:HelixViewport3D x:Name="view1">
+        <t:HelixViewport3D x:Name="Viewport">
             <t:DefaultLights />
-            <my:Terrain3DView  x:Name="terrain" />
+            <my:Terrain3DView  x:Name="Terrain" />
         </t:HelixViewport3D>
-        <ComboBox Height="23" Margin="355,12,0,0" Name="cboxTexture" VerticalAlignment="Top" DataContext="{Binding}" HorizontalAlignment="Left" Width="73" SelectionChanged="cboxTexture_SelectionChanged" SelectedIndex="0">
-            <ComboBoxItem Content="按高度" />
-            <ComboBoxItem Content="按坡度" />
+        <ComboBox Margin="360,12,0,0" Name="cboxTexture" VerticalAlignment="Top" DataContext="{Binding}" HorizontalAlignment="Left" Width="100" SelectionChanged="cboxTexture_SelectionChanged" SelectedIndex="0">
+            <ComboBoxItem Content="By elevation" />
+            <ComboBoxItem Content="By slope" />
         </ComboBox>
-        <Label Content="垂直放大率：" Height="32" HorizontalAlignment="Left" Margin="12,12,0,0" Name="label1" VerticalAlignment="Top" Width="81" />
-        <Label Content="着色方法：" Height="32" HorizontalAlignment="Left" Margin="271,10,0,0" Name="label2" VerticalAlignment="Top" Width="81" />
-        <Slider Height="23" HorizontalAlignment="Left" Margin="99,12,0,0" Name="sliderVM" VerticalAlignment="Top" Width="156" SelectionEnd="0" TickPlacement="BottomRight" Minimum="-5" Maximum="5" ValueChanged="sliderVM_ValueChanged" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" IsSnapToTickEnabled="True" />
+        <Label Content="H scale" HorizontalAlignment="Left" Margin="12,10,0,0" VerticalAlignment="Top" />
+        <Label Content="Shading mode" HorizontalAlignment="Left" Margin="271,10,0,0" VerticalAlignment="Top" />
+        <Slider HorizontalAlignment="Left" Margin="80,12,0,0" Name="sliderVM" VerticalAlignment="Top" Width="160" SelectionEnd="0" TickPlacement="BottomRight" Minimum="-5" Maximum="5" ValueChanged="sliderVM_ValueChanged" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" IsSnapToTickEnabled="True" />
     </Grid>
 </Window>
