@@ -99,6 +99,7 @@ namespace BubbleFlow
         public virtual IEnumerable<UIElement> WorldElements { get { yield break; } } // newly 20140707
         public virtual ContextMenu ContextMenu { get { return null; } } // newly 20140623
 
+        // TODO: consider removing Render() and temporary elements.
         public virtual void Render()
         {
         }

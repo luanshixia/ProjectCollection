@@ -117,18 +117,14 @@ namespace BubbleFlow
             this.RenderLayers();
         }
 
-        internal void ScaleCanvas(double scale, Point basePoint)
+        internal void ScaleCanvas(double newScale, Point basePoint)
         {
-            double scale0 = this.Scale;
-            double vx = basePoint.X - Origin.X;
-            double vy = basePoint.Y - Origin.Y;
-            double v1x = (scale0 / scale) * vx;
-            double v1y = (scale0 / scale) * vy;
-            double v2x = vx - v1x;
-            double v2y = vy - v1y;
+            var v1 = basePoint - this.Origin;
+            var v2 = (this.Scale / newScale) * v1;
 
-            this.Scale = scale;
-            this.Origin = new Point(Origin.X + v2x, Origin.Y + v2y);
+            this.Scale = newScale;
+            this.Origin += v1 - v2;
+            //this.Origin += (1 - this.Scale / newScale) * (basePoint - this.Origin); // floating point error?
             this.RenderLayers();
         }
 
