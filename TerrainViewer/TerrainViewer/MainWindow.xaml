@@ -1,0 +1,20 @@
+﻿<Window x:Class="TongJi.Drawing.Viewer3D.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:t="clr-namespace:HelixToolkit;assembly=HelixToolkit"
+        xmlns:my="clr-namespace:TongJi.Drawing.Viewer3D"
+        Title="同济筑城 - 地形查看器" Height="600" Width="800" WindowStartupLocation="CenterScreen" FontFamily="宋体">
+    <Grid>
+        <t:HelixView3D x:Name="view1">
+            <t:DefaultLightsVisual3D/>
+            <my:Terrain3DView  x:Name="terrain" />
+        </t:HelixView3D>
+        <ComboBox Height="23" Margin="355,12,0,0" Name="cboxTexture" VerticalAlignment="Top" DataContext="{Binding}" HorizontalAlignment="Left" Width="73" SelectionChanged="cboxTexture_SelectionChanged" SelectedIndex="0">
+            <ComboBoxItem Content="按高度" />
+            <ComboBoxItem Content="按坡度" />
+        </ComboBox>
+        <Label Content="垂直放大率：" Height="32" HorizontalAlignment="Left" Margin="12,12,0,0" Name="label1" VerticalAlignment="Top" Width="81" />
+        <Label Content="着色方法：" Height="32" HorizontalAlignment="Left" Margin="271,10,0,0" Name="label2" VerticalAlignment="Top" Width="81" />
+        <Slider Height="23" HorizontalAlignment="Left" Margin="99,12,0,0" Name="sliderVM" VerticalAlignment="Top" Width="156" SelectionEnd="0" TickPlacement="BottomRight" Minimum="-5" Maximum="5" ValueChanged="sliderVM_ValueChanged" AutoToolTipPlacement="TopLeft" AutoToolTipPrecision="0" IsSnapToTickEnabled="True" />
+    </Grid>
+</Window>
