@@ -325,7 +325,8 @@ namespace BubbleFlow
             {
                 if (MainWindow.Current.SelectedBubble != null)
                 {
-                    MainWindow.Current.SelectedBubble.SetColor(DefaultColor);
+                    MainWindow.Current.SelectedBubble.FillColor = DefaultColor;
+                    MainWindow.Current.SelectedBubble.ReadyControl();
                 }
 
                 if (e.OriginalSource is FrameworkElement element)
@@ -333,7 +334,8 @@ namespace BubbleFlow
                     if (element.Parent is NodeBubble bubble)
                     {
                         MainWindow.Current.SelectedBubble = bubble;
-                        bubble.SetColor(HighlightColor);
+                        bubble.FillColor = HighlightColor;
+                        bubble.ReadyControl();
 
                         return;
                     }
@@ -366,7 +368,8 @@ namespace BubbleFlow
                 node.Properties["role"] = inputs["Role"];
                 node.Properties["user"] = inputs["User"];
 
-                bubble.SetText(inputs["Name"]);
+                bubble.Text = inputs["Name"];
+                bubble.ReadyControl();
             }
         }
     }

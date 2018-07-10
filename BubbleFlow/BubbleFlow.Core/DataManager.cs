@@ -133,7 +133,7 @@ namespace BubbleFlow
                 else if (node.Status == FlowNodeStatus.Active)
                 {
                     bubble.FillColor = Colors.Orange;
-                    bubble.NeedAlert = true;
+                    bubble.Flashing = true;
                 }
 
                 bubble.ReadyControl();

@@ -25,7 +25,7 @@ namespace BubbleFlow
         public Color StrokeColor { get; set; }
         public Color FontColor { get; set; }
         public Point Position { get; set; }
-        public bool NeedAlert { get; set; }
+        public bool Flashing { get; set; }
 
         private Ellipse RoundShape { get; } = new Ellipse();
         private TextBlock TextLabel { get; } = new TextBlock();
@@ -37,41 +37,13 @@ namespace BubbleFlow
             this.Children.Add(TextLabel);
 
             this.Cursor = Cursors.Hand;
-            this.MouseEnter += new MouseEventHandler(_shape_MouseEnter);
-            this.MouseLeave += new MouseEventHandler(_shape_MouseLeave);
-            this.MouseLeftButtonDown += new MouseButtonEventHandler(_shape_MouseLeftButtonDown);
-            this.MouseLeftButtonUp += new MouseButtonEventHandler(_shape_MouseLeftButtonUp);
+            this.MouseEnter += (sender, e) => this.RoundShape.Opacity = 0.6;
+            this.MouseLeave += (sender, e) => this.RoundShape.Opacity = 1.0;
+            this.MouseLeftButtonDown += (sender, e) => this.RenderTransform = new TranslateTransform(1, 1);
+            this.MouseLeftButtonUp += (sender, e) => this.RenderTransform = null;
 
             this.DefaultValue();
             this.ReadyControl();
-        }
-
-        public void SetColor(Color color)
-        {
-            this.FillColor = color;
-            this.ReadyControl();
-        }
-
-        void _shape_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            Canvas.SetLeft(this.RoundShape, Canvas.GetLeft(this.RoundShape) - 1);
-            Canvas.SetTop(this.RoundShape, Canvas.GetTop(this.RoundShape) - 1);
-        }
-
-        void _shape_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Canvas.SetLeft(this.RoundShape, Canvas.GetLeft(this.RoundShape) + 1);
-            Canvas.SetTop(this.RoundShape, Canvas.GetTop(this.RoundShape) + 1);
-        }
-
-        void _shape_MouseLeave(object sender, MouseEventArgs e)
-        {
-            this.RoundShape.Opacity = 1;
-        }
-
-        void _shape_MouseEnter(object sender, MouseEventArgs e)
-        {
-            this.RoundShape.Opacity = 0.6;
         }
 
         private void DefaultValue()
@@ -87,24 +59,24 @@ namespace BubbleFlow
 
         public void ReadyControl()
         {
-            this.RoundShape.Width = Size;
-            this.RoundShape.Height = Size;
-            Canvas.SetLeft(this.RoundShape, Position.X - Size / 2);
-            Canvas.SetTop(this.RoundShape, Position.Y - Size / 2);
-            this.RoundShape.Stroke = new SolidColorBrush(StrokeColor);
+            this.RoundShape.Width = this.Size;
+            this.RoundShape.Height = this.Size;
+            Canvas.SetLeft(this.RoundShape, this.Position.X - this.Size / 2);
+            Canvas.SetTop(this.RoundShape, this.Position.Y - this.Size / 2);
+            this.RoundShape.Stroke = new SolidColorBrush(this.StrokeColor);
             this.RoundShape.StrokeThickness = 1;
-            this.RoundShape.Fill = BuildFill(FillColor);
+            this.RoundShape.Fill = NodeBubble.BuildFill(this.FillColor);
 
-            this.TextLabel.Text = WrapText(Text);
-            this.TextLabel.FontSize = FontSize;
-            this.TextLabel.Foreground = new SolidColorBrush(FontColor);
+            this.TextLabel.Text = this.Text;
+            this.TextLabel.FontSize = this.FontSize;
+            this.TextLabel.Foreground = new SolidColorBrush(this.FontColor);
             this.TextLabel.TextAlignment = TextAlignment.Center;
             this.Measure(this.DesiredSize);
             this.Arrange(new Rect(0, 0, this.DesiredSize.Width, this.DesiredSize.Height));
-            Canvas.SetLeft(this.TextLabel, Position.X - TextLabel.ActualWidth / 2);
-            Canvas.SetTop(this.TextLabel, Position.Y - TextLabel.ActualHeight / 2);
+            Canvas.SetLeft(this.TextLabel, this.Position.X - this.TextLabel.ActualWidth / 2);
+            Canvas.SetTop(this.TextLabel, this.Position.Y - this.TextLabel.ActualHeight / 2);
 
-            if (this.NeedAlert)
+            if (this.Flashing)
             {
                 var doubleAnimation = new DoubleAnimation
                 {
@@ -116,39 +88,14 @@ namespace BubbleFlow
                 };
 
                 this.Storyboard.Children.Add(doubleAnimation);
-                Storyboard.SetTarget(doubleAnimation, RoundShape);
-                Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath("Opacity"));
+                Storyboard.SetTarget(element: doubleAnimation, value: this.RoundShape);
+                Storyboard.SetTargetProperty(element: doubleAnimation, path: new PropertyPath("Opacity"));
                 this.Storyboard.Begin();
             }
             else
             {
                 this.Storyboard.Stop();
             }
-        }
-
-        public void SetText(string text)
-        {
-            this.Text = text;
-            this.TextLabel.Text = NodeBubble.WrapText(this.Text);
-            this.TextLabel.FontSize = this.FontSize;
-            this.TextLabel.Foreground = new SolidColorBrush(this.FontColor);
-            this.TextLabel.TextAlignment = TextAlignment.Center;
-            Canvas.SetLeft(this.TextLabel, Position.X - TextLabel.ActualWidth / 2);
-            Canvas.SetTop(this.TextLabel, Position.Y - TextLabel.ActualHeight / 2);
-        }
-
-        private static string WrapText(string text)
-        {
-            int lineLength = 6;
-            var positions = new List<int>();
-            for (int pos = lineLength; pos < text.Length; pos += lineLength)
-            {
-                positions.Add(pos);
-            }
-
-            positions.Reverse();
-            positions.ForEach(pos => text = text.Insert(pos, "\n"));
-            return text;
         }
 
         private static RadialGradientBrush BuildFill(Color color)
@@ -161,20 +108,6 @@ namespace BubbleFlow
                 RadiusX = 0.8,
                 RadiusY = 0.8
             };
-        }
-
-        public void Fade(bool fade)
-        {
-            if (fade)
-            {
-                var b = (byte)((FillColor.R + FillColor.G + FillColor.B) / 3);
-                var c = new Color { A = 255, R = b, G = b, B = b };
-                this.RoundShape.Fill = NodeBubble.BuildFill(c);
-            }
-            else
-            {
-                this.RoundShape.Fill = NodeBubble.BuildFill(FillColor);
-            }
         }
     }
 }
