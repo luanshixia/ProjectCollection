@@ -44,7 +44,7 @@ namespace TongJi.Drawing.Viewer3D
         
         void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            view1.ZoomToFit();
+            view1.ZoomExtents();
         }
 
         public void ShowDemoTerrain(string file)

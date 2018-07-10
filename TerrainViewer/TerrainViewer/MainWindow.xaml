@@ -1,14 +1,14 @@
 ﻿<Window x:Class="TongJi.Drawing.Viewer3D.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:t="clr-namespace:HelixToolkit;assembly=HelixToolkit"
+        xmlns:t="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
         xmlns:my="clr-namespace:TongJi.Drawing.Viewer3D"
         Title="同济筑城 - 地形查看器" Height="600" Width="800" WindowStartupLocation="CenterScreen" FontFamily="宋体">
     <Grid>
-        <t:HelixView3D x:Name="view1">
-            <t:DefaultLightsVisual3D/>
+        <t:HelixViewport3D x:Name="view1">
+            <t:DefaultLights />
             <my:Terrain3DView  x:Name="terrain" />
-        </t:HelixView3D>
+        </t:HelixViewport3D>
         <ComboBox Height="23" Margin="355,12,0,0" Name="cboxTexture" VerticalAlignment="Top" DataContext="{Binding}" HorizontalAlignment="Left" Width="73" SelectionChanged="cboxTexture_SelectionChanged" SelectedIndex="0">
             <ComboBoxItem Content="按高度" />
             <ComboBoxItem Content="按坡度" />

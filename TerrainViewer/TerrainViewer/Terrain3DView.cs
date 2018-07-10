@@ -6,7 +6,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Media3D;
 
-using HelixToolkit;
+using HelixToolkit.Wpf;
 
 namespace TongJi.Drawing.Viewer3D
 {
@@ -45,7 +45,7 @@ namespace TongJi.Drawing.Viewer3D
             Point3D[,] RoadPts = createRoadMesh(points, roadWidth);
             // 构造道路面的mesh
             MeshBuilder mb = new MeshBuilder(false, false);
-            mb.AddRectangularMesh(RoadPts, false, false);
+            mb.AddRectangularMesh(RoadPts, closed0: false, closed1: false);
             var mesh = mb.ToMesh();
             var model = new GeometryModel3D();
             model.Geometry = mesh;
