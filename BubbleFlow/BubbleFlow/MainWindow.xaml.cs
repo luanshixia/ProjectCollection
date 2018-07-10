@@ -134,7 +134,6 @@ namespace BubbleFlow
             transform.Children.Add(new ScaleTransform { CenterX = 0, CenterY = 0, ScaleX = 1 / Scale, ScaleY = 1 / Scale });
             transform.Children.Add(new TranslateTransform { X = Origin.X, Y = Origin.Y });
             this.MyCanvas.RenderTransform = transform;
-            ViewerToolManager.Tools.ForEach(tool => tool.Render());
         }
 
         private void Submit()

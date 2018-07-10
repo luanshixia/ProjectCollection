@@ -95,15 +95,6 @@ namespace BubbleFlow
 
     public abstract class ViewerTool
     {
-        public virtual IEnumerable<UIElement> CanvasElements { get { yield break; } } // mod 20140707
-        public virtual IEnumerable<UIElement> WorldElements { get { yield break; } } // newly 20140707
-        public virtual ContextMenu ContextMenu { get { return null; } } // newly 20140623
-
-        // TODO: consider removing Render() and temporary elements.
-        public virtual void Render()
-        {
-        }
-
         public virtual void MouseMoveHandler(object sender, MouseEventArgs e)
         {
         }
@@ -130,83 +121,60 @@ namespace BubbleFlow
 
         public virtual void EnterToolHandler()
         {
-            //TempElements.ForEach(x => MapControl.Current.Children.Add(x));
         }
 
         public virtual void ExitToolHandler()
         {
-            //TempElements.ForEach(x => MapControl.Current.Children.Remove(x));
         }
     }
 
     public class CombinedViewerTool : ViewerTool
     {
-        private ViewerTool[] _tools;
+        private readonly ViewerTool[] Tools;
 
         public CombinedViewerTool(params ViewerTool[] tools)
         {
-            _tools = tools;
-        }
-
-        public override IEnumerable<UIElement> CanvasElements
-        {
-            get
-            {
-                return _tools.SelectMany(x => x.CanvasElements);
-            }
-        }
-
-        public override IEnumerable<UIElement> WorldElements
-        {
-            get
-            {
-                return _tools.SelectMany(x => x.WorldElements);
-            }
-        }
-
-        public override void Render()
-        {
-            _tools.ForEach(x => x.Render());
+            this.Tools = tools;
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            _tools.ForEach(x => x.MouseMoveHandler(sender, e));
+            this.Tools.ForEach(x => x.MouseMoveHandler(sender, e));
         }
 
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            _tools.ForEach(x => x.MouseDownHandler(sender, e));
+            this.Tools.ForEach(x => x.MouseDownHandler(sender, e));
         }
 
         public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            _tools.ForEach(x => x.MouseUpHandler(sender, e));
+            this.Tools.ForEach(x => x.MouseUpHandler(sender, e));
         }
 
         public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
-            _tools.ForEach(x => x.MouseDoubleClickHandler(sender, e));
+            this.Tools.ForEach(x => x.MouseDoubleClickHandler(sender, e));
         }
 
         public override void MouseWheelHandler(object sender, MouseWheelEventArgs e)
         {
-            _tools.ForEach(x => x.MouseWheelHandler(sender, e));
+            this.Tools.ForEach(x => x.MouseWheelHandler(sender, e));
         }
 
         public override void KeyDownHandler(object sender, KeyEventArgs e)
         {
-            _tools.ForEach(x => x.KeyDownHandler(sender, e));
+            this.Tools.ForEach(x => x.KeyDownHandler(sender, e));
         }
 
         public override void EnterToolHandler()
         {
-            _tools.ForEach(x => x.EnterToolHandler());
+            this.Tools.ForEach(x => x.EnterToolHandler());
         }
 
         public override void ExitToolHandler()
         {
-            _tools.ForEach(x => x.ExitToolHandler());
+            this.Tools.ForEach(x => x.ExitToolHandler());
         }
     }
 }
