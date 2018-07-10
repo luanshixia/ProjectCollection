@@ -113,6 +113,14 @@ namespace BubbleFlow
 
     public class AddNodeTool : ViewerTool
     {
+        private readonly NodeBubble PhantomBubble = new NodeBubble();
+
+        public override void MouseMoveHandler(object sender, MouseEventArgs e)
+        {
+            this.PhantomBubble.Position = e.GetPosition(MainWindow.Current.MyCanvas);
+            this.PhantomBubble.ReadyControl();
+        }
+
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -149,6 +157,20 @@ namespace BubbleFlow
                 MainWindow.Current.Bubbles.Add(node.ID, bubble);
                 DataManager.CurrentDocument.NodesStore.Add(node.ID, node);
             }
+        }
+
+        public override void EnterToolHandler()
+        {
+            base.EnterToolHandler();
+
+            MainWindow.Current.MyCanvas.Children.Add(this.PhantomBubble);
+        }
+
+        public override void ExitToolHandler()
+        {
+            base.ExitToolHandler();
+
+            MainWindow.Current.MyCanvas.Children.Remove(this.PhantomBubble);
         }
     }
 

@@ -206,7 +206,7 @@ namespace BubbleFlow
         {
             if (e.Key == Key.Escape)
             {
-                ResetTool();
+                this.ResetTool();
             }
         }
 
