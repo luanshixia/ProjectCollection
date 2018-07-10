@@ -315,7 +315,7 @@ namespace BubbleFlow
 
     public class SelectNodeTool : ViewerTool
     {
-        // TODO: move the colors to Node class when CanvasIndentifiableElement base class is done.
+        // TODO: move the colors to Node class when CanvasIdentifiableElement base class is done.
         private static readonly Color DefaultColor = Colors.Gray;
         private static readonly Color HighlightColor = Colors.Orange;
 

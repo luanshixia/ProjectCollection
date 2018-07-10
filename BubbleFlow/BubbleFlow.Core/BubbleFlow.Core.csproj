@@ -49,6 +49,7 @@
     <Compile Include="Arrow.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="FlowModel.cs" />
+    <Compile Include="CanvasIdentifiableElement.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewerTool.cs" />
