@@ -31,7 +31,7 @@ namespace BubbleFlow
             }
 
             double scale = ZoomLevels[index];
-            MainWindow.Current.ScaleCanvas(scale, basePoint);
+            MainWindow.Current.ScaleCanvas(scale, basePoint); // TODO: look into ScaleCanvas().
         }
 
         private static int FindScaleIndex(double scale)
@@ -180,6 +180,17 @@ namespace BubbleFlow
         private NodeBubble EndNode;
         private int ClickCount = 0;
 
+        private readonly BezierLink PhantomArrow = new BezierLink();
+
+        public override void MouseMoveHandler(object sender, MouseEventArgs e)
+        {
+            if (this.StartNode != null)
+            {
+                this.PhantomArrow.EndPoint = e.GetPosition(MainWindow.Current.MyCanvas);
+                this.PhantomArrow.ReadyControl();
+            }
+        }
+
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
@@ -193,6 +204,8 @@ namespace BubbleFlow
                         if (this.ClickCount == 1)
                         {
                             this.StartNode = bubble;
+                            this.PhantomArrow.StartPoint = bubble.Position;
+                            MainWindow.Current.MyCanvas.Children.Add(this.PhantomArrow);
                         }
                         else
                         {
@@ -245,6 +258,7 @@ namespace BubbleFlow
                         this.ClickCount = 0;
                         this.StartNode = null;
                         this.EndNode = null;
+                        MainWindow.Current.MyCanvas.Children.Remove(this.PhantomArrow);
                     }
                 }
             }
