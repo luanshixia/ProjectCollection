@@ -16,7 +16,7 @@ using System.Windows.Shapes;
 namespace Dreambuild.Gis.Display
 {
     /// <summary>
-    /// 视图工具管理
+    /// The viewer tool manager.
     /// </summary>
     public static class ViewerToolManager
     {
@@ -103,7 +103,7 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 视图工具抽象类
+    /// The viewer tool
     /// </summary>
     public abstract class ViewerTool
     {

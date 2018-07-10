@@ -28,12 +28,6 @@ namespace Dreambuild.Geometry
             this.Max = max;
         }
 
-        public Extents(IEnumerable<Vector> points)
-        {
-            this.Min = new Vector(points.Min(point => point.X), points.Min(point => point.Y), points.Min(point => point.Z));
-            this.Max = new Vector(points.Max(point => point.X), points.Max(point => point.Y), points.Max(point => point.Z));
-        }
-
         public Extents Copy()
         {
             return new Extents(this.Min, this.Max);
@@ -157,8 +151,8 @@ namespace Dreambuild.Geometry
 
         public static Extents FromPoints(params Vector[] pts)
         {
-            var min = new Vector(pts.Min(p => p.X), pts.Min(p => p.Y));
-            var max = new Vector(pts.Max(p => p.X), pts.Max(p => p.Y));
+            var min = new Vector(pts.Min(p => p.X), pts.Min(p => p.Y), pts.Min(p => p.Z));
+            var max = new Vector(pts.Max(p => p.X), pts.Max(p => p.Y), pts.Max(p => p.Z));
             return new Extents(min, max);
         }
     }

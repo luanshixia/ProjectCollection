@@ -239,7 +239,7 @@ namespace BubbleFlow
                 return;
             }
 
-            var extents = new Extents(bubblePositions);
+            var extents = Extents.FromPoints(bubblePositions);
             this.Zoom(extents.Offset(200));
         }
 

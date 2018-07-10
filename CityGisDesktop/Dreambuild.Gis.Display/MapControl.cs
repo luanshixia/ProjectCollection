@@ -293,22 +293,20 @@ namespace Dreambuild.Gis.Display
 
         public void PanCanvas(System.Windows.Vector displacement)
         {
-            Origin += displacement;
-            RenderLayers();
+            this.Origin += displacement;
+            this.RenderLayers();
         }
 
-        public void ScaleCanvas(double scale, Point basePoint)
+        public void ScaleCanvas(double newScale, Point basePoint)
         {
-            double scale0 = this.Scale;
-            var v = new Geometry.Vector(basePoint.X - Origin.X, basePoint.Y - Origin.Y);
-            var v1 = (scale0 / scale) * v;
-            var v2 = v - v1;
+            var v1 = basePoint - this.Origin;
+            var v2 = (this.Scale / newScale) * v1;
 
-            Scale = scale;
-            Origin = new Point(Origin.X + v2.X, Origin.Y + v2.Y);
+            this.Scale = newScale;
+            this.Origin += v1 - v2;
 
-            RenderLayers();
-            AdjustMagFactor();
+            this.RenderLayers();
+            this.AdjustMagFactor();
         }
 
         public void LocateCanvas(Geometry.Vector location)
