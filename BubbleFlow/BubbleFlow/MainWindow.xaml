@@ -58,20 +58,27 @@
         <!--Toolbar-->
         <Border Margin="0" VerticalAlignment="Top" Opacity="0.9" Background="{StaticResource SecondaryGradientBrush}">
             <StackPanel Name="Toolbar" Orientation="Horizontal">
-                <ToggleButton Name="PanButton" Content="Pan" ToolTip="Pan" Click="PanButton_Click" IsChecked="True" />
-                <Button Name="ZoomExtentsButton" Content="Zoom to fit" ToolTip="Zoom to fit" Click="ZoomExtentsButton_Click" />
-                <ToggleButton Name="AddNodeButton" Content="Add node" ToolTip="Add node" Click="AddNodeButton_Click" />
-                <ToggleButton Name="AddConnectionButton" Content="Add link" ToolTip="Add link" Click="AddConnectionButton_Click" />
-                <ToggleButton Name="EditConnectionButton" Content="Edit link" ToolTip="Edit link" Click="EditConnectionButton_Click" />
-                <ToggleButton Name="MoveNodeButton" Content="Move node" ToolTip="Move node" Click="MoveNodeButton_Click" />
+                <Button Name="NewButton" Content="New" ToolTip="New a workflow." Click="NewButton_Click" />
+                <Button Name="OpenButton" Content="Open" ToolTip="Open an existing workflow." Click="OpenButton_Click" />
+                <Button Name="SaveButton" Content="Save" ToolTip="Save the current workflow." Click="SaveButton_Click" />
+                <Button Name="SaveAsButton" Content="Save as" ToolTip="Save as another workflow." Click="SaveAsButton_Click" />
+                <Border Width="1" Background="Gray" />
+                <ToggleButton Name="PanButton" Content="Pan" ToolTip="Pan tha canvas." Click="PanButton_Click" IsChecked="True" />
+                <Button Name="ZoomExtentsButton" Content="Zoom to fit" ToolTip="Zoom the viewport to fit all content." Click="ZoomExtentsButton_Click" />
+                <ToggleButton Name="AddNodeButton" Content="Add node" ToolTip="Add node." Click="AddNodeButton_Click" />
+                <ToggleButton Name="AddConnectionButton" Content="Add link" ToolTip="Add link." Click="AddConnectionButton_Click" />
+                <ToggleButton Name="EditConnectionButton" Content="Edit link" ToolTip="Edit link." Click="EditConnectionButton_Click" />
+                <ToggleButton Name="MoveNodeButton" Content="Move node" ToolTip="Move node." Click="MoveNodeButton_Click" />
                 <Button Name="DeleteNodeButton" Content="Delete node" ToolTip="Delete node" Click="DeleteNodeButton_Click" />
-                <Button Name="SubmitButton" Content="Submit" ToolTip="Submit" Click="SubmitButton_Click" />
             </StackPanel>
         </Border>
 
         <!--Coordinates-->
         <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,20" Background="#80000000">
-            <TextBlock Padding="20,5" Name="Message" Text="Workflow Editor" Foreground="White" />
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Padding="20,5" Name="Message" Text="Workflow Editor" Foreground="White" />
+                <CheckBox Template="{StaticResource ToggleSwitch}" Foreground="LightGray">Grid</CheckBox>
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

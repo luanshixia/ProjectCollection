@@ -34,14 +34,13 @@ namespace BubbleFlow
 
             MainWindow.Current = this;
 
-            DataManager.New();
             this.InitializeTool();
-
-            this.AddGridLinesToCanvas();
+            this.New();
         }
 
-        private void AddGridLinesToCanvas()
+        private void ShowGridLines()
         {
+            this.GridLines.ForEach(line => this.MyCanvas.Children.Remove(line));
             this.GridLines.Clear();
 
             var radius = 10000;
@@ -82,7 +81,7 @@ namespace BubbleFlow
         private void InitializeTool()
         {
             var toggleButtons = this.Toolbar.Children
-                .Cast<ButtonBase>()
+                .Cast<UIElement>()
                 .Where(button => button is ToggleButton)
                 .Cast<ToggleButton>()
                 .ToArray();
@@ -136,12 +135,12 @@ namespace BubbleFlow
             this.MyCanvas.RenderTransform = transform;
         }
 
-        private void Submit()
+        private void Submit(bool newFile = false)
         {
             var (succeeded, messages) = DataManager.Validate();
             if (succeeded)
             {
-                this.Save();
+                this.Save(newFile);
             }
             else
             {
@@ -151,9 +150,9 @@ namespace BubbleFlow
             }
         }
 
-        private void Save()
+        private void Save(bool newFile = false)
         {
-            if (DataManager.CurrentFileName == null)
+            if (DataManager.CurrentFileName == null || newFile)
             {
                 var saveFileDialog = new SaveFileDialog
                 {
@@ -182,7 +181,15 @@ namespace BubbleFlow
             {
                 DataManager.Open(openFileDialog.FileName);
                 DataManager.CurrentDocument.DrawToCanvas(this.MyCanvas);
+                this.ShowGridLines();
             }
+        }
+
+        private void New()
+        {
+            DataManager.New();
+            this.MyCanvas.Children.Clear();
+            this.ShowGridLines();
         }
 
         #region General event handlers
@@ -287,9 +294,24 @@ namespace BubbleFlow
             ViewerToolManager.ExclusiveTool = new PanCanvasTool();
         }
 
-        private void SubmitButton_Click(object sender, RoutedEventArgs e)
+        private void NewButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.New();
+        }
+
+        private void OpenButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Open();
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             this.Submit();
+        }
+
+        private void SaveAsButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Submit(newFile: true);
         }
 
         #endregion

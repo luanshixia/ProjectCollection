@@ -39,8 +39,16 @@
     </LinearGradientBrush>
 
     <ControlTemplate x:Key="FlatButton">
-        <Border Width="{TemplateBinding Property=Width}" Height="{TemplateBinding Property=Height}" Background="{TemplateBinding Property=Background}" >
-            <ContentPresenter Content="{TemplateBinding ContentControl.Content}" ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}" Margin="{TemplateBinding Control.Padding}" HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" />
+        <Border
+            Width="{TemplateBinding Property=Width}"
+            Height="{TemplateBinding Property=Height}"
+            Background="{TemplateBinding Property=Background}" >
+            <ContentPresenter
+                Content="{TemplateBinding ContentControl.Content}"
+                ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                Margin="{TemplateBinding Control.Padding}"
+                HorizontalAlignment="{TemplateBinding Control.HorizontalContentAlignment}"
+                VerticalAlignment="{TemplateBinding Control.VerticalContentAlignment}" />
         </Border>
     </ControlTemplate>
 
@@ -107,6 +115,69 @@
                     </BeginStoryboard>
                 </Trigger.ExitActions>
                 <Setter TargetName="HeadButton" Property="Foreground" Value="{StaticResource FocusForegroundSolidBrush}"/>
+            </Trigger>
+        </ControlTemplate.Triggers>
+    </ControlTemplate>
+
+    <ControlTemplate x:Key="ToggleSwitch" TargetType="{x:Type CheckBox}">
+        <ControlTemplate.Resources>
+            <Storyboard x:Key="OnChecking">
+                <DoubleAnimationUsingKeyFrames
+                    BeginTime="00:00:00"
+                    Storyboard.TargetName="slider"
+                    Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+                    <EasingDoubleKeyFrame KeyTime="00:00:00.1" Value="24"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="OnUnchecking">
+                <DoubleAnimationUsingKeyFrames
+                    BeginTime="00:00:00"
+                    Storyboard.TargetName="slider"
+                    Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.X)">
+                    <EasingDoubleKeyFrame KeyTime="00:00:00.1" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+            </Storyboard>
+        </ControlTemplate.Resources>
+
+        <DockPanel x:Name="dockPanel">
+            <ContentPresenter
+                SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                Content="{TemplateBinding Content}"
+                ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                ContentTemplate="{TemplateBinding ContentTemplate}"
+                RecognizesAccessKey="True"
+                VerticalAlignment="Center"/>
+            <Grid Margin="5" Width="40" Background="DarkGray">
+                <Grid.Effect>
+                    <DropShadowEffect BlurRadius="10" Color="Gray" ShadowDepth="5" Opacity="0.5" />
+                </Grid.Effect>
+                <Border
+                    x:Name="slider"
+                    HorizontalAlignment="Left"
+                    Width="16"
+                    Height="16"
+                    Background="{StaticResource DefaultBackgroundSolidBrush}">
+                    <Border.RenderTransform>
+                        <TranslateTransform X="0" Y="0"/>
+                    </Border.RenderTransform>
+                </Border>
+            </Grid>
+        </DockPanel>
+
+        <ControlTemplate.Triggers>
+            <Trigger Property="IsChecked" Value="True">
+                <Trigger.ExitActions>
+                    <BeginStoryboard Storyboard="{StaticResource OnUnchecking}" />
+                </Trigger.ExitActions>
+                <Trigger.EnterActions>
+                    <BeginStoryboard Storyboard="{StaticResource OnChecking}" />
+                </Trigger.EnterActions>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+            </Trigger>
+            <Trigger Property="IsChecked" Value="True">
+                <Setter Property="Background" TargetName="slider" Value="{StaticResource PrimarySolidBrush}"/>
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
