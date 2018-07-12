@@ -51,5 +51,12 @@ namespace BubbleFlow
                 this.Children.Add(line);
             }
         }
+
+        public Point Snap(Point position)
+        {
+            return new Point(
+                Math.Truncate(position.X / this.Interval) * this.Interval,
+                Math.Truncate(position.Y / this.Interval) * this.Interval);
+        }
     }
 }

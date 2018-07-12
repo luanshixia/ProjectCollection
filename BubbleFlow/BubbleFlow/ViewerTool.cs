@@ -117,7 +117,13 @@ namespace BubbleFlow
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            this.PhantomBubble.Position = e.GetPosition(MainWindow.Current.MyCanvas);
+            var position = e.GetPosition(MainWindow.Current.MyCanvas);
+            if (MainWindow.Current.GridToggleSwitch.IsChecked == true)
+            {
+                position = MainWindow.Current.GridLines.Snap(position);
+            }
+
+            this.PhantomBubble.Position = position;
             this.PhantomBubble.ReadyControl();
         }
 
@@ -126,6 +132,10 @@ namespace BubbleFlow
             if (e.ChangedButton == MouseButton.Left)
             {
                 var clickPoint = e.GetPosition(MainWindow.Current.MyCanvas);
+                if (MainWindow.Current.GridToggleSwitch.IsChecked == true)
+                {
+                    clickPoint = MainWindow.Current.GridLines.Snap(clickPoint);
+                }
 
                 var node = new FlowNode
                 {
