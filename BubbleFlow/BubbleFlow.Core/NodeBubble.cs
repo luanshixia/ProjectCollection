@@ -19,17 +19,17 @@ namespace BubbleFlow
         }
 
         public string Text { get; set; }
-        public double FontSize { get; set; }
-        public double Size { get; set; }
-        public Color FillColor { get; set; }
-        public Color StrokeColor { get; set; }
-        public Color FontColor { get; set; }
+        public double Size { get; set; } = 100;
+        public double FontSize { get; set; } = 12;
+        public Color FontColor { get; set; } = Colors.Black;
+        public Color FillColor { get; set; } = Colors.DarkGray;
+        public Color StrokeColor { get; set; } = Colors.Gray;
         public Point Position { get; set; }
         public bool Flashing { get; set; }
 
-        private Ellipse RoundShape { get; } = new Ellipse();
-        private TextBlock TextLabel { get; } = new TextBlock();
-        private Storyboard Storyboard { get; } = new Storyboard();
+        private readonly Ellipse RoundShape = new Ellipse();
+        private readonly TextBlock TextLabel = new TextBlock();
+        private readonly Storyboard Storyboard = new Storyboard();
 
         public NodeBubble()
         {
@@ -42,19 +42,7 @@ namespace BubbleFlow
             this.MouseLeftButtonDown += (sender, e) => this.RenderTransform = new TranslateTransform(1, 1);
             this.MouseLeftButtonUp += (sender, e) => this.RenderTransform = null;
 
-            this.DefaultValue();
             this.ReadyControl();
-        }
-
-        private void DefaultValue()
-        {
-            this.Text = "Node";
-            this.FontSize = 12;
-            this.Size = 100;
-            this.FillColor = Colors.DarkGray;
-            this.StrokeColor = Colors.Gray;
-            this.FontColor = Colors.Black;
-            this.Position = new Point();
         }
 
         public void ReadyControl()

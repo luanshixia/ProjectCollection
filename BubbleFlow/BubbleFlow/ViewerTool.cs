@@ -369,7 +369,7 @@ namespace BubbleFlow
     public class SelectNodeTool : ViewerTool
     {
         // TODO: move the colors to Node class when CanvasIdentifiableElement base class is done.
-        private static readonly Color DefaultColor = Colors.Gray;
+        private static readonly Color DefaultColor = Colors.DarkGray;
         private static readonly Color HighlightColor = Colors.Orange;
 
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)

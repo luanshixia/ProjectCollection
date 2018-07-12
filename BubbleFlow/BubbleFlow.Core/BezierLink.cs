@@ -41,34 +41,34 @@ namespace BubbleFlow
         public Point EndPoint { get; set; }
         public double StartOffset { get; set; }
         public double EndOffset { get; set; }
-        public double ArrowSize { get; set; }
-        public Color BaseColor { get; set; }
-        public Color HighlightColor { get; set; }
 
-        private Path BodayShape { get; } = new Path();
-        private Polyline HeadShape { get; } = new Polyline();
-        private TextBlock TextLabel { get; } = new TextBlock();
-        private Storyboard Storyboard { get; } = new Storyboard();
+        public static double ArrowSize { get; set; } = 10;
+        public static Color BaseColor { get; set; } = Colors.Gray;
+        public static Color HighlightColor { get; set; } = Colors.Red;
+
+        private readonly Path BodayShape = new Path
+        {
+            Stroke = new SolidColorBrush(BezierLink.BaseColor),
+            StrokeThickness = 3
+        };
+
+        private readonly Polyline HeadShape = new Polyline
+        {
+            Stroke = new SolidColorBrush(BezierLink.BaseColor),
+            StrokeThickness = 3,
+            Opacity = 0.8
+        };
+
+        private readonly TextBlock TextLabel = new TextBlock();
+        private readonly Storyboard Storyboard = new Storyboard();
 
         public BezierLink()
         {
-            this.Children.Add(BodayShape);
-            this.Children.Add(HeadShape);
-            this.Children.Add(TextLabel);
+            this.Children.Add(this.BodayShape);
+            this.Children.Add(this.HeadShape);
+            this.Children.Add(this.TextLabel);
 
-            this.DefaultValue();
             this.ReadyControl();
-        }
-
-        private void DefaultValue()
-        {
-            this.StartPoint = new Point();
-            this.EndPoint = new Point(100, 0);
-            this.StartOffset = 10;
-            this.EndOffset = 10;
-            this.ArrowSize = 10;
-            this.BaseColor = Colors.Gray;
-            this.HighlightColor = Colors.Red;
         }
 
         public void ReadyControl()
@@ -81,13 +81,17 @@ namespace BubbleFlow
             var start = new Point(StartPoint.X + StartOffset, StartPoint.Y);
             var end = new Point(EndPoint.X - EndOffset, EndPoint.Y);
 
-            var pathFigure = new PathFigure();
-            var bezierSegment = new BezierSegment();
-            pathFigure.StartPoint = start;
-            bezierSegment.Point3 = end;
-            bezierSegment.Point1 = new Point(start.X + controlPointOffset, start.Y);
-            bezierSegment.Point2 = new Point(end.X - controlPointOffset, end.Y);
-            pathFigure.Segments.Add(bezierSegment);
+            var pathFigure = new PathFigure
+            {
+                StartPoint = start
+            };
+
+            pathFigure.Segments.Add(new BezierSegment
+            {
+                Point3 = end,
+                Point1 = new Point(start.X + controlPointOffset, start.Y),
+                Point2 = new Point(end.X - controlPointOffset, end.Y)
+            });
 
             this.HeadShape.Points.Clear();
             this.HeadShape.Points.Add(new Point(end.X - ArrowSize, end.Y - 0.5 * ArrowSize));
@@ -98,18 +102,12 @@ namespace BubbleFlow
             pathGeometry.Figures.Add(pathFigure);
             this.BodayShape.Data = pathGeometry;
 
-            this.HeadShape.StrokeThickness = 3;
-            this.BodayShape.StrokeThickness = 3;
-
-            var solidColorBrush = new SolidColorBrush(color: this.BaseColor);
-            this.BodayShape.Stroke = solidColorBrush;
-            this.BodayShape.Opacity = 0.8;
-            this.HeadShape.Stroke = solidColorBrush;
+            var solidColorBrush = new SolidColorBrush(color: BezierLink.BaseColor);
 
             var colorAnimation = new ColorAnimation
             {
                 From = Colors.Transparent,
-                To = HighlightColor,
+                To = BezierLink.HighlightColor,
                 AutoReverse = true,
                 Duration = new Duration(TimeSpan.Parse("0:0:0.5")),
                 RepeatBehavior = RepeatBehavior.Forever
