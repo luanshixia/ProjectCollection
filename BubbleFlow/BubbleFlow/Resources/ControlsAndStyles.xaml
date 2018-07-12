@@ -147,16 +147,19 @@
                 ContentTemplate="{TemplateBinding ContentTemplate}"
                 RecognizesAccessKey="True"
                 VerticalAlignment="Center"/>
-            <Grid Margin="5" Width="40" Background="DarkGray">
+            <Grid Margin="8" Width="40" Background="DarkGray">
                 <Grid.Effect>
-                    <DropShadowEffect BlurRadius="10" Color="Gray" ShadowDepth="5" Opacity="0.5" />
+                    <DropShadowEffect BlurRadius="10" Color="Gray" ShadowDepth="2" Opacity="0.5" />
                 </Grid.Effect>
                 <Border
                     x:Name="slider"
                     HorizontalAlignment="Left"
                     Width="16"
-                    Height="16"
+                    Height="{TemplateBinding Height}"
                     Background="{StaticResource DefaultBackgroundSolidBrush}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" Color="Gray" ShadowDepth="2" Opacity="0.5" />
+                    </Border.Effect>
                     <Border.RenderTransform>
                         <TranslateTransform X="0" Y="0"/>
                     </Border.RenderTransform>

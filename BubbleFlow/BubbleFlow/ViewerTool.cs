@@ -263,6 +263,13 @@ namespace BubbleFlow
                 }
             }
         }
+
+        public override void ExitToolHandler()
+        {
+            base.ExitToolHandler();
+
+            MainWindow.Current.MyCanvas.Children.Remove(this.PhantomArrow);
+        }
     }
 
     public class MoveNodeTool : ViewerTool

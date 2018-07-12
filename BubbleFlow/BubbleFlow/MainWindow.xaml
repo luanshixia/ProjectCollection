@@ -74,9 +74,9 @@
         </Border>
 
         <!--Coordinates-->
-        <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,20" Background="#80000000">
+        <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,15" Background="#80000000">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Padding="20,5" Name="Message" Text="Workflow Editor" Foreground="White" />
+                <TextBlock Padding="20,8" Name="Message" Text="Workflow Editor" Foreground="White" />
                 <CheckBox
                     Name="GridToggleSwitch"
                     Template="{StaticResource ToggleSwitch}"
