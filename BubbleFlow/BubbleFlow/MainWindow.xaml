@@ -77,7 +77,16 @@
         <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,20" Background="#80000000">
             <StackPanel Orientation="Horizontal">
                 <TextBlock Padding="20,5" Name="Message" Text="Workflow Editor" Foreground="White" />
-                <CheckBox Template="{StaticResource ToggleSwitch}" Foreground="LightGray">Grid</CheckBox>
+                <CheckBox
+                    Name="GridToggleSwitch"
+                    Template="{StaticResource ToggleSwitch}"
+                    Foreground="LightGray"
+                    IsChecked="True"
+                    Checked="GridToggleSwitch_Checked"
+                    Unchecked="GridToggleSwitch_Unchecked"
+                    ToolTip="Toggle whether to show and snap to grid.">
+                    Grid
+                </CheckBox>
             </StackPanel>
         </Border>
     </Grid>

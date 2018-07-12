@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Shapes;
 using Vector = Dreambuild.Geometry.Vector;
 
 namespace BubbleFlow
@@ -22,11 +21,11 @@ namespace BubbleFlow
         public static MainWindow Current { get; private set; }
         public Point Origin { get; private set; }
         public NodeBubble SelectedBubble { get; set; }
+        public GridLines GridLines { get; } = new GridLines();
         public double Scale { get; set; }
 
         public Dictionary<Guid, NodeBubble> Bubbles { get; } = new Dictionary<Guid, NodeBubble>();
         public DoubleDictionary<Guid, Guid, BezierLink> Arrows { get; } = new DoubleDictionary<Guid, Guid, BezierLink>();
-        private List<Line> GridLines { get; } = new List<Line>();
 
         public MainWindow()
         {
@@ -38,43 +37,16 @@ namespace BubbleFlow
             this.New();
         }
 
-        private void ShowGridLines()
+        private void ShowGridLines(bool show = true)
         {
-            this.GridLines.ForEach(line => this.MyCanvas.Children.Remove(line));
-            this.GridLines.Clear();
-
-            var radius = 10000;
-            var interval = 25;
-
-            for (var x = - radius; x <= radius; x += interval)
+            if (!show)
             {
-                var line = new Line
-                {
-                    X1 = x,
-                    Y1 = -radius,
-                    X2 = x,
-                    Y2 = radius,
-                    Stroke = new SolidColorBrush(x == 0 ? Colors.DarkGray : Colors.LightGray),
-                    StrokeThickness = x == 0 ? 2 : 1,
-                    //SnapsToDevicePixels = true
-                };
-
-                this.GridLines.Add(line);
-                this.MyCanvas.Children.Add(line);
-
-                line = new Line
-                {
-                    X1 = -radius,
-                    Y1 = x,
-                    X2 = radius,
-                    Y2 = x,
-                    Stroke = new SolidColorBrush(x == 0 ? Colors.DarkGray : Colors.LightGray),
-                    StrokeThickness = x == 0 ? 2 : 1,
-                    //SnapsToDevicePixels = true
-                };
-
-                this.GridLines.Add(line);
-                this.MyCanvas.Children.Add(line);
+                this.MyCanvas.Children.Remove(this.GridLines);
+            }
+            else if (!this.MyCanvas.Children.Contains(this.GridLines))
+            {
+                this.GridLines.ReadyControl();
+                this.MyCanvas.Children.Add(this.GridLines);
             }
         }
 
@@ -312,6 +284,16 @@ namespace BubbleFlow
         private void SaveAsButton_Click(object sender, RoutedEventArgs e)
         {
             this.Submit(newFile: true);
+        }
+
+        private void GridToggleSwitch_Checked(object sender, RoutedEventArgs e)
+        {
+            this.ShowGridLines(true);
+        }
+
+        private void GridToggleSwitch_Unchecked(object sender, RoutedEventArgs e)
+        {
+            this.ShowGridLines(false);
         }
 
         #endregion

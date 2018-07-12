@@ -46,6 +46,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GridLines.cs" />
     <Compile Include="Arrow.cs" />
     <Compile Include="DataManager.cs" />
     <Compile Include="FlowModel.cs" />
