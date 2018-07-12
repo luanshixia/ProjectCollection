@@ -21,7 +21,7 @@ namespace BubbleFlow
 
         public List<FlowNode> Nodes
         {
-            get => this.NodesStore.Values.ToList();
+            get => this.NodesStore?.Values.ToList(); // NOTE: get() should return null for JSON deserializaiton to work.
             set => this.NodesStore = value.ToDictionary(node => node.ID, node => node);
         }
 
@@ -30,7 +30,7 @@ namespace BubbleFlow
 
         public List<FlowLink> Links
         {
-            get => this.LinksStore.RealValues.ToList();
+            get => this.LinksStore?.RealValues.ToList(); // NOTE: get() should return null for JSON deserializaiton to work.
             set => this.LinksStore = value.ToDoubleDictionary(link => link.From, link => link.To, link => link);
         }
 
