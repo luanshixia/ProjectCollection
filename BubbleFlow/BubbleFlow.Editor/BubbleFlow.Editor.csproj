@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{680298FD-95AE-4C0E-AB44-72F5F46EB19A}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>BubbleFlow</RootNamespace>
-    <AssemblyName>BubbleFlow</AssemblyName>
+    <RootNamespace>BubbleFlow.Editor</RootNamespace>
+    <AssemblyName>BubbleFlow.Editor</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
