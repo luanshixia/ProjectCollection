@@ -192,7 +192,7 @@ namespace BubbleFlow.Editor
         private void MainWindow_MouseMove(object sender, MouseEventArgs e)
         {
             var pos = e.GetPosition(this.MyCanvas);
-            this.Message.Text = string.Format("{0:0.00},{1:0.00}", pos.X, pos.Y);
+            this.Message.Text = string.Format("{0:0.00}, {1:0.00}", pos.X, pos.Y);
         }
 
         #endregion
