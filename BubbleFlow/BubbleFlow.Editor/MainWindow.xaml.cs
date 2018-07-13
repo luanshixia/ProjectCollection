@@ -11,7 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using Vector = Dreambuild.Geometry.Vector;
 
-namespace BubbleFlow
+namespace BubbleFlow.Editor
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

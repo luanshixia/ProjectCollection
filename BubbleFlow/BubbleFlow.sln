@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleFlow", "BubbleFlow\BubbleFlow.csproj", "{680298FD-95AE-4C0E-AB44-72F5F46EB19A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleFlow.Core", "BubbleFlow.Core\BubbleFlow.Core.csproj", "{E0610852-9B8F-4F0F-8035-BBD32A0E1343}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleFlow.Editor", "BubbleFlow.Editor\BubbleFlow.Editor.csproj", "{680298FD-95AE-4C0E-AB44-72F5F46EB19A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleFlow.Viewer", "BubbleFlow.Viewer\BubbleFlow.Viewer.csproj", "{EAD44A52-605B-43B6-B9A1-0927770DE57F}"
 EndProject
