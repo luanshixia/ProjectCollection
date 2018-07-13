@@ -5,11 +5,62 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BubbleFlow.Viewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" FontFamily="Microsoft YaHei">
+        Title="MainWindow" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary Source="pack://application:,,,/BubbleFlow.Core;component/Resources/ControlsAndStyles.xaml" />
+    </Window.Resources>
+
     <Grid x:Name="LayoutRoot" Background="WhiteSmoke">
-        <Border Name="border1" BorderThickness="1" BorderBrush="DarkGray">
+        <Grid.Resources>
+            <Style TargetType="Button">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{StaticResource DefaultForegroundSolidBrush}" />
+                <Setter Property="Padding" Value="20,3" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="13" />
+                <Setter Property="Template" Value="{StaticResource FlatButton}" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsPressed" Value="True">
+                        <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource FocusForegroundSolidBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+            <Style TargetType="ToggleButton">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="Foreground" Value="{StaticResource DefaultForegroundSolidBrush}" />
+                <Setter Property="Padding" Value="20,3" />
+                <Setter Property="Margin" Value="0" />
+                <Setter Property="Padding" Value="13" />
+                <Setter Property="Template" Value="{StaticResource FlatButton}" />
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                    </Trigger>
+                    <Trigger Property="IsChecked" Value="True">
+                        <Setter Property="Background" Value="{StaticResource PrimaryGradientBrush}" />
+                        <Setter Property="Foreground" Value="{StaticResource FocusForegroundSolidBrush}" />
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Grid.Resources>
+
+        <!--Canvas-->
+        <Border BorderThickness="1" BorderBrush="DarkGray">
             <Canvas x:Name="MyCanvas">
             </Canvas>
+        </Border>
+
+        <!--Toolbar-->
+        <Border Margin="0" VerticalAlignment="Top" Opacity="0.9" Background="{StaticResource SecondaryGradientBrush}">
+            <StackPanel Name="Toolbar" Orientation="Horizontal">
+                <Button Name="OpenButton" Content="Open" ToolTip="Open an existing workflow." Click="OpenButton_Click" />
+                <Button Name="StartButton" Content="Start simulation" ToolTip="Start simulation." Click="OpenButton_Click" />
+                <Button Name="StopButton" Content="Stop simulation" ToolTip="Stop simulation." Click="OpenButton_Click" />
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

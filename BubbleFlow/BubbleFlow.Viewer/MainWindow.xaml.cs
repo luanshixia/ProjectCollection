@@ -1,4 +1,5 @@
 ﻿using Dreambuild.Extensions;
+using Microsoft.Win32;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -27,40 +28,20 @@ namespace BubbleFlow.Viewer
             ViewerToolManager.SetFrameworkElement(this);
         }
 
-        public void AddAssist()
-        {
-            var ellipse = new Ellipse
-            {
-                Width = 100,
-                Height = 100,
-                Fill = new SolidColorBrush(Colors.Black)
-            };
-
-            Canvas.SetLeft(ellipse, 100);
-            Canvas.SetTop(ellipse, 100);
-            MyCanvas.Children.Add(ellipse);
-        }
-
         public void PanCanvas(Vector displacement)
         {
             this.Origin += displacement;
             this.RenderLayers();
         }
 
-        public void ScaleCanvas(double scale, Point basePoint)
+        public void ScaleCanvas(double newScale, Point basePoint)
         {
-            double scale0 = this.Scale;
+            var v1 = basePoint - this.Origin;
+            var v2 = (this.Scale / newScale) * v1;
 
-            double vx = basePoint.X - Origin.X;
-            double vy = basePoint.Y - Origin.Y;
-            double v1x = (scale0 / scale) * vx;
-            double v1y = (scale0 / scale) * vy;
-            double v2x = vx - v1x;
-            double v2y = vy - v1y;
-
-            this.Scale = scale;
-            this.Origin = new Point(Origin.X + v2x, Origin.Y + v2y);
-
+            this.Scale = newScale;
+            this.Origin += v1 - v2;
+            //this.Origin += (1 - this.Scale / newScale) * (basePoint - this.Origin); // floating point error?
             this.RenderLayers();
         }
 
@@ -70,8 +51,25 @@ namespace BubbleFlow.Viewer
             transform.Children.Add(new ScaleTransform { CenterX = 0, CenterY = 0, ScaleX = 1 / Scale, ScaleY = 1 / Scale });
             transform.Children.Add(new TranslateTransform { X = Origin.X, Y = Origin.Y });
             MyCanvas.RenderTransform = transform;
+        }
 
-            ViewerToolManager.Tools.ForEach(tool => tool.Render());
+        private void Open()
+        {
+            var openFileDialog = new OpenFileDialog
+            {
+                Filter = "JSON files (.json)|*.json|All files (*.*)|*.*"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                DataManager.Open(openFileDialog.FileName);
+                DataManager.CurrentDocument.DrawToCanvas(this.MyCanvas);
+            }
+        }
+
+        private void OpenButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Open();
         }
     }
 }

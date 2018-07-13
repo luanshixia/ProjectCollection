@@ -8,10 +8,10 @@
         Title="BubbleFlow" Height="720" Width="1200" WindowStartupLocation="CenterScreen"
         Loaded="MainWindow_Loaded" KeyUp="MainWindow_KeyUp" KeyDown="MainWindow_KeyDown" MouseMove="MainWindow_MouseMove">
     <Window.Resources>
-        <ResourceDictionary Source="Resources/ControlsAndStyles.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/BubbleFlow.Core;component/Resources/ControlsAndStyles.xaml" />
     </Window.Resources>
 
-    <Grid Name="layoutRoot" Background="White" ShowGridLines="True">
+    <Grid Name="LayoutRoot" Background="White" ShowGridLines="True">
         <Grid.Resources>
             <Style TargetType="Button">
                 <Setter Property="Background" Value="Transparent" />
