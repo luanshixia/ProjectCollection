@@ -14,7 +14,7 @@
     End Sub
 
     Private Async Function Start() As Task
-        Dim sm As New SnapshotManager(Me.PathTestBox.Text)
+        Dim sm As New SnapshotManager(Me.PathTextBox.Text)
         Dim records = sm.GetEmptyRecords()
         Me.TheList.ItemsSource = records
 
