@@ -4,9 +4,12 @@
   "description": "A jQuery-like JavaScript API library",
   "author": "luanshixia",
   "devDependencies": {
-    "eslint": "5.2.0"
+    "chai": "4.1.2",
+    "eslint": "5.2.0",
+    "mocha": "5.2.0"
   },
   "scripts": {
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "mocha"
   }
 }

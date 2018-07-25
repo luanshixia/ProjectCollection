@@ -2,6 +2,13 @@
 
 const version = '0.1.0';
 
+function isArrayLike(obj) {
+  const length = !!obj && "length" in obj && obj.length;
+
+  return typeof obj === "array" || length === 0 ||
+    typeof length === "number" && length > 0 && (length - 1) in obj;
+}
+
 class jqShim {
 
   static extend(...args) {
@@ -29,7 +36,21 @@ class jqShim {
   }
 
   constructor(selector) {
-    this.elems = [];
+    if (typeof (selector) === 'string') {
+      if (selector.startsWith('<') && selector.endsWith('>') && selector.length > 2) {
+        // element factory
+        this.elems = [document.createElement(selector.substring(1, selector.length - 1))];
+      } else {
+        // selector
+        this.elems = Array.from(document.querySelectorAll(selector));
+      }
+    } else if (isArrayLike(selector)) {
+      // array like
+      this.elems = Array.from(selector);
+    } else {
+      // single object
+      this.elems = [selector];
+    }
   }
 
   extend(...args) {
@@ -44,3 +65,5 @@ class jqShim {
     Array.from(this, callback);
   }
 }
+
+window.$ = window.jqShim = jqShim;
