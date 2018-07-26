@@ -29,6 +29,21 @@ describe('API tests', function() {
     it('can wrap single tag', function() {
     });
   });
+
+  describe('Utility', function() {
+    describe('#extend()', function() {
+      it('should be able to merge objects by extend()', function() {
+        const result = $.extend({}, { a: 1 }, { b: 2});
+        assert.isTrue('a' in result);
+        assert.isTrue('b' in result);
+      });
+
+      it('should be able to extend the library', function() {
+        $.extend({ test: 1 });
+        assert.isTrue('test' in $);
+      });
+    });
+  });
 });
 
 mocha.run();

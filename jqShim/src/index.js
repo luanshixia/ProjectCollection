@@ -13,7 +13,8 @@ class jqShim {
 
   static extend(...args) {
     if (args.length === 1) {
-      return Object.assign(jqShim, args[0]);
+      Object.assign(jqShim, args[0]);
+      return Object.assign(jqShimFactory, args[0]);
     }
 
     return Object.assign(...args);
@@ -53,20 +54,19 @@ class jqShim {
     }
   }
 
-  extend(...args) {
-    if (args.length === 1) {
-      return Object.assign(this, args[0]);
-    }
-
-    return Object.assign(...args);
-  }
-
   each(callback) {
-    Array.from(this, callback);
+    Array.from(this.elems, callback);
   }
 }
 
-window.jqShim = jqShim;
-window.$ = function(selector) {
+function jqShimFactory(selector) {
   return new jqShim(selector);
 }
+
+Object.assign(jqShimFactory, {
+  extend: jqShim.extend,
+  each: jqShim.each,
+  map: jqShim.map
+});
+
+window.jqShim = window.$ = jqShimFactory;
