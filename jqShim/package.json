@@ -11,7 +11,7 @@
   },
   "scripts": {
     "lint": "eslint",
-    "test": "mocha",
+    "test": "mocha test/test.js",
     "testhtml": "mocha-chrome test/test.html"
   }
 }
