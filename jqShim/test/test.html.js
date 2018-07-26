@@ -8,4 +8,13 @@ describe('General tests', function() {
   });
 });
 
+describe('API tests', function() {
+  describe('Factory', function() {
+    it('can create a tag', function() {
+      const jq = $('<div>');
+      assert.equal(1, jq.elems.length);
+    });
+  });
+});
+
 mocha.run();

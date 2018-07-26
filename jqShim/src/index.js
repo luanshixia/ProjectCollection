@@ -66,4 +66,7 @@ class jqShim {
   }
 }
 
-window.$ = window.jqShim = jqShim;
+window.jqShim = jqShim;
+window.$ = function(selector) {
+  return new jqShim(selector);
+}
