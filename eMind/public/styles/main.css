@@ -112,7 +112,7 @@ html, body {
 .mdl-demo section.section--center {
   max-width: 860px;
 }
-.mdl-demo #features section.section--center {
+.mdl-demo .feature-panel section.section--center {
   max-width: 620px;
 }
 .mdl-demo section > header{
@@ -183,10 +183,10 @@ html, body {
 .mdl-demo .mdl-layout__tab-panel:not(#overview) {
   background-color: white;
 }
-.mdl-demo #features section {
+.mdl-demo .feature-panel section {
   margin-bottom: 72px;
 }
-.mdl-demo #features h4, #features h5 {
+.mdl-demo .feature-panel h4, .feature-panel h5 {
   margin-bottom: 16px;
 }
 .mdl-demo .toc {
