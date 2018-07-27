@@ -1,0 +1,17 @@
+{
+  "name": "emind",
+  "version": "0.1.0",
+  "description": "Mind map made easy",
+  "author": "luanshixia",
+  "devDependencies": {
+    "chai": "4.1.2",
+    "eslint": "5.2.0",
+    "mocha": "5.2.0",
+    "mocha-chrome": "1.1.0"
+  },
+  "scripts": {
+    "lint": "eslint",
+    "test": "mocha test/test.js",
+    "testhtml": "mocha-chrome test/test.html"
+  }
+}
