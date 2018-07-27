@@ -9,6 +9,10 @@ function isArrayLike(obj) {
     typeof length === "number" && length > 0 && (length - 1) in obj;
 }
 
+function hyphenToCamel(value) {
+  return value.replace(/-([a-z])/g, g => g[1].toUpperCase());
+}
+
 class jqShim {
 
   static extend(...args) {
@@ -56,7 +60,74 @@ class jqShim {
 
   each(callback) {
     Array.from(this.elems, callback);
+    return this;
   }
+
+  attr(name, value) {
+    if (!value && typeof name === 'string') {
+      return this.elems[0].getAttribute(name);
+    }
+
+    if (typeof name === 'object') {
+      for (const key in name) {
+        this.elems.forEach(elem => elem.setAttribute(key, name[key]));
+      }
+    } else {
+      this.elems.forEach(elem => elem.setAttribute(name, value));
+    }
+
+    return this;
+  }
+
+  prop(name, value) {
+    if (!value && typeof name === 'string') {
+      return this.elems[0][name];
+    }
+
+    if (typeof name === 'object') {
+      for (const key in name) {
+        this.elems.forEach(elem => elem[key] = name[key]);
+      }
+    } else {
+      this.elems.forEach(elem => elem[name] = value);
+    }
+
+    return this;
+  }
+
+  data(name, value) {
+    // TODO: make this more robust
+    if (!value) {
+      return this.elems[0][name];
+    }
+
+    this.elems.forEach(elem => elem[name] = value);
+    return this;
+  }
+
+  css(name, value) {
+    if (typeof name === 'string') {
+      name = hyphenToCamel(name);
+    }
+
+    if (!value && typeof name === 'string') {
+      return window
+        .getComputedStyle(this.elems[0])
+        .getPropertyValue(name);
+    }
+
+    if (typeof name === 'object') {
+      for (let key in name) {
+        key = hyphenToCamel(key);
+        this.elems.forEach(elem => elem.style[key] = name[key]);
+      }
+    } else {
+      this.elems.forEach(elem => elem.style[name] = value);
+    }
+
+    return this;
+  }
+
 }
 
 function jqShimFactory(selector) {

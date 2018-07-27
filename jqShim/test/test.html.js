@@ -44,6 +44,19 @@ describe('API tests', function() {
       });
     });
   });
+
+  describe('Basics', function() {
+    describe('#attr()', function() {
+      it('should be able to get attribute', function() {
+        assert.equal('mocha', $('#mocha').attr('id'));
+      });
+
+      it('should be able to set attribute', function() {
+        $('#mocha').attr('class', 'test');
+        assert.equal('test', $('#mocha').attr('class'));
+      });
+    });
+  });
 });
 
 mocha.run();
