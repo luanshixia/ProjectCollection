@@ -1,3 +1,13 @@
 {
-  "extends": "airbnb"
+  "extends": "airbnb",
+  "rules": {
+    "func-names": "warn",
+    "max-len": ["warn", { "code": 120 }],
+    "no-param-reassign": "warn",
+    "no-undef": "warn",
+    "no-underscore-dangle": "warn",
+    "no-unused-vars": "warn",
+    "prefer-arrow-callback": "warn",
+    "prefer-destructuring": "warn"
+  }
 }

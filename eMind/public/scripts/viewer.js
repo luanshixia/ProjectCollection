@@ -11,4 +11,4 @@ class Viewer extends Widget {
   }
 }
 
-WidgetFactory.register("dreambuild-viewer", "viewer", Viewer);
+WidgetFactory.register('dreambuild-viewer', 'viewer', Viewer);

@@ -1,8 +1,8 @@
 const assert = chai.assert;
 
-describe('General tests', function() {
-  describe('Environment', function() {
-    it('should be in browser mode', function() {
+describe('General tests', () => {
+  describe('Environment', () => {
+    it('should be in browser mode', () => {
       assert.isTrue(!!window);
     });
   });
