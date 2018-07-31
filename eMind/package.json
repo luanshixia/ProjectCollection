@@ -4,12 +4,18 @@
   "description": "Mind map made easy",
   "author": "luanshixia",
   "devDependencies": {
+    "babel-eslint": "^8.2.6",
     "chai": "4.1.2",
-    "eslint": "5.2.0",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^17.0.0",
+    "eslint-plugin-import": "^2.12.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.9.1",
     "mocha": "5.2.0",
     "mocha-chrome": "1.1.0"
   },
   "scripts": {
+    "setuplint": "npx install-peerdeps --dev eslint-config-airbnb",
     "lint": "eslint",
     "test": "mocha test/test.js",
     "testhtml": "mocha-chrome test/test.html"
