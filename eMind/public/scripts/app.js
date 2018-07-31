@@ -3,6 +3,7 @@ const root = Node.fromSpecString('{"content":"Root","children":[{"content":"Chil
 
 root.updateAllRecursively();
 
+// eslint-disable-next-line no-console
 root.walk(node => console.log(node.toDebugString()));
 
 const map = new MindMap(root);

@@ -18,6 +18,14 @@ class WidgetFactory {
   }
 }
 
+class WidgetOptions {
+  constructor() {
+    this.disabled = false;
+    this.width = 0;
+    this.height = 0;
+  }
+}
+
 class Widget {
   constructor($element, options) {
     this.$element = $element;

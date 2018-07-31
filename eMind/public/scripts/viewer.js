@@ -1,3 +1,6 @@
+class ViewerOptions extends WidgetOptions {
+}
+
 class Viewer extends Widget {
   constructor($element, options) {
     super($element, options);
