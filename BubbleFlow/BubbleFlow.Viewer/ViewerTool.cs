@@ -43,34 +43,17 @@ namespace BubbleFlow.Viewer
 
     public class PanCanvasTool : ViewerTool
     {
-        private bool IsDragging = false;
         private Point PreviousPosition;
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            if (this.IsDragging)
+            var position = e.GetPosition(MainWindow.Current);
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var position = e.GetPosition(MainWindow.Current);
                 MainWindow.Current.PanCanvas(position - this.PreviousPosition);
-                this.PreviousPosition = position;
             }
-        }
 
-        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.IsDragging = true;
-                this.PreviousPosition = e.GetPosition(MainWindow.Current);
-            }
-        }
-
-        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.IsDragging = false;
-            }
+            this.PreviousPosition = position;
         }
     }
 }

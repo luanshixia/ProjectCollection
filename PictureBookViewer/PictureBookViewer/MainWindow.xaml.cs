@@ -52,9 +52,9 @@ namespace PictureBookViewer
 
         void PageCombo_SelectionChanged(object sender, EventArgs e)
         {
-            if (PageCombo.SelectedItem != null)
+            if (this.PageCombo.SelectedItem != null)
             {
-                this.PageManager.GoToPage((int)PageCombo.SelectedItem);
+                this.PageManager.GoToPage((int)this.PageCombo.SelectedItem);
             }
         }
 
@@ -118,10 +118,10 @@ namespace PictureBookViewer
 
         private void ZoomTo_Click(object sender, RoutedEventArgs e)
         {
-            var ztw = new ZoomToWindow();
-            if (ztw.ShowDialog() == true)
+            var zoomToWindow = new ZoomToWindow();
+            if (zoomToWindow.ShowDialog() == true)
             {
-                this.PageManager.Zoom(ztw.Magnification);
+                this.PageManager.Zoom(zoomToWindow.Magnification);
             }
         }
 

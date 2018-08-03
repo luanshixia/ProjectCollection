@@ -50,42 +50,17 @@ namespace BubbleFlow.Editor
 
     public class PanCanvasTool : ViewerTool
     {
-        private bool IsDragging = false;
         private Point PreviousPosition;
-
-        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.IsDragging = false;
-            }
-        }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            if (this.IsDragging)
+            var position = e.GetPosition(MainWindow.Current);
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var position = e.GetPosition(MainWindow.Current);
                 MainWindow.Current.PanCanvas(position - this.PreviousPosition);
-                this.PreviousPosition = position;
             }
-        }
 
-        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.IsDragging = true;
-                this.PreviousPosition = e.GetPosition(MainWindow.Current);
-            }
-        }
-
-        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.IsDragging = false;
-            }
+            this.PreviousPosition = position;
         }
 
         public override void EnterToolHandler()
@@ -284,29 +259,20 @@ namespace BubbleFlow.Editor
 
     public class MoveNodeTool : ViewerTool
     {
-        private bool IsDragging = false;
         private Point PreviousPosition;
         private NodeBubble BubbleToMove;
 
-        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-            {
-                this.IsDragging = false;
-            }
-        }
-
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            if (this.IsDragging && this.BubbleToMove != null)
+            var position = e.GetPosition(MainWindow.Current.MyCanvas);
+            if (e.LeftButton == MouseButtonState.Pressed && this.BubbleToMove != null)
             {
-                var position = e.GetPosition(MainWindow.Current.MyCanvas);
                 this.BubbleToMove.Position += position - this.PreviousPosition;
                 this.BubbleToMove.ReadyControl();
                 this.UpdateAllLinks(position);
-
-                this.PreviousPosition = position;
             }
+
+            this.PreviousPosition = position;
         }
 
         public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
@@ -317,11 +283,7 @@ namespace BubbleFlow.Editor
                 {
                     if (element.Parent is NodeBubble bubble)
                     {
-                        this.IsDragging = true;
-                        this.PreviousPosition = e.GetPosition(MainWindow.Current.MyCanvas);
                         this.BubbleToMove = bubble;
-
-                        return;
                     }
                 }
             }
@@ -333,17 +295,18 @@ namespace BubbleFlow.Editor
             {
                 if (this.BubbleToMove != null)
                 {
-                    var position = e.GetPosition(MainWindow.Current.MyCanvas);
-                    this.BubbleToMove.Position = position;
-                    this.BubbleToMove.ReadyControl();
-                    this.UpdateAllLinks(position);
+                    if (MainWindow.Current.GridToggleSwitch.IsChecked == true)
+                    {
+                        this.BubbleToMove.Position = MainWindow.Current.GridLines.Snap(this.BubbleToMove.Position);
+                        this.BubbleToMove.ReadyControl();
+                        this.UpdateAllLinks(this.BubbleToMove.Position);
+                    }
 
                     var node = DataManager.CurrentDocument.NodesStore[this.BubbleToMove.NodeID];
-                    node.Metadata.Left = position.X;
-                    node.Metadata.Top = position.Y;
+                    node.Metadata.Left = this.BubbleToMove.Position.X;
+                    node.Metadata.Top = this.BubbleToMove.Position.Y;
                 }
 
-                this.IsDragging = false;
                 this.BubbleToMove = null;
             }
         }
