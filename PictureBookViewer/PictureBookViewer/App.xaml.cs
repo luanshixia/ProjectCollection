@@ -8,7 +8,7 @@ using System.Windows;
 namespace PictureBookViewer
 {
     /// <summary>
-    /// App.xaml 的交互逻辑
+    /// App.xaml code behind.
     /// </summary>
     public partial class App : Application
     {

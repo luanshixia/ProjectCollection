@@ -1,20 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
 namespace PictureBookViewer
 {
     /// <summary>
-    /// ZoomToWindow.xaml 的交互逻辑
+    /// ZoomToWindow.xaml code behind.
     /// </summary>
     public partial class ZoomToWindow : Window
     {
@@ -22,37 +11,35 @@ namespace PictureBookViewer
         {
             get
             {
-                string source = TextBox1.Text;
+                string source = this.InputTextBox.Text;
                 if (source.EndsWith("%"))
                 {
                     source = source.Remove(source.Length - 1);
                     source = source.Insert(source.Length - 2, ".");
                 }
-                double mag = 0;
-                if (double.TryParse(source, out mag))
+
+                if (double.TryParse(source, out double mag))
                 {
                     return mag;
                 }
-                else
-                {
-                    return 1;
-                }
+
+                return 1;
             }
         }
 
         public ZoomToWindow()
         {
-            InitializeComponent();
+            this.InitializeComponent();
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void OkButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = true;
+            this.DialogResult = true;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
-            DialogResult = false;
+            this.DialogResult = false;
         }
     }
 }

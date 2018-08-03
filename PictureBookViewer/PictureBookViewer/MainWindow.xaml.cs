@@ -1,79 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using PictureBookViewer.Code;
+using System;
 using System.Linq;
-using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
-using PictureBookViewer.Code;
+using System.Windows.Forms;
 
 namespace PictureBookViewer
 {
     /// <summary>
-    /// MainWindow.xaml 的交互逻辑
+    /// MainWindow.xaml code behind.
     /// </summary>
     public partial class MainWindow : Window
     {
-        private PageManager _pm;
-        private string _lastPath;
+        private PageManager PageManager;
+        private string LastPath;
+
         public static MainWindow Current { get; private set; }
 
         public MainWindow()
         {
             InitializeComponent();
 
-            Current = this;
+            MainWindow.Current = this;
         }
 
         private void OpenFolder_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
-            fbd.SelectedPath = _lastPath;
-            fbd.Description = "Choose the folder that contains your eBook.";
-            fbd.ShowNewFolderButton = false;
-            if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            var folderDialog = new FolderBrowserDialog
             {
-                _pm = new PageManager(fbd.SelectedPath);
-                _lastPath = fbd.SelectedPath;
-                DisplayArea.Content = _pm.GetContinuousLayout();
-                DisplayArea.ScrollToTop();
+                SelectedPath = this.LastPath,
+                Description = "Choose a folder that contains your eBook.",
+                ShowNewFolderButton = false
+            };
+
+            if (folderDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                this.PageManager = new PageManager(folderDialog.SelectedPath);
+                this.LastPath = folderDialog.SelectedPath;
+                this.DisplayArea.Content = this.PageManager.GetContinuousLayout();
+                this.DisplayArea.ScrollToTop();
             }
-            Enumerable.Range(1, _pm.PictureFiles.Count).ToList().ForEach(i =>
+
+            Enumerable.Range(1, this.PageManager.PictureFiles.Count).ToList().ForEach(i =>
             {
-                PageCombo.Items.Add(i);
+                this.PageCombo.Items.Add(i);
             });
-            PageCombo.DropDownClosed += PageCombo_SelectionChanged;
-            TotalPageLabel.Content = string.Format("(of {0})", _pm.PictureFiles.Count);
+
+            this.PageCombo.DropDownClosed += this.PageCombo_SelectionChanged;
+            this.TotalPageLabel.Content = $"(of {this.PageManager.PictureFiles.Count})";
         }
 
         void PageCombo_SelectionChanged(object sender, EventArgs e)
         {
             if (PageCombo.SelectedItem != null)
             {
-                _pm.GoToPage((int)PageCombo.SelectedItem);
+                this.PageManager.GoToPage((int)PageCombo.SelectedItem);
             }
         }
 
         private void DisplayArea_ScrollChanged(object sender, ScrollChangedEventArgs e)
         {
-            if (_pm != null)
+            if (this.PageManager != null)
             {
                 //Point viewportCenter = new Point(150, DisplayArea.VerticalOffset + DisplayArea.ActualHeight / 2);
-                _pm.OnPageDisplay(DisplayArea.VerticalOffset);
+                this.PageManager.OnPageDisplay(this.DisplayArea.VerticalOffset);
             }
         }
 
         private void Close_Click(object sender, RoutedEventArgs e)
         {
-            _pm = null;
-            DisplayArea.Content = null;
+            this.PageManager = null;
+            this.DisplayArea.Content = null;
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
@@ -83,69 +80,69 @@ namespace PictureBookViewer
 
         private void ActualSize_Click(object sender, RoutedEventArgs e)
         {
-            _pm.SetDisplayMode(PageDisplayMode.ActualSize);
+            this.PageManager.SetDisplayMode(PageDisplayMode.ActualSize);
         }
 
         private void FitPage_Click(object sender, RoutedEventArgs e)
         {
-            _pm.SetDisplayMode(PageDisplayMode.FitPage);
+            this.PageManager.SetDisplayMode(PageDisplayMode.FitPage);
         }
 
         private void FitWidth_Click(object sender, RoutedEventArgs e)
         {
-            _pm.SetDisplayMode(PageDisplayMode.FitWidth);
+            this.PageManager.SetDisplayMode(PageDisplayMode.FitWidth);
         }
 
         private void FitHeight_Click(object sender, RoutedEventArgs e)
         {
-            _pm.SetDisplayMode(PageDisplayMode.FitHeight);
+            this.PageManager.SetDisplayMode(PageDisplayMode.FitHeight);
         }
 
         private void DisplayArea_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (_pm != null)
+            if (this.PageManager != null)
             {
-                _pm.OnResize();
+                this.PageManager.OnResize();
             }
         }
 
         private void ZoomIn_Click(object sender, RoutedEventArgs e)
         {
-            _pm.ZoomIn();
+            this.PageManager.ZoomIn();
         }
 
         private void ZoomOut_Click(object sender, RoutedEventArgs e)
         {
-            _pm.ZoomOut();
+            this.PageManager.ZoomOut();
         }
 
         private void ZoomTo_Click(object sender, RoutedEventArgs e)
         {
-            ZoomToWindow ztw = new ZoomToWindow();
+            var ztw = new ZoomToWindow();
             if (ztw.ShowDialog() == true)
             {
-                _pm.Zoom(ztw.Magnification);
+                this.PageManager.Zoom(ztw.Magnification);
             }
         }
 
         private void FirstPage_Click(object sender, RoutedEventArgs e)
         {
-            _pm.GoToPage(1);
+            this.PageManager.GoToPage(1);
         }
 
         private void PreviousPage_Click(object sender, RoutedEventArgs e)
         {
-            _pm.GoToPage(_pm.CurrentPage - 1);
+            this.PageManager.GoToPage(this.PageManager.CurrentPage - 1);
         }
 
         private void NextPage_Click(object sender, RoutedEventArgs e)
         {
-            _pm.GoToPage(_pm.CurrentPage + 1);
+            this.PageManager.GoToPage(this.PageManager.CurrentPage + 1);
         }
 
         private void LastPage_Click(object sender, RoutedEventArgs e)
         {
-            _pm.GoToPage(_pm.PictureFiles.Count);
+            this.PageManager.GoToPage(this.PageManager.PictureFiles.Count);
         }
 
         private void GoToPage_Click(object sender, RoutedEventArgs e)
