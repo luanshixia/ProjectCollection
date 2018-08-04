@@ -85,18 +85,18 @@ namespace Dreambuild.Gis.Display
         public static void SetFrameworkElement(FrameworkElement element)
         {
             element.MouseMove += (s, args) => Tools.ForEach(t => t.MouseMoveHandler(s, args));
-            element.MouseLeftButtonDown += (s, args) =>
+            element.MouseDown += (s, args) =>
             {
                 if (args.ClickCount >= 2)
                 {
-                    Tools.ForEach(t => t.MouseLDoubleClickHandler(s, args));
+                    Tools.ForEach(t => t.MouseDoubleClickHandler(s, args));
                 }
                 else
                 {
-                    Tools.ForEach(t => t.MouseLDownHandler(s, args));
+                    Tools.ForEach(t => t.MouseDownHandler(s, args));
                 }
             };
-            element.MouseLeftButtonUp += (s, args) => Tools.ForEach(t => t.MouseLUpHandler(s, args));
+            element.MouseUp += (s, args) => Tools.ForEach(t => t.MouseUpHandler(s, args));
             element.MouseWheel += (s, args) => Tools.ForEach(t => t.MouseWheelHandler(s, args));
             element.KeyDown += (s, args) => Tools.ForEach(t => t.KeyDownHandler(s, args));
         }
@@ -127,15 +127,7 @@ namespace Dreambuild.Gis.Display
         {
         }
 
-        public virtual void MouseLDownHandler(object sender, MouseButtonEventArgs e)
-        {
-        }
-
-        public virtual void MouseLUpHandler(object sender, MouseButtonEventArgs e)
-        {
-        }
-
-        public virtual void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
+        public virtual void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
         }
 
@@ -163,7 +155,7 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 组合的视图工具
+    /// The combined viewer tool.
     /// </summary>
     public class CombinedViewerTool : ViewerTool
     {
@@ -210,19 +202,9 @@ namespace Dreambuild.Gis.Display
             _tools.ForEach(x => x.MouseUpHandler(sender, e));
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
-            _tools.ForEach(x => x.MouseLDownHandler(sender, e));
-        }
-
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
-        {
-            _tools.ForEach(x => x.MouseLUpHandler(sender, e));
-        }
-
-        public override void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
-        {
-            _tools.ForEach(x => x.MouseLDoubleClickHandler(sender, e));
+            _tools.ForEach(x => x.MouseDoubleClickHandler(sender, e));
         }
 
         public override void MouseWheelHandler(object sender, MouseWheelEventArgs e)
@@ -247,19 +229,60 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 平移画布工具
+    /// Wheel zoom tool.
+    /// </summary>
+    public class WheelScalingTool : ViewerTool
+    {
+        private static readonly double[] ZoomLevels = Enumerable.Range(-15, 31).Select(i => Math.Pow(2, i)).Reverse().ToArray(); // newly 20130403
+
+        public override void MouseWheelHandler(object sender, MouseWheelEventArgs e)
+        {
+            base.MouseWheelHandler(sender, e);
+
+            var basePoint = e.GetPosition(MapControl.Current);
+            int index = WheelScalingTool.FindScaleIndex(MapControl.Current.Scale);
+            index += e.Delta / 120;
+            if (index > ZoomLevels.Length - 1)
+            {
+                index = ZoomLevels.Length - 1;
+            }
+            else if (index < 0)
+            {
+                index = 0;
+            }
+
+            double scale = ZoomLevels[index];
+            MapControl.Current.ScaleCanvas(scale, basePoint); // TODO: look into ScaleCanvas().
+        }
+
+        private static int FindScaleIndex(double scale)
+        {
+            for (int i = 0; i < ZoomLevels.Length; i++)
+            {
+                if (scale > ZoomLevels[i] * 0.75)
+                {
+                    return i;
+                }
+            }
+
+            return ZoomLevels.Length - 1;
+        }
+    }
+
+    /// <summary>
+    /// Pan canvas tool.
+    /// TODO: find other ways to support middle button pan.
     /// </summary>
     public class PanCanvasTool : ViewerTool
     {
-        private bool _isDragging = false;
-        private Point _mouseDownTemp;
+        private Point PreviousPosition;
 
         public override ContextMenu ContextMenu
         {
             get
             {
-                ContextMenu menu = new ContextMenu();
-                MenuItem mi = new MenuItem { Header = "DrawOrder: Move To Bottom" };
+                var menu = new ContextMenu();
+                var mi = new MenuItem { Header = "DrawOrder: Move To Bottom" };
                 mi.Click += DrawOrderMoveToBottom;
                 menu.Items.Add(mi);
                 return menu;
@@ -277,26 +300,27 @@ namespace Dreambuild.Gis.Display
             }
             else
             {
-                MessageBox.Show("请先选择实体。", "提示", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Select first.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 return;
             }
         }
 
         public override void MouseMoveHandler(object sender, MouseEventArgs e)
         {
-            if (_isDragging)
+            var position = e.GetPosition(MapControl.Current);
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                var position = e.GetPosition(MapControl.Current);
-                MapControl.Current.PanCanvas(position - _mouseDownTemp);
-                _mouseDownTemp = position;
+                MapControl.Current.PanCanvas(position - this.PreviousPosition);
             }
+
+            this.PreviousPosition = position;
         }
 
         public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Right)
             {
-                Point pt = e.GetPosition(MapControl.Current);
+                var pt = e.GetPosition(MapControl.Current);
                 var pos = MapControl.Current.GetWorldCoord(pt);
                 var queryResult = MapDataManager.LatestMap.QueryFeatures(SpatialQueryOperation.Point, pos, 5 * MapControl.Current.Scale).ToList();
                 if (queryResult.Count > 0)
@@ -309,23 +333,6 @@ namespace Dreambuild.Gis.Display
                     SelectionSet.ClearSelection();
                 }
             }
-        }
-
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
-        {
-            _isDragging = true;
-            _mouseDownTemp = e.GetPosition(MapControl.Current);
-        }
-
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
-        {
-            _isDragging = false;
-        }
-
-        public void StartDrag(Point mousePos)
-        {
-            _isDragging = true;
-            _mouseDownTemp = mousePos;
         }
 
         public override void EnterToolHandler()
@@ -342,50 +349,50 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 点选工具
+    /// Point selection tool.
     /// </summary>
     public class SelectionTool : ViewerTool
     {
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            Point pt = e.GetPosition(MapControl.Current);
-            var pos = MapControl.Current.GetWorldCoord(pt);
-            var queryResult = MapDataManager.LatestMap.QueryFeatures(SpatialQueryOperation.Point, pos, 5 * MapControl.Current.Scale).ToList();
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift) // mod 20130222
+            if (e.ChangedButton == MouseButton.Left)
             {
-                if (queryResult.Count > 0)
+                var pt = e.GetPosition(MapControl.Current);
+                var pos = MapControl.Current.GetWorldCoord(pt);
+                var queryResult = MapDataManager.LatestMap.QueryFeatures(SpatialQueryOperation.Point, pos, 5 * MapControl.Current.Scale).ToList();
+                if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift) // mod 20130222
                 {
-                    var single = queryResult.Last();
-                    if (SelectionSet.Contents.Contains(single))
+                    if (queryResult.Count > 0)
                     {
-                        SelectionSet.SubtractSelection(new[] { single });
+                        var single = queryResult.Last();
+                        if (SelectionSet.Contents.Contains(single))
+                        {
+                            SelectionSet.SubtractSelection(new[] { single });
+                        }
+                        else
+                        {
+                            SelectionSet.AddSelection(new[] { single });
+                        }
+                    }
+                }
+                else
+                {
+                    if (queryResult.Count > 0)
+                    {
+                        var single = queryResult.Last();
+                        SelectionSet.Select(new[] { single });
                     }
                     else
                     {
-                        SelectionSet.AddSelection(new[] { single });
+                        SelectionSet.ClearSelection();
                     }
-                }
-                else
-                {
-                }
-            }
-            else
-            {
-                if (queryResult.Count > 0)
-                {
-                    var single = queryResult.Last();
-                    SelectionSet.Select(new[] { single });
-                }
-                else
-                {
-                    SelectionSet.ClearSelection();
                 }
             }
         }
     }
 
     /// <summary>
-    /// 矩形选择工具
+    /// Rect selection tool.
     /// </summary>
     public class RectSelectionTool : ViewerTool
     {
@@ -445,46 +452,49 @@ namespace Dreambuild.Gis.Display
             }
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            if (_isDragging == false)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = true;
-                _mouseDownOrigin = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
-                return;
-            }
-
-            _mouseDownEnd = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
-            var extents = Extents.FromPoints(_mouseDownOrigin, _mouseDownEnd);
-            var queryResult = MapDataManager.LatestMap.QueryFeatures(IsWindow ? SpatialQueryOperation.Window : SpatialQueryOperation.Cross, extents, 0).ToArray();
-            if (queryResult.Length > 0)
-            {
-                if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
-                    && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control) // mod 20140725
+                if (_isDragging == false)
                 {
-                    SelectionSet.SubtractSelection(queryResult);
+                    _isDragging = true;
+                    _mouseDownOrigin = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
+                    return;
                 }
-                else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift) // mod 20120810
+
+                _mouseDownEnd = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
+                var extents = Extents.FromPoints(_mouseDownOrigin, _mouseDownEnd);
+                var queryResult = MapDataManager.LatestMap.QueryFeatures(IsWindow ? SpatialQueryOperation.Window : SpatialQueryOperation.Cross, extents, 0).ToArray();
+                if (queryResult.Length > 0)
                 {
-                    SelectionSet.AddSelection(queryResult);
+                    if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
+                        && (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control) // mod 20140725
+                    {
+                        SelectionSet.SubtractSelection(queryResult);
+                    }
+                    else if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift) // mod 20120810
+                    {
+                        SelectionSet.AddSelection(queryResult);
+                    }
+                    else
+                    {
+                        SelectionSet.Select(queryResult); // mod 20120725
+                    }
                 }
                 else
                 {
-                    SelectionSet.Select(queryResult); // mod 20120725
+                    SelectionSet.ClearSelection();
                 }
-            }
-            else
-            {
-                SelectionSet.ClearSelection();
-            }
 
-            _isDragging = false;
-            this.Rect.Visibility = Visibility.Collapsed;
+                _isDragging = false;
+                this.Rect.Visibility = Visibility.Collapsed;
+            }
         }
     }
 
     /// <summary>
-    /// 矩形缩放工具
+    /// Rect scaling tool.
     /// </summary>
     public class RectScaleTool : ViewerTool
     {
@@ -519,40 +529,46 @@ namespace Dreambuild.Gis.Display
             }
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            if (!_isStarted)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _isStarted = true;
-                _isDragging = true;
-                _mouseDownOrigin = e.GetPosition(MapControl.Current);
+                if (!_isStarted)
+                {
+                    _isStarted = true;
+                    _isDragging = true;
+                    _mouseDownOrigin = e.GetPosition(MapControl.Current);
 
-                MapControl.Current.Children.Add(Rect);
-            }
-            else
-            {
-                _isStarted = false;
+                    MapControl.Current.Children.Add(Rect);
+                }
+                else
+                {
+                    _isStarted = false;
+                }
             }
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            if (_isStarted == false)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                if (_isMoving == true)
+                if (_isStarted == false)
                 {
-                    var pt1 = MapControl.Current.GetWorldCoord(_mouseDownOrigin);
-                    var pt2 = MapControl.Current.GetWorldCoord(_mouseDownEnd);
+                    if (_isMoving == true)
+                    {
+                        var pt1 = MapControl.Current.GetWorldCoord(_mouseDownOrigin);
+                        var pt2 = MapControl.Current.GetWorldCoord(_mouseDownEnd);
 
-                    var extents = Extents.FromPoints(pt1, pt2);
-                    MapControl.Current.Zoom(extents);
+                        var extents = Extents.FromPoints(pt1, pt2);
+                        MapControl.Current.Zoom(extents);
 
-                    _isMoving = false;
+                        _isMoving = false;
+                    }
+
+                    MapControl.Current.Children.Remove(Rect);
+                    Rect.Visibility = Visibility.Collapsed;
+                    _isDragging = false;
                 }
-
-                MapControl.Current.Children.Remove(Rect);
-                Rect.Visibility = Visibility.Collapsed;
-                _isDragging = false;
             }
         }
 
@@ -564,7 +580,7 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 面积测量工具
+    /// Area measuring tool.
     /// </summary>
     public class AreaMeasureTool : ViewerTool
     {
@@ -579,8 +595,14 @@ namespace Dreambuild.Gis.Display
         private static readonly SolidColorBrush _strokeBrush = new SolidColorBrush(new Color { A = 255, B = 255, R = 128 });
         private static readonly SolidColorBrush _fillBrush = new SolidColorBrush(new Color { A = 64, B = 255, R = 128 });
 
-        private TextBlock _areaLabel = new TextBlock();
-        private System.Windows.Shapes.Polygon _measurePolygon = new System.Windows.Shapes.Polygon { Stroke = _strokeBrush, Fill = _fillBrush, StrokeThickness = 2, StrokeLineJoin = PenLineJoin.Bevel };
+        private readonly TextBlock _areaLabel = new TextBlock();
+        private readonly Polygon _measurePolygon = new Polygon
+        {
+            Stroke = _strokeBrush,
+            Fill = _fillBrush,
+            StrokeThickness = 2,
+            StrokeLineJoin = PenLineJoin.Bevel
+        };
 
         private List<Geometry.Vector> _clickPoints = new List<Geometry.Vector>();
 
@@ -630,60 +652,66 @@ namespace Dreambuild.Gis.Display
             this.Render();
         }
 
-        public override void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             _isEnded = true;
             _isStarted = false;
             _isDragging = false;
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            if (_isEnded)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _areaLabel.Text = string.Empty;
-                _measurePolygon.Points.Clear();
-                _clickPoints.Clear();
+                if (_isEnded)
+                {
+                    _areaLabel.Text = string.Empty;
+                    _measurePolygon.Points.Clear();
+                    _clickPoints.Clear();
 
-                _isEnded = false;
+                    _isEnded = false;
+                }
+
+                _isStarted = true;
             }
-
-            _isStarted = true;
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            if (_isStarted && !_isEnded && !_isDragging)  // 第一次点击
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = true;
-                _mouseDownOrigin = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
-                _mouseDownBegin = _mouseDownOrigin;
-                _clickPoints.Add(_mouseDownBegin);
-            }
-            else if (_isEnded)  // 结束点击
-            {
-                //_clickPoints.Remove(_mouseDownOrigin);
-                this.Render();
-
-                if (_clickPoints.Count > 1)
+                if (_isStarted && !_isEnded && !_isDragging)  // First click
                 {
-                    var areaPoly = new PointString(_clickPoints);
-                    _areaLabel.Text = "面积：" + areaPoly.Area().ToString("0.000") + "m²";
-                    Canvas.SetLeft(_areaLabel, MapControl.Current.GetCanvasCoord(_clickPoints.ElementAt(_clickPoints.Count - 1)).X + 10);
-                    Canvas.SetTop(_areaLabel, MapControl.Current.GetCanvasCoord(_clickPoints.ElementAt(_clickPoints.Count - 1)).Y + 15);
+                    _isDragging = true;
+                    _mouseDownOrigin = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
+                    _mouseDownBegin = _mouseDownOrigin;
+                    _clickPoints.Add(_mouseDownBegin);
                 }
-            }
-            else // 中间点击
-            {
-                _mouseDownOrigin = MapControl.Current.GetWorldCoord((e.GetPosition(MapControl.Current)));
-                _clickPoints.Add(_mouseDownOrigin);
-                this.Render();
+                else if (_isEnded)  // Last click
+                {
+                    //_clickPoints.Remove(_mouseDownOrigin);
+                    this.Render();
+
+                    if (_clickPoints.Count > 1)
+                    {
+                        var areaPoly = new PointString(_clickPoints);
+                        _areaLabel.Text = "Area: " + areaPoly.Area().ToString("0.000") + "m²";
+                        Canvas.SetLeft(_areaLabel, MapControl.Current.GetCanvasCoord(_clickPoints.ElementAt(_clickPoints.Count - 1)).X + 10);
+                        Canvas.SetTop(_areaLabel, MapControl.Current.GetCanvasCoord(_clickPoints.ElementAt(_clickPoints.Count - 1)).Y + 15);
+                    }
+                }
+                else // Middle clicks
+                {
+                    _mouseDownOrigin = MapControl.Current.GetWorldCoord((e.GetPosition(MapControl.Current)));
+                    _clickPoints.Add(_mouseDownOrigin);
+                    this.Render();
+                }
             }
         }
     }
 
     /// <summary>
-    /// 距离测量工具
+    /// Distance measuring tool.
     /// </summary>
     public class MeasureTool : ViewerTool
     {
@@ -755,57 +783,63 @@ namespace Dreambuild.Gis.Display
             this.Render();
         }
 
-        public override void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             _isEnded = true;
             _isStarted = false;
             _isDragging = false;
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            if (_isEnded)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _labels.ForEach(x => MapControl.Current.Children.Remove(x.Key));
-                _clickPoints.Clear();
-                _measureLine.Points.Clear();
-                _labels.Clear();
+                if (_isEnded)
+                {
+                    _labels.ForEach(x => MapControl.Current.Children.Remove(x.Key));
+                    _clickPoints.Clear();
+                    _measureLine.Points.Clear();
+                    _labels.Clear();
 
-                _isEnded = false;
+                    _isEnded = false;
+                }
+
+                _isStarted = true;
             }
-
-            _isStarted = true;
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            if (!_isEnded && _isStarted && !_isDragging)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = true;
-                _mouseDownOrigin = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
-                _clickPoints.Add(_mouseDownOrigin);
-            }
-            else if (_isEnded)
-            {
-            }
-            else
-            {
-                _tempMouseDownEnd = _mouseDownEnd;
-                _clickPoints.Add(_mouseDownEnd);
+                if (!_isEnded && _isStarted && !_isDragging)
+                {
+                    _isDragging = true;
+                    _mouseDownOrigin = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
+                    _clickPoints.Add(_mouseDownOrigin);
+                }
+                else if (_isEnded)
+                {
+                }
+                else
+                {
+                    _tempMouseDownEnd = _mouseDownEnd;
+                    _clickPoints.Add(_mouseDownEnd);
 
-                double distance = Enumerable.Range(0, _clickPoints.Count - 1).Sum(i => _clickPoints[i].Dist(_clickPoints[i + 1]));
-                var tempLabel = new TextBlock { Text = distance.ToString("0.000") + "m" };
-                Canvas.SetLeft(tempLabel, MapControl.Current.GetCanvasCoord(_mouseDownEnd).X + 10);
-                Canvas.SetTop(tempLabel, MapControl.Current.GetCanvasCoord(_mouseDownEnd).Y + 15);
+                    double distance = Enumerable.Range(0, _clickPoints.Count - 1).Sum(i => _clickPoints[i].Dist(_clickPoints[i + 1]));
+                    var tempLabel = new TextBlock { Text = distance.ToString("0.000") + "m" };
+                    Canvas.SetLeft(tempLabel, MapControl.Current.GetCanvasCoord(_mouseDownEnd).X + 10);
+                    Canvas.SetTop(tempLabel, MapControl.Current.GetCanvasCoord(_mouseDownEnd).Y + 15);
 
-                _labels.Add(tempLabel, _mouseDownEnd);
-                MapControl.Current.Children.Add(tempLabel);
+                    _labels.Add(tempLabel, _mouseDownEnd);
+                    MapControl.Current.Children.Add(tempLabel);
+                }
             }
         }
     }
 
     /// <summary>
-    /// 设置标记工具
+    /// Set marks tool.
     /// </summary>
     public class SetMarksTool : ViewerTool
     {
@@ -813,7 +847,7 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 光标跟随提示工具
+    /// Cursor tip tool.
     /// </summary>
     public class CursorTipTool : ViewerTool // todo: when this is on, app exit has issue.
     {
@@ -821,13 +855,13 @@ namespace Dreambuild.Gis.Display
 
         private Point Position;
 
-        private Popup ToolTipPopup = new Popup
+        private readonly Popup ToolTipPopup = new Popup
         {
             Placement = PlacementMode.Relative,
             PlacementTarget = MapControl.Current
         };
 
-        private TextBlock ToolTipTextBlock = new TextBlock
+        private readonly TextBlock ToolTipTextBlock = new TextBlock
         {
             Padding = new Thickness(5),
             Background = Brushes.Pink
@@ -873,7 +907,7 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 选点工具
+    /// Pick point tool.
     /// </summary>
     public class PickPointTool : ViewerTool
     {
@@ -886,13 +920,16 @@ namespace Dreambuild.Gis.Display
             this.PointPicked?.Invoke(p);
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            var pos = e.GetPosition(MapControl.Current);
-            var point = MapControl.Current.GetWorldCoord(pos);
-            this.Point = point;
-            this.OnPointPicked(point);
-            this.Picked = true;
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                var pos = e.GetPosition(MapControl.Current);
+                var point = MapControl.Current.GetWorldCoord(pos);
+                this.Point = point;
+                this.OnPointPicked(point);
+                this.Picked = true;
+            }
         }
 
         public override void KeyDownHandler(object sender, KeyEventArgs e)
@@ -917,7 +954,7 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 选范围工具
+    /// Pick extents tool.
     /// </summary>
     public class PickExtentsTool : ViewerTool
     {
@@ -974,34 +1011,40 @@ namespace Dreambuild.Gis.Display
             }
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            if (!_isStarted)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _isStarted = true;
-                _isDragging = true;
-                Point pos = e.GetPosition(MapControl.Current);
-                _mouseDownOrigin = MapControl.Current.GetWorldCoord(pos);
-            }
-            else
-            {
-                _isStarted = false;
+                if (!_isStarted)
+                {
+                    _isStarted = true;
+                    _isDragging = true;
+                    Point pos = e.GetPosition(MapControl.Current);
+                    _mouseDownOrigin = MapControl.Current.GetWorldCoord(pos);
+                }
+                else
+                {
+                    _isStarted = false;
+                }
             }
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            if (_isStarted == false)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                if (_isMoving == true)
+                if (_isStarted == false)
                 {
-                    Extents = Extents.FromPoints(_mouseDownOrigin, _mouseDownEnd);
-                    Picked = true;
-                    _isMoving = false;
-                }
+                    if (_isMoving == true)
+                    {
+                        Extents = Extents.FromPoints(_mouseDownOrigin, _mouseDownEnd);
+                        Picked = true;
+                        _isMoving = false;
+                    }
 
-                Rect.Visibility = Visibility.Collapsed;
-                _isDragging = false;
+                    Rect.Visibility = Visibility.Collapsed;
+                    _isDragging = false;
+                }
             }
         }
 
@@ -1016,7 +1059,7 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 画线工具
+    /// Draw line tool.
     /// </summary>
     public class DrawLineTool : ViewerTool
     {
@@ -1081,47 +1124,53 @@ namespace Dreambuild.Gis.Display
             this.Render();
         }
 
-        public override void MouseLDoubleClickHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDoubleClickHandler(object sender, MouseButtonEventArgs e)
         {
             _isStarted = false;
             _isDragging = false;
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            if (!_isStarted)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _poly.Points.Clear();
-                _pts.Clear();
-            }
+                if (!_isStarted)
+                {
+                    _poly.Points.Clear();
+                    _pts.Clear();
+                }
 
-            _isStarted = true;
+                _isStarted = true;
+            }
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            if (_isStarted && !_isDragging)  // 第一次点击
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = true;
-                var pt = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
-                _pts.Add(pt);
-            }
-            else if (!_isStarted)  // 结束点击（双击的第二下）
-            {
-                this.Render();
-                this.OnCompleted(_pts);
-            }
-            else // 中间点击（包括结束双击的第一下）
-            {
-                var pt = MapControl.Current.GetWorldCoord((e.GetPosition(MapControl.Current)));
-                _pts.Add(pt);
-                this.Render();
+                if (_isStarted && !_isDragging)  // First click
+                {
+                    _isDragging = true;
+                    var pt = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
+                    _pts.Add(pt);
+                }
+                else if (!_isStarted)  // Last click (the second of a double click)
+                {
+                    this.Render();
+                    this.OnCompleted(_pts);
+                }
+                else // Other clicks (including the first of a double click)
+                {
+                    var pt = MapControl.Current.GetWorldCoord((e.GetPosition(MapControl.Current)));
+                    _pts.Add(pt);
+                    this.Render();
+                }
             }
         }
     }
 
     /// <summary>
-    /// 操控工具
+    /// Manipulate tool.
     /// </summary>
     public class ManipulateTool : ViewerTool
     {
@@ -1267,23 +1316,29 @@ namespace Dreambuild.Gis.Display
             }
         }
 
-        public override void MouseLDownHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseDownHandler(object sender, MouseButtonEventArgs e)
         {
-            if (_readyToResize || _readyToMove)
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _isDragging = true;
-                _ghost.Opacity = 0.5;
+                if (_readyToResize || _readyToMove)
+                {
+                    _isDragging = true;
+                    _ghost.Opacity = 0.5;
+                }
             }
         }
 
-        public override void MouseLUpHandler(object sender, MouseButtonEventArgs e)
+        public override void MouseUpHandler(object sender, MouseButtonEventArgs e)
         {
-            _isDragging = false;
-            _readyToResize = false;
-            _readyToMove = false;
-            _ghost.Opacity = 0;
-            MapControl.Current.Cursor = Cursors.Arrow;
-            OnCompleted(_element);
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                _isDragging = false;
+                _readyToResize = false;
+                _readyToMove = false;
+                _ghost.Opacity = 0;
+                MapControl.Current.Cursor = Cursors.Arrow;
+                OnCompleted(_element);
+            }
         }
     }
 

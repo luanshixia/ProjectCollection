@@ -54,13 +54,9 @@ namespace Dreambuild.Gis.Display
             Layers = new List<MapLayer>();
             Current = this;
 
-            base.MouseMove += new MouseEventHandler(MapControl_MouseMove);
-            base.MouseLeftButtonDown += new MouseButtonEventHandler(MapControl_MouseLeftButtonDown);
-            base.MouseLeftButtonUp += new MouseButtonEventHandler(MapControl_MouseLeftButtonUp);
-            base.MouseWheel += new MouseWheelEventHandler(MapControl_MouseWheel);
-            base.MouseRightButtonUp += (s, arg) => OnNeedToInitializeViewerTools();
-            base.MouseDown += new MouseButtonEventHandler(MapControl_MouseDown);
-            base.MouseUp += new MouseButtonEventHandler(MapControl_MouseUp);
+            ViewerToolManager.AddTool(new WheelScalingTool());
+            ViewerToolManager.ExclusiveTool = new PanCanvasTool();
+            ViewerToolManager.SetFrameworkElement(this);
 
             //CacheMode = new BitmapCache();
         }
@@ -214,72 +210,6 @@ namespace Dreambuild.Gis.Display
             TempLayers.ForEach(x => this.Children.Add(x));
             LabelLayers.ForEach(x => this.Children.Add(x));
             RenderLayers();
-        }
-
-        #endregion
-
-        #region Event handlers
-
-        void MapControl_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            var basePoint = e.GetPosition(this);
-            int index = FindScaleIndex(Scale);
-            index += e.Delta / 120;
-            if (index > _zoomLevels.Length - 1) index = _zoomLevels.Length - 1;
-            else if (index < 0) index = 0;
-            double scale = _zoomLevels[index];
-            ScaleCanvas(scale, basePoint);
-        }
-
-        void MapControl_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Middle)
-            {
-                if (ViewerToolManager.OverlayTools.Any(x => x is PanCanvasTool))
-                {
-                    ViewerToolManager.RemoveTool(ViewerToolManager.OverlayTools.First(x => x is PanCanvasTool));
-                }
-            }
-            ViewerToolManager.Tools.ForEach(t => t.MouseUpHandler(sender, e));
-        }
-
-        void MapControl_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Middle)
-            {
-                if (!(ViewerToolManager.ExclusiveTool is PanCanvasTool))
-                {
-                    var panCanvasTool = new PanCanvasTool();
-                    panCanvasTool.StartDrag(e.GetPosition(MapControl.Current));
-                    ViewerToolManager.AddTool(panCanvasTool);
-                }
-            }
-            ViewerToolManager.Tools.ForEach(t => t.MouseDownHandler(sender, e));
-        }
-
-        void MapControl_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            ViewerToolManager.Tools.ForEach(t => t.MouseLUpHandler(sender, e));
-        }
-
-        void MapControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ViewerToolManager.Tools.ForEach(t => t.MouseLDownHandler(sender, e));
-
-            if (e.ClickCount >= 2)
-            {
-                ViewerToolManager.Tools.ForEach(t => t.MouseLDoubleClickHandler(sender, e));
-            }
-        }
-
-        void MapControl_MouseMove(object sender, MouseEventArgs e)
-        {
-            ViewerToolManager.Tools.ForEach(t => t.MouseMoveHandler(sender, e));
-        }
-
-        public void MapControl_KeyDown(object sender, KeyEventArgs e)
-        {
-            ViewerToolManager.Tools.ForEach(t => t.KeyDownHandler(sender, e));
         }
 
         #endregion
