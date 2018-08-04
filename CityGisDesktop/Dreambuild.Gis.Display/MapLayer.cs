@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 namespace Dreambuild.Gis.Display
 {
     /// <summary>
-    /// 地图图层，使用WPF Shape渲染
+    /// A map layer rendered with WPF shapes.
     /// </summary>
     public class MapLayer : Canvas
     {
@@ -160,7 +160,7 @@ namespace Dreambuild.Gis.Display
                 {
                     var center = poly.Centroid(); // mod 20130507
                     AddPolygon(poly.Points.Select(p => new Point(p.X, p.Y)).ToArray(), feature);
-                    AddLable(new Point(center.X, center.Y), LayerLableStyle.GetLable(feature));                   
+                    AddLable(new Point(center.X, center.Y), LayerLableStyle.GetLable(feature));
                 }
             }
         }
@@ -169,7 +169,7 @@ namespace Dreambuild.Gis.Display
         {
             if (LayerData != null)
             {
-                if ((LayerData.GeoType == VectorLayer.GEOTYPE_REGION) && (feature.GeoData.Count <= 2)) // 非法数据检测
+                if ((LayerData.GeoType == VectorLayer.GEOTYPE_REGION) && (feature.GeoData.Count <= 2)) // illegal data detection
                 {
                     return;
                 }
@@ -523,7 +523,7 @@ namespace Dreambuild.Gis.Display
                 ElementPositionHelper.SetElementData(tb, "Size", LayerStyle.FontSize);
                 ElementPositionHelper.SetElementData(tb, "Angle", angle);
                 ElementPositionHelper.SetElementDesignPosition(tb, pos);
-                //ElementPositionHelper.CenterElementInCanvas(tb, actualWidth, actualHeight);                
+                //ElementPositionHelper.CenterElementInCanvas(tb, actualWidth, actualHeight);
 
                 Canvas.SetLeft(tb, pos.X - actualWidth / 2);
                 Canvas.SetTop(tb, pos.Y - actualHeight / 2);
@@ -545,54 +545,70 @@ namespace Dreambuild.Gis.Display
 
         protected virtual void AddSpot(Point pos, IFeature f)
         {
-            double size = LayerStyle.SpotSize;
-            Ellipse result = new Ellipse { Width = size, Height = size };
+            var result = new Ellipse
+            {
+                Width = LayerStyle.SpotSize,
+                Height = LayerStyle.SpotSize,
+                Stroke = LayerStyle.Stroke,
+                StrokeThickness = LayerStyle.StrokeWeight,
+                Fill = LayerStyle.GetFill()
+            };
+
             ElementPositionHelper.SetElementDesignPosition(result, pos);
-            ElementPositionHelper.CenterElementInCanvas(result, size, size);
-            result.Stroke = LayerStyle.Stroke;
-            result.StrokeThickness = LayerStyle.StrokeWeight;
-            result.Fill = LayerStyle.GetFill();
+            ElementPositionHelper.CenterElementInCanvas(result, LayerStyle.SpotSize, LayerStyle.SpotSize);
             this.AddFeatureChildren(f, result);
         }
 
         protected virtual void AddPolyline(Point[] points, IFeature f)
         {
-            Polyline poly = new Polyline();
+            var poly = new Polyline
+            {
+                Stroke = LayerStyle.Stroke,
+                StrokeThickness = LayerStyle.StrokeWeight,
+                StrokeLineJoin = PenLineJoin.Bevel
+            };
+
             points.ForEach(p => poly.Points.Add(p));
-            poly.Stroke = LayerStyle.Stroke;
-            poly.StrokeThickness = LayerStyle.StrokeWeight;
-            poly.StrokeLineJoin = PenLineJoin.Bevel;
             this.AddFeatureChildren(f, poly);
         }
 
         protected virtual void AddPolygon(Point[] points, IFeature f)
         {
-            Polygon poly = new Polygon();
+            var poly = new Polygon
+            {
+                Stroke = LayerStyle.Stroke,
+                StrokeThickness = LayerStyle.StrokeWeight,
+                StrokeLineJoin = PenLineJoin.Bevel,
+                Fill = LayerStyle.GetFill(f)
+            };
+
             points.ForEach(p => poly.Points.Add(p));
-            poly.Stroke = LayerStyle.Stroke;
-            poly.StrokeThickness = LayerStyle.StrokeWeight;
-            poly.StrokeLineJoin = PenLineJoin.Bevel;
-            poly.Fill = LayerStyle.GetFill(f);
             this.AddFeatureChildren(f, poly);
         }
 
         protected virtual void AddRoadStroke(Point[] points, IFeature f)
         {
-            Polyline poly = new Polyline();
+            var poly = new Polyline
+            {
+                Stroke = LayerStyle.Stroke,
+                StrokeThickness = LayerStyle.StrokeWeight * 1.2,
+                StrokeLineJoin = PenLineJoin.Bevel
+            };
+
             points.ForEach(p => poly.Points.Add(p));
-            poly.Stroke = LayerStyle.Stroke;
-            poly.StrokeThickness = LayerStyle.StrokeWeight * 1.2;
-            poly.StrokeLineJoin = PenLineJoin.Bevel;
             this.AddFeatureChildren(f, poly);
         }
 
         protected virtual void AddRoadFill(Point[] points, IFeature f)
         {
-            Polyline poly = new Polyline();
+            var poly = new Polyline
+            {
+                Stroke = LayerStyle.GetFill(f),
+                StrokeThickness = LayerStyle.StrokeWeight,
+                StrokeLineJoin = PenLineJoin.Bevel
+            };
+
             points.ForEach(p => poly.Points.Add(p));
-            poly.Stroke = LayerStyle.GetFill(f);
-            poly.StrokeThickness = LayerStyle.StrokeWeight;
-            poly.StrokeLineJoin = PenLineJoin.Bevel;
             Children.Add(poly);
         }
 
@@ -608,13 +624,13 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 元素位置助手
+    /// Element position helper.
     /// </summary>
     public static class ElementPositionHelper
     {
         public static void CenterElementInCanvas(FrameworkElement element, double width, double height)
         {
-            Point pos = GetElementDesignPosition(element);
+            var pos = GetElementDesignPosition(element);
             if (!IsPointNull(pos))
             {
                 element.Width = width;
@@ -656,7 +672,8 @@ namespace Dreambuild.Gis.Display
             {
                 element.Tag = new Dictionary<string, object>();
             }
-            Dictionary<string, object> dict = element.Tag as Dictionary<string, object>;
+
+            var dict = element.Tag as Dictionary<string, object>;
             if (dict.Keys.Contains("DesignPosition"))
             {
                 dict["DesignPosition"] = pos;
@@ -673,7 +690,8 @@ namespace Dreambuild.Gis.Display
             {
                 element.Tag = new Dictionary<string, object>();
             }
-            Dictionary<string, object> dict = element.Tag as Dictionary<string, object>;
+
+            var dict = element.Tag as Dictionary<string, object>;
             if (dict.Keys.Contains(key))
             {
                 dict[key] = value;

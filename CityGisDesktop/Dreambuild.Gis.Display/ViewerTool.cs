@@ -233,7 +233,11 @@ namespace Dreambuild.Gis.Display
     /// </summary>
     public class WheelScalingTool : ViewerTool
     {
-        private static readonly double[] ZoomLevels = Enumerable.Range(-15, 31).Select(i => Math.Pow(2, i)).Reverse().ToArray(); // newly 20130403
+        private static readonly double[] ZoomLevels = Enumerable
+            .Range(-15, 31)
+            .Select(i => Math.Pow(2, i))
+            .Reverse()
+            .ToArray(); // newly 20130403
 
         public override void MouseWheelHandler(object sender, MouseWheelEventArgs e)
         {
@@ -359,7 +363,10 @@ namespace Dreambuild.Gis.Display
             {
                 var pt = e.GetPosition(MapControl.Current);
                 var pos = MapControl.Current.GetWorldCoord(pt);
-                var queryResult = MapDataManager.LatestMap.QueryFeatures(SpatialQueryOperation.Point, pos, 5 * MapControl.Current.Scale).ToList();
+                var queryResult = MapDataManager.LatestMap
+                    .QueryFeatures(SpatialQueryOperation.Point, pos, 5 * MapControl.Current.Scale)
+                    .ToList();
+
                 if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift) // mod 20130222
                 {
                     if (queryResult.Count > 0)
@@ -465,7 +472,10 @@ namespace Dreambuild.Gis.Display
 
                 _mouseDownEnd = MapControl.Current.GetWorldCoord(e.GetPosition(MapControl.Current));
                 var extents = Extents.FromPoints(_mouseDownOrigin, _mouseDownEnd);
-                var queryResult = MapDataManager.LatestMap.QueryFeatures(IsWindow ? SpatialQueryOperation.Window : SpatialQueryOperation.Cross, extents, 0).ToArray();
+                var queryResult = MapDataManager.LatestMap
+                    .QueryFeatures(IsWindow ? SpatialQueryOperation.Window : SpatialQueryOperation.Cross, extents, 0)
+                    .ToArray();
+
                 if (queryResult.Length > 0)
                 {
                     if ((Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift
@@ -1195,12 +1205,21 @@ namespace Dreambuild.Gis.Display
             _ghost = element.Clone();
             _ghost.Opacity = 0;
 
-            _anchorResize = new Rectangle { Stroke = Brushes.Black, Fill = Brushes.White, Cursor = Cursors.SizeNESW, Width = AnchorSize, Height = AnchorSize };
+            _anchorResize = new Rectangle
+            {
+                Stroke = Brushes.Black,
+                Fill = Brushes.White,
+                Cursor = Cursors.SizeNESW,
+                Width = AnchorSize,
+                Height = AnchorSize
+            };
+
             _anchorResize.MouseEnter += (sender, e) =>
             {
                 _readyToResize = true;
                 MapControl.Current.Cursor = Cursors.SizeNESW;
             };
+
             _anchorResize.MouseLeave += (sender, e) =>
             {
                 if (e.LeftButton != MouseButtonState.Pressed)
@@ -1210,12 +1229,21 @@ namespace Dreambuild.Gis.Display
                 }
             };
 
-            _anchorMove = new Rectangle { Stroke = Brushes.Black, Fill = Brushes.DodgerBlue, Cursor = Cursors.SizeAll, Width = AnchorSize, Height = AnchorSize };
+            _anchorMove = new Rectangle
+            {
+                Stroke = Brushes.Black,
+                Fill = Brushes.DodgerBlue,
+                Cursor = Cursors.SizeAll,
+                Width = AnchorSize,
+                Height = AnchorSize
+            };
+
             _anchorMove.MouseEnter += (sender, e) =>
             {
                 _readyToMove = true;
                 MapControl.Current.Cursor = Cursors.SizeAll;
             };
+
             _anchorMove.MouseLeave += (sender, e) =>
             {
                 if (e.LeftButton != MouseButtonState.Pressed)
@@ -1254,7 +1282,7 @@ namespace Dreambuild.Gis.Display
             TuneRect(_element, _minx, _miny, _maxx, _maxy);
         }
 
-        private void TuneRect(FrameworkElement rect, double minx, double miny, double maxx, double maxy)
+        private static void TuneRect(FrameworkElement rect, double minx, double miny, double maxx, double maxy)
         {
             rect.Width = Math.Max(0, maxx - minx);
             rect.Height = Math.Max(0, maxy - miny);

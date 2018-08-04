@@ -9,7 +9,7 @@ using System.Windows.Media.Animation;
 namespace Dreambuild.Gis.Display
 {
     /// <summary>
-    /// 地图图层，使用WPF Drawing渲染
+    /// A map layer rendered with WPF drawings.
     /// </summary>
     public class DrawingMapLayer : MapLayer
     {
@@ -142,7 +142,7 @@ namespace Dreambuild.Gis.Display
             {
                 var feature = LayerData.Features[i];
                 var drawing = Features[feature];
- 
+
                 if (LayerData.GeoType == VectorLayer.GEOTYPE_LINEAR)
                 {
                     drawing.Pen.Brush = new SolidColorBrush(theme.GetColor(feature));
@@ -191,41 +191,49 @@ namespace Dreambuild.Gis.Display
         {
             if (LayerData.GeoType == VectorLayer.GEOTYPE_LINEAR)
             {
-                foreach (var feature in Features)
+                foreach (var featurePair in Features)
                 {
-                    var f = feature.Key;
-                    var geometry = feature.Value.Geometry as PathGeometry;
-                    var poly = new Geometry.PointString(f.GeoData);
+                    var feature = featurePair.Key;
+                    var geometry = featurePair.Value.Geometry as PathGeometry;
+                    var poly = new Geometry.PointString(feature.GeoData);
                     double length = poly.Length();
                     if (length < 10)
                     {
                         continue;
                     }
-                    double velocity = theme.GetVelocity(f);
+
+                    double velocity = theme.GetVelocity(feature);
                     double time = length / velocity;
-                    double space = 1 / theme.GetDensity(f);
+                    double space = 1 / theme.GetDensity(feature);
                     int spotCount = (int)(length / space) + 1;
-                    var color = theme.GetColor(f);
+                    var color = theme.GetColor(feature);
 
                     for (int i = 0; i < spotCount; i++)
                     {
-                        PointAnimationUsingPath paup = new PointAnimationUsingPath();
-                        paup.PathGeometry = geometry;
-                        paup.Duration = new Duration(new TimeSpan(0, 0, 0, 0, (int)(time * 1000)));
-                        paup.RepeatBehavior = RepeatBehavior.Forever;
-                        paup.BeginTime = new TimeSpan(0, 0, 0, 0, (int)(time / spotCount * i * 1000));
+                        var pointAnimation = new PointAnimationUsingPath
+                        {
+                            PathGeometry = geometry,
+                            Duration = new Duration(new TimeSpan(0, 0, 0, 0, (int)(time * 1000))),
+                            RepeatBehavior = RepeatBehavior.Forever,
+                            BeginTime = new TimeSpan(0, 0, 0, 0, (int)(time / spotCount * i * 1000))
+                        };
 
-                        ColorAnimation ca = new ColorAnimation(color.Item1, color.Item2, new Duration(new TimeSpan(0, 0, 0, 0, (int)(time * 1000))));
-                        ca.RepeatBehavior = RepeatBehavior.Forever;
-                        ca.BeginTime = new TimeSpan(0, 0, 0, 0, (int)(time / spotCount * i * 1000));
+                        var colorAnimation = new ColorAnimation(
+                            fromValue: color.Item1,
+                            toValue: color.Item2,
+                            duration: new Duration(new TimeSpan(0, 0, 0, 0, (int)(time * 1000))))
+                        {
+                            RepeatBehavior = RepeatBehavior.Forever,
+                            BeginTime = new TimeSpan(0, 0, 0, 0, (int)(time / spotCount * i * 1000))
+                        };
 
-                        double radius = theme.GetDiameter(f) / 2;
+                        double radius = theme.GetDiameter(feature) / 2;
                         var fill = new SolidColorBrush(color.Item1);
-                        EllipseGeometry spot = new EllipseGeometry(new Point(), radius, radius);
-                        GeometryDrawing spotDrawing = new GeometryDrawing(fill, null, spot);
+                        var spot = new EllipseGeometry(new Point(), radius, radius);
+                        var spotDrawing = new GeometryDrawing(fill, null, spot);
                         this.AddOverlayChildren(spotDrawing);
-                        spot.BeginAnimation(EllipseGeometry.CenterProperty, paup);
-                        fill.BeginAnimation(SolidColorBrush.ColorProperty, ca);
+                        spot.BeginAnimation(EllipseGeometry.CenterProperty, pointAnimation);
+                        fill.BeginAnimation(SolidColorBrush.ColorProperty, colorAnimation);
                     }
                 }
             }
@@ -273,8 +281,7 @@ namespace Dreambuild.Gis.Display
                 var drawing = Features[feature];
                 if (LayerData.GeoType == VectorLayer.GEOTYPE_POINT)
                 {
-                    var geometry = drawing.Geometry as EllipseGeometry;
-                    if (geometry != null)
+                    if (drawing.Geometry is EllipseGeometry geometry)
                     {
                         double radius = MapControl.Current.GetMagFactor(MapControl.Current.InitialScale) * LayerStyle.SpotSize / 2;
                         geometry.RadiusX = radius;
@@ -292,14 +299,14 @@ namespace Dreambuild.Gis.Display
 
         public override void ApplyToolTip(Func<IFeature, FrameworkElement> mapper)
         {
-            // todo: drawing的工具提示
+            // todo: drawing's tool tip
         }
 
         protected override void AddSpot(Point pos, IFeature f)
         {
             double radius = LayerStyle.SpotSize / 2;
-            EllipseGeometry geometry = new EllipseGeometry(pos, radius, radius);
-            GeometryDrawing drawing = new GeometryDrawing(LayerStyle.GetFill(), new Pen(LayerStyle.Stroke, LayerStyle.StrokeWeight), geometry);
+            var geometry = new EllipseGeometry(pos, radius, radius);
+            var drawing = new GeometryDrawing(LayerStyle.GetFill(), new Pen(LayerStyle.Stroke, LayerStyle.StrokeWeight), geometry);
             this.AddFeatureChildren(f, drawing);
         }
 
@@ -335,12 +342,13 @@ namespace Dreambuild.Gis.Display
             {
                 return;
             }
-            PathGeometry geometry = new PathGeometry();
-            PathFigure figure = new PathFigure { StartPoint = points.First() };
-            PolyLineSegment segment = new PolyLineSegment(points, true);
+
+            var geometry = new PathGeometry();
+            var figure = new PathFigure { StartPoint = points.First() };
+            var segment = new PolyLineSegment(points, true);
             figure.Segments.Add(segment);
             geometry.Figures.Add(figure);
-            GeometryDrawing drawing = new GeometryDrawing(fill, new Pen(stroke, strokeWeight) { LineJoin = PenLineJoin.Bevel }, geometry);
+            var drawing = new GeometryDrawing(fill, new Pen(stroke, strokeWeight) { LineJoin = PenLineJoin.Bevel }, geometry);
             _drawingGroup.Children.Add(drawing);
             if (addToFeatureList)
             {
