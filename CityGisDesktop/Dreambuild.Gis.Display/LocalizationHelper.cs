@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -20,188 +19,114 @@ namespace Dreambuild.Utils
 
     public static class LocalizationHelper
     {
-        private static string[] _locales = { Locales.ZH_CN, Locales.EN_US };
-        private static Dictionary<string, ResourceDictionary> _localResources;
-        public static string CurrentLocale { get; private set; }
-
-        static LocalizationHelper()
+        private static readonly string[] SupportedLocales =
         {
-            CurrentLocale = Locales.ZH_CN;
-            _localResources = _locales.ToDictionary(x => x, x => new ResourceDictionary
+            Locales.ZH_CN,
+            Locales.EN_US
+        };
+
+        private static readonly Dictionary<string, ResourceDictionary> LocaleResources = LocalizationHelper.SupportedLocales.ToDictionary(
+            locale => locale,
+            locale => new ResourceDictionary
             {
-                Source = new Uri(string.Format(@"Resources\{0}.xaml", x), UriKind.RelativeOrAbsolute)
+                Source = new Uri(string.Format(@"Resources\{0}.xaml", locale), UriKind.RelativeOrAbsolute)
             });
-        }
 
-        public static void SetLocale(string localeIdentifier)
+        public static string CurrentLocale { get; private set; } = Locales.ZH_CN;
+
+        public static void SetLocale(string locale)
         {
-            CurrentLocale = localeIdentifier;
-            Application.Current.Resources.MergedDictionaries[0] = _localResources[CurrentLocale];
+            LocalizationHelper.CurrentLocale = locale;
+            Application.Current.Resources.MergedDictionaries[0] = LocalizationHelper.LocaleResources[locale];
         }
 
         public static string GetString(string key)
         {
-            return _localResources[CurrentLocale][key] as string;
+            return LocalizationHelper.LocaleResources[CurrentLocale][key] as string;
         }
 
-        public static PropertyDescriptorCollection GetLocalizedPropertyDescriptor(PropertyDescriptorCollection descriptors)
+        public static PropertyDescriptorCollection GetLocalizedPropertyDescriptors(PropertyDescriptorCollection descriptors)
         {
-            List<LocalizedPropertyDescriptor> tmpPDCLst = new List<LocalizedPropertyDescriptor>();
-            PropertyDescriptorCollection tmpPDC = descriptors;
-            IEnumerator tmpIe = tmpPDC.GetEnumerator();
-            LocalizedPropertyDescriptor tmpCPD;
-            PropertyDescriptor tmpPD;
-            while (tmpIe.MoveNext())
-            {
-                tmpPD = tmpIe.Current as PropertyDescriptor;
-                tmpCPD = new LocalizedPropertyDescriptor(tmpPD);
-                tmpPDCLst.Add(tmpCPD);
-            }
-            return new PropertyDescriptorCollection(tmpPDCLst.ToArray());
+            return new PropertyDescriptorCollection(
+                properties: descriptors
+                    .Cast<PropertyDescriptor>()
+                    .Select(descriptor => new LocalizedPropertyDescriptor(descriptor))
+                    .ToArray());
         }
     }
 
     public class LocalizedPropertyDescriptor : PropertyDescriptor
     {
-        private PropertyDescriptor mDescriptor;
+        private readonly PropertyDescriptor Source;
+
+        public override Type ComponentType => this.Source.ComponentType;
+
+        public override bool IsReadOnly => this.Source.IsReadOnly;
+
+        public override Type PropertyType => this.Source.PropertyType;
+
+        public override string Description => GetLocalizationString(this.Source.Description);
+
+        public override string Category => GetLocalizationString(this.Source.Category);
+
+        public override string DisplayName => GetLocalizationString(this.Source.DisplayName);
 
         public LocalizedPropertyDescriptor(PropertyDescriptor descriptor)
             : base(descriptor)
         {
-            mDescriptor = descriptor;
+            this.Source = descriptor;
         }
 
-        #region PropertyDescriptor Specific
+        public override bool CanResetValue(object component) => this.Source.CanResetValue(component);
 
-        public override bool CanResetValue(object component)
+        public override object GetValue(object component) => this.Source.GetValue(component);
+
+        public override void ResetValue(object component) => this.Source.ResetValue(component);
+
+        public override void SetValue(object component, object value) => this.Source.SetValue(component, value);
+
+        public override bool ShouldSerializeValue(object component) => this.Source.ShouldSerializeValue(component);
+
+        private static string GetLocalizationString(string key)
         {
-            return mDescriptor.CanResetValue(component);
-        }
-
-        public override Type ComponentType
-        {
-            get { return mDescriptor.ComponentType; }
-        }
-
-        public override object GetValue(object component)
-        {
-            return mDescriptor.GetValue(component);
-        }
-
-        public override bool IsReadOnly
-        {
-            get { return mDescriptor.IsReadOnly; }
-        }
-
-        public override Type PropertyType
-        {
-            get { return mDescriptor.PropertyType; }
-        }
-
-        public override void ResetValue(object component)
-        {
-            mDescriptor.ResetValue(component);
-        }
-
-        public override void SetValue(object component, object value)
-        {
-            mDescriptor.SetValue(component, value);
-        }
-
-        public override bool ShouldSerializeValue(object component)
-        {
-            return mDescriptor.ShouldSerializeValue(component);
-        }
-
-
-        #region PropertyDescriptor Overrides
-
-        public override string Description
-        {
-            get
+            if (string.IsNullOrEmpty(key))
             {
-                return GetLocalizationString(mDescriptor.Description);
-            }
-        }
-
-        public override string Category
-        {
-            get
-            {
-                return GetLocalizationString(mDescriptor.Category);
-            }
-        }
-
-        public override string DisplayName
-        {
-            get
-            {
-                return GetLocalizationString(mDescriptor.DisplayName);
-            }
-        }
-
-        private string GetLocalizationString(string key)
-        {
-            if (String.IsNullOrEmpty(key))
-            {
-                return key;
+                return string.Empty;
             }
 
-            string tmp = LocalizationHelper.GetString(key);
-            return String.IsNullOrEmpty(tmp) ? "" : tmp;
+            return LocalizationHelper.GetString(key) ?? string.Empty;
         }
-
-        #endregion PropertyDescriptor Overrides
-
-        #endregion PropertyDescriptor Specific
     }
 
-    public class LocalizedDisplayNameAttribute : DisplayNameAttribute
+    public sealed class LocalizedDisplayNameAttribute : DisplayNameAttribute
     {
-        private readonly string _key;
+        private readonly string Key;
 
         public LocalizedDisplayNameAttribute(string key)
-            : base()
-        {
-            this._key = key;
-        }
+            : base() => this.Key = key;
 
-        public override string DisplayName
-        {
-            get
-            {
-                return LocalizationHelper.GetString(_key);
-            }
-        }
+        public override string DisplayName => LocalizationHelper.GetString(this.Key);
     }
 
-    public class LocalizedDescriptionAttribute : DescriptionAttribute
+    public sealed class LocalizedDescriptionAttribute : DescriptionAttribute
     {
-        private readonly string _key;
+        private readonly string Key;
 
         public LocalizedDescriptionAttribute(string key)
-            : base()
-        {
-            this._key = key;
-        }
+            : base() => this.Key = key;
 
-        public override string Description
-        {
-            get
-            {
-                return LocalizationHelper.GetString(_key);
-            }
-        }
+        public override string Description => LocalizationHelper.GetString(this.Key);
     }
 
     public class LocalizedExpandableObjectConverter : ExpandableObjectConverter
     {
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value,
-            System.Attribute[] attributes)
+        public override PropertyDescriptorCollection GetProperties(
+            ITypeDescriptorContext context,
+            object value,
+            Attribute[] attributes)
         {
-            PropertyDescriptorCollection originalCollection = base.GetProperties(context, value, attributes);
-            PropertyDescriptorCollection newCollection = LocalizationHelper.GetLocalizedPropertyDescriptor(originalCollection);
-            return newCollection;
+            var originalProperties = base.GetProperties(context, value, attributes);
+            return LocalizationHelper.GetLocalizedPropertyDescriptors(originalProperties);
         }
     }
 }
