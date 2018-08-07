@@ -129,6 +129,7 @@ namespace Dreambuild.Gis.Display
             }
         }
 
+        // TODO: make this light-weight
         public List<Tuple<Map, List<MapLayer>>> MapAndLayers
         {
             get

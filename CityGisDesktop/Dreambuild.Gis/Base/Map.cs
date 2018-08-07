@@ -558,14 +558,31 @@ namespace Dreambuild.Gis
     public class CollagePiece
     {
         public string Name { get; set; }
-        public string Group { get; set; }                           // 编组，可存储项目地点名称。
-        public string Type { get; set; }                            // 类型，可存储图层名称。
+        public string Group { get; set; } // Project location
+        public string Type { get; set; } // Layer name
         public CollageDataType DataType { get; set; }
-        public object Data { get; set; }                            // 这个属性不是必须有值的，作为本地缓存使用。
+        public object Data { get; set; } // Optional local cache
         public Extents LocalExtents { get; set; }
         public Extents WorldExtents { get; set; }
-        public string DataUri { get; set; }                         // 获取数据的路径。获取数据后，可填充在Data属性里。
-        public DateTime Time { get; set; }                          // 时间元数据。
+        public string DataUri { get; set; } // Source location of data
+        public DateTime Time { get; set; } // Time metadata
+    }
+
+    public static class WellknownLayerNames
+    {
+        public const string Parcel = "地块";
+        public const string Road = "道路";
+    }
+
+    public static class WellknownPropertyNames
+    {
+        public const string LandUseCode = "用地代码";
+        public const string LandUse = "用地性质";
+        public const string FloorAreaRatio = "容积率";
+        public const string SiteCoverageRatio = "建筑密度";
+        public const string BuildingHeightLimit = "建筑限高";
+        public const string GreenRate = "绿地率";
+
     }
 
     #endregion

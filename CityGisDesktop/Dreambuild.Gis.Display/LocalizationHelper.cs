@@ -40,19 +40,14 @@ namespace Dreambuild.Utils
             Application.Current.Resources.MergedDictionaries[0] = LocalizationHelper.LocaleResources[locale];
         }
 
-        public static string GetString(string key)
-        {
-            return LocalizationHelper.LocaleResources[CurrentLocale][key] as string;
-        }
+        public static string GetString(string key) => LocalizationHelper.LocaleResources[CurrentLocale][key] as string;
 
-        public static PropertyDescriptorCollection GetLocalizedPropertyDescriptors(PropertyDescriptorCollection descriptors)
-        {
-            return new PropertyDescriptorCollection(
+        public static PropertyDescriptorCollection GetLocalizedPropertyDescriptors(PropertyDescriptorCollection descriptors) =>
+            new PropertyDescriptorCollection(
                 properties: descriptors
                     .Cast<PropertyDescriptor>()
                     .Select(descriptor => new LocalizedPropertyDescriptor(descriptor))
                     .ToArray());
-        }
     }
 
     public class LocalizedPropertyDescriptor : PropertyDescriptor
@@ -123,10 +118,6 @@ namespace Dreambuild.Utils
         public override PropertyDescriptorCollection GetProperties(
             ITypeDescriptorContext context,
             object value,
-            Attribute[] attributes)
-        {
-            var originalProperties = base.GetProperties(context, value, attributes);
-            return LocalizationHelper.GetLocalizedPropertyDescriptors(originalProperties);
-        }
+            Attribute[] attributes) => LocalizationHelper.GetLocalizedPropertyDescriptors(base.GetProperties(context, value, attributes));
     }
 }

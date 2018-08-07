@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -12,143 +13,170 @@ using System.Windows.Shapes;
 namespace Dreambuild.Gis.Display
 {
     /// <summary>
-    /// 地图图层面板
+    /// Map layer panel.
     /// </summary>
     public class MapLayerPanelControl : UserControl, ILanguageSwitcher
     {
-        private StackPanel _layoutRoot;
-        private Slider _opacitySlider;
-        private TreeView _mapLayerList;
-        private List<Tuple<Map, List<MapLayer>>> _mapAndLayers;
-
+        private readonly TreeView _mapLayerList = new TreeView
+        {
+            Height = 200,
+            BorderBrush = new SolidColorBrush(Colors.LightGray)
+        };
 
         public MapLayerPanelControl()
         {
-            _layoutRoot = new StackPanel();
-            _opacitySlider = new Slider { Minimum = 0, Maximum = 1, Value = 1 };
-            _mapLayerList = new TreeView { Height = 200, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-            _layoutRoot.Children.Add(_mapLayerList);
-            this.Content = _layoutRoot;
+            var layoutRoot = new StackPanel();
+            layoutRoot.Children.Add(_mapLayerList);
+            this.Content = layoutRoot;
             this.Margin = new Thickness(5);
         }
 
         public void Update()
         {
             _mapLayerList.Items.Clear();
-            _mapAndLayers = MapControl.Current.MapAndLayers;
-            foreach (var map in _mapAndLayers)
+            foreach (var map in MapControl.Current.MapAndLayers)
             {
-                TreeViewItem mapNode = new TreeViewItem();
-                mapNode.Header = GetMapNodeHeader(map.Item1);
+                var mapNode = new TreeViewItem
+                {
+                    Header = GetMapNodeHeader(map.Item1)
+                };
+
                 foreach (var layer in map.Item2)
                 {
-                    TreeViewItem layerNode = new TreeViewItem();
-                    layerNode.Header = GetLayerNodeHeader(layer);
-                    mapNode.Items.Add(layerNode);
+                    mapNode.Items.Add(new TreeViewItem
+                    {
+                        Header = GetLayerNodeHeader(layer)
+                    });
                 }
+
                 _mapLayerList.Items.Add(mapNode);
             }
         }
 
         private FrameworkElement GetLayerNodeHeader(MapLayer layer)
         {
-            StackPanel sp = new StackPanel { Orientation = Orientation.Horizontal };
-            CheckBox cb = new CheckBox { Content = layer.LayerData.Name };
-            cb.IsChecked = layer.Visibility == System.Windows.Visibility.Visible;
-            cb.Checked += (sender, e) => LayerVisible(layer, true);
-            cb.Unchecked += (sender, e) => LayerVisible(layer, false);
-            Slider slider = new Slider { Minimum = 0, Maximum = 1, Width = 40, Margin = new Thickness(10, 0, 0, 0) };
-            slider.SetBinding(Slider.ValueProperty, new System.Windows.Data.Binding("Opacity") { Source = layer, Mode = System.Windows.Data.BindingMode.TwoWay });
-            sp.Children.Add(cb);
-            sp.Children.Add(slider);
-            return sp;
-        }
+            var stackPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal
+            };
 
-        void ILanguageSwitcher.RefreshLanguage()
-        {
-            Update();
+            var checkBox = new CheckBox
+            {
+                Content = layer.LayerData.Name,
+                IsChecked = layer.Visibility == Visibility.Visible
+            };
+
+            checkBox.Checked += (sender, e) => LayerVisible(layer, true);
+            checkBox.Unchecked += (sender, e) => LayerVisible(layer, false);
+
+            var slider = new Slider
+            {
+                Minimum = 0,
+                Maximum = 1,
+                Width = 40,
+                Margin = new Thickness(10, 0, 0, 0)
+            };
+
+            slider.SetBinding(
+                dp: Slider.ValueProperty,
+                binding: new Binding("Opacity")
+                {
+                    Source = layer,
+                    Mode = BindingMode.TwoWay
+                });
+
+            stackPanel.Children.Add(checkBox);
+            stackPanel.Children.Add(slider);
+            return stackPanel;
         }
 
         private FrameworkElement GetMapNodeHeader(Map map)
         {
-            StackPanel sp = new StackPanel { Orientation = Orientation.Horizontal };
-            //添加语言切换判断
-            CheckBox cb;
-            if (LocalizationHelper.CurrentLocale == Locales.ZH_CN)
+            var stackPanel = new StackPanel
             {
-                cb = new CheckBox { Content = string.IsNullOrEmpty(map.Name) ? string.Format("地图 {0}", _mapAndLayers.Select(x => x.Item1).ToList().IndexOf(map) + 1) : map.Name };
-            }
-            else
+                Orientation = Orientation.Horizontal
+            };
+
+            var mapAndLayers = MapControl.Current.MapAndLayers;
+
+            var mapTitle = LocalizationHelper.CurrentLocale == Locales.ZH_CN
+                ? "地图 {0}"
+                : "Map {0}";
+
+            var checkBox = new CheckBox
             {
-                cb = new CheckBox { Content = string.IsNullOrEmpty(map.Name) ? string.Format("Map {0}", _mapAndLayers.Select(x => x.Item1).ToList().IndexOf(map) + 1) : map.Name };
-            }
-            cb.IsChecked = true;
-            var layers = _mapAndLayers.First(x => x.Item1 == map).Item2;
-            cb.Checked += (sender, e) => layers.ForEach(layer => LayerVisible(layer, true));
-            cb.Unchecked += (sender, e) => layers.ForEach(layer => LayerVisible(layer, false));
-            sp.Children.Add(cb);
-            return sp;
+                IsChecked = true,
+                Content = string.IsNullOrEmpty(map.Name)
+                    ? string.Format("地图 {0}", mapAndLayers.Select(mapLayersPair => mapLayersPair.Item1).ToList().IndexOf(map) + 1)
+                    : map.Name
+            };
+
+            var mapLayers = mapAndLayers.First(mapLayersPair => mapLayersPair.Item1 == map).Item2;
+            checkBox.Checked += (sender, e) => mapLayers.ForEach(mapLayer => LayerVisible(mapLayer, true));
+            checkBox.Unchecked += (sender, e) => mapLayers.ForEach(mapLayer => LayerVisible(mapLayer, false));
+            stackPanel.Children.Add(checkBox);
+            return stackPanel;
         }
 
         private static void LayerVisible(MapLayer layer, bool visible)
         {
-            Visibility v = visible ? Visibility.Visible : Visibility.Collapsed;
-            layer.Visibility = v;
-            layer.LabelLayer.Visibility = v;
+            var visibility = visible ? Visibility.Visible : Visibility.Collapsed;
+            layer.Visibility = visibility;
+            layer.LabelLayer.Visibility = visibility;
+        }
+
+        void ILanguageSwitcher.RefreshLanguage()
+        {
+            this.Update();
         }
     }
 
     /// <summary>
-    /// 专题面板
+    /// Feature panel.
     /// </summary>
     public class FeaturePanelControl : UserControl
     {
-        private ComboBox _comboBox = new ComboBox { BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private CheckBox _checkBox = new CheckBox();
-        private StackPanel _layoutRoot;
-        private StackPanel _vLayout;
-        public IColorTheme ParcelTheme { get; private set; }
+        public const string None = "None";
+        public const string LandUse = "Land use";
+        public const string FloorAreaRatio = "Floor-area ratio"; // aka Plot ratio
+        public const string SiteCoverageRatio = "Site coverage ratio";
+        public const string GreenRate = "Green rate";
+        public const string BuildingHeightLimit = "Building height limit";
+
+        private readonly ComboBox _comboBox = new ComboBox
+        {
+            BorderBrush = new SolidColorBrush(Colors.LightGray),
+            ItemsSource = new[] { None, LandUse, FloorAreaRatio, SiteCoverageRatio, GreenRate, BuildingHeightLimit },
+            SelectedIndex = 0
+        };
+
+        private readonly CheckBox _checkBox = new CheckBox
+        {
+            Content = "Legend",
+            IsChecked = true,
+            Visibility = Visibility.Collapsed
+        };
+
+        private readonly StackPanel _vLayout = new StackPanel();
 
         private Dictionary<string, Color> _dictColor = new Dictionary<string, Color>();
-        public string None; //无
-        public string LandCharacter;//用地性质
-        public string PlotRatio;//容积率
-        public string BuildingDensity;//建筑密度
-        public string GreenSpaceRatio;//绿地率
-        public string BuildingMax;//建筑限高
-        public void Update()
-        {
-            _comboBox.Items.Clear();
-            LandCharacter = LocalizationHelper.GetString("LandCharacter");
-            _comboBox.Items.Add(LandCharacter);
-        }
+
         public FeaturePanelControl()
         {
-            _layoutRoot = new StackPanel();
-            this.Content = _layoutRoot;
+            var layoutRoot = new StackPanel();
+            this.Content = layoutRoot;
             this.Margin = new Thickness(5);
 
-            _comboBox.Items.Add("无");
-            _comboBox.Items.Add(LandCharacter);
-            _comboBox.Items.Add("容积率");
-            _comboBox.Items.Add("建筑密度");
-            _comboBox.Items.Add("绿地率");
-            _comboBox.Items.Add("建筑限高");
-            _comboBox.SelectedIndex = 0;
-            _comboBox.SelectionChanged += comboboxCallback;
-            _layoutRoot.Children.Add(_comboBox);
+            _comboBox.SelectionChanged += ComboBoxCallback;
+            layoutRoot.Children.Add(_comboBox);
 
-            _checkBox.Content = "图例";
-            _checkBox.IsChecked = true;
-            _checkBox.Visibility = System.Windows.Visibility.Collapsed;
-            _checkBox.Click += checkboxCallback;
-            _layoutRoot.Children.Add(_checkBox);
+            _checkBox.Click += CheckBoxCallback;
+            layoutRoot.Children.Add(_checkBox);
 
-            _vLayout = new StackPanel();
-            _layoutRoot.Children.Add(_vLayout);
+            layoutRoot.Children.Add(_vLayout);
         }
 
-        private double GetPropMinValue(MapLayer layer, string propertyName)
+        private static double GetPropMinValue(MapLayer layer, string propertyName)
         {
             double min = 0;
             foreach (var feature in layer.LayerData.Features)
@@ -165,7 +193,7 @@ namespace Dreambuild.Gis.Display
             return min;
         }
 
-        private double GetPropMaxValue(MapLayer layer, string propertyName)
+        private static double GetPropMaxValue(MapLayer layer, string propertyName)
         {
             double max = 0;
             foreach (var feature in layer.LayerData.Features)
@@ -186,107 +214,119 @@ namespace Dreambuild.Gis.Display
         {
             if (_checkBox.IsChecked == false)
             {
-                _vLayout.Visibility = System.Windows.Visibility.Collapsed;
+                _vLayout.Visibility = Visibility.Collapsed;
             }
             else
             {
-                _vLayout.Visibility = System.Windows.Visibility.Visible;
+                _vLayout.Visibility = Visibility.Visible;
             }
 
             _vLayout.Children.Clear();
             foreach (var element in _dictColor)
             {
-                Rectangle rect = new Rectangle();
-                rect.Width = 12;
-                rect.Height = 12;
-                rect.Fill = new SolidColorBrush(element.Value);
+                var rect = new Rectangle
+                {
+                    Width = 12,
+                    Height = 12,
+                    Fill = new SolidColorBrush(element.Value)
+                };
 
-                TextBlock textB = new TextBlock();
-                textB.Text = element.Key;
+                var textBlock = new TextBlock
+                {
+                    Text = element.Key
+                };
 
-                StackPanel hLayout = new StackPanel();
-                hLayout.Orientation = Orientation.Horizontal;
-                hLayout.Margin = new Thickness(0.5, 0.5, 0.5, 0);
-                hLayout.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
-                hLayout.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+                var hLayout = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    Margin = new Thickness(0.5, 0.5, 0.5, 0),
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Center
+                };
+
                 hLayout.Children.Add(rect);
-                hLayout.Children.Add(textB);
+                hLayout.Children.Add(textBlock);
                 _vLayout.Children.Add(hLayout);
             }
         }
 
-        private void checkboxCallback(object sender, EventArgs e)
+        private void CheckBoxCallback(object sender, EventArgs e)
         {
             if (_checkBox.IsChecked == true)
             {
-                _vLayout.Visibility = System.Windows.Visibility.Visible;
+                _vLayout.Visibility = Visibility.Visible;
             }
             else
             {
-                _vLayout.Visibility = System.Windows.Visibility.Collapsed;
+                _vLayout.Visibility = Visibility.Collapsed;
             }
         }
 
-        private void comboboxCallback(object sender, EventArgs e)
+        private void ComboBoxCallback(object sender, EventArgs e)
         {
-            if (!MapControl.Current.Layers.Any(x => x.LayerData.Name == "地块"))
+            if (!MapControl.Current.Layers.Any(mapLayer => mapLayer.LayerData.Name == WellknownLayerNames.Parcel))
             {
                 return;
             }
 
-            MapLayer parcelLayer = MapControl.Current.Layers.First(x => x.LayerData.Name == "地块");
+            var parcelLayer = MapControl.Current.Layers.First(mapLayer => mapLayer.LayerData.Name == WellknownLayerNames.Parcel);
             string currentItem = _comboBox.SelectedItem as string;
-            if (currentItem == "无")
+            IColorTheme parcelTheme = null;
+            if (currentItem == None)
             {
                 _vLayout.Children.Clear();
 
-                _checkBox.Visibility = System.Windows.Visibility.Collapsed;
-                ParcelTheme = null;
+                _checkBox.Visibility = Visibility.Collapsed;
+                parcelTheme = null;
             }
-            else if (currentItem == "用地性质")
+            else if (currentItem == LandUse)
             {
-                _checkBox.Visibility = System.Windows.Visibility.Visible;
+                _checkBox.Visibility = Visibility.Visible;
 
-                ParcelUsageTheme usageTheme = new ParcelUsageTheme();
-                ParcelTheme = usageTheme;
+                var usageTheme = new ParcelUsageTheme();
+                parcelTheme = usageTheme;
                 _dictColor = usageTheme.DictColor;
                 ShowLegend();
             }
-            else if (currentItem == "容积率" || currentItem == "建筑密度" || currentItem == "绿地率" || currentItem == "建筑限高")
+            else if (currentItem == FloorAreaRatio || currentItem == SiteCoverageRatio || currentItem == GreenRate || currentItem == BuildingHeightLimit)
             {
-                _checkBox.Visibility = System.Windows.Visibility.Visible;
+                _checkBox.Visibility = Visibility.Visible;
 
-                var gradientTheme = new BiColorGradientTheme();
-                gradientTheme.Property = currentItem;
-                gradientTheme.MinValue = GetPropMinValue(parcelLayer, currentItem);
-                gradientTheme.MaxValue = GetPropMaxValue(parcelLayer, currentItem);
-                ParcelTheme = gradientTheme;
+                var gradientTheme = new BiColorGradientTheme
+                {
+                    Property = currentItem,
+                    MinValue = GetPropMinValue(parcelLayer, currentItem),
+                    MaxValue = GetPropMaxValue(parcelLayer, currentItem)
+                };
+
+                parcelTheme = gradientTheme;
                 _dictColor = GetGradientDictColor(gradientTheme);
                 ShowLegend();
             }
-            if (ParcelTheme != null) // mod 20120725
+
+            if (parcelTheme != null) // mod 20120725
             {
-                parcelLayer.ApplyColorTheme(ParcelTheme);
-                if (ParcelTheme is IDataVisualizationTheme)
+                parcelLayer.ApplyColorTheme(parcelTheme);
+                if (parcelTheme is IDataVisualizationTheme)
                 {
-                    string prop = (ParcelTheme as IDataVisualizationTheme).Property;
-                    parcelLayer.ApplyToolTip(f => UIHelper.TitledToolTip(prop, f[prop]));
+                    string prop = (parcelTheme as IDataVisualizationTheme).Property;
+                    parcelLayer.ApplyToolTip(feature => UIHelper.TitledToolTip(prop, feature[prop]));
                 }
-                else if (ParcelTheme is ParcelUsageTheme)
+                else if (parcelTheme is ParcelUsageTheme)
                 {
-                    parcelLayer.ApplyToolTip(f => UIHelper.TitledToolTip(f["用地代码"], ParcelColorCfg.GetUsageByCode(f["用地代码"])));
+                    parcelLayer.ApplyToolTip(feature => UIHelper.TitledToolTip(feature[WellknownPropertyNames.LandUseCode], ParcelColorCfg.GetUsageByCode(feature[WellknownPropertyNames.LandUseCode])));
                 }
             }
             else
             {
                 parcelLayer.ClearColorTheme();
-                parcelLayer.ApplyToolTip(f => null);
+                parcelLayer.ApplyToolTip(feature => null);
             }
         }
 
-        private Dictionary<string, Color> GetGradientDictColor(BiColorGradientTheme gradientTheme)
+        private static Dictionary<string, Color> GetGradientDictColor(BiColorGradientTheme gradientTheme)
         {
-            Dictionary<string, Color> result = new Dictionary<string, Color>();
+            var result = new Dictionary<string, Color>();
             double minValue = gradientTheme.MinValue;
             double maxValue = gradientTheme.MaxValue;
 
@@ -297,17 +337,16 @@ namespace Dreambuild.Gis.Display
             {
                 interval = 1;
             }
+
             for (int index = 0; index <= 4; index++)
             {
                 leftVal = minValue + interval * index;
                 rightVal = minValue + interval * (index + 1);
                 string range = string.Format(" {0}~{1}", leftVal.ToString(), rightVal.ToString());
 
-                Color color = new Color();
-                color = gradientTheme.GetColorByValue(minValue + index * interval);
-
-                result.Add(range, color);
+                result.Add(range, gradientTheme.GetColorByValue(minValue + index * interval));
             }
+
             return result;
         }
     }
@@ -344,7 +383,7 @@ namespace Dreambuild.Gis.Display
         public PropertyPanelControl()
         {
             DockPanel.SetDock(_btnShowAll, Dock.Right);
-            _btnShowAll.Click += buttonCallback;
+            _btnShowAll.Click += ButtonCallback;
             _firstRow.Children.Add(_btnShowAll);
             _cbbAll.SelectionChanged += new SelectionChangedEventHandler(_cbbAll_SelectionChanged);
             _firstRow.Children.Add(_cbbAll);
@@ -373,9 +412,13 @@ namespace Dreambuild.Gis.Display
             _cbbAll.Items.Clear();
             if (_features.Count > 0)
             {
-                var layers = _features.GroupBy(x => SelectionSet.FindLayer(x)).Select(x => string.Format("{0} ({1})", x.Key.Name, x.Count())).ToList();
-                layers.Add(string.Format("<全部> ({0})", _features.Count));
-                layers.ForEach(x => _cbbAll.Items.Add(x));
+                var layerNames = _features
+                    .GroupBy(feature => SelectionSet.FindLayer(feature))
+                    .Select(group => string.Format("{0} ({1})", group.Key.Name, group.Count()))
+                    .ToList();
+
+                layerNames.Add(string.Format("<全部> ({0})", _features.Count));
+                layerNames.ForEach(layerName => _cbbAll.Items.Add(layerName));
                 _cbbAll.SelectedIndex = 0;
             }
             else
@@ -393,8 +436,11 @@ namespace Dreambuild.Gis.Display
         {
             if (CurrentLayer != "<全部>")
             {
-                var featuresInLayer = _features.Where(x => SelectionSet.FindLayer(x).Name == CurrentLayer).ToList();
-                var propFeature = GetPropPresentation(featuresInLayer);
+                var featuresInLayer = _features
+                    .Where(feature => SelectionSet.FindLayer(feature).Name == CurrentLayer)
+                    .ToList();
+
+                var propFeature = GetPropertyRepresentation(featuresInLayer);
                 this.ShowProperties(propFeature);
             }
             else
@@ -403,25 +449,25 @@ namespace Dreambuild.Gis.Display
             }
         }
 
-        private static IFeature GetPropPresentation(List<IFeature> features)
+        private static IFeature GetPropertyRepresentation(List<IFeature> features)
         {
-            Feature f = new Feature();
+            var dummyFeature = new Feature();
             if (features.Count > 0)
             {
-                List<string> props = features[0].Properties.Keys.ToList();
+                var props = features[0].Properties.Keys.ToList();
                 foreach (string prop in props)
                 {
-                    if (features.Select(x => x[prop]).Distinct().Count() <= 1)
+                    if (features.Select(feature => feature[prop]).Distinct().Count() <= 1)
                     {
-                        f.Properties.Add(prop, features[0][prop]);
+                        dummyFeature.Properties.Add(prop, features[0][prop]);
                     }
                     else
                     {
-                        f.Properties.Add(prop, string.Empty);
+                        dummyFeature.Properties.Add(prop, string.Empty);
                     }
                 }
             }
-            return f;
+            return dummyFeature;
         }
 
         private void ShowProperties(IFeature f)
@@ -434,26 +480,49 @@ namespace Dreambuild.Gis.Display
                 var prop = property;
                 _propertyGrid.RowDefinitions.Add(new RowDefinition());
 
-                var textName = new TextBlock { Text = property.Key, VerticalAlignment = System.Windows.VerticalAlignment.Center, Margin = new Thickness(5, 0, 0, 0), Foreground = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96)) };
-                var textVal = new TextBox { Text = property.Value, Height = 20, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-                textVal.TextChanged += (s, args) => _features.Where(x => SelectionSet.FindLayer(x).Name == CurrentLayer).ForEach(x => x[prop.Key] = textVal.Text); // newly 20120514
+                var textName = new TextBlock
+                {
+                    Text = property.Key,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = new Thickness(5, 0, 0, 0),
+                    Foreground = new SolidColorBrush(Color.FromArgb(255, 96, 96, 96))
+                };
 
-                ToolTip tipName = new ToolTip();
-                tipName.Content = property.Key;
+                var textVal = new TextBox
+                {
+                    Text = property.Value,
+                    Height = 20,
+                    BorderBrush = new SolidColorBrush(Colors.LightGray)
+                };
+
+                textVal.TextChanged += (s, args) => _features
+                    .Where(feature => SelectionSet.FindLayer(feature).Name == CurrentLayer)
+                    .ForEach(feature => feature[prop.Key] = textVal.Text); // newly 20120514
+
+                var tipName = new ToolTip
+                {
+                    Content = property.Key
+                };
                 ToolTipService.SetToolTip(textName, tipName);
 
-                ToolTip tipVal = new ToolTip();
                 if (property.Value != string.Empty)
                 {
-                    tipVal.Content = property.Value;
+                    var tipVal = new ToolTip
+                    {
+                        Content = property.Value
+                    };
                     ToolTipService.SetToolTip(textVal, tipVal);
                 }
 
-                Border border = new Border();
-                border.Child = textName;
-                border.BorderBrush = new SolidColorBrush(Colors.Black);
-                border.BorderThickness = new Thickness(0.25, 0.25, 0.25, 0.25);
-                border.Background = row % 2 == 0 ? new SolidColorBrush(Colors.White) : new SolidColorBrush(new Color { A = 255, R = 240, G = 240, B = 240 });
+                var border = new Border
+                {
+                    Child = textName,
+                    BorderBrush = new SolidColorBrush(Colors.Black),
+                    BorderThickness = new Thickness(0.25, 0.25, 0.25, 0.25),
+                    Background = row % 2 == 0
+                        ? new SolidColorBrush(Colors.White)
+                        : new SolidColorBrush(new Color { A = 255, R = 240, G = 240, B = 240 })
+                };
 
                 _propertyGrid.Children.Add(border);
                 _propertyGrid.Children.Add(textVal);
@@ -467,12 +536,12 @@ namespace Dreambuild.Gis.Display
             }
         }
 
-        private void buttonCallback(object sender, EventArgs e)
+        private void ButtonCallback(object sender, EventArgs e)
         {
             if (CurrentLayer != "<全部>")
             {
-                QueryResultWindow qrw = new QueryResultWindow();
-                qrw.SetData(_features.Where(x => SelectionSet.FindLayer(x).Name == CurrentLayer).ToList());
+                var qrw = new QueryResultWindow();
+                qrw.SetData(_features.Where(feature => SelectionSet.FindLayer(feature).Name == CurrentLayer).ToList());
                 qrw.ShowDialog();
             }
         }
@@ -485,7 +554,7 @@ namespace Dreambuild.Gis.Display
     {
         private StackPanel _layoutRootNew = new StackPanel();
         private DockPanel _layoutRoot = new DockPanel();
-        private TextBox _text = new TextBox();
+        private TextBox _searchTextBox = new TextBox();
         private ToolTip _tip = new ToolTip();
         private Button _button = new Button { Width = 50, BorderBrush = new SolidColorBrush(Colors.LightGray) };
         private ListBox _list = new ListBox { Height = 200, BorderBrush = new SolidColorBrush(Colors.LightGray) };
@@ -506,15 +575,15 @@ namespace Dreambuild.Gis.Display
 
             _button.Content = "查找";
             _button.Click += new RoutedEventHandler(_button_Click);
-            _text.KeyUp += new KeyEventHandler(_text_KeyUp);
+            _searchTextBox.KeyUp += new KeyEventHandler(_text_KeyUp);
             _list.SelectionChanged += new SelectionChangedEventHandler(_list_SelectionChanged);
 
             _tip.Content = "输入关键字以查找";
-            ToolTipService.SetToolTip(_text, _tip);
+            ToolTipService.SetToolTip(_searchTextBox, _tip);
 
             DockPanel.SetDock(_button, Dock.Right);
             _layoutRoot.Children.Add(_button);
-            _layoutRoot.Children.Add(_text);
+            _layoutRoot.Children.Add(_searchTextBox);
             _layoutRootNew.Children.Add(_layoutRoot);
 
             _cbbLayers.DropDownClosed += (s, args) => ReadyProps();
@@ -554,11 +623,11 @@ namespace Dreambuild.Gis.Display
 
             string layerName = _cbbLayers.SelectedItem.ToString();
             string prop = _cbbProps.SelectedItem.ToString();
-            DataQueryOperation operation = (DataQueryOperation)_cbbOperations.SelectedIndex;
+            var operation = (DataQueryOperation)_cbbOperations.SelectedIndex;
             string param = _txtParam.Text;
 
-            var theme = new PredicateTheme(f => MapQueryServices.FeatureSelector(f, prop, operation, param), Colors.Yellow, Colors.Gray);
-            MapControl.Current.Layers.First(x => x.LayerData.Name == layerName).ApplyColorTheme(theme);
+            var theme = new PredicateTheme(feature => MapQueryServices.FeatureSelector(feature, prop, operation, param), Colors.Yellow, Colors.Gray);
+            MapControl.Current.Layers.First(mapLayer => mapLayer.LayerData.Name == layerName).ApplyColorTheme(theme);
             _findResults = MapDataManager.LatestMap.Layers[layerName].QueryFeatures(prop, operation, param).ToList();
             _list.Items.Clear();
             foreach (var find in _findResults)
@@ -569,10 +638,15 @@ namespace Dreambuild.Gis.Display
 
         public void ResetQuery()
         {
-            MapControl.Current.Layers.ForEach(x => x.ClearColorTheme());
+            MapControl.Current.Layers.ForEach(mapLayer => mapLayer.ClearColorTheme());
 
             _cbbLayers.Items.Clear();
-            MapControl.Current.AllMaps.SelectMany(x => x.Layers).Select(x => x.Name).Distinct().ForEach(x => _cbbLayers.Items.Add(x));
+            MapControl.Current.AllMaps
+                .SelectMany(map => map.Layers)
+                .Select(layer => layer.Name)
+                .Distinct()
+                .ForEach(layerName => _cbbLayers.Items.Add(layerName));
+
             _cbbProps.Items.Clear();
             _cbbOperations.SelectedIndex = -1;
             _txtParam.Text = string.Empty;
@@ -585,13 +659,17 @@ namespace Dreambuild.Gis.Display
             _cbbProps.Items.Clear();
             if (_cbbLayers.SelectedItem != null)
             {
-                string layer = _cbbLayers.SelectedItem.ToString();
-                if (MapControl.Current.AllMaps.SelectMany(x => x.Layers).Any(x => x.Name == layer))
+                string layerName = _cbbLayers.SelectedItem.ToString();
+                if (MapControl.Current.AllMaps.SelectMany(map => map.Layers).Any(layer => layer.Name == layerName))
                 {
-                    var features = MapControl.Current.AllMaps.SelectMany(x => x.Layers).First(x => x.Name == layer).Features;
+                    var features = MapControl.Current.AllMaps
+                        .SelectMany(map => map.Layers)
+                        .First(layer => layer.Name == layerName)
+                        .Features;
+
                     if (features.Count > 0)
                     {
-                        features[0].Properties.ForEach(x => _cbbProps.Items.Add(x.Key));
+                        features[0].Properties.ForEach(pair => _cbbProps.Items.Add(pair.Key));
                     }
                 }
             }
@@ -601,7 +679,7 @@ namespace Dreambuild.Gis.Display
         {
             if (_list.SelectedIndex > -1 && _list.SelectedIndex < _findResults.Count)
             {
-                IFeature feature = _findResults[_list.SelectedIndex];
+                var feature = _findResults[_list.SelectedIndex];
                 MapControl.Current.Zoom(new Geometry.PointString(feature.GeoData).GetExtents());
                 SelectionSet.Select(feature);
             }
@@ -626,15 +704,14 @@ namespace Dreambuild.Gis.Display
 
         void DoSearch()
         {
-            string searchText = _text.Text;
-            if (searchText == string.Empty)
+            if (string.IsNullOrEmpty(_searchTextBox.Text))
             {
                 _list.Items.Clear();
             }
             else
             {
                 //MapDataManager.FindAndMarkFeatures(searchText);
-                _findResults = MapDataManager.LatestMap.FindFeatures(searchText).ToList();
+                _findResults = MapDataManager.LatestMap.FindFeatures(_searchTextBox.Text).ToList();
                 _list.Items.Clear();
                 foreach (var find in _findResults)
                 {
@@ -645,16 +722,28 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 界面助手
+    /// UI helpers.
     /// </summary>
     public static class UIHelper
     {
         public static ToolTip TitledToolTip(string title, string content)
         {
-            StackPanel sp = new StackPanel();
-            sp.Children.Add(new TextBlock { Text = title, Margin = new Thickness(10), FontWeight = FontWeights.Bold });
-            sp.Children.Add(new TextBlock { Text = content, Margin = new Thickness(10, 0, 10, 10) });
-            return new ToolTip { Content = sp };
+            var stackPanel = new StackPanel();
+
+            stackPanel.Children.Add(new TextBlock
+            {
+                Text = title,
+                Margin = new Thickness(10),
+                FontWeight = FontWeights.Bold
+            });
+
+            stackPanel.Children.Add(new TextBlock
+            {
+                Text = content,
+                Margin = new Thickness(10, 0, 10, 10)
+            });
+
+            return new ToolTip { Content = stackPanel };
         }
     }
 }
