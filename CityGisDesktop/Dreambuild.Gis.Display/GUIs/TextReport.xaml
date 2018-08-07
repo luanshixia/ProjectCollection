@@ -6,6 +6,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300" WindowStartupLocation="CenterScreen" Topmost="True" ShowInTaskbar="False">
     <Grid>
-        <TextBox Name="txtContent" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Visible" FontFamily="Consolas,宋体" Text="Abc文字" FontSize="14" />
+        <TextBox Name="ContentTextBox" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap" IsReadOnly="True" VerticalScrollBarVisibility="Visible" FontFamily="Consolas,宋体" Text="Abc文字" FontSize="14" />
     </Grid>
 </Window>

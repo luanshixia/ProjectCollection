@@ -2,7 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -36,11 +38,18 @@ namespace Dreambuild.Gis.Display
         /// </summary>
         public static void ScanAndLoadPlugins()
         {
-            var dlls = System.IO.Directory.GetFiles(AppPath + PluginDirectory).Where(x => x.EndsWith(".dll", StringComparison.OrdinalIgnoreCase)).ToArray();
+            var dlls = Directory
+                .GetFiles(AppPath + PluginDirectory)
+                .Where(x => x.EndsWith(".dll", StringComparison.OrdinalIgnoreCase))
+                .ToArray();
+
             foreach (var dll in dlls)
             {
-                var plugin = System.Reflection.Assembly.LoadFrom(dll);
-                var entryClass = plugin.GetTypes().First(x => x.GetInterfaces().Contains(typeof(IPlugin)));
+                var plugin = Assembly.LoadFrom(dll);
+                var entryClass = plugin
+                    .GetTypes()
+                    .First(x => x.GetInterfaces().Contains(typeof(IPlugin)));
+
                 var entryMethod = entryClass.GetMethod("OnLoad");
                 entryMethod.Invoke(plugin.CreateInstance(entryClass.FullName), null);
             }
@@ -52,8 +61,9 @@ namespace Dreambuild.Gis.Display
         /// <returns>内部插件列表</returns>
         public static List<IPlugin> GetBuiltInPlugins()
         {
-            var assembly = System.Reflection.Assembly.GetEntryAssembly();
-            return assembly.GetTypes()
+            var assembly = Assembly.GetEntryAssembly();
+            return assembly
+                .GetTypes()
                 .Where(t => t.GetInterfaces().Contains(typeof(IPlugin)))
                 .Select(t => assembly.CreateInstance(t.FullName))
                 .Cast<IPlugin>()
@@ -110,16 +120,15 @@ namespace Dreambuild.Gis.Display
             foreach (var method in this.GetType().GetMethods())
             {
                 // Iterate through all the Attributes for each method.
-                foreach (Attribute attr in Attribute.GetCustomAttributes(method))
+                foreach (var attr in Attribute.GetCustomAttributes(method))
                 {
                     // Check for the DemoTool attribute.
                     if (attr.GetType() == typeof(DemoToolAttribute))
                     {
                         var method1 = method;
-                        yield return Tuple.Create<string, RoutedEventHandler>((attr as DemoToolAttribute).Name, (s, args) =>
-                        {
-                            method1.Invoke(this, null);
-                        });
+                        yield return Tuple.Create<string, RoutedEventHandler>(
+                            (attr as DemoToolAttribute).Name,
+                            (s, args) => method1.Invoke(this, null));
                     }
                 }
             }
@@ -191,7 +200,7 @@ namespace Dreambuild.Gis.Display
         /// </summary>
         public Toolbar()
         {
-            Buttons = new List<ToolbarButton>();
+            this.Buttons = new List<ToolbarButton>();
         }
 
         /// <summary>
@@ -202,9 +211,21 @@ namespace Dreambuild.Gis.Display
         /// <param name="imageUri">图片地址</param>
         /// <param name="description">工具提示</param>
         /// <param name="isRadioButton">是否单选按钮</param>
-        public void AddButton(string textLebel, Action clickHandler, string imageUri = null, string description = null, ToolbarButtonType type = ToolbarButtonType.Default)
+        public void AddButton(
+            string textLebel,
+            Action clickHandler,
+            string imageUri = null,
+            string description = null,
+            ToolbarButtonType type = ToolbarButtonType.Default)
         {
-            Buttons.Add(new ToolbarButton { TextLabel = textLebel, ClickHandler = clickHandler, Description = description, ImageUri = imageUri, ButtonType = type });
+            this.Buttons.Add(new ToolbarButton
+            {
+                TextLabel = textLebel,
+                ClickHandler = clickHandler,
+                Description = description,
+                ImageUri = imageUri,
+                ButtonType = type
+            });
         }
 
         /// <summary>
@@ -231,26 +252,47 @@ namespace Dreambuild.Gis.Display
         /// <returns></returns>
         public static int GetOption(string tip, params string[] options)
         {
-            string title = "";
-            //增加语言判断
-            if (LocalizationHelper.CurrentLocale == Locales.ZH_CN)
+            string title = LocalizationHelper.CurrentLocale == Locales.ZH_CN ? "请选择" : "Please choose";
+
+            var window = new Window
             {
-                title = "请选择";
-            }
-            else
+                Width = 300,
+                SizeToContent = SizeToContent.Height,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.ToolWindow,
+                Title = title,
+                Owner = Application.Current.MainWindow
+            };
+
+            var stackPanel = new StackPanel
             {
-                title = "Please choose";
-            }
-            Window window = new Window { Width = 300, SizeToContent = SizeToContent.Height, WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen, ShowInTaskbar = false, WindowStyle = WindowStyle.ToolWindow, Title = title };
-            window.Owner = Application.Current.MainWindow;
-            StackPanel sp = new StackPanel { Margin = new Thickness(5) };
-            TextBlock tb = new TextBlock { Text = (tip == string.Empty ? "请选择一个选项。" : tip), TextWrapping = TextWrapping.Wrap };
+                Margin = new Thickness(5)
+            };
+
+            var textBlock = new TextBlock
+            {
+                Text = (string.IsNullOrEmpty(tip) ? "Choose one." : tip),
+                TextWrapping = TextWrapping.Wrap
+            };
+
             int result = -1;
-            var btns = options.Select((x, i) => new Button { Content = x, Tag = i }).ToList();
-            btns.ForEach(x => x.Click += (s, args) => { result = (int)x.Tag; window.DialogResult = true; });
-            sp.Children.Add(tb);
-            btns.ForEach(x => sp.Children.Add(x));
-            window.Content = sp;
+            var buttons = options
+                .Select((option, i) => new Button
+                {
+                    Content = option,
+                    Tag = i
+                })
+                .ToList();
+
+            buttons.ForEach(button => button.Click += (s, args) =>
+            {
+                result = (int)button.Tag; window.DialogResult = true;
+            });
+
+            stackPanel.Children.Add(textBlock);
+            buttons.ForEach(x => stackPanel.Children.Add(x));
+            window.Content = stackPanel;
             window.ShowDialog();
             return result;
         }
@@ -263,19 +305,53 @@ namespace Dreambuild.Gis.Display
         /// <returns></returns>
         public static string GetChoice(string tip, params string[] choices)
         {
-            Window window = new Window { Width = 300, SizeToContent = SizeToContent.Height, WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen, ShowInTaskbar = false, WindowStyle = WindowStyle.ToolWindow, Title = "请选择" };
-            StackPanel sp = new StackPanel { Margin = new Thickness(10) };
-            TextBlock tb = new TextBlock { Text = (tip == string.Empty ? "请选择一个项目。" : tip), TextWrapping = TextWrapping.Wrap };
-            ListBox list = new ListBox { Height = 200 };
-            choices.ToList().ForEach(x => list.Items.Add(new ListBoxItem { Content = x }));
-            Button btnOk = new Button { Content = "确定", Margin = new Thickness(5) };
-            btnOk.Click += (s, args) => window.DialogResult = true;
-            sp.Children.Add(tb);
-            sp.Children.Add(list);
-            sp.Children.Add(btnOk);
-            window.Content = sp;
+            var window = new Window
+            {
+                Width = 300,
+                SizeToContent = SizeToContent.Height,
+                WindowStartupLocation = WindowStartupLocation.CenterScreen,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.ToolWindow,
+                Title = "Please choose"
+            };
+
+            var stackPanel = new StackPanel
+            {
+                Margin = new Thickness(10)
+            };
+
+            var textBlock = new TextBlock
+            {
+                Text = (string.IsNullOrEmpty(tip) ? "Choose one." : tip),
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            var listBox = new ListBox
+            {
+                Height = 200
+            };
+
+            choices.ToList().ForEach(choice => listBox.Items.Add(new ListBoxItem
+            {
+                Content = choice
+            }));
+
+            var okButton = new Button
+            {
+                Content = "OK",
+                Margin = new Thickness(5)
+            };
+
+            okButton.Click += (s, args) => window.DialogResult = true;
+            stackPanel.Children.Add(textBlock);
+            stackPanel.Children.Add(listBox);
+            stackPanel.Children.Add(okButton);
+            window.Content = stackPanel;
             window.ShowDialog();
-            return list.SelectedItem == null ? string.Empty : (list.SelectedItem as ListBoxItem).Content.ToString();
+
+            return listBox.SelectedItem == null
+                ? string.Empty
+                : (listBox.SelectedItem as ListBoxItem).Content.ToString();
         }
 
         /// <summary>
@@ -286,19 +362,55 @@ namespace Dreambuild.Gis.Display
         /// <returns></returns>
         public static string[] GetChoices(string tip, params string[] choices)
         {
-            Window window = new Window { Width = 300, SizeToContent = SizeToContent.Height, WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen, ShowInTaskbar = false, WindowStyle = WindowStyle.ToolWindow, Title = "请选择" };
-            StackPanel sp = new StackPanel { Margin = new Thickness(10) };
-            TextBlock tb = new TextBlock { Text = (tip == string.Empty ? "请选择一个选项。" : tip), TextWrapping = TextWrapping.Wrap };
-            ListBox list = new ListBox { Height = 200 };
-            choices.ToList().ForEach(x => list.Items.Add(new CheckBox { Content = x }));
-            Button btnOk = new Button { Content = "确定", Margin = new Thickness(5) };
-            btnOk.Click += (s, args) => window.DialogResult = true;
-            sp.Children.Add(tb);
-            sp.Children.Add(list);
-            sp.Children.Add(btnOk);
-            window.Content = sp;
+            var window = new Window
+            {
+                Width = 300,
+                SizeToContent = SizeToContent.Height,
+                WindowStartupLocation = System.Windows.WindowStartupLocation.CenterScreen,
+                ShowInTaskbar = false,
+                WindowStyle = WindowStyle.ToolWindow,
+                Title = "Please choose"
+            };
+
+            var stackPanel = new StackPanel
+            {
+                Margin = new Thickness(10)
+            };
+
+            var textBlock = new TextBlock
+            {
+                Text = (string.IsNullOrEmpty(tip) ? "Choose one." : tip),
+                TextWrapping = TextWrapping.Wrap
+            };
+
+            var listBox = new ListBox
+            {
+                Height = 200
+            };
+
+            choices.ToList().ForEach(choice => listBox.Items.Add(new CheckBox
+            {
+                Content = choice
+            }));
+
+            var okButton = new Button
+            {
+                Content = "OK",
+                Margin = new Thickness(5)
+            };
+
+            okButton.Click += (s, args) => window.DialogResult = true;
+            stackPanel.Children.Add(textBlock);
+            stackPanel.Children.Add(listBox);
+            stackPanel.Children.Add(okButton);
+            window.Content = stackPanel;
             window.ShowDialog();
-            return list.Items.Cast<CheckBox>().Where(x => x.IsChecked == true).Select(x => x.Content.ToString()).ToArray();
+
+            return listBox.Items
+                .Cast<CheckBox>()
+                .Where(x => x.IsChecked == true)
+                .Select(x => x.Content.ToString())
+                .ToArray();
         }
 
         /// <summary>
@@ -311,18 +423,21 @@ namespace Dreambuild.Gis.Display
         /// <param name="modal"></param>
         public static void TextReport(string title, string content, double width, double height, bool modal = false)
         {
-            TextReport tr = new TextReport();
-            tr.Width = width;
-            tr.Height = height;
-            tr.Title = title;
-            tr.txtContent.Text = content;
+            var textReport = new TextReport
+            {
+                Width = width,
+                Height = height,
+                Title = title
+            };
+
+            textReport.ContentTextBox.Text = content;
             if (modal)
             {
-                tr.ShowDialog();
+                textReport.ShowDialog();
             }
             else
             {
-                tr.Show();
+                textReport.Show();
             }
         }
 
@@ -333,9 +448,9 @@ namespace Dreambuild.Gis.Display
         /// <param name="entries"></param>
         public static bool? MultiInputs(string title, Dictionary<string, string> entries)
         {
-            MultiInputs mi = new MultiInputs();
-            mi.Ready(entries, title);
-            return mi.ShowDialog();
+            var multiInputs = new MultiInputs();
+            multiInputs.Ready(entries, title);
+            return multiInputs.ShowDialog();
         }
 
         /// <summary>
@@ -346,11 +461,12 @@ namespace Dreambuild.Gis.Display
         /// <returns></returns>
         public static string InputBox(string tip, string defaultValue = "")
         {
-            InputBox input = new InputBox(tip, defaultValue);
+            var input = new InputBox(tip, defaultValue);
             if (input.ShowDialog() == true)
             {
                 return input.Value;
             }
+
             return string.Empty;
         }
 
@@ -371,7 +487,7 @@ namespace Dreambuild.Gis.Display
         /// <param name="worker"></param>
         public static void ProgressIndicator(string title, BackgroundWorker worker)
         {
-            TaskProgressWindow tpw = new TaskProgressWindow { Title = title + " (0%)" };
+            var tpw = new TaskProgressWindow { Title = title + " (0%)" };
             tpw.CancelButton.Click += (s, args) =>
             {
                 tpw.CancelButton.IsEnabled = false;
@@ -393,9 +509,24 @@ namespace Dreambuild.Gis.Display
         /// <param name="url"></param>
         public static void WebBrowser(string title, string url, int width, int height)
         {
-            var form = new System.Windows.Forms.Form { Text = title, Width = width, Height = height, StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen, MaximizeBox = false, MinimizeBox = false, TopMost = true, ShowIcon = false, ShowInTaskbar = false };
-            var browser = new WebKit.WebKitBrowser();
-            browser.Dock = System.Windows.Forms.DockStyle.Fill;
+            var form = new System.Windows.Forms.Form
+            {
+                Text = title,
+                Width = width,
+                Height = height,
+                StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen,
+                MaximizeBox = false,
+                MinimizeBox = false,
+                TopMost = true,
+                ShowIcon = false,
+                ShowInTaskbar = false
+            };
+
+            var browser = new WebKit.WebKitBrowser
+            {
+                Dock = System.Windows.Forms.DockStyle.Fill
+            };
+
             form.Controls.Add(browser);
             browser.Navigate(url);
             form.Show();
@@ -408,16 +539,23 @@ namespace Dreambuild.Gis.Display
         /// <param name="obj"></param>
         public static void PropertyWindow(string title, object obj, int width, int height, bool detail = false)
         {
-            PropertyInputs pi = new PropertyInputs { Text = title, Width = width, Height = height };
+            var propertyInputs = new PropertyInputs
+            {
+                Text = title,
+                Width = width,
+                Height = height
+            };
+
             if (detail)
             {
-                pi.SetDetailData(obj as object[]);
+                propertyInputs.SetDetailData(obj as object[]);
             }
             else
             {
-                pi.SetData(obj);
+                propertyInputs.SetData(obj);
             }
-            pi.ShowDialog();
+
+            propertyInputs.ShowDialog();
         }
     }
 
@@ -448,7 +586,7 @@ namespace Dreambuild.Gis.Display
         /// <returns>字符串表示</returns>
         public string GetRow(params object[] contents)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             for (int i = 0; i < contents.Length; i++)
             {
                 string content = contents[i].ToString();
@@ -474,7 +612,7 @@ namespace Dreambuild.Gis.Display
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class DemoToolAttribute : Attribute
+    public sealed class DemoToolAttribute : Attribute
     {
         public string Name;
         public string Category;

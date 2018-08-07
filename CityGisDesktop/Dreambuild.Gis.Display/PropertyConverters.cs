@@ -3,14 +3,15 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
 namespace Dreambuild.Properties
 {
     /// <summary>
-    /// 枚举转换器。
-    /// 用此类之前，必须保证在枚举项中定义了Description
+    /// Enum value description converter.
+    /// Ensure enum items have descriptions defined before use.
     /// </summary>
     public class EnumValueDescriptionConverter : ExpandableObjectConverter
     {
@@ -31,28 +32,29 @@ namespace Dreambuild.Properties
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
             if (sourceType == typeof(string))
+            {
                 return true;
+            }
 
             return base.CanConvertFrom(context, sourceType);
         }
 
         private bool IsExpired()
         {
-            if ((_dict == null) || (_dict.Count <= 0) || (_cultureInfo != LocalizationHelper.CurrentLocale))
-            {
-                return true;
-            }
-            return false;
+            return (_dict == null) || (_dict.Count <= 0) || (_cultureInfo != LocalizationHelper.CurrentLocale);
         }
 
-        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             if (value is string)
             {
                 if (context.PropertyDescriptor.PropertyType.IsEnum)
                 {
                     if (IsExpired())
+                    {
                         LoadDict(context);
+                    }
+
                     if (_dict.Values.Contains(value.ToString()))
                     {
                         foreach (object obj in _dict.Keys)
@@ -87,20 +89,24 @@ namespace Dreambuild.Properties
         public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
         {
             if (IsExpired())
+            {
                 LoadDict(context);
+            }
 
-            StandardValuesCollection vals = new TypeConverter.StandardValuesCollection(_dict.Keys);
-
-            return vals;
+            return new TypeConverter.StandardValuesCollection(_dict.Keys);
         }
 
-        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
             if (value == null)
+            {
                 return string.Empty;
+            }
 
             if (IsExpired())
+            {
                 LoadDict(context);
+            }
 
             foreach (object key in _dict.Keys)
             {
@@ -113,15 +119,15 @@ namespace Dreambuild.Properties
             return base.ConvertTo(context, culture, value, destinationType);
         }
 
-        public Dictionary<object, string> GetEnumValueDisplayNameDict(Type enumType)
+        private static Dictionary<object, string> GetEnumValueDisplayNameDict(Type enumType)
         {
-            Dictionary<object, string> dict = new Dictionary<object, string>();
-            FieldInfo[] fieldinfos = enumType.GetFields();
-            foreach (FieldInfo field in fieldinfos)
+            var dict = new Dictionary<object, string>();
+            var fieldinfos = enumType.GetFields();
+            foreach (var field in fieldinfos)
             {
                 if (field.FieldType.IsEnum)
                 {
-                    Object[] objs = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
+                    var objs = field.GetCustomAttributes(typeof(DescriptionAttribute), false);
                     if (objs.Length > 0)
                     {
                         string description = ((DescriptionAttribute)objs[0]).Description;
@@ -143,6 +149,7 @@ namespace Dreambuild.Properties
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -152,38 +159,42 @@ namespace Dreambuild.Properties
             {
                 return true;
             }
+
             if (destinationType == typeof(InstanceDescriptor))
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
-        public override object ConvertFrom(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             if (value is string)
             {
                 return FromString(value as string);
             }
+
             return base.ConvertFrom(context, culture, value);
         }
 
-        public override object ConvertTo(ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, Type destinationType)
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            if (value is List<T>)
+            if (value is List<T> list)
             {
-                var list = value as List<T>;
                 if (destinationType == typeof(string))
                 {
                     return Stringify(list);
                 }
+
                 if (destinationType == typeof(InstanceDescriptor))
                 {
-                    return new InstanceDescriptor(this.GetType().GetMethod("FromString"),
-                        new object[] { Stringify(list) }
-                    );
+                    return new InstanceDescriptor(
+                        member: this.GetType().GetMethod(nameof(FromString)),
+                        arguments: new object[] { Stringify(list) });
                 }
             }
+
             return base.ConvertTo(context, culture, value, destinationType);
         }
 

@@ -12,12 +12,10 @@ namespace Dreambuild.Gis.Display
     /// </summary>
     public static class SelectionSet // todo: show selection bounding box.
     {
-        private static HashSet<IFeature> _contents = new HashSet<IFeature>();
         /// <summary>
         /// 选择集的内容
         /// </summary>
-        public static HashSet<IFeature> Contents { get { return _contents; } }
-
+        public static HashSet<IFeature> Contents { get; } = new HashSet<IFeature>();
         /// <summary>
         /// 选择集改变事件
         /// </summary>
@@ -27,10 +25,7 @@ namespace Dreambuild.Gis.Display
         /// </summary>
         public static void OnSelectionChanged()
         {
-            if (SelectionChanged != null)
-            {
-                SelectionChanged();
-            }
+            SelectionChanged?.Invoke();
         }
 
         private static Brush _markBrush = Brushes.Red;
@@ -70,8 +65,8 @@ namespace Dreambuild.Gis.Display
         public static void Select(IFeature[] entities)
         {
             UnmarkSelection();
-            _contents.Clear();
-            entities.ToList().ForEach(x => _contents.Add(x));
+            Contents.Clear();
+            entities.ToList().ForEach(x => Contents.Add(x));
             MarkSelection();
             OnSelectionChanged();
         }
@@ -83,8 +78,8 @@ namespace Dreambuild.Gis.Display
         public static void Select(IFeature entity)
         {
             UnmarkSelection();
-            _contents.Clear();
-            _contents.Add(entity);
+            Contents.Clear();
+            Contents.Add(entity);
             MarkSelection();
             OnSelectionChanged();
         }
@@ -98,9 +93,9 @@ namespace Dreambuild.Gis.Display
             UnmarkSelection();
             entities.ToList().ForEach(x =>
             {
-                if (!_contents.Contains(x))
+                if (!Contents.Contains(x))
                 {
-                    _contents.Add(x);
+                    Contents.Add(x);
                 }
             });
             MarkSelection();
@@ -114,9 +109,9 @@ namespace Dreambuild.Gis.Display
         public static void AddSelection(IFeature entity)
         {
             UnmarkSelection();
-            if (!_contents.Contains(entity))
+            if (!Contents.Contains(entity))
             {
-                _contents.Add(entity);
+                Contents.Add(entity);
             }
             MarkSelection();
             OnSelectionChanged();
@@ -131,9 +126,9 @@ namespace Dreambuild.Gis.Display
             UnmarkSelection();
             entities.ToList().ForEach(x =>
             {
-                if (_contents.Contains(x))
+                if (Contents.Contains(x))
                 {
-                    _contents.Remove(x);
+                    Contents.Remove(x);
                 }
             });
             MarkSelection();
@@ -146,7 +141,7 @@ namespace Dreambuild.Gis.Display
         public static void ClearSelection()
         {
             UnmarkSelection();
-            _contents.Clear();
+            Contents.Clear();
             OnSelectionChanged();
         }
 
@@ -181,11 +176,11 @@ namespace Dreambuild.Gis.Display
                 {
                     foreach (var content in (layer as DrawingMapLayer).Features)
                     {
-                        var f = content.Key;
+                        var feature = content.Key;
                         var drawing = content.Value;
-                        if (_contents.Contains(f))
+                        if (Contents.Contains(feature))
                         {
-                            if (FindLayer(f).GeoType != VectorLayer.GEOTYPE_LINEAR)
+                            if (FindLayer(feature).GeoType != VectorLayer.GEOTYPE_LINEAR)
                             {
                                 (layer as DrawingMapLayer).BringToFront(drawing);
                             }
@@ -198,12 +193,12 @@ namespace Dreambuild.Gis.Display
                 {
                     foreach (var content in layer.Features)
                     {
-                        var f = content.Key;
+                        var feature = content.Key;
                         var shape = content.Value;
                         //System.Windows.Controls.Canvas.SetZIndex(shape, 0);
-                        if (_contents.Contains(f))
+                        if (Contents.Contains(feature))
                         {
-                            if (FindLayer(f).GeoType != VectorLayer.GEOTYPE_LINEAR)
+                            if (FindLayer(feature).GeoType != VectorLayer.GEOTYPE_LINEAR)
                             {
                                 layer.BringToFront(shape);
                             }
@@ -232,11 +227,11 @@ namespace Dreambuild.Gis.Display
         /// <returns>图形，未找到为null</returns>
         public static Shape FindShape(IFeature entity)
         {
-            foreach (var layer in MapControl.Current.Layers)
+            foreach (var mapLayer in MapControl.Current.Layers)
             {
-                if (layer.Features.ContainsKey(entity))
+                if (mapLayer.Features.ContainsKey(entity))
                 {
-                    return layer.Features[entity];
+                    return mapLayer.Features[entity];
                 }
             }
             return null;
@@ -249,11 +244,11 @@ namespace Dreambuild.Gis.Display
         /// <returns>图层，未找到为null</returns>
         public static VectorLayer FindLayer(IFeature entity) // mod 20130403
         {
-            foreach (var layer in MapControl.Current.Layers)
+            foreach (var mapLayer in MapControl.Current.Layers)
             {
-                if (layer.LayerData.Features.Contains(entity))
+                if (mapLayer.LayerData.Features.Contains(entity))
                 {
-                    return layer.LayerData;
+                    return mapLayer.LayerData;
                 }
             }
             return null;
