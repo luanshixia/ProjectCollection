@@ -103,11 +103,15 @@ namespace Dreambuild.Gis.Display
                 ? "地图 {0}"
                 : "Map {0}";
 
+            var mapNumber = mapAndLayers
+                .Select(mapLayersPair => mapLayersPair.Item1)
+                .ToList().IndexOf(map) + 1;
+
             var checkBox = new CheckBox
             {
                 IsChecked = true,
                 Content = string.IsNullOrEmpty(map.Name)
-                    ? string.Format("地图 {0}", mapAndLayers.Select(mapLayersPair => mapLayersPair.Item1).ToList().IndexOf(map) + 1)
+                    ? string.Format("地图 {0}", mapNumber)
                     : map.Name
             };
 
@@ -288,7 +292,8 @@ namespace Dreambuild.Gis.Display
                 _dictColor = usageTheme.DictColor;
                 ShowLegend();
             }
-            else if (currentItem == FloorAreaRatio || currentItem == SiteCoverageRatio || currentItem == GreenRate || currentItem == BuildingHeightLimit)
+            else if (currentItem == FloorAreaRatio || currentItem == SiteCoverageRatio
+                || currentItem == GreenRate || currentItem == BuildingHeightLimit)
             {
                 _checkBox.Visibility = Visibility.Visible;
 
@@ -310,11 +315,13 @@ namespace Dreambuild.Gis.Display
                 if (parcelTheme is IDataVisualizationTheme)
                 {
                     string prop = (parcelTheme as IDataVisualizationTheme).Property;
-                    parcelLayer.ApplyToolTip(feature => UIHelper.TitledToolTip(prop, feature[prop]));
+                    parcelLayer.ApplyToolTip(feature => UIHelper.TitledToolTip(title: prop, content: feature[prop]));
                 }
                 else if (parcelTheme is ParcelUsageTheme)
                 {
-                    parcelLayer.ApplyToolTip(feature => UIHelper.TitledToolTip(feature[WellknownPropertyNames.LandUseCode], ParcelColorCfg.GetUsageByCode(feature[WellknownPropertyNames.LandUseCode])));
+                    parcelLayer.ApplyToolTip(feature => UIHelper.TitledToolTip(
+                        title: feature[WellknownPropertyNames.LandUseCode],
+                        content: ParcelColorCfg.GetUsageByCode(feature[WellknownPropertyNames.LandUseCode])));
                 }
             }
             else
@@ -352,16 +359,19 @@ namespace Dreambuild.Gis.Display
     }
 
     /// <summary>
-    /// 属性面板
+    /// Property panel.
     /// </summary>
     public class PropertyPanelControl : UserControl
     {
-        private Grid _propertyGrid = new Grid { VerticalAlignment = VerticalAlignment.Top };
-        private ScrollViewer _scroll = new ScrollViewer { Height = 200, VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
-        private StackPanel _layoutRoot = new StackPanel();
-        private DockPanel _firstRow = new DockPanel();
-        private ComboBox _cbbAll = new ComboBox { BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private Button _btnShowAll = new Button { Width = 50, Content = "详细", BorderBrush = new SolidColorBrush(Colors.LightGray) };
+        private readonly Grid _propertyGrid = new Grid
+        {
+            VerticalAlignment = VerticalAlignment.Top
+        };
+
+        private readonly ComboBox _layerComboBox = new ComboBox
+        {
+            BorderBrush = new SolidColorBrush(Colors.LightGray)
+        };
 
         private List<IFeature> _features = new List<IFeature>();
 
@@ -369,38 +379,54 @@ namespace Dreambuild.Gis.Display
         {
             get
             {
-                if (_cbbAll.SelectedItem != null)
+                if (_layerComboBox.SelectedItem != null)
                 {
-                    return _cbbAll.SelectedItem.ToString().Split(' ')[0];
+                    return _layerComboBox.SelectedItem.ToString().Split(' ')[0];
                 }
                 else
                 {
-                    return "<全部>";
+                    return "<all>";
                 }
             }
         }
 
         public PropertyPanelControl()
         {
-            DockPanel.SetDock(_btnShowAll, Dock.Right);
-            _btnShowAll.Click += ButtonCallback;
-            _firstRow.Children.Add(_btnShowAll);
-            _cbbAll.SelectionChanged += new SelectionChangedEventHandler(_cbbAll_SelectionChanged);
-            _firstRow.Children.Add(_cbbAll);
-            _layoutRoot.Children.Add(_firstRow);
+            var layoutRoot = new StackPanel();
+            var firstRow = new DockPanel();
+            var showAllButton = new Button
+            {
+                Width = 50,
+                Content = "Details",
+                BorderBrush = new SolidColorBrush(Colors.LightGray)
+            };
+
+            DockPanel.SetDock(showAllButton, Dock.Right);
+            showAllButton.Click += ButtonCallback;
+            firstRow.Children.Add(showAllButton);
+            _layerComboBox.SelectionChanged += LayerComboBox_SelectionChanged;
+            firstRow.Children.Add(_layerComboBox);
+            layoutRoot.Children.Add(firstRow);
 
             _propertyGrid.ColumnDefinitions.Add(new ColumnDefinition());
             _propertyGrid.ColumnDefinitions.Add(new ColumnDefinition());
-            _scroll.Content = _propertyGrid;
-            _layoutRoot.Children.Add(_scroll);
 
-            this.Content = _layoutRoot;
+            var scrollViewer = new ScrollViewer
+            {
+                Height = 200,
+                VerticalScrollBarVisibility = ScrollBarVisibility.Auto
+            };
+
+            scrollViewer.Content = _propertyGrid;
+            layoutRoot.Children.Add(scrollViewer);
+
+            this.Content = layoutRoot;
             this.Margin = new Thickness(5);
         }
 
-        void _cbbAll_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        void LayerComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (_cbbAll.SelectedItem != null)
+            if (_layerComboBox.SelectedItem != null)
             {
                 ReadyGrid();
             }
@@ -409,7 +435,7 @@ namespace Dreambuild.Gis.Display
         public void Update(IEnumerable<IFeature> features)
         {
             _features = features.ToList();
-            _cbbAll.Items.Clear();
+            _layerComboBox.Items.Clear();
             if (_features.Count > 0)
             {
                 var layerNames = _features
@@ -417,9 +443,9 @@ namespace Dreambuild.Gis.Display
                     .Select(group => string.Format("{0} ({1})", group.Key.Name, group.Count()))
                     .ToList();
 
-                layerNames.Add(string.Format("<全部> ({0})", _features.Count));
-                layerNames.ForEach(layerName => _cbbAll.Items.Add(layerName));
-                _cbbAll.SelectedIndex = 0;
+                layerNames.Add(string.Format("<all> ({0})", _features.Count));
+                layerNames.ForEach(layerName => _layerComboBox.Items.Add(layerName));
+                _layerComboBox.SelectedIndex = 0;
             }
             else
             {
@@ -434,10 +460,10 @@ namespace Dreambuild.Gis.Display
 
         private void ReadyGrid()
         {
-            if (CurrentLayer != "<全部>")
+            if (this.CurrentLayer != "<all>")
             {
                 var featuresInLayer = _features
-                    .Where(feature => SelectionSet.FindLayer(feature).Name == CurrentLayer)
+                    .Where(feature => SelectionSet.FindLayer(feature).Name == this.CurrentLayer)
                     .ToList();
 
                 var propFeature = GetPropertyRepresentation(featuresInLayer);
@@ -496,7 +522,7 @@ namespace Dreambuild.Gis.Display
                 };
 
                 textVal.TextChanged += (s, args) => _features
-                    .Where(feature => SelectionSet.FindLayer(feature).Name == CurrentLayer)
+                    .Where(feature => SelectionSet.FindLayer(feature).Name == this.CurrentLayer)
                     .ForEach(feature => feature[prop.Key] = textVal.Text); // newly 20120514
 
                 var tipName = new ToolTip
@@ -538,70 +564,120 @@ namespace Dreambuild.Gis.Display
 
         private void ButtonCallback(object sender, EventArgs e)
         {
-            if (CurrentLayer != "<全部>")
+            if (this.CurrentLayer != "<all>")
             {
                 var qrw = new QueryResultWindow();
-                qrw.SetData(_features.Where(feature => SelectionSet.FindLayer(feature).Name == CurrentLayer).ToList());
+                qrw.SetData(_features
+                    .Where(feature => SelectionSet.FindLayer(feature).Name == this.CurrentLayer)
+                    .ToList());
+
                 qrw.ShowDialog();
             }
         }
     }
 
     /// <summary>
-    /// 查找面板
+    /// Search panel.
     /// </summary>
     public class SearchPanelControl : UserControl
     {
-        private StackPanel _layoutRootNew = new StackPanel();
-        private DockPanel _layoutRoot = new DockPanel();
-        private TextBox _searchTextBox = new TextBox();
-        private ToolTip _tip = new ToolTip();
-        private Button _button = new Button { Width = 50, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private ListBox _list = new ListBox { Height = 200, BorderBrush = new SolidColorBrush(Colors.LightGray) };
+        private readonly TextBox _searchTextBox = new TextBox();
+        private readonly ListBox _list = new ListBox
+        {
+            Height = 200,
+            BorderBrush = new SolidColorBrush(Colors.LightGray)
+        };
+
         private List<IFeature> _findResults = new List<IFeature>();
 
-        private ComboBox _cbbLayers = new ComboBox { Width = 80, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private ComboBox _cbbProps = new ComboBox { Width = 80, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private ComboBox _cbbOperations = new ComboBox { Width = 82, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private TextBox _txtParam = new TextBox { Width = 140, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private Button _btnDoQuery = new Button { Content = "查询", Width = 52, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private Button _btnResetQuery = new Button { Content = "复位", Width = 50, BorderBrush = new SolidColorBrush(Colors.LightGray) };
-        private WrapPanel _queryControls = new WrapPanel();
+        private readonly ComboBox _cbbLayers = new ComboBox
+        {
+            Width = 80,
+            BorderBrush = new SolidColorBrush(Colors.LightGray)
+        };
+
+        private readonly ComboBox _cbbProps = new ComboBox
+        {
+            Width = 80,
+            BorderBrush = new SolidColorBrush(Colors.LightGray)
+        };
+
+        private readonly ComboBox _cbbOperations = new ComboBox
+        {
+            ItemsSource = new[]
+            {
+                "= equals",
+                "≠ not equals",
+                "> greater than",
+                "< less than"
+            },
+            Width = 82,
+            BorderBrush = new SolidColorBrush(Colors.LightGray)
+        };
+
+        private readonly TextBox _txtParam = new TextBox
+        {
+            Width = 140,
+            BorderBrush = new SolidColorBrush(Colors.LightGray)
+        };
 
         public SearchPanelControl()
         {
-            this.Content = _layoutRootNew;
+            var layoutRootNew = new StackPanel();
+            var layoutRoot = new DockPanel();
+            var toolTip = new ToolTip();
+
+            var findButton = new Button
+            {
+                Content = "Find",
+                Width = 50,
+                BorderBrush = new SolidColorBrush(Colors.LightGray)
+            };
+
+            var doQueryButton = new Button
+            {
+                Content = "Query",
+                Width = 52,
+                BorderBrush = new SolidColorBrush(Colors.LightGray)
+            };
+
+            var resetQueryButton = new Button
+            {
+                Content = "Reset",
+                Width = 50,
+                BorderBrush = new SolidColorBrush(Colors.LightGray)
+            };
+
+            var queryControls = new WrapPanel();
+
+            this.Content = layoutRootNew;
             this.Margin = new Thickness(5);
 
-            _button.Content = "查找";
-            _button.Click += new RoutedEventHandler(_button_Click);
+            findButton.Click += new RoutedEventHandler(_button_Click);
             _searchTextBox.KeyUp += new KeyEventHandler(_text_KeyUp);
             _list.SelectionChanged += new SelectionChangedEventHandler(_list_SelectionChanged);
 
-            _tip.Content = "输入关键字以查找";
-            ToolTipService.SetToolTip(_searchTextBox, _tip);
+            toolTip.Content = "Type in a keyword.";
+            ToolTipService.SetToolTip(_searchTextBox, toolTip);
 
-            DockPanel.SetDock(_button, Dock.Right);
-            _layoutRoot.Children.Add(_button);
-            _layoutRoot.Children.Add(_searchTextBox);
-            _layoutRootNew.Children.Add(_layoutRoot);
+            DockPanel.SetDock(findButton, Dock.Right);
+            layoutRoot.Children.Add(findButton);
+            layoutRoot.Children.Add(_searchTextBox);
+            layoutRootNew.Children.Add(layoutRoot);
 
             _cbbLayers.DropDownClosed += (s, args) => ReadyProps();
-            _queryControls.Children.Add(_cbbLayers);
-            _queryControls.Children.Add(_cbbProps);
-            _cbbOperations.Items.Add("= 等于");
-            _cbbOperations.Items.Add("≠ 不等于");
-            _cbbOperations.Items.Add("> 大于");
-            _cbbOperations.Items.Add("< 小于");
-            _queryControls.Children.Add(_cbbOperations);
-            _queryControls.Children.Add(_txtParam);
-            _btnDoQuery.Click += new RoutedEventHandler(_btnDoQuery_Click);
-            _btnResetQuery.Click += new RoutedEventHandler(_btnResetQuery_Click);
-            _queryControls.Children.Add(_btnDoQuery);
-            _queryControls.Children.Add(_btnResetQuery);
-            _layoutRootNew.Children.Add(_queryControls);
+            queryControls.Children.Add(_cbbLayers);
+            queryControls.Children.Add(_cbbProps);
+            queryControls.Children.Add(_cbbOperations);
+            queryControls.Children.Add(_txtParam);
 
-            _layoutRootNew.Children.Add(_list);
+            doQueryButton.Click += new RoutedEventHandler(_btnDoQuery_Click);
+            resetQueryButton.Click += new RoutedEventHandler(_btnResetQuery_Click);
+            queryControls.Children.Add(doQueryButton);
+            queryControls.Children.Add(resetQueryButton);
+            layoutRootNew.Children.Add(queryControls);
+
+            layoutRootNew.Children.Add(_list);
         }
 
         void _btnResetQuery_Click(object sender, RoutedEventArgs e)
@@ -626,9 +702,20 @@ namespace Dreambuild.Gis.Display
             var operation = (DataQueryOperation)_cbbOperations.SelectedIndex;
             string param = _txtParam.Text;
 
-            var theme = new PredicateTheme(feature => MapQueryServices.FeatureSelector(feature, prop, operation, param), Colors.Yellow, Colors.Gray);
-            MapControl.Current.Layers.First(mapLayer => mapLayer.LayerData.Name == layerName).ApplyColorTheme(theme);
-            _findResults = MapDataManager.LatestMap.Layers[layerName].QueryFeatures(prop, operation, param).ToList();
+            var theme = new PredicateTheme(
+                feature => MapQueryServices.FeatureSelector(feature, prop, operation, param),
+                Colors.Yellow,
+                Colors.Gray);
+
+            MapControl.Current.Layers
+                .First(mapLayer => mapLayer.LayerData.Name == layerName)
+                .ApplyColorTheme(theme);
+
+            _findResults = MapDataManager.LatestMap
+                .Layers[layerName]
+                .QueryFeatures(prop, operation, param)
+                .ToList();
+
             _list.Items.Clear();
             foreach (var find in _findResults)
             {
@@ -660,7 +747,9 @@ namespace Dreambuild.Gis.Display
             if (_cbbLayers.SelectedItem != null)
             {
                 string layerName = _cbbLayers.SelectedItem.ToString();
-                if (MapControl.Current.AllMaps.SelectMany(map => map.Layers).Any(layer => layer.Name == layerName))
+                if (MapControl.Current.AllMaps
+                    .SelectMany(map => map.Layers)
+                    .Any(layer => layer.Name == layerName))
                 {
                     var features = MapControl.Current.AllMaps
                         .SelectMany(map => map.Layers)
@@ -715,7 +804,10 @@ namespace Dreambuild.Gis.Display
                 _list.Items.Clear();
                 foreach (var find in _findResults)
                 {
-                    _list.Items.Add(new TextBlock { Text = string.Format("Feature {0}", find.FeatId) });
+                    _list.Items.Add(new TextBlock
+                    {
+                        Text = string.Format("Feature {0}", find.FeatId)
+                    });
                 }
             }
         }
