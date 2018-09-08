@@ -22,57 +22,23 @@ namespace BookKeeper
                 return 0;
             });
 
-            app.Command("hide", (command) =>
+            app.Command("book", bookCommand =>
             {
-                command.Description = "Instruct the ninja to hide in a specific location.";
-                command.HelpOption("-?|-h|--help");
+                bookCommand.Description = "Book related commands.";
+                bookCommand.HelpOption("-?|-h|--help");
 
-                var locationArgument = command.Argument("[location]", "Where the ninja should hide.");
-
-                command.OnExecute(() =>
+                bookCommand.Command("search", searchCommand =>
                 {
-                    Console.WriteLine("Ninja is hidden " + locationArgument.Value ?? "under a turtle");
-                    return 0;
-                });
-            });
+                    searchCommand.Description = "Search a book on Amazon.";
+                    searchCommand.Argument("kwd", "The keyword");
 
-            app.Command("attack", (command) =>
-            {
-                command.Description = "Instruct the ninja to go and attack!";
-                command.HelpOption("-?|-h|--help");
-
-                var excludeOption = command.Option(
-                    "-e|--exclude <exclusions>",
-                    "Things to exclude while attacking.",
-                    CommandOptionType.MultipleValue);
-
-                var screamOption = command.Option(
-                    "-s|--scream",
-                    "Scream while attacking",
-                    CommandOptionType.NoValue);
-
-                command.OnExecute(() =>
-                {
-                    var exclusions = excludeOption.Values;
-                    var attacking = (new List<string>
-                        {
-                            "dragons",
-                            "badguys",
-                            "civilians",
-                            "animals"
-                        }).Where(x => !exclusions.Contains(x));
-
-                    Console.Write("Ninja is attacking " + string.Join(", ", attacking));
-
-                    if (screamOption.HasValue())
+                    searchCommand.OnExecute(() =>
                     {
-                        Console.Write(" while screaming");
-                    }
+                        var kwd = searchCommand.Arguments.SingleOrDefault();
+                        searchCommand.Out.WriteLine($"About to search for '{kwd.Value}'.");
 
-                    Console.WriteLine();
-
-                    return 0;
-
+                        return 0;
+                    });
                 });
             });
 
