@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "BookKeeper": {
+      "commandName": "Project",
+      "commandLineArgs": "book search react"
+    }
+  }
+}

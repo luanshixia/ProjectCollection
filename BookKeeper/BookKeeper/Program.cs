@@ -32,10 +32,12 @@ namespace BookKeeper
                     searchCommand.Description = "Search a book on Amazon.";
                     searchCommand.Argument("kwd", "The keyword");
 
-                    searchCommand.OnExecute(() =>
+                    searchCommand.OnExecute(async () =>
                     {
                         var kwd = searchCommand.Arguments.SingleOrDefault();
                         searchCommand.Out.WriteLine($"About to search for '{kwd.Value}'.");
+
+                        await BookEngine.Search(kwd.Value);
 
                         return 0;
                     });

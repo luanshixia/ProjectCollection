@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 
 namespace BookKeeper
@@ -18,13 +19,13 @@ namespace BookKeeper
 
         public const string UriTemplate = "https://www.amazon.com/s/ref=nb_sb_noss_2?url=search-alias%3Dstripbooks&field-keywords={0}";
 
-        public static async void Search(string kwd)
+        public static async Task Search(string kwd)
         {
             using (var httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.UserAgent.ParseAdd(BookEngine.UserAgent);
                 httpClient.DefaultRequestHeaders.Accept.ParseAdd(BookEngine.Accept);
-                httpClient.DefaultRequestHeaders.AcceptEncoding.ParseAdd(BookEngine.AcceptEncoding);
+                //httpClient.DefaultRequestHeaders.AcceptEncoding.ParseAdd(BookEngine.AcceptEncoding);
                 httpClient.DefaultRequestHeaders.AcceptLanguage.ParseAdd(BookEngine.AcceptLanguage);
 
                 var requestUri = string.Format(BookEngine.UriTemplate, kwd);
