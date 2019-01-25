@@ -44,7 +44,8 @@ namespace CVMagic
                             {
                                 var days = dayMatch.Groups["days"].Value;
                                 var datetime = DateTime.UtcNow.AddDays(-int.Parse(days));
-                                Clipboard.SetText($"TIMESTAMP > datetime({datetime})");
+                                var replacement = $"TIMESTAMP > datetime({datetime})";
+                                Clipboard.SetText(Regex.Replace(text, @"TIMESTAMP\s*>\s*ago\([0-9]+[dhms]\)", replacement, RegexOptions.IgnoreCase));
                             }
                         }
                     }
