@@ -40,13 +40,29 @@ namespace CVMagic
                         else if (Regex.Match(text, @"TIMESTAMP\s*>\s*ago\((?<point>[0-9]+[dhms])\)", RegexOptions.IgnoreCase) is Match match && match.Success)
                         {
                             var point = match.Groups["point"].Value;
+                            var dateTime = DateTime.UtcNow;
                             if (Regex.Match(point, "(?<days>[0-9]+)d") is Match dayMatch && dayMatch.Success)
                             {
-                                var days = dayMatch.Groups["days"].Value;
-                                var datetime = DateTime.UtcNow.AddDays(-int.Parse(days));
-                                var replacement = $"TIMESTAMP > datetime({datetime})";
-                                Clipboard.SetText(Regex.Replace(text, @"TIMESTAMP\s*>\s*ago\([0-9]+[dhms]\)", replacement, RegexOptions.IgnoreCase));
+                                dateTime = dateTime.AddDays(-int.Parse(dayMatch.Groups["days"].Value));
                             }
+                            else if (Regex.Match(point, "(?<hours>[0-9]+)h") is Match hourMatch && hourMatch.Success)
+                            {
+                                dateTime = dateTime.AddHours(-int.Parse(hourMatch.Groups["hours"].Value));
+                            }
+                            else if (Regex.Match(point, "(?<minutes>[0-9]+)h") is Match minuteMatch && minuteMatch.Success)
+                            {
+                                dateTime = dateTime.AddHours(-int.Parse(minuteMatch.Groups["minutes"].Value));
+                            }
+                            else if (Regex.Match(point, "(?<seconds>[0-9]+)h") is Match secondMatch && secondMatch.Success)
+                            {
+                                dateTime = dateTime.AddHours(-int.Parse(secondMatch.Groups["seconds"].Value));
+                            }
+
+                            Clipboard.SetText(Regex.Replace(
+                                input: text, 
+                                pattern: @"TIMESTAMP\s*>\s*ago\([0-9]+[dhms]\)",
+                                replacement: $"TIMESTAMP > datetime({dateTime}) and TIMESTAMP < datetime({DateTime.UtcNow})", 
+                                options: RegexOptions.IgnoreCase));
                         }
                     }
                 };
