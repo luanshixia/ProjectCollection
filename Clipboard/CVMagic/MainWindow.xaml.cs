@@ -25,6 +25,31 @@ namespace CVMagic
         {
             InitializeComponent();
 
+            this.Visibility = Visibility.Hidden;
+
+            var notifyIcon = new System.Windows.Forms.NotifyIcon()
+            {
+                Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("CVMagic.ico", UriKind.Relative)).Stream),
+                Text = "CV Magic",
+                Visible = true,
+                ContextMenu = new System.Windows.Forms.ContextMenu(new[] 
+                {
+                    new System.Windows.Forms.MenuItem("E&xit", (sender, e) => Application.Current.Shutdown())
+                })
+            };
+
+            notifyIcon.Click += (sender, e) =>
+            {
+                this.Visibility = Visibility.Visible;
+                this.WindowState = WindowState.Normal;
+            };
+
+            this.Closing += (sender, e) =>
+            {
+                e.Cancel = true;
+                this.Visibility = Visibility.Hidden;
+            };
+
             this.SourceInitialized += (sender, e) =>
             {
                 var clipboardManager = new ClipboardManager(this);
