@@ -25,8 +25,6 @@ namespace CVMagic
         {
             InitializeComponent();
 
-            this.Visibility = Visibility.Hidden;
-
             var notifyIcon = new System.Windows.Forms.NotifyIcon()
             {
                 Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("CVMagic.ico", UriKind.Relative)).Stream),
@@ -91,6 +89,8 @@ namespace CVMagic
                         }
                     }
                 };
+
+                this.Visibility = Visibility.Hidden;
             };
         }
     }
