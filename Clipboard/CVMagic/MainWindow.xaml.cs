@@ -30,6 +30,9 @@ namespace CVMagic
                 Icon = new System.Drawing.Icon(Application.GetResourceStream(new Uri("CVMagic.ico", UriKind.Relative)).Stream),
                 Text = "CV Magic",
                 Visible = true,
+                BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info,
+                BalloonTipText = "CV Magic is running.",
+                BalloonTipTitle = "CV Magic",
                 ContextMenu = new System.Windows.Forms.ContextMenu(new[] 
                 {
                     new System.Windows.Forms.MenuItem("E&xit", (sender, e) => Application.Current.Shutdown())
@@ -46,6 +49,7 @@ namespace CVMagic
             {
                 e.Cancel = true;
                 this.Visibility = Visibility.Hidden;
+                notifyIcon.ShowBalloonTip(3000);
             };
 
             this.SourceInitialized += (sender, e) =>
@@ -91,6 +95,7 @@ namespace CVMagic
                 };
 
                 this.Visibility = Visibility.Hidden;
+                notifyIcon.ShowBalloonTip(3000);
             };
         }
     }
