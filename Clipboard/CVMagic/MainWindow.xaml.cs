@@ -80,11 +80,11 @@ namespace CVMagic
                             }
                             else if (unit == "m")
                             {
-                                dateTime = dateTime.AddHours(-int.Parse(number));
+                                dateTime = dateTime.AddMinutes(-int.Parse(number));
                             }
                             else if (unit == "s")
                             {
-                                dateTime = dateTime.AddHours(-int.Parse(number));
+                                dateTime = dateTime.AddSeconds(-int.Parse(number));
                             }
 
                             Clipboard.SetText(Regex.Replace(
