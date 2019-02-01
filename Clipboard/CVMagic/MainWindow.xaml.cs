@@ -64,25 +64,27 @@ namespace CVMagic
                         {
                             Clipboard.SetText("bingo!");
                         }
-                        else if (Regex.Match(text, @"TIMESTAMP\s*>\s*ago\((?<point>[0-9]+[dhms])\)", RegexOptions.IgnoreCase) is Match match && match.Success)
+                        else if (Regex.Match(text, @"TIMESTAMP\s*>\s*ago\((?<number>[0-9]+)(?<unit>[dhms])\)", RegexOptions.IgnoreCase) is Match match && match.Success)
                         {
-                            var point = match.Groups["point"].Value;
+                            var number = match.Groups["number"].Value;
+                            var unit = match.Groups["unit"].Value;
                             var dateTime = DateTime.UtcNow;
-                            if (Regex.Match(point, "(?<days>[0-9]+)d") is Match dayMatch && dayMatch.Success)
+
+                            if (unit == "d")
                             {
-                                dateTime = dateTime.AddDays(-int.Parse(dayMatch.Groups["days"].Value));
+                                dateTime = dateTime.AddDays(-int.Parse(number));
                             }
-                            else if (Regex.Match(point, "(?<hours>[0-9]+)h") is Match hourMatch && hourMatch.Success)
+                            else if (unit == "h")
                             {
-                                dateTime = dateTime.AddHours(-int.Parse(hourMatch.Groups["hours"].Value));
+                                dateTime = dateTime.AddHours(-int.Parse(number));
                             }
-                            else if (Regex.Match(point, "(?<minutes>[0-9]+)h") is Match minuteMatch && minuteMatch.Success)
+                            else if (unit == "m")
                             {
-                                dateTime = dateTime.AddHours(-int.Parse(minuteMatch.Groups["minutes"].Value));
+                                dateTime = dateTime.AddHours(-int.Parse(number));
                             }
-                            else if (Regex.Match(point, "(?<seconds>[0-9]+)h") is Match secondMatch && secondMatch.Success)
+                            else if (unit == "s")
                             {
-                                dateTime = dateTime.AddHours(-int.Parse(secondMatch.Groups["seconds"].Value));
+                                dateTime = dateTime.AddHours(-int.Parse(number));
                             }
 
                             Clipboard.SetText(Regex.Replace(
