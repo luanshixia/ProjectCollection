@@ -9,7 +9,8 @@ namespace CVMagic
 
     public class ClipboardManager
     {
-        public event EventHandler ClipboardChanged;
+        public event ClipboardEventHandler ClipboardChanged;
+        public event ClipboardEventHandler ClipboardChangedFromOutside;
 
         public ClipboardManager(Window windowSource)
         {
@@ -31,7 +32,7 @@ namespace CVMagic
 
         private void OnClipboardChanged()
         {
-            this.ClipboardChanged?.Invoke(this, EventArgs.Empty);
+            this.ClipboardChanged?.Invoke(this, new ClipboardEventArgs { Text = "" });
         }
 
         private static readonly IntPtr WndProcSuccess = IntPtr.Zero;
@@ -47,6 +48,13 @@ namespace CVMagic
             return WndProcSuccess;
         }
     }
+
+    public class ClipboardEventArgs : EventArgs
+    {
+        public string Text { get; set; }
+    }
+
+    public delegate void ClipboardEventHandler(object sender, ClipboardEventArgs e);
 
     internal static class NativeMethods
     {

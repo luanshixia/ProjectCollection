@@ -1,18 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CVMagic
 {
@@ -33,7 +21,7 @@ namespace CVMagic
                 BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info,
                 BalloonTipText = "CV Magic is running.",
                 BalloonTipTitle = "CV Magic",
-                ContextMenu = new System.Windows.Forms.ContextMenu(new[] 
+                ContextMenu = new System.Windows.Forms.ContextMenu(new[]
                 {
                     new System.Windows.Forms.MenuItem("E&xit", (sender, e) => Application.Current.Shutdown())
                 })
@@ -88,10 +76,26 @@ namespace CVMagic
                             }
 
                             Clipboard.SetText(Regex.Replace(
-                                input: text, 
+                                input: text,
                                 pattern: @"TIMESTAMP\s*>\s*ago\([0-9]+[dhms]\)",
-                                replacement: $"TIMESTAMP > datetime({dateTime}) and TIMESTAMP < datetime({DateTime.UtcNow})", 
+                                replacement: $"TIMESTAMP > datetime({dateTime}) and TIMESTAMP < datetime({DateTime.UtcNow})",
                                 options: RegexOptions.IgnoreCase));
+                        }
+                        else
+                        {
+                            foreach (var spell in MagicBook.Spells)
+                            {
+                                if (Regex.Match(text, spell.Pattern, RegexOptions.IgnoreCase) is Match match1 && match1.Success)
+                                {
+                                    Clipboard.SetText(Regex.Replace(
+                                        input: text,
+                                        pattern: spell.Pattern,
+                                        replacement: spell.Cast().Result,
+                                        options: RegexOptions.IgnoreCase));
+
+                                    break;
+                                }
+                            }
                         }
                     }
                 };
