@@ -20,6 +20,12 @@ namespace CVMagic
                     { "ago", "DateTime.UtcNow" },
                     { "now", "DateTime.UtcNow" }
                 }
+            },
+            new Spell
+            {
+                Name = "US date to ISO date",
+                Pattern = @"(?<month>\d\d)/(?<day>\d\d)/(?<year>\d\d\d\d)",
+                Substitution = "${year}-${month}-${day}"
             }
         };
     }

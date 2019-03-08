@@ -90,7 +90,7 @@ namespace CVMagic
                                     Clipboard.SetText(Regex.Replace(
                                         input: text,
                                         pattern: spell.Pattern,
-                                        replacement: spell.Cast().Result,
+                                        replacement: spell.Cast(input: text).Result,
                                         options: RegexOptions.IgnoreCase));
 
                                     break;

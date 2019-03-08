@@ -2,8 +2,6 @@
 using Microsoft.CodeAnalysis.Scripting;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
@@ -15,6 +13,8 @@ namespace CVMagic
 
         public string Pattern { get; set; }
 
+        public string Substitution { get; set; }
+
         public string Template { get; set; }
 
         public Dictionary<string, string> Parameters { get; set; }
@@ -25,8 +25,13 @@ namespace CVMagic
             return true;
         }
 
-        public async Task<string> Cast()
+        public async Task<string> Cast(string input)
         {
+            if (!string.IsNullOrEmpty(this.Substitution))
+            {
+                return this.Substitution;
+            }
+
             var output = this.Template;
             try
             {
