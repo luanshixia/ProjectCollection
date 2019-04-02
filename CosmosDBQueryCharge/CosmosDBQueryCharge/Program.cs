@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace CosmosDBQueryCharge
@@ -23,7 +21,10 @@ namespace CosmosDBQueryCharge
                 var resourceGenerator = new ResourceGenerator(DataGenerationPatterns);
                 foreach (var resource in resourceGenerator.GenerateAll())
                 {
-                    var json = JsonConvert.SerializeObject(resource);
+                    var json = JsonConvert.SerializeObject(resource, Formatting.Indented, new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
                     Console.WriteLine(json);
                     Console.WriteLine(Encoding.UTF8.GetBytes(json).Length);
                 }

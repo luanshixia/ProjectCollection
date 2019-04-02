@@ -81,15 +81,7 @@ namespace CosmosDBQueryCharge
             0,
             1,
             2,
-            4,
-            8,
-            16,
-            32,
-            64,
-            128,
-            256,
-            512,
-            1024
+            4
         };
 
         public ResourceGenerator(int[][] patterns)
@@ -110,18 +102,21 @@ namespace CosmosDBQueryCharge
                 .ToArray();
         }
 
-        public IEnumerable<Resource> GenerateAll()
+        public IEnumerable<Resource> GenerateAll(double sizeFactor = 1.0)
         {
             foreach (var subscription in this.Subscriptions)
             {
                 foreach (var resourceGroup in subscription.ResourceGroups)
                 {
-                    yield return this.Next(subscription.Id, resourceGroup.Name, resourceGroup.Location);
+                    foreach (var resource in Enumerable.Range(0, resourceGroup.ResourceCount))
+                    {
+                        yield return this.Next(subscription.Id, resourceGroup.Name, resourceGroup.Location, sizeFactor);
+                    }
                 }
             }
         }
 
-        public Resource Next(string subscriptionId, string resourceGroupName, string resourceGroupLocation)
+        public Resource Next(string subscriptionId, string resourceGroupName, string resourceGroupLocation, double sizeFactor = 1.0)
         {
             var resourceType = this.ResourceTypes.PickRandomItem();
             return new Resource
@@ -136,7 +131,7 @@ namespace CosmosDBQueryCharge
                 ManagedBy = RandomIdGenerator.GetBase62(16),
                 Sku = this.Skus.GetValueOrDefault(resourceType),
                 Kind = this.Kinds.GetValueOrDefault(resourceType),
-                Tags = this.GenerateTags(),
+                Tags = this.GenerateTags(sizeFactor),
                 Plan = null,
                 Scale = null,
                 Identity = this.MsiResourceTypes.Contains(resourceType)
@@ -148,18 +143,21 @@ namespace CosmosDBQueryCharge
             };
         }
 
-        private TagsDictionary GenerateTags()
+        private TagsDictionary GenerateTags(double sizeFactor = 1.0)
         {
             const int maxNumberOfTags = 15;
             const int maxTagKeyLength = 512;
             const int maxTagValueLength = 256;
 
+            var factor = sizeFactor / 8.0;
+            var tagCount = new[] { 0, 0, RandomNumber.Next(1, maxNumberOfTags + 1) }.PickRandomItem();
+
             return new TagsDictionary(
                 dictionary: Enumerable
-                    .Range(0, RandomNumber.Next(1, maxNumberOfTags + 1))
+                    .Range(0, tagCount)
                     .ToDictionary(
-                        i => RandomIdGenerator.GetBase62(RandomNumber.Next(3, maxTagKeyLength)),
-                        i => RandomIdGenerator.GetBase62(RandomNumber.Next(3, maxTagValueLength))));
+                        i => RandomIdGenerator.GetBase62(RandomNumber.Next(3, (int)(maxTagKeyLength * factor))),
+                        i => RandomIdGenerator.GetBase62(RandomNumber.Next(3, (int)(maxTagValueLength * factor)))));
         }
 
         private ResourceIdentity GenerateResourceIdentity(int identityCount, string subscriptionId, string resourceGroupName)
