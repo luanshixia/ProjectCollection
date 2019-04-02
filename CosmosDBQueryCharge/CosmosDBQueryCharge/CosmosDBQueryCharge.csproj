@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,6 +33,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>7.1</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Azure.DocumentDB.Core, Version=2.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -125,6 +127,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\RandomIdGenerator.cs" />
+    <Compile Include="Components\Extensions.cs" />
+    <Compile Include="Components\RandomNumber.cs" />
+    <Compile Include="Components\ResourceGenerator.cs" />
+    <Compile Include="Models\Entity.cs" />
+    <Compile Include="Models\ProvisioningState.cs" />
+    <Compile Include="Models\Subscription.cs" />
+    <Compile Include="Models\ResourceGroup.cs" />
+    <Compile Include="Models\ResourcePlan.cs" />
+    <Compile Include="Models\ResourceScale.cs" />
+    <Compile Include="Models\ResourceIdentity.cs" />
+    <Compile Include="Models\TagsDictionary.cs" />
+    <Compile Include="Models\ResourceSku.cs" />
+    <Compile Include="Models\Resource.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -132,6 +148,7 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Azure.DocumentDB.Core.2.2.3\build\Microsoft.Azure.DocumentDB.Core.targets" Condition="Exists('..\packages\Microsoft.Azure.DocumentDB.Core.2.2.3\build\Microsoft.Azure.DocumentDB.Core.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

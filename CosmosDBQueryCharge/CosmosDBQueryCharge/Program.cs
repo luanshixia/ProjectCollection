@@ -3,19 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace CosmosDBQueryCharge
 {
     class Program
     {
+        private static readonly int[][] DataGenerationPatterns =
+        {
+            new[] { 3, 4, 5 },
+            new[] { 2 },
+            new[] { 1 },
+        };
+
         static void Main(string[] args)
         {
-            // The code provided will print ‘Hello World’ to the console.
-            // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
-            Console.WriteLine("Hello World!");
-            Console.ReadKey();
+            if (args.First().Equals("generate"))
+            {
+                var resourceGenerator = new ResourceGenerator(DataGenerationPatterns);
+                foreach (var resource in resourceGenerator.GenerateAll())
+                {
+                    var json = JsonConvert.SerializeObject(resource);
+                    Console.WriteLine(json);
+                    Console.WriteLine(Encoding.UTF8.GetBytes(json).Length);
+                }
+            }
 
-            // Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
+            Console.ReadKey();
         }
     }
 }
