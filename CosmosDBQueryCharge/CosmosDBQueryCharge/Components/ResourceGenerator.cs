@@ -9,7 +9,7 @@ namespace CosmosDBQueryCharge
     /// </summary>
     public class ResourceGenerator
     {
-        private readonly Subscription[] Subscriptions;
+        public Subscription[] Subscriptions { get; }
 
         private readonly string[] ResourceTypes =
         {

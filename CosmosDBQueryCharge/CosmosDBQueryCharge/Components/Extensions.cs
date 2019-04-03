@@ -1,8 +1,10 @@
 ﻿namespace CosmosDBQueryCharge
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Threading;
 
     /// <summary>
@@ -20,6 +22,11 @@
         public static TValue GetValueOrDefault<TKey, TValue>(this Dictionary<TKey, TValue> source, TKey key)
         {
             return source != null && source.TryGetValue(key, out TValue value) ? value : default;
+        }
+
+        public static int GetDocumentSize(this object documentObject)
+        {
+            return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(documentObject)).Length;
         }
     }
 }
