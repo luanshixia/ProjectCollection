@@ -1,8 +1,6 @@
 ﻿namespace CosmosDBQueryCharge
 {
     using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Threading;
 
     /// <summary>
@@ -73,24 +71,6 @@
         public static TimeSpan Next(TimeSpan minimum, TimeSpan maximum)
         {
             return TimeSpan.FromTicks(minimum.Ticks + (long)(RandomNumber.NextDouble() * (maximum.Ticks - minimum.Ticks)));
-        }
-
-        public static T PickRandomItem<T>(this IEnumerable<T> source)
-        {
-            return source.ElementAt(RandomNumber.Next(source.Count()));
-        }
-
-        public static T[] PickRandomItems<T>(this IEnumerable<T> source)
-        {
-            return source.Aggregate(seed: new List<T>(), func: (list, item) =>
-            {
-                if (RandomNumber.Next(2) == 1)
-                {
-                    list.Add(item);
-                }
-
-                return list;
-            }).ToArray();
         }
     }
 }

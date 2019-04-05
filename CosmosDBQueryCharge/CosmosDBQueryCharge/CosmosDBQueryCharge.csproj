@@ -130,6 +130,7 @@
     <Compile Include="Components\RandomIdGenerator.cs" />
     <Compile Include="Components\Extensions.cs" />
     <Compile Include="Components\RandomNumber.cs" />
+    <Compile Include="Components\RequestGenerator.cs" />
     <Compile Include="Components\ResourceGenerator.cs" />
     <Compile Include="Models\Entity.cs" />
     <Compile Include="Models\ProvisioningState.cs" />

@@ -1,7 +1,10 @@
 using System;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Security;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
 using Microsoft.Azure.Documents.Linq;
@@ -29,11 +32,15 @@ namespace CosmosDBQueryCharge
 
         static void Main(string[] args)
         {
+            Trace.Listeners.Add(
+                new TextWriterTraceListener(
+                    new StreamWriter(path: $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt")));
+
             var documentClient = new DocumentClient(
                 serviceEndpoint: new Uri("https://arm-cits-globaldata.documents.azure.com:443/"),
                 authKey: GetAuthKey());
 
-            if (args.First().Equals("generate"))
+            if (args.First().Equals("generate", StringComparison.InvariantCultureIgnoreCase))
             {
                 var resourceGenerator = new ResourceGenerator(DataGenerationPatterns);
                 foreach (var resource in resourceGenerator.GenerateAll())
@@ -46,7 +53,7 @@ namespace CosmosDBQueryCharge
                     Console.WriteLine(Encoding.UTF8.GetBytes(json).Length);
                 }
             }
-            else if (args.First().Equals("dbgenerate"))
+            else if (args.First().Equals("dbgenerate", StringComparison.InvariantCultureIgnoreCase))
             {
                 var resourceGenerator = new ResourceGenerator(DbDataGenerationPatterns);
                 var total = DbDataGenerationPatterns.SelectMany(sub => sub).Sum();
@@ -75,7 +82,7 @@ namespace CosmosDBQueryCharge
                     }
                 }
             }
-            else if (args.First().Equals("readsmalldoc"))
+            else if (args.First().Equals("readsmalldoc", StringComparison.InvariantCultureIgnoreCase))
             {
                 TestReadDocument(
                     documentClient: documentClient,
@@ -90,21 +97,14 @@ namespace CosmosDBQueryCharge
                     collectionId: "resources",
                     partitionKey: "173ed1f4-308c-4502-85fb-b75bf1ee9af6");
             }
-            else if (args.First().Equals("querydocs"))
+            else if (args.First().Equals("querydocs", StringComparison.InvariantCultureIgnoreCase))
             {
-                //var partitions = new[]
-                //{
-                //    "109abf51-e148-4bc6-bbf9-a8a045cc711c",
-                //    "2d16309f-8923-4c85-bdd2-33165b264e03",
-                //    "173ed1f4-308c-4502-85fb-b75bf1ee9af6"
-                //};
-
                 var partitions = new[]
                 {
-                    "54294b98-3f59-499d-920b-f2ec0071afd3",
-                    "c1abe804-9a53-4d7f-a607-da40655c6200",
-                    "98902bdb-ec67-42d4-ae61-cd293a24b2cb",
-                    "9d97f971-d2f2-425d-89f4-fd274556e457"
+                    ("54294b98-3f59-499d-920b-f2ec0071afd3", "iXiEpmqqAAb8wcq88lI"),
+                    ("c1abe804-9a53-4d7f-a607-da40655c6200", "qOAUwnBXpRv5ia5ZXrhQwJLKNTgjT"),
+                    ("98902bdb-ec67-42d4-ae61-cd293a24b2cb", "IfTecupY3mQeF0PF4tYq3"),
+                    ("9d97f971-d2f2-425d-89f4-fd274556e457", "JHQLLW2p6T7S3WmSR5fG0U")
                 };
 
                 foreach (var partition in partitions)
@@ -113,8 +113,30 @@ namespace CosmosDBQueryCharge
                         documentClient: documentClient,
                         databaseId: "ARMLocalData",
                         collectionId: "resources",
-                        partitionKey: partition);
+                        partitionKey: partition.Item1);
+
+                    TestInPartitionQuery(
+                        documentClient: documentClient,
+                        databaseId: "ARMLocalData",
+                        collectionId: "resources",
+                        partitionKey: partition.Item1,
+                        resourceGroupName: partition.Item2);
                 }
+            }
+            else if (args.First().Equals("loadtest", StringComparison.InvariantCultureIgnoreCase))
+            {
+                var requestGenerator = new RequestGenerator(documentClient, "9d97f971-d2f2-425d-89f4-fd274556e457");
+                var requests = new[]
+                {
+                    requestGenerator.Generate(targetRps: 10, delayStart: TimeSpan.FromSeconds(0), duration: TimeSpan.FromSeconds(60)),
+                    //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(10), duration: TimeSpan.FromSeconds(1)),
+                    //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(20), duration: TimeSpan.FromSeconds(1)),
+                    //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(30), duration: TimeSpan.FromSeconds(1)),
+                    //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(40), duration: TimeSpan.FromSeconds(1)),
+                    //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(50), duration: TimeSpan.FromSeconds(1)),
+                };
+
+                Task.WhenAll(requests.SelectMany(tasks => tasks)).Wait();
             }
 
             Console.ReadKey();
@@ -175,6 +197,30 @@ namespace CosmosDBQueryCharge
                         PartitionKey = new PartitionKey(partitionKey),
                         MaxItemCount = -1
                     })
+                .AsDocumentQuery()
+                .ExecuteNextAsync<Resource>()
+                .Result;
+
+            Console.WriteLine($"[Query] Count={queryResponse.Count}|TotalSize={queryResponse.Sum(doc => doc.GetDocumentSize())}|Charge={queryResponse.RequestCharge}");
+
+            Console.WriteLine();
+        }
+
+        private static void TestInPartitionQuery(DocumentClient documentClient, string databaseId, string collectionId, string partitionKey, string resourceGroupName)
+        {
+            Console.WriteLine($"[PartitionKey={partitionKey}|ResourceGroup={resourceGroupName}]");
+
+            var queryResponse = documentClient
+                .CreateDocumentQuery<Resource>(
+                    documentCollectionUri: UriFactory.CreateDocumentCollectionUri(
+                        databaseId: databaseId,
+                        collectionId: collectionId),
+                    feedOptions: new FeedOptions
+                    {
+                        PartitionKey = new PartitionKey(partitionKey),
+                        MaxItemCount = -1
+                    })
+                .Where(resource => resource.ResourceGroupName == resourceGroupName)
                 .AsDocumentQuery()
                 .ExecuteNextAsync<Resource>()
                 .Result;
