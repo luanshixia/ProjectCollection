@@ -32,9 +32,9 @@ namespace CosmosDBQueryCharge
 
         static void Main(string[] args)
         {
-            Trace.Listeners.Add(
-                new TextWriterTraceListener(
-                    new StreamWriter(path: $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt")));
+            //Trace.Listeners.Add(
+            //    new TextWriterTraceListener(
+            //        new StreamWriter(path: $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt")));
 
             var documentClient = new DocumentClient(
                 serviceEndpoint: new Uri("https://arm-cits-globaldata.documents.azure.com:443/"),
@@ -128,7 +128,7 @@ namespace CosmosDBQueryCharge
                 var requestGenerator = new RequestGenerator(documentClient, "9d97f971-d2f2-425d-89f4-fd274556e457");
                 var requests = new[]
                 {
-                    requestGenerator.Generate(targetRps: 10, delayStart: TimeSpan.FromSeconds(0), duration: TimeSpan.FromSeconds(60)),
+                    requestGenerator.Generate(targetRps: 5, delayStart: TimeSpan.FromSeconds(0), duration: TimeSpan.FromSeconds(20)),
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(10), duration: TimeSpan.FromSeconds(1)),
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(20), duration: TimeSpan.FromSeconds(1)),
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(30), duration: TimeSpan.FromSeconds(1)),
@@ -139,6 +139,7 @@ namespace CosmosDBQueryCharge
                 Task.WhenAll(requests.SelectMany(tasks => tasks)).Wait();
             }
 
+            RequestAnalyzer.Instance.Analyze();
             Console.ReadKey();
         }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
@@ -35,10 +33,12 @@ namespace CosmosDBQueryCharge
                     await Task.Delay(delayStart + TimeSpan.FromSeconds(1.0 / targetRps * i));
 
                     var requestId = Guid.NewGuid();
-                    Trace.WriteLine($"{DateTime.Now},{requestId}");
+                    RequestAnalyzer.Instance.Log(DateTime.Now, requestId, false, null);
+                    //Trace.WriteLine($"{DateTime.Now},{requestId}");
 
                     var response = await ReadPartition(this.DocumentClient, this.DatabaseId, this.CollectionId, this.PartitionKey);
-                    Trace.WriteLine($"{DateTime.Now},{requestId},{response.Count},{response.RequestCharge}");
+                    RequestAnalyzer.Instance.Log(DateTime.Now, requestId, true, new { response.Count, response.RequestCharge });
+                    //Trace.WriteLine($"{DateTime.Now},{requestId},{response.Count},{response.RequestCharge}");
 
                     return response;
                 })
