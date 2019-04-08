@@ -34,16 +34,24 @@ namespace CosmosDBQueryCharge
         {
             var starts = this.Records.Where(record => !record.IsEnd).OrderBy(record => record.Timestamp).ToArray();
             var ends = this.Records.Where(record => record.IsEnd).ToDictionary(record => record.RequestId, record => record);
-            Debug.Assert(starts.Length == ends.Count);
+            // Debug.Assert(starts.Length == ends.Count);
 
             var requests = starts
-                .Select(start => new Request
-                {
-                    RequestId = start.RequestId,
-                    StartTime = start.Timestamp,
-                    EndTime = ends[start.RequestId].Timestamp,
-                    Duration = ends[start.RequestId].Timestamp - start.Timestamp
-                })
+                .Select(start => ends.ContainsKey(start.RequestId)
+                    ? new Request
+                    {
+                        RequestId = start.RequestId,
+                        StartTime = start.Timestamp,
+                        EndTime = ends[start.RequestId].Timestamp,
+                        Duration = ends[start.RequestId].Timestamp - start.Timestamp
+                    }
+                    : new Request
+                    {
+                        RequestId = start.RequestId,
+                        StartTime = start.Timestamp,
+                        EndTime = DateTime.Now,
+                        Duration = DateTime.Now - start.Timestamp
+                    })
                 .ToArray();
 
             this.DrawRequestSequenceChart(requests);
@@ -62,7 +70,7 @@ namespace CosmosDBQueryCharge
             {
                 var left = (request.StartTime - minTime).TotalSeconds / windowLength.TotalSeconds;
                 var width = request.Duration.TotalSeconds / windowLength.TotalSeconds;
-                return $"<tr><td>{request.RequestId}</td><td><div class='bar' style='left: {left * 100:0.##}%; width: {width * 100:0.##}%;'></div></td></tr>";
+                return $"<tr><td>{request.RequestId}</td><td><div class='bar' style='left: {left * 100:0.##}%; width: {width * 100:0.##}%;' title='Start={request.StartTime}\nEnd={request.EndTime}'></div></td></tr>";
             });
 
             File.WriteAllText(

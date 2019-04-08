@@ -34,13 +34,19 @@ namespace CosmosDBQueryCharge
 
                     var requestId = Guid.NewGuid();
                     RequestAnalyzer.Instance.Log(DateTime.Now, requestId, false, null);
-                    //Trace.WriteLine($"{DateTime.Now},{requestId}");
 
-                    var response = await ReadPartition(this.DocumentClient, this.DatabaseId, this.CollectionId, this.PartitionKey);
-                    RequestAnalyzer.Instance.Log(DateTime.Now, requestId, true, new { response.Count, response.RequestCharge });
-                    //Trace.WriteLine($"{DateTime.Now},{requestId},{response.Count},{response.RequestCharge}");
+                    try
+                    {
+                        var response = await ReadPartition(this.DocumentClient, this.DatabaseId, this.CollectionId, this.PartitionKey);
+                        RequestAnalyzer.Instance.Log(DateTime.Now, requestId, true, new { response.Count, response.RequestCharge });
+                        return response;
+                    }
+                    catch (DocumentClientException ex)
+                    {
+                        RequestAnalyzer.Instance.Log(DateTime.Now, requestId, true, new { ex.StatusCode, ex.Error, ex.Message, ex.RequestCharge });
+                    }
 
-                    return response;
+                    return null;
                 })
                 .ToArray();
         }

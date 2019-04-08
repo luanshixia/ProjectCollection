@@ -32,10 +32,6 @@ namespace CosmosDBQueryCharge
 
         static void Main(string[] args)
         {
-            //Trace.Listeners.Add(
-            //    new TextWriterTraceListener(
-            //        new StreamWriter(path: $"{DateTime.Now.ToString("yyyyMMddHHmmss")}.txt")));
-
             var documentClient = new DocumentClient(
                 serviceEndpoint: new Uri("https://arm-cits-globaldata.documents.azure.com:443/"),
                 authKey: GetAuthKey());
@@ -126,9 +122,9 @@ namespace CosmosDBQueryCharge
             else if (args.First().Equals("loadtest", StringComparison.InvariantCultureIgnoreCase))
             {
                 var requestGenerator = new RequestGenerator(documentClient, "9d97f971-d2f2-425d-89f4-fd274556e457");
-                var requests = new[]
+                var requestBunches = new[]
                 {
-                    requestGenerator.Generate(targetRps: 5, delayStart: TimeSpan.FromSeconds(0), duration: TimeSpan.FromSeconds(20)),
+                    requestGenerator.Generate(targetRps: 10, delayStart: TimeSpan.FromSeconds(0), duration: TimeSpan.FromSeconds(30)),
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(10), duration: TimeSpan.FromSeconds(1)),
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(20), duration: TimeSpan.FromSeconds(1)),
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(30), duration: TimeSpan.FromSeconds(1)),
@@ -136,7 +132,9 @@ namespace CosmosDBQueryCharge
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(50), duration: TimeSpan.FromSeconds(1)),
                 };
 
-                Task.WhenAll(requests.SelectMany(tasks => tasks)).Wait();
+                var requests = requestBunches.SelectMany(bunch => bunch).ToArray();
+                Task.WhenAll(requests).Wait();
+                Console.WriteLine($"Sent {requests.Length} requests.");
             }
 
             RequestAnalyzer.Instance.Analyze();
