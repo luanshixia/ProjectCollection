@@ -19,13 +19,26 @@ namespace CosmosDBQueryCharge
 
         private List<Record> Records { get; } = new List<Record>();
 
-        public void Log(DateTime timestamp, Guid requestId, bool isEnd, dynamic properties)
+        public void LogRequestStart(DateTime timestamp, Guid requestId)
         {
             this.Records.Add(new Record
             {
                 Timestamp = timestamp,
                 RequestId = requestId,
-                IsEnd = isEnd,
+                IsEnd = false,
+                IsError = false,
+                Properties = null
+            });
+        }
+
+        public void LogRequestEnd(DateTime timestamp, Guid requestId, bool isError, dynamic properties)
+        {
+            this.Records.Add(new Record
+            {
+                Timestamp = timestamp,
+                RequestId = requestId,
+                IsEnd = true,
+                IsError = isError,
                 Properties = properties
             });
         }
@@ -43,14 +56,18 @@ namespace CosmosDBQueryCharge
                         RequestId = start.RequestId,
                         StartTime = start.Timestamp,
                         EndTime = ends[start.RequestId].Timestamp,
-                        Duration = ends[start.RequestId].Timestamp - start.Timestamp
+                        Duration = ends[start.RequestId].Timestamp - start.Timestamp,
+                        StatusCode = ends[start.RequestId].IsError ? ends[start.RequestId].Properties.StatusCode : 200,
+                        Charge = ends[start.RequestId].Properties.RequestCharge
                     }
                     : new Request
                     {
                         RequestId = start.RequestId,
                         StartTime = start.Timestamp,
                         EndTime = DateTime.Now,
-                        Duration = DateTime.Now - start.Timestamp
+                        Duration = DateTime.Now - start.Timestamp,
+                        StatusCode = 0,
+                        Charge = 0
                     })
                 .ToArray();
 
@@ -70,7 +87,9 @@ namespace CosmosDBQueryCharge
             {
                 var left = (request.StartTime - minTime).TotalSeconds / windowLength.TotalSeconds;
                 var width = request.Duration.TotalSeconds / windowLength.TotalSeconds;
-                return $"<tr><td>{request.RequestId}</td><td><div class='bar' style='left: {left * 100:0.##}%; width: {width * 100:0.##}%;' title='Start={request.StartTime}\nEnd={request.EndTime}'></div></td></tr>";
+                return request.StatusCode == 200
+                    ? $"<tr><td>{request.RequestId}</td><td><div class='bar' style='left: {left * 100:0.##}%; width: {width * 100:0.##}%;' title='Start={request.StartTime}\nEnd={request.EndTime}\nRU={request.Charge}'></div></td></tr>"
+                    : $"<tr><td>{request.RequestId}</td><td><div class='bar error' style='left: {left * 100:0.##}%; width: {width * 100:0.##}%;' title='Start={request.StartTime}\nEnd={request.EndTime}\nStatusCode={request.StatusCode}\nRU={request.Charge}'></div></td></tr>";
             });
 
             File.WriteAllText(
@@ -83,6 +102,7 @@ namespace CosmosDBQueryCharge
             public DateTime Timestamp { get; set; }
             public Guid RequestId { get; set; }
             public bool IsEnd { get; set; }
+            public bool IsError { get; set; }
             public dynamic Properties { get; set; }
         }
 
@@ -92,6 +112,8 @@ namespace CosmosDBQueryCharge
             public DateTime StartTime { get; set; }
             public DateTime EndTime { get; set; }
             public TimeSpan Duration { get; set; }
+            public int StatusCode { get; set; }
+            public double Charge { get; set; }
         }
     }
 }

@@ -32,9 +32,7 @@ namespace CosmosDBQueryCharge
 
         static void Main(string[] args)
         {
-            var documentClient = new DocumentClient(
-                serviceEndpoint: new Uri("https://arm-cits-globaldata.documents.azure.com:443/"),
-                authKey: GetAuthKey());
+            var documentClient = DocumentClientPool.GetDocumentClient();
 
             if (args.First().Equals("generate", StringComparison.InvariantCultureIgnoreCase))
             {
@@ -121,12 +119,12 @@ namespace CosmosDBQueryCharge
             }
             else if (args.First().Equals("loadtest", StringComparison.InvariantCultureIgnoreCase))
             {
-                var requestGenerator = new RequestGenerator(documentClient, "9d97f971-d2f2-425d-89f4-fd274556e457");
+                var requestGenerator = new RequestGenerator("9d97f971-d2f2-425d-89f4-fd274556e457");
                 var requestBunches = new[]
                 {
-                    requestGenerator.Generate(targetRps: 10, delayStart: TimeSpan.FromSeconds(0), duration: TimeSpan.FromSeconds(30)),
-                    //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(10), duration: TimeSpan.FromSeconds(1)),
-                    //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(20), duration: TimeSpan.FromSeconds(1)),
+                    requestGenerator.Generate(targetRps: 20, delayStart: TimeSpan.FromSeconds(0), duration: TimeSpan.FromSeconds(30)),
+                    //requestGenerator.Generate(targetRps: 50, delayStart: TimeSpan.FromSeconds(10), duration: TimeSpan.FromSeconds(1)),
+                    //requestGenerator.Generate(targetRps: 50, delayStart: TimeSpan.FromSeconds(20), duration: TimeSpan.FromSeconds(1)),
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(30), duration: TimeSpan.FromSeconds(1)),
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(40), duration: TimeSpan.FromSeconds(1)),
                     //requestGenerator.Generate(targetRps: 1000, delayStart: TimeSpan.FromSeconds(50), duration: TimeSpan.FromSeconds(1)),
@@ -139,18 +137,6 @@ namespace CosmosDBQueryCharge
 
             RequestAnalyzer.Instance.Analyze();
             Console.ReadKey();
-        }
-
-        private static SecureString GetAuthKey()
-        {
-            var encodedKey = "";
-            var secureString = new SecureString();
-            foreach (var c in Encoding.UTF8.GetString(Convert.FromBase64String(encodedKey)))
-            {
-                secureString.AppendChar(c);
-            }
-
-            return secureString;
         }
 
         private static void TestReadDocument(DocumentClient documentClient, string databaseId, string collectionId, string partitionKey, string documentId)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Azure.Documents;
 using Microsoft.Azure.Documents.Client;
@@ -12,14 +13,12 @@ namespace CosmosDBQueryCharge
     /// </summary>
     public class RequestGenerator
     {
-        private readonly DocumentClient DocumentClient;
         private readonly string DatabaseId = "ARMLocalData";
         private readonly string CollectionId = "resources";
         private readonly string PartitionKey;
 
-        public RequestGenerator(DocumentClient documentClient, string partitionKey)
+        public RequestGenerator(string partitionKey)
         {
-            this.DocumentClient = documentClient;
             this.PartitionKey = partitionKey;
         }
 
@@ -33,17 +32,21 @@ namespace CosmosDBQueryCharge
                     await Task.Delay(delayStart + TimeSpan.FromSeconds(1.0 / targetRps * i));
 
                     var requestId = Guid.NewGuid();
-                    RequestAnalyzer.Instance.Log(DateTime.Now, requestId, false, null);
+                    RequestAnalyzer.Instance.LogRequestStart(DateTime.Now, requestId);
 
                     try
                     {
-                        var response = await ReadPartition(this.DocumentClient, this.DatabaseId, this.CollectionId, this.PartitionKey);
-                        RequestAnalyzer.Instance.Log(DateTime.Now, requestId, true, new { response.Count, response.RequestCharge });
+                        var response = await ReadPartition(DocumentClientPool.GetDocumentClient(), this.DatabaseId, this.CollectionId, this.PartitionKey);
+                        RequestAnalyzer.Instance.LogRequestEnd(DateTime.Now, requestId, false, new { response.Count, response.RequestCharge });
                         return response;
                     }
                     catch (DocumentClientException ex)
                     {
-                        RequestAnalyzer.Instance.Log(DateTime.Now, requestId, true, new { ex.StatusCode, ex.Error, ex.Message, ex.RequestCharge });
+                        RequestAnalyzer.Instance.LogRequestEnd(DateTime.Now, requestId, true, new { ex.StatusCode, ex.Error, ex.Message, ex.RequestCharge });
+                    }
+                    catch (OperationCanceledException ex)
+                    {
+                        RequestAnalyzer.Instance.LogRequestEnd(DateTime.Now, requestId, true, new { StatusCode = 0, ex.Message, RequestCharge = 0 });
                     }
 
                     return null;
@@ -64,7 +67,7 @@ namespace CosmosDBQueryCharge
                         MaxItemCount = -1
                     })
                 .AsDocumentQuery()
-                .ExecuteNextAsync<Resource>();
+                .ExecuteNextAsync<Resource>(new CancellationTokenSource(delay: TimeSpan.FromSeconds(10)).Token);
         }
     }
 }
