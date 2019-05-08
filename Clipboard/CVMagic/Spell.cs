@@ -25,7 +25,7 @@ namespace CVMagic
             return true;
         }
 
-        public async Task<string> Cast(string input)
+        public async Task<string> Cast(string input, Match match)
         {
             if (!string.IsNullOrEmpty(this.Substitution))
             {
@@ -35,13 +35,17 @@ namespace CVMagic
             var output = this.Template;
             try
             {
-                foreach (var parameter in this.Parameters)
+                if (match.Success)
                 {
-                    var argument = await CSharpScript.EvaluateAsync(
-                        code: parameter.Value,
-                        options: ScriptOptions.Default.WithImports("System"));
+                    foreach (var parameter in this.Parameters)
+                    {
+                        var argument = await CSharpScript.EvaluateAsync(
+                            code: parameter.Value,
+                            options: ScriptOptions.Default.WithImports("System"),
+                            globals: new Globals { match = match });
 
-                    output = output.Replace($"{{{parameter.Key}}}", argument.ToString());
+                        output = output.Replace($"{{{parameter.Key}}}", argument.ToString());
+                    }
                 }
             }
             catch (CompilationErrorException ex)
@@ -50,6 +54,11 @@ namespace CVMagic
             }
 
             return output;
+        }
+
+        public class Globals
+        {
+            public Match match { get; set; }
         }
     }
 }

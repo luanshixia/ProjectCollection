@@ -48,53 +48,17 @@ namespace CVMagic
                     if (Clipboard.ContainsText())
                     {
                         var text = Clipboard.GetText();
-                        if (text.StartsWith("ago"))
+                        foreach (var spell in MagicBook.Spells)
                         {
-                            Clipboard.SetText("bingo!");
-                        }
-                        else if (Regex.Match(text, @"TIMESTAMP\s*>\s*ago\((?<number>[0-9]+)(?<unit>[dhms])\)", RegexOptions.IgnoreCase) is Match match && match.Success)
-                        {
-                            var number = match.Groups["number"].Value;
-                            var unit = match.Groups["unit"].Value;
-                            var dateTime = DateTime.UtcNow;
+                            if (Regex.Match(text, spell.Pattern, RegexOptions.IgnoreCase) is Match match1 && match1.Success)
+                            {
+                                Clipboard.SetText(Regex.Replace(
+                                    input: text,
+                                    pattern: spell.Pattern,
+                                    replacement: spell.Cast(input: text, match: match1).Result,
+                                    options: RegexOptions.IgnoreCase));
 
-                            if (unit == "d")
-                            {
-                                dateTime = dateTime.AddDays(-int.Parse(number));
-                            }
-                            else if (unit == "h")
-                            {
-                                dateTime = dateTime.AddHours(-int.Parse(number));
-                            }
-                            else if (unit == "m")
-                            {
-                                dateTime = dateTime.AddMinutes(-int.Parse(number));
-                            }
-                            else if (unit == "s")
-                            {
-                                dateTime = dateTime.AddSeconds(-int.Parse(number));
-                            }
-
-                            Clipboard.SetText(Regex.Replace(
-                                input: text,
-                                pattern: @"TIMESTAMP\s*>\s*ago\([0-9]+[dhms]\)",
-                                replacement: $"TIMESTAMP > datetime({dateTime}) and TIMESTAMP < datetime({DateTime.UtcNow})",
-                                options: RegexOptions.IgnoreCase));
-                        }
-                        else
-                        {
-                            foreach (var spell in MagicBook.Spells)
-                            {
-                                if (Regex.Match(text, spell.Pattern, RegexOptions.IgnoreCase) is Match match1 && match1.Success)
-                                {
-                                    Clipboard.SetText(Regex.Replace(
-                                        input: text,
-                                        pattern: spell.Pattern,
-                                        replacement: spell.Cast(input: text).Result,
-                                        options: RegexOptions.IgnoreCase));
-
-                                    break;
-                                }
+                                break;
                             }
                         }
                     }

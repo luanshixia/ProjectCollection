@@ -13,11 +13,11 @@ namespace CVMagic
             new Spell
             {
                 Name = "Ago to UTC",
-                Pattern = @"TIMESTAMP\s*>\s*ago1\((?<number>[0-9]+)(?<unit>[dhms])\)",
+                Pattern = @"TIMESTAMP\s*>\s*ago\((?<number>[0-9]+)(?<unit>[dhms])\)",
                 Template = "TIMESTAMP > datetime({ago}) and TIMESTAMP < datetime({now})",
                 Parameters = new Dictionary<string, string>
                 {
-                    { "ago", "DateTime.UtcNow" },
+                    { "ago", "match.Groups['unit'].Value == 'd' ? DateTime.UtcNow.AddDays(-int.Parse(match.Groups['number'].Value)) : DateTime.UtcNow".Replace("'", "\"") },
                     { "now", "DateTime.UtcNow" }
                 }
             },
