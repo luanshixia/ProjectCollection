@@ -36,15 +36,35 @@ namespace CosmosDBQueryCharge
         public static DocumentClient NewDocumentClient()
         {
             return new DocumentClient(
-                serviceEndpoint: new Uri("https://arm-cits-globaldata.documents.azure.com:443/"),
+                serviceEndpoint: new Uri("https://arm-cits-localdata.documents.azure.com:443/"),
                 authKey: GetAuthKey());
+        }
+
+        public static DocumentClient NewDocumentClient2()
+        {
+            return new DocumentClient(
+                serviceEndpoint: new Uri("https://arm-test-localdata.documents.azure.com:443/"),
+                authKey: GetAuthKey2());
         }
 
         private static SecureString GetAuthKey()
         {
-            var encodedKey = "";
+            //var encodedKey = "S1c3VWE0NWduZ2dTbmdndjI5MWRKZm9pbkdQN0E4c1NrQjJJd0o2TlBNejE3bHdLSUhrTmwweWVsV1FiekVrbHdueklkdWtJS2NJUFpYaHlVVlU4SHc9PQ==";
+            var key = "";
             var secureString = new SecureString();
-            foreach (var c in Encoding.UTF8.GetString(Convert.FromBase64String(encodedKey)))
+            foreach (var c in key)
+            {
+                secureString.AppendChar(c);
+            }
+
+            return secureString;
+        }
+
+        private static SecureString GetAuthKey2()
+        {
+            var key = "";
+            var secureString = new SecureString();
+            foreach (var c in key)
             {
                 secureString.AppendChar(c);
             }

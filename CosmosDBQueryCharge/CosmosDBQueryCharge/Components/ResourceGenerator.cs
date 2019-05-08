@@ -102,6 +102,11 @@ namespace CosmosDBQueryCharge
                 .ToArray();
         }
 
+        public ResourceGenerator(Subscription[] subscriptions)
+        {
+            this.Subscriptions = subscriptions;
+        }
+
         public IEnumerable<Resource> GenerateAll(double sizeFactor = 1.0)
         {
             foreach (var subscription in this.Subscriptions)

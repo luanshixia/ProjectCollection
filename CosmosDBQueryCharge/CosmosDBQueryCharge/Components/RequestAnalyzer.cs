@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System.Collections.Concurrent;
 using System.IO;
 using System.Linq;
 
@@ -17,7 +16,7 @@ namespace CosmosDBQueryCharge
         {
         }
 
-        private List<Record> Records { get; } = new List<Record>();
+        private ConcurrentBag<Record> Records { get; } = new ConcurrentBag<Record>();
 
         public void LogRequestStart(DateTime timestamp, Guid requestId)
         {
