@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.421
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArmRevokeTokenProducer", "ArmRevokeTokenProducer\ArmRevokeTokenProducer.csproj", "{3E0A3140-A114-41C9-84AF-F94470E7710C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArmRevokeTokenConsumer", "ArmRevokeTokenConsumer\ArmRevokeTokenConsumer.csproj", "{86A9D3EB-84FE-432D-8583-12FFFBEBE5FB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3E0A3140-A114-41C9-84AF-F94470E7710C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E0A3140-A114-41C9-84AF-F94470E7710C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E0A3140-A114-41C9-84AF-F94470E7710C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E0A3140-A114-41C9-84AF-F94470E7710C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86A9D3EB-84FE-432D-8583-12FFFBEBE5FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86A9D3EB-84FE-432D-8583-12FFFBEBE5FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86A9D3EB-84FE-432D-8583-12FFFBEBE5FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86A9D3EB-84FE-432D-8583-12FFFBEBE5FB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C38FA3CF-69D6-44FF-AE5D-167A1EB1E3D0}
+	EndGlobalSection
+EndGlobal
