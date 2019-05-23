@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace PersonalSite.Pages
 {
-    public class PrivacyModel : PageModel
+    public class ProjectsModel : PageModel
     {
         public void OnGet()
         {

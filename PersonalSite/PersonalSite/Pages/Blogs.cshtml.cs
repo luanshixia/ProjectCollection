@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace PersonalSite.Pages
 {
-    public class AboutModel : PageModel
+    public class BlogsModel : PageModel
     {
         public string Message { get; set; }
 

@@ -30,8 +30,10 @@
     <div class="blog-masthead">
         <div class="container">
             <nav class="blog-nav">
-                <a class="blog-nav-item active" href="/" nav-to="home">Home</a>
-                <a class="blog-nav-item" href="/about" nav-to="about">About</a>
+                <a class="blog-nav-item @(ViewData["Path"]?.ToString() == "Home" ? "active" : null)" href="/" nav-to="home">Home</a>
+                <a class="blog-nav-item @(ViewData["Path"]?.ToString() == "Projects" ? "active" : null)" href="/projects" nav-to="projects">Projects</a>
+                <a class="blog-nav-item @(ViewData["Path"]?.ToString() == "Blogs" ? "active" : null)" href="/blogs" nav-to="blogs">Blogs</a>
+                <a class="blog-nav-item @(ViewData["Path"]?.ToString() == "Contact" ? "active" : null)" href="/contact" nav-to="contact">Contact</a>
             </nav>
         </div>
     </div>
@@ -57,23 +59,18 @@
 
             <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
                 <div class="sidebar-module sidebar-module-inset">
-                    <h4>Instructions</h4>
+                    <h4>About me</h4>
                     <p>
-                        This is a simple SPA (single page application) to show your pages.
-                        Put your pages (xyz.html) under <code>/public/pages</code> folder and access it through
-                        <code>localhost/xyz</code>.
+                        Yang Wang
                     </p>
                 </div>
                 <div class="sidebar-module">
                     <h4>Page List</h4>
                     <ol class="list-unstyled">
-                        <li><a href="/signup" nav-to="signup">Sign up</a></li>
-                        <li><a href="/404" nav-to="404">404</a></li>
-                        <li><a href="/avatar" nav-to="avatar">Profile Image</a></li>
-                        <li><a href="/s3" nav-to="s3">S3 Test</a></li>
-                        <li><a href="/documentUpload" nav-to="documentUpload">DocumentUpload</a></li>
-                        <li><a href="/login" nav-to="login">Login</a></li>
-                        <li><a href="/captcha" nav-to="captcha">Captcha</a></li>
+                        <li><a href="/" nav-to="home">Home</a></li>
+                        <li><a href="/projects" nav-to="projects">Projects</a></li>
+                        <li><a href="/blogs" nav-to="blogs">Blogs</a></li>
+                        <li><a href="/contact" nav-to="contact">Contact</a></li>
                     </ol>
                 </div>
             </div><!-- /.blog-sidebar -->
