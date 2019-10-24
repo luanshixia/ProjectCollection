@@ -1,7 +1,8 @@
 ﻿@page "{name}"
 @model PersonalSite.Pages.ArticleModel
 @{
-    ViewData["Title"] = "Article";
+    ViewData["Title"] = Model.Title;
+    ViewData["Breadcrumb"] = "Articles";
 }
 
 @Html.Raw(Model.Html)

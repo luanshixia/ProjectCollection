@@ -1,4 +1,12 @@
-﻿# AutoCAD Code Pack
+﻿[Title]:      # (AutoCAD Code Pack)
+[Subtitle]:   # ()
+[Author]:     # (Yang Wang)
+[Date]:       # (June 18, 2012)
+[Comments]:   # ()
+[Keywords]:   # (AutoCAD)
+
+
+# AutoCAD Code Pack
 
 *Previously hosted on [CodePlex](https://acadcodepack.codeplex.com/).*
 

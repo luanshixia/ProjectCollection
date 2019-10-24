@@ -9,7 +9,7 @@
     <meta name="author" content="">
     <link rel="icon" href="~/favicon.ico">
 
-    <title>@ViewData["Title"]</title>
+    <title>@ViewData["Title"] | Yang Wang</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -41,8 +41,8 @@
     <div class="container">
 
         <div class="blog-header">
-            <h1 class="blog-title">@ViewData["Title"]</h1>
-            <p class="lead blog-description">The basic UI to test the backend.</p>
+            <h1 class="blog-title">Yang Wang > @(ViewData.ContainsKey("Breadcrumb") ? ViewData["Breadcrumb"] : ViewData["Title"])</h1>
+            <p class="lead blog-description">Everything about this person.</p>
         </div>
 
         <div class="row">

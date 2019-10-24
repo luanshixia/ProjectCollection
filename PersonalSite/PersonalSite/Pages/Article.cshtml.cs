@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace PersonalSite.Pages
@@ -18,6 +17,10 @@ namespace PersonalSite.Pages
 
         public string Html { get; set; }
 
+        public string Title { get; set; }
+
+        public Dictionary<string, string> Metadata { get; set; }
+
         public ArticleModel(IHostingEnvironment env)
         {
             _env = env;
@@ -26,8 +29,17 @@ namespace PersonalSite.Pages
         public async Task OnGetAsync()
         {
             Name = RouteData.Values["name"].ToString();
-            Markdown = await System.IO.File.ReadAllTextAsync(System.IO.Path.Combine(_env.ContentRootPath, "Articles", $"{Name}.md"));
+            var fileName = System.IO.Path.Combine(_env.ContentRootPath, "Articles", $"{Name}.md");
+            Markdown = await System.IO.File.ReadAllTextAsync(fileName);
             Html = Markdig.Markdown.ToHtml(Markdown);
+            Metadata = (await System.IO.File.ReadAllLinesAsync(fileName))
+                .Take(100)
+                .Select(line => Regex.Match(line, @"^\s*\[(?<key>[a-zA-Z0-9_]+)\]:\s*#\s*\((?<value>.*)\)\s*$"))
+                .Where(match => match.Success)
+                .ToDictionary(
+                    match => match.Groups["key"].Value,
+                    match => match.Groups["value"].Value);
+            Title = Metadata.ContainsKey("Title") ? Metadata["Title"] : Name;
         }
     }
 }
