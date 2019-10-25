@@ -50,12 +50,12 @@ namespace CVMagic
                         var text = Clipboard.GetText();
                         foreach (var spell in MagicBook.Spells)
                         {
-                            if (Regex.Match(text, spell.Pattern, RegexOptions.IgnoreCase) is Match match1 && match1.Success)
+                            if (Regex.Match(text, spell.Pattern, RegexOptions.IgnoreCase) is Match match && match.Success)
                             {
                                 Clipboard.SetText(Regex.Replace(
                                     input: text,
                                     pattern: spell.Pattern,
-                                    replacement: spell.Cast(input: text, match: match1).Result,
+                                    replacement: spell.Cast(input: text, match: match).Result,
                                     options: RegexOptions.IgnoreCase));
 
                                 break;

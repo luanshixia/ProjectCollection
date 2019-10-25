@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MyOwn": {
+      "commandName": "Project",
+      "commandLineArgs": "browse www.google.com"
+    }
+  }
+}
