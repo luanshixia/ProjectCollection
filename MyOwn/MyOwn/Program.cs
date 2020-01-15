@@ -47,7 +47,7 @@ namespace MyOwn
                 googleCommand.OnExecute(() =>
                 {
                     Console.WriteLine("Opening Google in browser...");
-                    Program.OpenUrl(WithScheme($"https://www.google.com/#q=${kwd.Value}"));
+                    Program.OpenUrl(WithScheme($"https://www.google.com/#q={kwd.Value}"));
                 });
             });
 
