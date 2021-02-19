@@ -35,7 +35,7 @@ namespace CVMagic
             var output = this.Template;
             try
             {
-                if (match.Success)
+                if (match.Success && this.Parameters != null)
                 {
                     foreach (var parameter in this.Parameters)
                     {

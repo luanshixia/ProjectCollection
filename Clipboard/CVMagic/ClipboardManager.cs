@@ -14,14 +14,16 @@ namespace CVMagic
 
         public ClipboardManager(Window windowSource)
         {
-            if (!(PresentationSource.FromVisual(windowSource) is HwndSource source))
+            if (PresentationSource.FromVisual(windowSource) is HwndSource source)
+            {
+                source.AddHook(WndProc);
+            }
+            else
             {
                 throw new ArgumentException(
                     "Window source MUST be initialized first, such as in the Window's OnSourceInitialized handler."
                     , nameof(windowSource));
             }
-
-            source.AddHook(WndProc);
 
             // get window handle for interop
             IntPtr windowHandle = new WindowInteropHelper(windowSource).Handle;

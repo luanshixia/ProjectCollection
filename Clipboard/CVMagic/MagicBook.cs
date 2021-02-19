@@ -26,6 +26,12 @@ namespace CVMagic
                 Name = "US date to ISO date",
                 Pattern = @"(?<month>\d\d)/(?<day>\d\d)/(?<year>\d\d\d\d)",
                 Substitution = "${year}-${month}-${day}"
+            },
+            new Spell
+            {
+                Name = "Project 01",
+                Pattern = "project01",
+                Substitution = "| project TIMESTAMP, correlationId, operationName, targetUri, httpStatusCode, durationInMilliseconds, SourceNamespace, Role"
             }
         };
     }
