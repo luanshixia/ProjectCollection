@@ -12,7 +12,7 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.9.1",
     "mocha": "5.2.0",
-    "mocha-chrome": "1.1.0"
+    "mocha-chrome": "2.2.0"
   },
   "scripts": {
     "setuplint": "npx install-peerdeps --dev eslint-config-airbnb",
