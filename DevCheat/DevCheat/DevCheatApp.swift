@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct DevCheatApp: App {
+    @State private var model = ModelData()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(model)
         }
     }
 }

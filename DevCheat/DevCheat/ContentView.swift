@@ -8,17 +8,28 @@
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(ModelData.self) var model
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationSplitView {
+            List {
+                ForEach(model.articles) { article in
+                    NavigationLink {
+                        ArticleView(article: article)
+                    } label: {
+                        Text(article.title)
+                    }
+                }
+            }
+            .listStyle(.inset)
+            .navigationTitle("Home")
+        } detail: {
+            Text("Detail")
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+        .environment(ModelData())
 }

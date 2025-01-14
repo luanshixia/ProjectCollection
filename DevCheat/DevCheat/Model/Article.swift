@@ -7,13 +7,14 @@
 
 import Foundation
 
-struct Article: Codable {
+struct Article: Codable, Identifiable {
+    let id: Int
     let title: String
     let url: String
     let description: String
     let publishedAt: Date
     
-    var category: Category
+    let category: Category
     enum Category: String, Codable {
         case swift
         case iOS
@@ -26,5 +27,5 @@ struct Article: Codable {
         case codingTips
     }
     
-    var isFavorite: Bool
+    let isFavorite: Bool
 }
