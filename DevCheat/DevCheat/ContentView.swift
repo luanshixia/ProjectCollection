@@ -24,7 +24,11 @@ struct ContentView: View {
             .listStyle(.inset)
             .navigationTitle("Home")
         } detail: {
-            Text("DevCheat")
+            Image(systemName: "book.pages")
+                .renderingMode(.original)
+                .foregroundStyle(.gray)
+                .imageScale(.large)
+                .font(.title)
         }
     }
 }
