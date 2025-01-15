@@ -24,7 +24,7 @@ struct ContentView: View {
             .listStyle(.inset)
             .navigationTitle("Home")
         } detail: {
-            Text("Detail")
+            Text("DevCheat")
         }
     }
 }
