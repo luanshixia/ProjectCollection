@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct ArticleView: View {
-    var article: Article?
+    var article: Article
     
     var body: some View {
-        Text(article?.title ?? "")
+        HTMLView(htmlFileName: article.fileName)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
 #Preview {
-    ArticleView(article: nil)
+    ArticleView(article: ModelData().articles[0])
 }

@@ -10,7 +10,7 @@ import Foundation
 struct Article: Codable, Identifiable {
     let id: Int
     let title: String
-    let url: String
+    let fileName: String
     let description: String
     let publishedAt: Date
     

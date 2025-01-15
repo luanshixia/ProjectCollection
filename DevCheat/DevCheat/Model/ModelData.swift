@@ -11,8 +11,8 @@ import Foundation
 class ModelData {
     var articles: [Article] = [
         // generate some sample data
-        .init(id: 1, title: "SwiftUI", url: "https://www.youtube.com/", description: "SwiftUI", publishedAt: Date(), category: .swift, isFavorite: true),
-        .init(id: 2, title: "React", url: "https://www.youtube.com/", description: "SwiftUI", publishedAt: Date(), category: .web, isFavorite: false),
-        .init(id: 3, title: "WinUI", url: "https://www.youtube.com/", description: "SwiftUI", publishedAt: Date(), category: .coding, isFavorite: false),
+        .init(id: 1, title: "HTML Cheatsheet", fileName: "html", description: "HTML", publishedAt: Date(), category: .web, isFavorite: true),
+        .init(id: 2, title: "CSS Cheatsheet", fileName: "css", description: "CSS", publishedAt: Date(), category: .web, isFavorite: false),
+        .init(id: 3, title: "ES6 Cheatsheet", fileName: "es6", description: "JavaScript", publishedAt: Date(), category: .web, isFavorite: false),
     ]
 }
