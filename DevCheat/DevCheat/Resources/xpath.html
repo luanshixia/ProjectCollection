@@ -1,0 +1,4473 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content="Astro v4.5.4" />
+    <link rel="shortcut icon" type="image/png" href="/assets/favicon.png" />
+    <script
+      type="text/partytown"
+      src="https://www.googletagmanager.com/gtag/js?id=G-N7TC6B227L"
+    ></script>
+    <script
+      type="text/partytown"
+      data-ga-measurement-id="G-N7TC6B227L"
+      id="ga-init"
+    >
+      const measurementId = document
+        .getElementById('ga-init')
+        .getAttribute('data-ga-measurement-id')
+      window.dataLayer = window.dataLayer || []
+      function gtag() {
+        dataLayer.push(arguments) // eslint-disable-line
+      }
+      gtag('js', new Date())
+      gtag('config', measurementId)
+    </script>
+    <title>Xpath cheatsheet</title>
+    <meta
+      name="description"
+      content="The one-page guide to Xpath: usage, examples, links, snippets, and more."
+    />
+    <meta name="app:pageurl" content="https://devhints.io/xpath" />
+    <meta
+      property="og:description"
+      content="The one-page guide to Xpath: usage, examples, links, snippets, and more."
+    />
+    <meta property="og:image:height" content="471" />
+    <meta
+      property="og:image"
+      content="https://assets.devhints.io/previews/xpath.jpg"
+    />
+    <meta property="og:image:width" content="900" />
+    <meta property="og:site_name" content="Devhints.io cheatsheets" />
+    <meta property="og:title" content="Xpath cheatsheet" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="https://devhints.io/xpath" />
+    <meta property="article:tag" content="Featured" />
+    <meta property="article:section" content="HTML" />
+    <meta property="twitter:title" content="Xpath cheatsheet" />
+    <meta
+      property="twitter:image"
+      content="https://assets.devhints.io/previews/xpath.jpg"
+    />
+    <meta
+      property="twitter:description"
+      content="The one-page guide to Xpath: usage, examples, links, snippets, and more."
+    />
+    <link rel="canonical" href="https://devhints.io/xpath" />
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "NewsArticle",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://google.com/article"
+        },
+        "headline": "Xpath cheatsheet",
+        "image": ["https://assets.devhints.io/previews/xpath.jpg"],
+        "description": "The one-page guide to Xpath: usage, examples, links, snippets, and more."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          {
+            "@type": "ListItem",
+            "position": 1,
+            "item": { "@id": "https://devhints.io/#html", "name": "HTML" }
+          },
+          {
+            "@type": "ListItem",
+            "position": 2,
+            "item": {
+              "@id": "https://devhints.io/xpath",
+              "name": "Xpath cheatsheet"
+            }
+          }
+        ]
+      }
+    </script>
+    <style>
+      *,
+      :before,
+      :after {
+        box-sizing: border-box;
+        border-width: 0;
+        border-style: solid;
+        border-color: #e5e7eb;
+      }
+      :before,
+      :after {
+        --tw-content: "";
+      }
+      html,
+      :host {
+        line-height: 1.5;
+        -webkit-text-size-adjust: 100%;
+        -moz-tab-size: 4;
+        -o-tab-size: 4;
+        tab-size: 4;
+        font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+        font-feature-settings: normal;
+        font-variation-settings: normal;
+        -webkit-tap-highlight-color: transparent;
+      }
+      body {
+        margin: 0;
+        line-height: inherit;
+      }
+      hr {
+        height: 0;
+        color: inherit;
+        border-top-width: 1px;
+      }
+      abbr:where([title]) {
+        -webkit-text-decoration: underline dotted;
+        text-decoration: underline dotted;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6 {
+        font-size: inherit;
+        font-weight: inherit;
+      }
+      a {
+        color: inherit;
+        text-decoration: inherit;
+      }
+      b,
+      strong {
+        font-weight: bolder;
+      }
+      code,
+      kbd,
+      samp,
+      pre {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          Liberation Mono, Courier New, monospace;
+        font-feature-settings: normal;
+        font-variation-settings: normal;
+        font-size: 1em;
+      }
+      small {
+        font-size: 80%;
+      }
+      sub,
+      sup {
+        font-size: 75%;
+        line-height: 0;
+        position: relative;
+        vertical-align: baseline;
+      }
+      sub {
+        bottom: -0.25em;
+      }
+      sup {
+        top: -0.5em;
+      }
+      table {
+        text-indent: 0;
+        border-color: inherit;
+        border-collapse: collapse;
+      }
+      button,
+      input,
+      optgroup,
+      select,
+      textarea {
+        font-family: inherit;
+        font-feature-settings: inherit;
+        font-variation-settings: inherit;
+        font-size: 100%;
+        font-weight: inherit;
+        line-height: inherit;
+        letter-spacing: inherit;
+        color: inherit;
+        margin: 0;
+        padding: 0;
+      }
+      button,
+      select {
+        text-transform: none;
+      }
+      button,
+      input:where([type="button"]),
+      input:where([type="reset"]),
+      input:where([type="submit"]) {
+        -webkit-appearance: button;
+        background-color: transparent;
+        background-image: none;
+      }
+      :-moz-focusring {
+        outline: auto;
+      }
+      :-moz-ui-invalid {
+        box-shadow: none;
+      }
+      progress {
+        vertical-align: baseline;
+      }
+      ::-webkit-inner-spin-button,
+      ::-webkit-outer-spin-button {
+        height: auto;
+      }
+      [type="search"] {
+        -webkit-appearance: textfield;
+        outline-offset: -2px;
+      }
+      ::-webkit-search-decoration {
+        -webkit-appearance: none;
+      }
+      ::-webkit-file-upload-button {
+        -webkit-appearance: button;
+        font: inherit;
+      }
+      summary {
+        display: list-item;
+      }
+      blockquote,
+      dl,
+      dd,
+      h1,
+      h2,
+      h3,
+      h4,
+      h5,
+      h6,
+      hr,
+      figure,
+      p,
+      pre {
+        margin: 0;
+      }
+      fieldset {
+        margin: 0;
+        padding: 0;
+      }
+      legend {
+        padding: 0;
+      }
+      ol,
+      ul,
+      menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      dialog {
+        padding: 0;
+      }
+      textarea {
+        resize: vertical;
+      }
+      input::-moz-placeholder,
+      textarea::-moz-placeholder {
+        opacity: 1;
+        color: #9ca3af;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        opacity: 1;
+        color: #9ca3af;
+      }
+      button,
+      [role="button"] {
+        cursor: pointer;
+      }
+      :disabled {
+        cursor: default;
+      }
+      img,
+      svg,
+      video,
+      canvas,
+      audio,
+      iframe,
+      embed,
+      object {
+        display: block;
+        vertical-align: middle;
+      }
+      img,
+      video {
+        max-width: 100%;
+        height: auto;
+      }
+      [hidden] {
+        display: none;
+      }
+      *,
+      :before,
+      :after {
+        --tw-border-spacing-x: 0;
+        --tw-border-spacing-y: 0;
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-pan-x: ;
+        --tw-pan-y: ;
+        --tw-pinch-zoom: ;
+        --tw-scroll-snap-strictness: proximity;
+        --tw-gradient-from-position: ;
+        --tw-gradient-via-position: ;
+        --tw-gradient-to-position: ;
+        --tw-ordinal: ;
+        --tw-slashed-zero: ;
+        --tw-numeric-figure: ;
+        --tw-numeric-spacing: ;
+        --tw-numeric-fraction: ;
+        --tw-ring-inset: ;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgb(59 130 246 / 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+        --tw-blur: ;
+        --tw-brightness: ;
+        --tw-contrast: ;
+        --tw-grayscale: ;
+        --tw-hue-rotate: ;
+        --tw-invert: ;
+        --tw-saturate: ;
+        --tw-sepia: ;
+        --tw-drop-shadow: ;
+        --tw-backdrop-blur: ;
+        --tw-backdrop-brightness: ;
+        --tw-backdrop-contrast: ;
+        --tw-backdrop-grayscale: ;
+        --tw-backdrop-hue-rotate: ;
+        --tw-backdrop-invert: ;
+        --tw-backdrop-opacity: ;
+        --tw-backdrop-saturate: ;
+        --tw-backdrop-sepia: ;
+        --tw-contain-size: ;
+        --tw-contain-layout: ;
+        --tw-contain-paint: ;
+        --tw-contain-style: ;
+      }
+      ::backdrop {
+        --tw-border-spacing-x: 0;
+        --tw-border-spacing-y: 0;
+        --tw-translate-x: 0;
+        --tw-translate-y: 0;
+        --tw-rotate: 0;
+        --tw-skew-x: 0;
+        --tw-skew-y: 0;
+        --tw-scale-x: 1;
+        --tw-scale-y: 1;
+        --tw-pan-x: ;
+        --tw-pan-y: ;
+        --tw-pinch-zoom: ;
+        --tw-scroll-snap-strictness: proximity;
+        --tw-gradient-from-position: ;
+        --tw-gradient-via-position: ;
+        --tw-gradient-to-position: ;
+        --tw-ordinal: ;
+        --tw-slashed-zero: ;
+        --tw-numeric-figure: ;
+        --tw-numeric-spacing: ;
+        --tw-numeric-fraction: ;
+        --tw-ring-inset: ;
+        --tw-ring-offset-width: 0px;
+        --tw-ring-offset-color: #fff;
+        --tw-ring-color: rgb(59 130 246 / 0.5);
+        --tw-ring-offset-shadow: 0 0 #0000;
+        --tw-ring-shadow: 0 0 #0000;
+        --tw-shadow: 0 0 #0000;
+        --tw-shadow-colored: 0 0 #0000;
+        --tw-blur: ;
+        --tw-brightness: ;
+        --tw-contrast: ;
+        --tw-grayscale: ;
+        --tw-hue-rotate: ;
+        --tw-invert: ;
+        --tw-saturate: ;
+        --tw-sepia: ;
+        --tw-drop-shadow: ;
+        --tw-backdrop-blur: ;
+        --tw-backdrop-brightness: ;
+        --tw-backdrop-contrast: ;
+        --tw-backdrop-grayscale: ;
+        --tw-backdrop-hue-rotate: ;
+        --tw-backdrop-invert: ;
+        --tw-backdrop-opacity: ;
+        --tw-backdrop-saturate: ;
+        --tw-backdrop-sepia: ;
+        --tw-contain-size: ;
+        --tw-contain-layout: ;
+        --tw-contain-paint: ;
+        --tw-contain-style: ;
+      }
+      .container {
+        width: 100%;
+      }
+      @media (min-width: 640px) {
+        .container {
+          max-width: 640px;
+        }
+      }
+      @media (min-width: 768px) {
+        .container {
+          max-width: 768px;
+        }
+      }
+      @media (min-width: 1024px) {
+        .container {
+          max-width: 1024px;
+        }
+      }
+      @media (min-width: 1280px) {
+        .container {
+          max-width: 1280px;
+        }
+      }
+      @media (min-width: 1536px) {
+        .container {
+          max-width: 1536px;
+        }
+      }
+      .visible {
+        visibility: visible;
+      }
+      .static {
+        position: static;
+      }
+      .mx-auto {
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .my-12 {
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+      }
+      .mt-12 {
+        margin-top: 3rem;
+      }
+      .mt-4 {
+        margin-top: 1rem;
+      }
+      .mt-8 {
+        margin-top: 2rem;
+      }
+      .mt-\[30svh\] {
+        margin-top: 30svh;
+      }
+      .flex {
+        display: flex;
+      }
+      .contents {
+        display: contents;
+      }
+      .hidden {
+        display: none;
+      }
+      .w-full {
+        width: 100%;
+      }
+      .max-w-content {
+        max-width: 1232px;
+      }
+      .max-w-slim {
+        max-width: 740px;
+      }
+      .flex-1 {
+        flex: 1 1 0%;
+      }
+      .transform {
+        transform: translate(var(--tw-translate-x), var(--tw-translate-y))
+          rotate(var(--tw-rotate)) skew(var(--tw-skew-x))
+          skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x))
+          scaleY(var(--tw-scale-y));
+      }
+      .flex-col {
+        flex-direction: column;
+      }
+      .items-center {
+        align-items: center;
+      }
+      .gap-12 {
+        gap: 3rem;
+      }
+      .p-6 {
+        padding: 1.5rem;
+      }
+      .text-center {
+        text-align: center;
+      }
+      .font-manrope {
+        font-family: Manrope, ui-sans-serif, system-ui, sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol,
+          "Noto Color Emoji";
+      }
+      .text-2xl {
+        font-size: 1.5rem;
+        line-height: 2rem;
+      }
+      .text-5xl {
+        font-size: 3rem;
+        line-height: 1;
+      }
+      .text-xl {
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+      }
+      .font-bold {
+        font-weight: 700;
+      }
+      .font-extrabold {
+        font-weight: 800;
+      }
+      .leading-\[1\.2\] {
+        line-height: 1.2;
+      }
+      .tracking-\[-0\.02em\] {
+        letter-spacing: -0.02em;
+      }
+      .text-zinc-950 {
+        --tw-text-opacity: 1;
+        color: rgb(9 9 11 / var(--tw-text-opacity));
+      }
+      .filter {
+        filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast)
+          var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert)
+          var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+      }
+      @media (min-width: 768px) {
+        .md\:flex-row {
+          flex-direction: row;
+        }
+        .md\:items-end {
+          align-items: flex-end;
+        }
+        .md\:px-8 {
+          padding-left: 2rem;
+          padding-right: 2rem;
+        }
+        .md\:pt-8 {
+          padding-top: 2rem;
+        }
+        .md\:text-left {
+          text-align: left;
+        }
+      }
+      @charset "UTF-8"; /*! Hint.css - v2.7.0 - 2021-10-01
+* https://kushagra.dev/lab/hint/
+* Copyright (c) 2021 Kushagra Gour */
+      [class*="hint--"] {
+        position: relative;
+        display: inline-block;
+      }
+      [class*="hint--"]:before,
+      [class*="hint--"]:after {
+        position: absolute;
+        transform: translateZ(0);
+        visibility: hidden;
+        opacity: 0;
+        z-index: 1000000;
+        pointer-events: none;
+        transition: 0.3s ease;
+        transition-delay: 0ms;
+      }
+      [class*="hint--"]:hover:before,
+      [class*="hint--"]:hover:after {
+        visibility: visible;
+        opacity: 1;
+        transition-delay: 0.1s;
+      }
+      [class*="hint--"]:before {
+        content: "";
+        position: absolute;
+        background: transparent;
+        border: 6px solid transparent;
+        z-index: 1000001;
+      }
+      [class*="hint--"]:after {
+        background: #383838;
+        color: #fff;
+        padding: 8px 10px;
+        font-size: 12px;
+        font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+        line-height: 12px;
+        white-space: nowrap;
+      }
+      [class*="hint--"][aria-label]:after {
+        content: attr(aria-label);
+      }
+      [class*="hint--"][data-hint]:after {
+        content: attr(data-hint);
+      }
+      [aria-label=""]:before,
+      [aria-label=""]:after,
+      [data-hint=""]:before,
+      [data-hint=""]:after {
+        display: none !important;
+      }
+      .hint--top-left:before {
+        border-top-color: #383838;
+      }
+      .hint--top-right:before {
+        border-top-color: #383838;
+      }
+      .hint--top:before {
+        border-top-color: #383838;
+      }
+      .hint--bottom-left:before {
+        border-bottom-color: #383838;
+      }
+      .hint--bottom-right:before {
+        border-bottom-color: #383838;
+      }
+      .hint--bottom:before {
+        border-bottom-color: #383838;
+      }
+      .hint--left:before {
+        border-left-color: #383838;
+      }
+      .hint--right:before {
+        border-right-color: #383838;
+      }
+      .hint--top:before {
+        margin-bottom: -11px;
+      }
+      .hint--top:before,
+      .hint--top:after {
+        bottom: 100%;
+        left: 50%;
+      }
+      .hint--top:before {
+        left: calc(50% - 6px);
+      }
+      .hint--top:after {
+        transform: translate(-50%);
+      }
+      .hint--top:hover:before {
+        transform: translateY(-8px);
+      }
+      .hint--top:hover:after {
+        transform: translate(-50%) translateY(-8px);
+      }
+      .hint--bottom:before {
+        margin-top: -11px;
+      }
+      .hint--bottom:before,
+      .hint--bottom:after {
+        top: 100%;
+        left: 50%;
+      }
+      .hint--bottom:before {
+        left: calc(50% - 6px);
+      }
+      .hint--bottom:after {
+        transform: translate(-50%);
+      }
+      .hint--bottom:hover:before {
+        transform: translateY(8px);
+      }
+      .hint--bottom:hover:after {
+        transform: translate(-50%) translateY(8px);
+      }
+      .hint--right:before {
+        margin-left: -11px;
+        margin-bottom: -6px;
+      }
+      .hint--right:after {
+        margin-bottom: -14px;
+      }
+      .hint--right:before,
+      .hint--right:after {
+        left: 100%;
+        bottom: 50%;
+      }
+      .hint--right:hover:before {
+        transform: translate(8px);
+      }
+      .hint--right:hover:after {
+        transform: translate(8px);
+      }
+      .hint--left:before {
+        margin-right: -11px;
+        margin-bottom: -6px;
+      }
+      .hint--left:after {
+        margin-bottom: -14px;
+      }
+      .hint--left:before,
+      .hint--left:after {
+        right: 100%;
+        bottom: 50%;
+      }
+      .hint--left:hover:before {
+        transform: translate(-8px);
+      }
+      .hint--left:hover:after {
+        transform: translate(-8px);
+      }
+      .hint--top-left:before {
+        margin-bottom: -11px;
+      }
+      .hint--top-left:before,
+      .hint--top-left:after {
+        bottom: 100%;
+        left: 50%;
+      }
+      .hint--top-left:before {
+        left: calc(50% - 6px);
+      }
+      .hint--top-left:after {
+        transform: translate(-100%);
+        margin-left: 12px;
+      }
+      .hint--top-left:hover:before {
+        transform: translateY(-8px);
+      }
+      .hint--top-left:hover:after {
+        transform: translate(-100%) translateY(-8px);
+      }
+      .hint--top-right:before {
+        margin-bottom: -11px;
+      }
+      .hint--top-right:before,
+      .hint--top-right:after {
+        bottom: 100%;
+        left: 50%;
+      }
+      .hint--top-right:before {
+        left: calc(50% - 6px);
+      }
+      .hint--top-right:after {
+        transform: translate(0);
+        margin-left: -12px;
+      }
+      .hint--top-right:hover:before {
+        transform: translateY(-8px);
+      }
+      .hint--top-right:hover:after {
+        transform: translateY(-8px);
+      }
+      .hint--bottom-left:before {
+        margin-top: -11px;
+      }
+      .hint--bottom-left:before,
+      .hint--bottom-left:after {
+        top: 100%;
+        left: 50%;
+      }
+      .hint--bottom-left:before {
+        left: calc(50% - 6px);
+      }
+      .hint--bottom-left:after {
+        transform: translate(-100%);
+        margin-left: 12px;
+      }
+      .hint--bottom-left:hover:before {
+        transform: translateY(8px);
+      }
+      .hint--bottom-left:hover:after {
+        transform: translate(-100%) translateY(8px);
+      }
+      .hint--bottom-right:before {
+        margin-top: -11px;
+      }
+      .hint--bottom-right:before,
+      .hint--bottom-right:after {
+        top: 100%;
+        left: 50%;
+      }
+      .hint--bottom-right:before {
+        left: calc(50% - 6px);
+      }
+      .hint--bottom-right:after {
+        transform: translate(0);
+        margin-left: -12px;
+      }
+      .hint--bottom-right:hover:before {
+        transform: translateY(8px);
+      }
+      .hint--bottom-right:hover:after {
+        transform: translateY(8px);
+      }
+      .hint--small:after,
+      .hint--medium:after,
+      .hint--large:after {
+        white-space: normal;
+        line-height: 1.4em;
+        word-wrap: break-word;
+      }
+      .hint--small:after {
+        width: 80px;
+      }
+      .hint--medium:after {
+        width: 150px;
+      }
+      .hint--large:after {
+        width: 300px;
+      }
+      [class*="hint--"]:after {
+        text-shadow: 0 -1px 0px black;
+        box-shadow: 4px 4px 8px #0000004d;
+      }
+      .hint--error:after {
+        background-color: #b34e4d;
+        text-shadow: 0 -1px 0px #592726;
+      }
+      .hint--error.hint--top-left:before {
+        border-top-color: #b34e4d;
+      }
+      .hint--error.hint--top-right:before {
+        border-top-color: #b34e4d;
+      }
+      .hint--error.hint--top:before {
+        border-top-color: #b34e4d;
+      }
+      .hint--error.hint--bottom-left:before {
+        border-bottom-color: #b34e4d;
+      }
+      .hint--error.hint--bottom-right:before {
+        border-bottom-color: #b34e4d;
+      }
+      .hint--error.hint--bottom:before {
+        border-bottom-color: #b34e4d;
+      }
+      .hint--error.hint--left:before {
+        border-left-color: #b34e4d;
+      }
+      .hint--error.hint--right:before {
+        border-right-color: #b34e4d;
+      }
+      .hint--warning:after {
+        background-color: #c09854;
+        text-shadow: 0 -1px 0px #6c5328;
+      }
+      .hint--warning.hint--top-left:before {
+        border-top-color: #c09854;
+      }
+      .hint--warning.hint--top-right:before {
+        border-top-color: #c09854;
+      }
+      .hint--warning.hint--top:before {
+        border-top-color: #c09854;
+      }
+      .hint--warning.hint--bottom-left:before {
+        border-bottom-color: #c09854;
+      }
+      .hint--warning.hint--bottom-right:before {
+        border-bottom-color: #c09854;
+      }
+      .hint--warning.hint--bottom:before {
+        border-bottom-color: #c09854;
+      }
+      .hint--warning.hint--left:before {
+        border-left-color: #c09854;
+      }
+      .hint--warning.hint--right:before {
+        border-right-color: #c09854;
+      }
+      .hint--info:after {
+        background-color: #3986ac;
+        text-shadow: 0 -1px 0px #1a3c4d;
+      }
+      .hint--info.hint--top-left:before {
+        border-top-color: #3986ac;
+      }
+      .hint--info.hint--top-right:before {
+        border-top-color: #3986ac;
+      }
+      .hint--info.hint--top:before {
+        border-top-color: #3986ac;
+      }
+      .hint--info.hint--bottom-left:before {
+        border-bottom-color: #3986ac;
+      }
+      .hint--info.hint--bottom-right:before {
+        border-bottom-color: #3986ac;
+      }
+      .hint--info.hint--bottom:before {
+        border-bottom-color: #3986ac;
+      }
+      .hint--info.hint--left:before {
+        border-left-color: #3986ac;
+      }
+      .hint--info.hint--right:before {
+        border-right-color: #3986ac;
+      }
+      .hint--success:after {
+        background-color: #458746;
+        text-shadow: 0 -1px 0px #1a321a;
+      }
+      .hint--success.hint--top-left:before {
+        border-top-color: #458746;
+      }
+      .hint--success.hint--top-right:before {
+        border-top-color: #458746;
+      }
+      .hint--success.hint--top:before {
+        border-top-color: #458746;
+      }
+      .hint--success.hint--bottom-left:before {
+        border-bottom-color: #458746;
+      }
+      .hint--success.hint--bottom-right:before {
+        border-bottom-color: #458746;
+      }
+      .hint--success.hint--bottom:before {
+        border-bottom-color: #458746;
+      }
+      .hint--success.hint--left:before {
+        border-left-color: #458746;
+      }
+      .hint--success.hint--right:before {
+        border-right-color: #458746;
+      }
+      .hint--always:after,
+      .hint--always:before {
+        opacity: 1;
+        visibility: visible;
+      }
+      .hint--always.hint--top:before {
+        transform: translateY(-8px);
+      }
+      .hint--always.hint--top:after {
+        transform: translate(-50%) translateY(-8px);
+      }
+      .hint--always.hint--top-left:before {
+        transform: translateY(-8px);
+      }
+      .hint--always.hint--top-left:after {
+        transform: translate(-100%) translateY(-8px);
+      }
+      .hint--always.hint--top-right:before {
+        transform: translateY(-8px);
+      }
+      .hint--always.hint--top-right:after {
+        transform: translateY(-8px);
+      }
+      .hint--always.hint--bottom:before {
+        transform: translateY(8px);
+      }
+      .hint--always.hint--bottom:after {
+        transform: translate(-50%) translateY(8px);
+      }
+      .hint--always.hint--bottom-left:before {
+        transform: translateY(8px);
+      }
+      .hint--always.hint--bottom-left:after {
+        transform: translate(-100%) translateY(8px);
+      }
+      .hint--always.hint--bottom-right:before {
+        transform: translateY(8px);
+      }
+      .hint--always.hint--bottom-right:after {
+        transform: translateY(8px);
+      }
+      .hint--always.hint--left:before {
+        transform: translate(-8px);
+      }
+      .hint--always.hint--left:after {
+        transform: translate(-8px);
+      }
+      .hint--always.hint--right:before {
+        transform: translate(8px);
+      }
+      .hint--always.hint--right:after {
+        transform: translate(8px);
+      }
+      .hint--rounded:after {
+        border-radius: 4px;
+      }
+      .hint--no-animate:before,
+      .hint--no-animate:after {
+        transition-duration: 0ms;
+      }
+      .hint--bounce:before,
+      .hint--bounce:after {
+        transition: opacity 0.3s ease, visibility 0.3s ease,
+          transform 0.3s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+      }
+      .hint--no-shadow:before,
+      .hint--no-shadow:after {
+        text-shadow: initial;
+        box-shadow: initial;
+      }
+      .hint--no-arrow:before {
+        display: none;
+      }
+      html,
+      body {
+        background: #fafafc;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #345;
+        overflow-x: hidden;
+      }
+      body {
+        font-size: 13px;
+        padding: 0;
+        margin: 0;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        body {
+          font-size: calc(13px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        body {
+          font-size: calc(14px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        body {
+          font-size: 14px;
+        }
+      }
+      pre,
+      code {
+        font-family: cousine, SFMono-Regular, Consolas, Menlo, Liberation Mono,
+          Ubuntu Mono, Courier, monospace;
+        letter-spacing: -0.03em;
+      }
+      pre {
+        font-size: 0.96em;
+      }
+      *:not(pre):not(code) {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      a {
+        color: #26648e;
+      }
+      a:visited {
+        color: #15234d;
+      }
+      a:hover {
+        color: #3ac1cb;
+      }
+      @media (max-width: 580px) {
+        .hint--bottom:before,
+        .hint--bottom:after {
+          display: none;
+        }
+      }
+      pre[data-line] {
+        position: relative;
+        padding: 1em 0 1em 3em;
+      }
+      .line-highlight {
+        position: absolute;
+        left: 0;
+        right: 0;
+        padding: inherit 0;
+        margin-top: 1em;
+        background: #997a6614;
+        background: linear-gradient(to right, #997a661a 70%, #997a6600);
+        pointer-events: none;
+        line-height: inherit;
+        white-space: pre;
+      }
+      @media print {
+        .line-highlight {
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+      }
+      .line-highlight:before,
+      .line-highlight[data-end]:after {
+        content: attr(data-start);
+        position: absolute;
+        top: 0.4em;
+        left: 0.6em;
+        min-width: 1em;
+        padding: 0 0.5em;
+        background-color: #997a6666;
+        color: #f5f2f0;
+        font: 700 65%/1.5 sans-serif;
+        text-align: center;
+        vertical-align: 0.3em;
+        border-radius: 999px;
+        text-shadow: none;
+        box-shadow: 0 1px #fff;
+      }
+      .line-highlight[data-end]:after {
+        content: attr(data-end);
+        top: auto;
+        bottom: 0.4em;
+      }
+      .line-numbers .line-highlight:before,
+      .line-numbers .line-highlight:after {
+        content: none;
+      }
+      pre[id].linkable-line-numbers span.line-numbers-rows {
+        pointer-events: all;
+      }
+      pre[id].linkable-line-numbers span.line-numbers-rows > span:before {
+        cursor: pointer;
+      }
+      pre[id].linkable-line-numbers span.line-numbers-rows > span:hover:before {
+        background-color: #80808033;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/_astro/cousine-cyrillic-ext-400-normal.C3QZYnkk.woff2)
+            format("woff2"),
+          url(/_astro/cousine-cyrillic-ext-400-normal.Drwh9rV4.woff)
+            format("woff");
+        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF,
+          U+A640-A69F, U+FE2E-FE2F;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/_astro/cousine-cyrillic-400-normal.CdUj46ix.woff2)
+            format("woff2"),
+          url(/_astro/cousine-cyrillic-400-normal.B-IttEg2.woff) format("woff");
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/_astro/cousine-greek-ext-400-normal.GHiQrtyv.woff2)
+            format("woff2"),
+          url(/_astro/cousine-greek-ext-400-normal.BVe8Osu7.woff) format("woff");
+        unicode-range: U+1F00-1FFF;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/_astro/cousine-greek-400-normal.CKfmnf7Y.woff2)
+            format("woff2"),
+          url(/_astro/cousine-greek-400-normal.DEEf410q.woff) format("woff");
+        unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C,
+          U+038E-03A1, U+03A3-03FF;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/_astro/cousine-hebrew-400-normal.BBwuAr2T.woff2)
+            format("woff2"),
+          url(/_astro/cousine-hebrew-400-normal.Dcm8Lahn.woff) format("woff");
+        unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/_astro/cousine-vietnamese-400-normal.pR4LjQb1.woff2)
+            format("woff2"),
+          url(/_astro/cousine-vietnamese-400-normal.BA8MK6vN.woff)
+            format("woff");
+        unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169,
+          U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309,
+          U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/_astro/cousine-latin-ext-400-normal.DC2y9sZG.woff2)
+            format("woff2"),
+          url(/_astro/cousine-latin-ext-400-normal.DuHaU5as.woff) format("woff");
+        unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F,
+          U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+          U+A720-A7FF;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 400;
+        src: url(/_astro/cousine-latin-400-normal.B3ajlhCR.woff2)
+            format("woff2"),
+          url(/_astro/cousine-latin-400-normal.DCDo6rwY.woff) format("woff");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC,
+          U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 700;
+        src: url(/_astro/cousine-cyrillic-ext-700-normal.D0TI5rYw.woff2)
+            format("woff2"),
+          url(/_astro/cousine-cyrillic-ext-700-normal.BPMFnzfH.woff)
+            format("woff");
+        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF,
+          U+A640-A69F, U+FE2E-FE2F;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 700;
+        src: url(/_astro/cousine-cyrillic-700-normal.O9t1yUVY.woff2)
+            format("woff2"),
+          url(/_astro/cousine-cyrillic-700-normal.mTDA7gBy.woff) format("woff");
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 700;
+        src: url(/_astro/cousine-greek-ext-700-normal.CxuadkIC.woff2)
+            format("woff2"),
+          url(/_astro/cousine-greek-ext-700-normal.BJ4RHgRx.woff) format("woff");
+        unicode-range: U+1F00-1FFF;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 700;
+        src: url(/_astro/cousine-greek-700-normal.fuY7cjXj.woff2)
+            format("woff2"),
+          url(/_astro/cousine-greek-700-normal.C8gwqhZ-.woff) format("woff");
+        unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C,
+          U+038E-03A1, U+03A3-03FF;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 700;
+        src: url(/_astro/cousine-hebrew-700-normal.DygMNBKQ.woff2)
+            format("woff2"),
+          url(/_astro/cousine-hebrew-700-normal.BU8qy4Jz.woff) format("woff");
+        unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 700;
+        src: url(/_astro/cousine-vietnamese-700-normal.BebDOlPW.woff2)
+            format("woff2"),
+          url(/_astro/cousine-vietnamese-700-normal.BmralHlx.woff)
+            format("woff");
+        unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169,
+          U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309,
+          U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 700;
+        src: url(/_astro/cousine-latin-ext-700-normal.xAB68C-U.woff2)
+            format("woff2"),
+          url(/_astro/cousine-latin-ext-700-normal.aUk2T5w3.woff) format("woff");
+        unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F,
+          U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+          U+A720-A7FF;
+      }
+      @font-face {
+        font-family: Cousine;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 700;
+        src: url(/_astro/cousine-latin-700-normal.Cw_n-3VR.woff2)
+            format("woff2"),
+          url(/_astro/cousine-latin-700-normal.Ba1heIiY.woff) format("woff");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC,
+          U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      @font-face {
+        font-family: Manrope;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 800;
+        src: url(data:font/woff2;base64,d09GMgABAAAAAAYcAA8AAAAAC7wAAAXBAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAG4FsHC4GYD9TVEFUKgBwEQgKiUCHPAsaAAE2AiQDMAQgBYUOB30MBxuTCSguCmNjafTJmiY0OnHijfijBPH8e9XXublJC6sZZ+3MQuiZBeAHIr09z/yDM2SXzUXmRMKBe5lFSJbJgx3dQp3zERKzaQYjpWWh7vrJmtqiJJYIwta6B76SanqFgWbJpOYIhNvUJLOuayYkanabMDPTrY7KXxpMJ4aVmiBAkFo4GJ26xKYCtXGViAfUphcRAqCGBvgkekybgARACgoHGhUs+FGMvx3sZTES+ADAKwVvdMbL7AtObCVLm73bvN63vfnecdp4cYu3AfAlMBpkxSaFgbkSgTCIVKYghggZDgoLTe+OVsBIEFIkq9ShzomTteqBU9PgXD3NsDHBLKtvAwc7G6snaKQ2U+qVD43i2IHd4qLAJe3tE/+g/y5D+iBVYgM5BaAd8zRgo3faJEBZuXceatEkFkEDULgn4jNsgLPQ/LQxrjrNcABx4hhAe65E6Vv6cf2D/YDnYddN/Zj+/iLvGa+9JwDwWTHdMIKEifY08WMRwHe7hK6SGABhALKAyiC9AfI/YNEQeRkwlCQd2k3WpeQPZPFcIFsV4oFc805GqmtdPSRlWGqOCy2LLAkvDS0eSouxLDisPQjusPXJEwmtfld22/vpDPcR45iIuTQyZZr8Yr1Md3g/w+uQfowKG2vul9cKbnXtisXCy6aJJtTkrR9eyJqPPqY7ffGc1aXvUulMRnxvlbrvuqxOP55gLI2MGCW/WC1Tr0+VTzsRgYEVIOgSGCYJxm99omRPFenio9Q2Q/jRscD3EaLHEFn7TMqh8doxt7xtr0cOWH2n6NG07LZMyKHpCpHjrp3rzj23LFWIP56RXWofOyVrbta6OlNXq8PHs8LnMo6ZRa6T9G6a1W7gdatX5joopGGgH0xs2oloGG1H4TDcQQTDYPSFrbAeQsdOOcEGDmQH6xhsYC2DGayiN4L2DoQOzKFG7obTB9M/n5W1/neyqvweq/3/n//T6KVmr13Y8Jr3pSe8dq71UlZJf1paf+aDur/WjXPvlQACCvbU8GM6/Nyj4HqqjWd+JbZpP1IPoP3N6fl5Zfcazzh53Dfiz8WTZXsFSW9qME8YzsImYn7nL3mQxDxNxa5Kl/GfJpQ6j1/u/+7zjIgnloJtM/83y4NLst8ePDj0pSTkoGAbsD+JpdXixL0rMd6+4WSg/bUzsqczr/vGzfHcXYslUkSVVZBPXg28otwl3TcprMjM5uukw6v33kt979q7y7+1mUtXtvGb0+d+bwuXLm/l98785+rb23avvbZmSFmCR+/IwaarrMqPHDLqQXfDbs7o6tIyRZlhkhrvXGPPt6Cqv9Ws8YrVvKtiXqtid/el075ZdStP2g7F3s268fPR73X+ooq8m771sgcWOFW453k7nukhbxc02d7ZwLKol2fA3XO2PdKO/NRu+P2xCwp2/B5+qOtqiqfJfNq8x4Gy0KABAP2zeRoB9Brr3ORf4VGxVr/5Dd87AB89dHE9wCeF/ecB/2/e9j0BWCgABD6udlZZAM48CGXfsPkKr5gprCKn/hkazeH0jMVWejYh7Ae/TH9LPxP6QQPCpJAngMyaFs7BBzEQHQBOSwnwCo7YXkVUkl6DXtyaqJlekxyuey2asdAbpQkdvHGqUOBJkCQsyU7SKPCR/7sYOmyYsCAIowICRBHBYPAoJY4iBCAwhNAx4mVjxxpYEESK3tSvdppHCQg2QghgcGCeyOvgLNCozTjSl3BiZx/eTWe/p6Z06KB5EUMgt25CPZrSgCbdxJYMJJI4osZjLXkyMiHB0otA9zCd0VwQMm52JYi7UyMa0JAibAZhOX3INaAfkHOgZFypPeQ9A3b6eiNq3HkaD4RJKc1DkmLdNA4M/ltIrDPQDkspwpNnrPeD1igA8I7TiLIGYaAKr4qilRiixRRLfOKXgNV+LKJTdOnBf8DsR5RUSi6YyXZy6xDUWa8zlF5Aq4MlL7mbi1MHtwvx3NY7AAAAAA==)
+            format("woff2"),
+          url(data:font/woff;base64,d09GRgABAAAAAAhwAA4AAAAACzwAAQABAAAAAAAAAAAAAAAAAAAAAAAAAABHUE9TAAABRAAAAJMAAADsjeOVW0dTVUIAAAHYAAAAMAAAADAjWiRoT1MvMgAAAggAAABNAAAAYHP9rb5TVEFUAAACWAAAACYAAAAqeZZrrWNtYXAAAAKAAAAAVgAAAHAPWDEaZ2FzcAAAAtgAAAAIAAAACAAAABBnbHlmAAAC4AAAA2MAAASUtVntCGhlYWQAAAZEAAAANgAAADYdoMRIaGhlYQAABnwAAAAdAAAAJA4GA8lobXR4AAAGnAAAAC4AAAAwPfwDXGxvY2EAAAbMAAAAGgAAABoHdwZFbWF4cAAABugAAAAaAAAAIAAcAGFuYW1lAAAHBAAAAREAAAJSNwlVkXBvc3QAAAgYAAAAVQAAAH1DI807eNpNjaUBQgEURc/3jza0oFsgBUlEOl5wlw1ITMAQZDJDsM2Xhz7Xe1GAOFGCKGRRJqP1nCJavdlqkx+c1lPy0952Th4VG4U0yI8O4DhSqwylP3LBxALZPcHp+vHbPb51GZyzc5OLm7N1rlSdu2yQ6Z0/kT9F2FU0DOGwCaLIVBVFNgq6TINoomAAKqY/dwHdTShEAAABAAAADgAKAAwAAAAAAANERkxUABRjeXJsABhsYXRuABgACAAAAAAAAAAA//8AAHjaY2BhyWZWYGBlYGAVYdnAwMAwDUIz7WEwYupgQAFM7CACxgv28PVkOMDgqLCFI+TvCgYGjhCmCAUGxvkgORYL1gVASoGBBQAHVAvTAAAAeNpjYARCDiBmYBABkzIMTOXpGSUgJgMTA5hiZGdWYGAAACttAigAAHjaPYixEUBAFAX3+ODGmAsUoJWrQqJGEhEJlUip4uOP8YK3OwskQAq0zzujMACBYD2yu0QmWeXqZtW/jLLI+RbdNKrDdvR8hqemMcsoyako8DfrgxKlAAAAAQAB//8AD3jaYuAFVE4OwHIkYQD+/x7W49qatR9WsxfbTh7PNiZO4WzFSeFs27YVF8+2lelNz8RJKW39+rob3gQQQLgROJCgGdrBDm7wQxhikIIcdEAJoFRRnIlDrG/y6v+HWDVt+cyZCyZP1saPXzB69IKhQzVVXdTZqeXzWja7KB7XIpEFPh8AgTTzuch8lqCJeYcKKpzCIcel8Ulci0/Sb47QPxskuVdeFG7872jM000kSxbrl7MYTUnpWVOybT9ZjNlLB8nj2Ldvf3t/JXwLXgJ7NPUwTS7w7qMpmkxWSg5Xd5W1omg/wCk8vW95z4YRAyM29Cw/aa9/oqdneV9hxIgC291uM31FYIn/gUUpAyhWVJAVK/5AHTgcVZaHUweZzPXon5HQ9rv1x6HR2C1BRODZEOEqNv+QafCwibVaq5a6XS6nVbGWiyQWlUSJDfH6rgknnPHoliPpD01d55x81tSuEP1JuFH/KmTzXavfTo/FqaMuWzAh6fHpl5mvZGjjM+FB4XloATcojEE0Tiy2eIS3WQjPuZiRmuJyu1yYTCWTcZEZIX9to2/cdRfW8UGs33UXfWPb5Y8X3c3bP2v2FB4nnmZ38XH60+MFT3PoWZyNL+LsZ5+l99OR9P5nEciysw8bO6Z+5jKywGh5YwoIabqen8irBhncQ+ZBugQtCCxb6BK6Hk/mVd1Bfvj/Tbp+N4uxTMZnsjBQuEPEhGF4GovuolG/YtKdrwdkCekPXLOtd9a4Y2P0J16lNweD65dneic76G/Y5pibnTAs4acBXmVEZjY+49fyPdDOOEcNIklSKdsMCzang4ip7l1MGBJmx0Si3fLX5Vf9deMtf19x5d83Xzgq2U7bLelRuNSSGn1+v+ZvlkIrEe+4C3H5Stq4407aWEH7yxMml3vw9onlnpkTAmEgpl3jJmIw0bTKwqiUazH2+RRmxOkwrqHUzW6EmRfZiogpxZhV9kTMVhW2u5MGexoOqeQk501cVTnxbHk2f7SekgVLUIlPDAzti8tNPHq4uH/cp/pcQjYQ0izYHN7xqfo0R0szRz8RC+FR7y486r6hQyfKx4YUf+X1MzKpDRtk2ZtJ190eS7XaHGgtnpw/+2zOs4HjbLnWSIczGFYj9rh1xKLCEccNV2u3z0mkNuwA6bgzIQAAAQAAAASBBr5tF6tfDzz1AAMH0AAAAADbtqaEAAAAAN0fUZ8AAP6YBbAHvAAAAAYAAgAAAAAAAHjaY2BkYOAI+buCgYFNhAEIWDcARVABDwBMQgLfAAAAeNpjPcFwgjWMQQOGWd4wMIAwawxDD5sIgw1LAVBsCkMPyzOGAFYGhgAA8TwJkQAAAAAAWgB3AJwAzQDmAO4BGAFaAXQBoQHdAkoAAHjaY2BkYGDgYQhj4GXgBLKBPAQA8QEL+QB+AAB42p2QhW1DQRAFJ8wojsjCMHMiCDOjWGbmMEMlrsIFuApX4Dr8dDLbIn/a2dW7ua8DOvmmiYbmDiABOW5ghUSOG+klneMmTsjkuLkk08JQw1yOW1lqOMlxLwsN/xhugO6GZI7bGGxIsU2EKG/E8eHByyMW5phhllXRjSYu1VNshJVR1vQXhv1ih1mxyZOqV7M4D+pHkEl3VN0a07o98iuhnJ0pHEqGNH3QxEbc2J36TmtautNo1c67vMqjFZwU/7hkuqVkUK4rpT08ieVngSkWmVFd55oDWQ9FZe6a5ska5jtl4zzgUx/GUnTX6cudVO6cHnAQVz6q2YPMD+Kgqk5WjmnO2ZPvXv6cs9qYBSPFXcoAAAB42mNgYgCD/3MYjBiwAR4gVmE4ycjEYMPIzMjCyMrIxsjOyMHIyeaYVJRalsoZWlxSlJhZklzJXpqXaWDi5AihXS04S9FknKAyliDayMDJBAAzuhhfAAAA)
+            format("woff");
+        unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF,
+          U+A640-A69F, U+FE2E-FE2F;
+      }
+      @font-face {
+        font-family: Manrope;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 800;
+        src: url(/_astro/manrope-cyrillic-800-normal.B9PzCqBx.woff2)
+            format("woff2"),
+          url(/_astro/manrope-cyrillic-800-normal.CtoRf32S.woff) format("woff");
+        unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+      }
+      @font-face {
+        font-family: Manrope;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 800;
+        src: url(/_astro/manrope-greek-800-normal.BHIB0aka.woff2)
+            format("woff2"),
+          url(/_astro/manrope-greek-800-normal.C2eRfkpd.woff) format("woff");
+        unicode-range: U+0370-0377, U+037A-037F, U+0384-038A, U+038C,
+          U+038E-03A1, U+03A3-03FF;
+      }
+      @font-face {
+        font-family: Manrope;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 800;
+        src: url(/_astro/manrope-vietnamese-800-normal.CuAgtnv6.woff2)
+            format("woff2"),
+          url(/_astro/manrope-vietnamese-800-normal.4Nn8zUP_.woff)
+            format("woff");
+        unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169,
+          U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309,
+          U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+      }
+      @font-face {
+        font-family: Manrope;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 800;
+        src: url(/_astro/manrope-latin-ext-800-normal.SU77tPi5.woff2)
+            format("woff2"),
+          url(/_astro/manrope-latin-ext-800-normal.BvAit2oT.woff) format("woff");
+        unicode-range: U+0100-02AF, U+0304, U+0308, U+0329, U+1E00-1E9F,
+          U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F,
+          U+A720-A7FF;
+      }
+      @font-face {
+        font-family: Manrope;
+        font-style: normal;
+        font-display: swap;
+        font-weight: 800;
+        src: url(/_astro/manrope-latin-800-normal.CTuzW-HK.woff2)
+            format("woff2"),
+          url(/_astro/manrope-latin-800-normal.B6ueAO7Y.woff) format("woff");
+        unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6,
+          U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC,
+          U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+      }
+      .back-button {
+        text-decoration: none;
+        width: 48px;
+        height: 48px;
+        line-height: 46px;
+        text-align: center;
+        display: inline-block;
+        border-radius: 50%;
+        transition: all 0.1s linear;
+      }
+      @media (max-width: 480px) {
+        .back-button {
+          width: 32px;
+          height: 32px;
+          line-height: 30px;
+        }
+      }
+      .back-button,
+      .back-button:visited {
+        color: #567;
+      }
+      .back-button:hover,
+      .back-button:focus {
+        color: #fff;
+        background: #745fb5;
+        opacity: 1;
+      }
+      .back-button:before {
+        content: "";
+        display: inline-block;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(51%2C68%2C85)%22%20d%3D%22M427%20234.625H167.296l119.702-119.702L256%2085%2085%20256l171%20171%2029.922-29.924-118.626-119.7H427v-42.75z%22%2F%3E%3C%2Fsvg%3E")
+          center center/24px 24px no-repeat;
+        height: 24px;
+        width: 24px;
+        vertical-align: middle;
+      }
+      .back-button:hover:before,
+      .back-button:focus:before {
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(255%2C255%2C255)%22%20d%3D%22M427%20234.625H167.296l119.702-119.702L256%2085%2085%20256l171%20171%2029.922-29.924-118.626-119.7H427v-42.75z%22%2F%3E%3C%2Fsvg%3E")
+          center center/24px 24px no-repeat;
+        height: 24px;
+        width: 24px;
+      }
+      @media (max-width: 480px) {
+        .back-button:before {
+          font-size: 16px;
+        }
+      }
+      .page-actions {
+        margin: 0;
+        padding: 0;
+        height: 32px;
+      }
+      .page-actions > .link.link > a {
+        display: inline-block;
+        height: 32px;
+        line-height: 32px;
+        vertical-align: top;
+        width: auto;
+      }
+      .page-actions > li {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+      .page-actions > li > a,
+      .page-actions > li > a:visited {
+        color: #567;
+        text-decoration: none;
+      }
+      .page-actions > li > a:hover,
+      .page-actions > li > a:focus {
+        color: #745fb5;
+      }
+      .page-actions > li > a:hover > .text,
+      .page-actions > li > a:focus > .text {
+        color: #745fb5;
+      }
+      .page-actions > li > a > .text {
+        font-size: 11px;
+        display: none;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .page-actions > li > a > .text {
+          font-size: calc(11px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .page-actions > li > a > .text {
+          font-size: calc(12px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .page-actions > li > a > .text {
+          font-size: 12px;
+        }
+      }
+      .page-actions > li > a > .text.-visible {
+        display: inline;
+      }
+      .page-actions + .page-actions {
+        margin-left: 8px;
+      }
+      .page-actions > .facebook > a:before,
+      .page-actions > .twitter > a:before,
+      .page-actions > .github > a:before {
+        content: "";
+        vertical-align: middle;
+      }
+      .page-actions > .facebook > a:before {
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(51%2C68%2C85)%22%20d%3D%22M426.8%2064H85.2C73.5%2064%2064%2073.5%2064%2085.2v341.6c0%2011.7%209.5%2021.2%2021.2%2021.2H256V296h-45.9v-56H256v-41.4c0-49.6%2034.4-76.6%2078.7-76.6%2021.2%200%2044%201.6%2049.3%202.3v51.8h-35.3c-24.1%200-28.7%2011.4-28.7%2028.2V240h57.4l-7.5%2056H320v152h106.8c11.7%200%2021.2-9.5%2021.2-21.2V85.2c0-11.7-9.5-21.2-21.2-21.2z%22%2F%3E%3C%2Fsvg%3E")
+          center center/16px 16px no-repeat;
+        height: 16px;
+        width: 16px;
+      }
+      .page-actions > .twitter > a:before {
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(51%2C68%2C85)%22%20d%3D%22M492%20109.5c-17.4%207.7-36%2012.9-55.6%2015.3%2020-12%2035.4-31%2042.6-53.6-18.7%2011.1-39.4%2019.2-61.5%2023.5C399.8%2075.8%20374.6%2064%20346.8%2064c-53.5%200-96.8%2043.4-96.8%2096.9%200%207.6.8%2015%202.5%2022.1-80.5-4-151.9-42.6-199.6-101.3-8.3%2014.3-13.1%2031-13.1%2048.7%200%2033.6%2017.2%2063.3%2043.2%2080.7-16-.4-31-4.8-44-12.1v1.2c0%2047%2033.4%2086.1%2077.7%2095-8.1%202.2-16.7%203.4-25.5%203.4-6.2%200-12.3-.6-18.2-1.8%2012.3%2038.5%2048.1%2066.5%2090.5%2067.3-33.1%2026-74.9%2041.5-120.3%2041.5-7.8%200-15.5-.5-23.1-1.4C62.8%20432%20113.7%20448%20168.3%20448%20346.6%20448%20444%20300.3%20444%20172.2c0-4.2-.1-8.4-.3-12.5C462.6%20146%20479%20129%20492%20109.5z%22%2F%3E%3C%2Fsvg%3E")
+          center center/16px 16px no-repeat;
+        height: 16px;
+        width: 16px;
+      }
+      .page-actions > .github > a:before {
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(51%2C68%2C85)%22%20d%3D%22M256%2032C132.3%2032%2032%20134.9%2032%20261.7c0%20101.5%2064.2%20187.5%20153.2%20217.9%201.4.3%202.6.4%203.8.4%208.3%200%2011.5-6.1%2011.5-11.4%200-5.5-.2-19.9-.3-39.1-8.4%201.9-15.9%202.7-22.6%202.7-43.1%200-52.9-33.5-52.9-33.5-10.2-26.5-24.9-33.6-24.9-33.6-19.5-13.7-.1-14.1%201.4-14.1h.1c22.5%202%2034.3%2023.8%2034.3%2023.8%2011.2%2019.6%2026.2%2025.1%2039.6%2025.1%2010.5%200%2020-3.4%2025.6-6%202-14.8%207.8-24.9%2014.2-30.7-49.7-5.8-102-25.5-102-113.5%200-25.1%208.7-45.6%2023-61.6-2.3-5.8-10-29.2%202.2-60.8%200%200%201.6-.5%205-.5%208.1%200%2026.4%203.1%2056.6%2024.1%2017.9-5.1%2037-7.6%2056.1-7.7%2019%20.1%2038.2%202.6%2056.1%207.7%2030.2-21%2048.5-24.1%2056.6-24.1%203.4%200%205%20.5%205%20.5%2012.2%2031.6%204.5%2055%202.2%2060.8%2014.3%2016.1%2023%2036.6%2023%2061.6%200%2088.2-52.4%20107.6-102.3%20113.3%208%207.1%2015.2%2021.1%2015.2%2042.5%200%2030.7-.3%2055.5-.3%2063%200%205.4%203.1%2011.5%2011.4%2011.5%201.2%200%202.6-.1%204-.4C415.9%20449.2%20480%20363.1%20480%20261.7%20480%20134.9%20379.7%2032%20256%2032z%22%2F%3E%3C%2Fsvg%3E")
+          center center/16px 16px no-repeat;
+        height: 16px;
+        width: 16px;
+      }
+      .page-actions > .github > a:hover:before {
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(255%2C255%2C255)%22%20d%3D%22M256%2032C132.3%2032%2032%20134.9%2032%20261.7c0%20101.5%2064.2%20187.5%20153.2%20217.9%201.4.3%202.6.4%203.8.4%208.3%200%2011.5-6.1%2011.5-11.4%200-5.5-.2-19.9-.3-39.1-8.4%201.9-15.9%202.7-22.6%202.7-43.1%200-52.9-33.5-52.9-33.5-10.2-26.5-24.9-33.6-24.9-33.6-19.5-13.7-.1-14.1%201.4-14.1h.1c22.5%202%2034.3%2023.8%2034.3%2023.8%2011.2%2019.6%2026.2%2025.1%2039.6%2025.1%2010.5%200%2020-3.4%2025.6-6%202-14.8%207.8-24.9%2014.2-30.7-49.7-5.8-102-25.5-102-113.5%200-25.1%208.7-45.6%2023-61.6-2.3-5.8-10-29.2%202.2-60.8%200%200%201.6-.5%205-.5%208.1%200%2026.4%203.1%2056.6%2024.1%2017.9-5.1%2037-7.6%2056.1-7.7%2019%20.1%2038.2%202.6%2056.1%207.7%2030.2-21%2048.5-24.1%2056.6-24.1%203.4%200%205%20.5%205%20.5%2012.2%2031.6%204.5%2055%202.2%2060.8%2014.3%2016.1%2023%2036.6%2023%2061.6%200%2088.2-52.4%20107.6-102.3%20113.3%208%207.1%2015.2%2021.1%2015.2%2042.5%200%2030.7-.3%2055.5-.3%2063%200%205.4%203.1%2011.5%2011.4%2011.5%201.2%200%202.6-.1%204-.4C415.9%20449.2%20480%20363.1%20480%20261.7%20480%20134.9%20379.7%2032%20256%2032z%22%2F%3E%3C%2Fsvg%3E");
+      }
+      .page-actions > .facebook > a:before,
+      .page-actions > .twitter > a:before {
+        width: 32px;
+        height: 32px;
+      }
+      .page-actions > .github > a:before {
+        position: relative;
+        top: -2px;
+      }
+      .page-actions > .link.-button > a {
+        box-shadow: inset 0 0 0 1px #5566774d;
+        border-radius: 2px;
+        padding: 0 16px;
+        margin: 0 8px;
+        transition: all 0.1s linear;
+      }
+      .page-actions > .link.-button > a > .text {
+        margin-left: 4px;
+        position: relative;
+        top: -1px;
+      }
+      .page-actions > .link.-button > a:hover,
+      .page-actions > .link.-button > a:focus {
+        background: linear-gradient(5deg, #745fb5, #9066b8);
+        box-shadow: 0 1px 1px #5566778c;
+      }
+      .page-actions > .link.-button > a:hover,
+      .page-actions > .link.-button > a:hover > .text,
+      .page-actions > .link.-button > a:focus,
+      .page-actions > .link.-button > a:focus > .text {
+        color: #fff;
+      }
+      @media (max-width: 768px) {
+        .page-actions > .link {
+          margin-left: 16px;
+        }
+      }
+      .page-actions > .link:first-child > a {
+        margin-left: 0;
+      }
+      .page-actions > .link:last-child > a {
+        margin-right: 0;
+      }
+      .top-nav,
+      .top-nav > .container {
+        height: 64px;
+        line-height: 64px;
+        text-align: center;
+        position: relative;
+      }
+      @media (max-width: 480px) {
+        .top-nav > .container {
+          height: 32px;
+          line-height: 32px;
+          margin-top: 8px;
+        }
+        .top-nav {
+          height: 48px;
+          padding: 8px 0;
+          border-bottom: solid 1px rgba(85, 102, 119, 0.3);
+          margin-bottom: 8px;
+        }
+      }
+      .top-nav > .container {
+        padding-left: 16px;
+        padding-right: 16px;
+        max-width: 1232px;
+        margin: 0 auto;
+      }
+      @media (max-width: 480px) {
+        .top-nav > .container {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+      }
+      .top-nav > .container {
+        display: flex;
+        align-items: center;
+        position: relative;
+      }
+      .top-nav > .container > .left {
+        flex: 0 0 auto;
+        line-height: 32px;
+      }
+      .top-nav > .container > .brand {
+        flex: 1 1 auto;
+      }
+      .top-nav > .container > .actions {
+        flex: 0 0 auto;
+        display: flex;
+      }
+      .top-nav > .container > .brand {
+        font-size: 11px;
+        display: inline-block;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        text-decoration: none;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .top-nav > .container > .brand {
+          font-size: calc(11px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .top-nav > .container > .brand {
+          font-size: calc(12px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .top-nav > .container > .brand {
+          font-size: 12px;
+        }
+      }
+      .top-nav > .container > .brand,
+      .top-nav > .container > .brand:visited {
+        color: #345;
+      }
+      .top-nav > .container > .brand:hover {
+        color: #745fb5;
+      }
+      @media (max-width: 480px) {
+        .top-nav > .container > .brand {
+          display: none;
+        }
+        .top-nav > .container > .actions {
+          margin-left: auto;
+        }
+      }
+      @media (min-width: 481px) {
+        .top-nav > .container > .actions {
+          position: absolute;
+          right: 16px;
+          top: 16px;
+        }
+      }
+      @media (min-width: 481px) and (max-width: 480px) {
+        .top-nav > .container > .actions {
+          right: 16px;
+        }
+      }
+      @media (min-width: 481px) {
+        .top-nav > .container > .left {
+          position: absolute;
+          left: 16px;
+          top: 16px;
+        }
+      }
+      @media (min-width: 481px) and (max-width: 480px) {
+        .top-nav > .container > .left {
+          left: 16px;
+        }
+      }
+      @media (min-width: 1232px) {
+        .top-nav > .container > .left > .home {
+          position: relative;
+          left: -16px;
+        }
+      }
+      .autocomplete {
+        background: #fff;
+        z-index: 1000;
+        font: 14px/22px -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+          Helvetica Neue, Arial, sans-serif;
+        overflow: auto;
+        box-sizing: border-box;
+        border: 1px solid rgba(50, 50, 50, 0.6);
+      }
+      .autocomplete * {
+        font: inherit;
+      }
+      .autocomplete > div {
+        padding: 0 4px;
+      }
+      .autocomplete .group {
+        background: #eee;
+      }
+      .autocomplete > div:hover:not(.group),
+      .autocomplete > div.selected {
+        background: #81ca91;
+        cursor: pointer;
+      }
+      .search-box {
+        background: #fff;
+        box-shadow: 0 6px 8px #55667708, 0 1px 1px #5676;
+        border-radius: 4px;
+        display: flex;
+        height: 64px;
+        align-items: center;
+        cursor: text;
+      }
+      .search-box:focus-within {
+        box-shadow: inset 0 0 0 1px #14af83, 0 0 0 3px #14af831a;
+      }
+      .search-box > input {
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-size: 17px;
+        height: 64px;
+        background: transparent;
+        border: 0;
+        flex: 1 1 auto;
+        padding: 16px 16px 16px 0;
+        font-weight: 700;
+        color: #111;
+        min-width: 48px;
+        cursor: text;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .search-box > input {
+          font-size: calc(17px + 2 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .search-box > input {
+          font-size: calc(19px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .search-box > input {
+          font-size: 19px;
+        }
+      }
+      .search-box > input::-moz-placeholder {
+        font-weight: 400;
+        color: #567;
+      }
+      .search-box > input::placeholder {
+        font-weight: 400;
+        color: #567;
+      }
+      .search-box > input:focus {
+        outline: 0;
+      }
+      .search-box > .prefix {
+        font-size: 13px;
+        display: block;
+        color: #55667780;
+        font-weight: 400;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+        line-height: 1.5em;
+        padding: 2px 8px;
+        border-radius: 3px;
+        background: #fafafc80;
+        margin: 0 0 0 16px;
+        box-shadow: 0 1px 1px #55667740;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .search-box > .prefix {
+          font-size: calc(13px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .search-box > .prefix {
+          font-size: calc(14px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .search-box > .prefix {
+          font-size: 14px;
+        }
+      }
+      .search-box > .sep {
+        color: #55667780;
+        font-size: 17px;
+        margin: 0 8px;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .search-box > .sep {
+          font-size: calc(17px + 2 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .search-box > .sep {
+          font-size: calc(19px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .search-box > .sep {
+          font-size: 19px;
+        }
+      }
+      @media (max-width: 768px) {
+        .search-box > .prefix,
+        .search-box > .sep {
+          display: none;
+        }
+        .search-box > input {
+          padding-left: 16px;
+        }
+      }
+      .search-box:before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(17%2C17%2C17)%22%20d%3D%22M337.51%20305.372h-17.502l-6.57-5.486c20.79-25.232%2033.92-57.054%2033.92-93.257C347.36%20127.63%20283.897%2064%20205.136%2064%20127.452%2064%2064%20127.632%2064%20206.63s63.452%20142.627%20142.225%20142.627c35.01%200%2067.83-13.167%2092.99-34.008l6.562%205.486v17.55L415.18%20448%20448%20415.086%20337.51%20305.372zm-131.285%200c-54.702%200-98.463-43.887-98.463-98.743%200-54.86%2043.76-98.743%2098.463-98.743%2054.7%200%2098.462%2043.884%2098.462%2098.742%200%2054.855-43.762%2098.742-98.462%2098.742z%22%2F%3E%3C%2Fsvg%3E")
+          center center/32px 32px no-repeat;
+        height: 32px;
+        background-position: center center;
+        flex: 0 0 64px;
+        width: 64px;
+        order: 2;
+      }
+      .search-box.-small {
+        height: 48px;
+      }
+      .search-box.-small > input {
+        height: 48px;
+        padding: 8px 8px 8px 0;
+      }
+      .search-box.-small > .prefix,
+      .search-box.-small > .sep,
+      .search-box.-small > input {
+        font-size: 15px;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .search-box.-small > .prefix,
+        .search-box.-small > .sep,
+        .search-box.-small > input {
+          font-size: calc(15px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .search-box.-small > .prefix,
+        .search-box.-small > .sep,
+        .search-box.-small > input {
+          font-size: calc(16px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .search-box.-small > .prefix,
+        .search-box.-small > .sep,
+        .search-box.-small > input {
+          font-size: 16px;
+        }
+      }
+      .search-box.-small:before {
+        flex: 0 0 48px;
+        width: 48px;
+        line-height: 48px;
+        background-size: 24px 24px;
+        background-position: center center;
+      }
+      .autocomplete {
+        border: none;
+        padding: 0.5rem;
+        padding-top: 0;
+        border-bottom-left-radius: 4px;
+        border-bottom-right-radius: 4px;
+        box-shadow: 0 6px 8px #55667708, 0 1px 1px #5676;
+        transform: translate(-8px, -2px);
+      }
+      .autocomplete > div {
+        padding: 0.5rem;
+        border-radius: 4px;
+      }
+      .autocomplete > div:hover:not(.group) {
+        background: #fafafc;
+      }
+      .autocomplete > div + div:not(.selected) {
+        box-shadow: inset 0 1px #5566772e;
+      }
+      .autocomplete > div.selected,
+      .autocomplete > div.selected:hover {
+        background: #14af83;
+        color: #fff;
+      }
+      .comments-area {
+        margin: 32px 0 16px;
+      }
+      .comments-area > .container {
+        padding-left: 16px;
+        padding-right: 16px;
+        max-width: 1232px;
+        margin: 0 auto;
+      }
+      @media (max-width: 480px) {
+        .comments-area > .container {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+      }
+      .comments-area > .container:before {
+        content: "";
+        display: block;
+        background: linear-gradient(
+          to right,
+          rgba(85, 102, 119, 0.3) 50%,
+          transparent
+        );
+        height: 1px;
+      }
+      .comments-details {
+        margin-bottom: -16px;
+      }
+      .comments-details[open] {
+        margin-bottom: 0;
+      }
+      .comments-details > summary {
+        font-size: 15px;
+        color: #745fb5;
+        padding: 24px 0;
+        white-space: nowrap;
+        cursor: pointer;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .comments-details > summary {
+          font-size: calc(15px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .comments-details > summary {
+          font-size: calc(16px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .comments-details > summary {
+          font-size: 16px;
+        }
+      }
+      .comments-details > summary:hover,
+      .comments-details > summary:hover > .suffix,
+      .comments-details > summary:focus,
+      .comments-details > summary:focus > .suffix {
+        color: #673d85;
+      }
+      .comments-details > summary:hover > .fauxlink,
+      .comments-details > summary:focus > .fauxlink {
+        border-bottom: solid 1px #673d85;
+      }
+      .comments-details > summary > .count {
+        font-weight: 700;
+      }
+      .comments-details > summary > .count:before {
+        display: inline-block;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(116%2C95%2C181)%22%20d%3D%22M391.553%2064H57.607C53.13%2064%2048%2067.745%2048%2072.16v214.216c0%204.413%205.13%208.624%209.607%208.624H115v88.894L205.128%20295h186.425c4.477%200%207.447-4.21%207.447-8.624V72.16c0-4.415-2.97-8.16-7.447-8.16z%22%2F%3E%3Cpath%20fill%3D%22rgb(116%2C95%2C181)%22%20d%3D%22M456.396%20127H424v166.57c0%2015.987-6.915%2026.43-25.152%2026.43H218.096l-38.905%2039h129.69L399%20448v-89h57.396c4.478%200%207.604-4.262%207.604-8.682V136.103c0-4.414-3.126-9.103-7.604-9.103z%22%2F%3E%3C%2Fsvg%3E")
+          center center/24px 24px no-repeat;
+        height: 24px;
+        width: 24px;
+        content: "";
+        vertical-align: middle;
+        color: #745fb5;
+        margin: 0 8px;
+      }
+      .comments-details > summary > .suffix {
+        color: #567;
+      }
+      .comments-details > summary > .fauxlink {
+        margin-left: 4px;
+        border-bottom: solid 1px rgba(116, 95, 181, 0.25);
+      }
+      .comments-section {
+        display: flex;
+      }
+      @media (max-width: 768px) {
+        .comments-section > .comments {
+          flex: 1 0 100%;
+          width: 100%;
+        }
+      }
+      @media (min-width: 769px) {
+        .comments-section > .comments {
+          flex: 0 1 66%;
+          min-width: 300px;
+        }
+      }
+      .home-button {
+        display: inline-block;
+        box-shadow: inset 0 0 0 1px #5566774d;
+        border-radius: 50%;
+      }
+      .home-button,
+      .home-button:visited {
+        color: #567;
+      }
+      .home-button:hover,
+      .home-button:focus {
+        background-color: #745fb5;
+        color: #fff;
+      }
+      .home-button > i:before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(85%2C102%2C119)%22%20d%3D%22M256%20112L96%20240v208h112V320h96v128h112V240L256%20112zm144%20320h-80V304H192v128h-80V247.69l144-115.2%20144%20115.2V432z%22%2F%3E%3Cpath%20fill%3D%22rgb(85%2C102%2C119)%22%20d%3D%22M256%2064l-96%2076.8V96H96v96l-32%2025.498%2011.51%2011.384L256%2084.49l180.49%20144.393L448%20217.498%20256%2064zm-112%2089.6l-32%2025.6V112h32v41.6z%22%2F%3E%3C%2Fsvg%3E")
+          center center/24px 24px no-repeat;
+        height: 48px;
+        line-height: 48px;
+        width: 48px;
+      }
+      .home-button:hover > i:before {
+        background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(255%2C255%2C255)%22%20d%3D%22M256%20112L96%20240v208h112V320h96v128h112V240L256%20112z%22%2F%3E%3Cpath%20fill%3D%22rgb(255%2C255%2C255)%22%20d%3D%22M256%2064l-96%2076.8V96H96v96l-32%2025.498%2011.51%2011.384L256%2084.49l180.49%20144.393L448%20217.498%20256%2064z%22%2F%3E%3C%2Fsvg%3E");
+      }
+      .search-footer {
+        padding-top: 16px;
+        padding-bottom: 16px;
+        background: #f3f5fc;
+        border-top: solid 1px rgba(85, 102, 119, 0.3);
+        border-bottom: solid 1px rgba(85, 102, 119, 0.3);
+      }
+      .search-footer > .container {
+        padding-left: 16px;
+        padding-right: 16px;
+        max-width: 1232px;
+        margin: 0 auto;
+      }
+      @media (max-width: 480px) {
+        .search-footer > .container {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+      }
+      .search-footer-section {
+        display: flex;
+      }
+      .search-footer-section > .search {
+        flex: 0 1 640px;
+      }
+      .search-footer-section > .links {
+        padding-left: 16px;
+        flex: 0 1 auto;
+        margin-left: auto;
+      }
+      @media (max-width: 480px) {
+        .search-footer-section > .links {
+          padding-left: 16px;
+        }
+      }
+      .related-post-item {
+        display: flex;
+        text-align: left;
+        line-height: 1.4;
+      }
+      .related-post-item > a {
+        flex: 1 1 100%;
+        display: block;
+        border-radius: 2px;
+        box-shadow: 0 1px 1px #5566778c;
+        padding: 16px;
+        text-decoration: none;
+      }
+      .related-post-item > a,
+      .related-post-item > a:visited {
+        background: #fff;
+        color: #567;
+      }
+      .related-post-item > a > strong,
+      .related-post-item > a:visited > strong {
+        color: #745fb5;
+      }
+      .related-post-item > a:hover,
+      .related-post-item > a:focus,
+      .related-post-item > a:visited:hover,
+      .related-post-item > a:visited:focus {
+        color: #745fb5;
+      }
+      .related-post-item > a:hover > strong,
+      .related-post-item > a:focus > strong,
+      .related-post-item > a:visited:hover > strong,
+      .related-post-item > a:visited:focus > strong {
+        color: #4f3d85;
+      }
+      .related-post-item:first-of-type > a,
+      .related-post-item:first-of-type > a:visited {
+        background: #745fb5;
+        color: #ffffff80;
+      }
+      .related-post-item:first-of-type > a > strong,
+      .related-post-item:first-of-type > a:visited > strong {
+        color: #fff;
+      }
+      .related-post-item:first-of-type > a:hover,
+      .related-post-item:first-of-type > a:focus,
+      .related-post-item:first-of-type > a:visited:hover,
+      .related-post-item:first-of-type > a:visited:focus {
+        color: #fff;
+      }
+      .related-post-item:first-of-type > a:hover > strong,
+      .related-post-item:first-of-type > a:focus > strong,
+      .related-post-item:first-of-type > a:visited:hover > strong,
+      .related-post-item:first-of-type > a:visited:focus > strong {
+        color: #fff;
+      }
+      .related-post-item:first-of-type > a:hover,
+      .related-post-item:first-of-type > a:focus,
+      .related-post-item:first-of-type > a:visited:hover,
+      .related-post-item:first-of-type > a:visited:focus {
+        background: #5f4aa1;
+      }
+      @media (min-width: 481px) {
+        .related-post-item > a > strong,
+        .related-post-item > a > span {
+          display: block;
+        }
+      }
+      .related-post-item > a > strong {
+        font-size: 15px;
+        font-weight: 400;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .related-post-item > a > strong {
+          font-size: calc(15px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .related-post-item > a > strong {
+          font-size: calc(16px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .related-post-item > a > strong {
+          font-size: 16px;
+        }
+      }
+      .related-post-item > a > span {
+        font-size: 11px;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .related-post-item > a > span {
+          font-size: calc(11px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .related-post-item > a > span {
+          font-size: calc(12px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .related-post-item > a > span {
+          font-size: 12px;
+        }
+      }
+      .push-button {
+        display: inline-block;
+        text-decoration: none;
+        padding: 8px 16px;
+        border-radius: 3px;
+      }
+      .push-button,
+      .push-button:visited {
+        background-color: #745fb5;
+        background: linear-gradient(5deg, #745fb5, #9066b8);
+        color: #fff;
+      }
+      .push-button:hover,
+      .push-button:focus {
+        background: #4f3d85;
+        box-shadow: none;
+        color: #fff;
+      }
+      .push-button.-dark,
+      .push-button.-dark:visited {
+        background: #4f3d85;
+        color: #fff;
+      }
+      .push-button.-dark:hover,
+      .push-button.-dark:focus {
+        background: #3e3069;
+        color: #fff;
+      }
+      .related-posts-area {
+        padding-top: 16px;
+        padding-bottom: 16px;
+        background: #f3f5fc;
+      }
+      .related-posts-area > .container {
+        padding-left: 16px;
+        padding-right: 16px;
+        max-width: 1232px;
+        margin: 0 auto;
+      }
+      @media (max-width: 480px) {
+        .related-posts-area > .container {
+          padding-left: 16px;
+          padding-right: 16px;
+        }
+      }
+      @media (min-width: 481px) {
+        .related-posts-area {
+          padding-top: 64px;
+          padding-bottom: 64px;
+        }
+      }
+      .related-posts-callout {
+        display: flex;
+        text-decoration: none;
+        background: linear-gradient(5deg, #745fb5, #9066b8);
+        padding: 32px;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        border-radius: 2px;
+        box-shadow: 0 1px 1px #5566778c;
+        text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+      }
+      .related-posts-callout,
+      .related-posts-callout:visited {
+        color: #fff;
+      }
+      .related-posts-callout:hover,
+      .related-posts-callout:focus {
+        background: #5f4aa1;
+      }
+      .related-posts-callout > .text {
+        margin: auto;
+        text-align: center;
+      }
+      .related-posts-callout > .text > .icon {
+        margin-bottom: 16px;
+        display: block;
+      }
+      .related-posts-callout > .text > .icon:before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(183%2C150%2C207)%22%20d%3D%22M352%20128.4L319.7%2096%20160%20256l159.7%20160%2032.3-32.4L224.7%20256z%22%2F%3E%3C%2Fsvg%3E")
+          center center/48px 48px no-repeat;
+        height: 64px;
+        width: 64px;
+        border: solid 2px #b796cf;
+        border-radius: 50%;
+        text-indent: -2px;
+        text-shadow: none;
+      }
+      .related-posts-callout > .text > .description {
+        font-size: 15px;
+        line-height: 1.4;
+        font-weight: 300;
+        display: block;
+        margin-bottom: 16px;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .related-posts-callout > .text > .description {
+          font-size: calc(15px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .related-posts-callout > .text > .description {
+          font-size: calc(16px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .related-posts-callout > .text > .description {
+          font-size: 16px;
+        }
+      }
+      .related-posts-group > h3 {
+        font-size: 15px;
+        color: #745fb5;
+        margin: 0 0 16px;
+        padding: 0 0 16px;
+        border-bottom: solid 1px rgba(85, 102, 119, 0.3);
+        line-height: 1.2;
+        font-weight: 400;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .related-posts-group > h3 {
+          font-size: calc(15px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .related-posts-group > h3 {
+          font-size: calc(16px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .related-posts-group > h3 {
+          font-size: 16px;
+        }
+      }
+      .related-posts-section {
+        display: flex;
+        margin-left: -16px;
+        margin-right: -16px;
+      }
+      @media (max-width: 1264px) {
+        .related-posts-section {
+          margin-left: -8px;
+          margin-right: -8px;
+        }
+      }
+      .related-posts-section > .callout,
+      .related-posts-section > .group {
+        margin: 0 16px;
+      }
+      @media (max-width: 1264px) {
+        .related-posts-section > .callout,
+        .related-posts-section > .group {
+          margin-left: 8px;
+          margin-right: 8px;
+        }
+      }
+      .related-posts-section > .callout {
+        flex: 1 1 33%;
+      }
+      .related-posts-section > .group {
+        flex: 1 1 50%;
+      }
+      .related-posts-section > .callout {
+        display: flex;
+      }
+      .related-posts-section > .callout > * {
+        flex: 1 0 100%;
+      }
+      @media (max-width: 480px) {
+        .related-posts-section {
+          flex-wrap: wrap;
+        }
+        .related-posts-section > .callout,
+        .related-posts-section > .group {
+          margin-top: 16px;
+          margin-bottom: 16px;
+          flex: 1 1 100%;
+        }
+      }
+      @media (max-width: 480px) and (max-width: 1264px) {
+        .related-posts-section > .callout,
+        .related-posts-section > .group {
+          margin-top: 8px;
+          margin-bottom: 8px;
+        }
+      }
+      @media (min-width: 481px) and (max-width: 768px) {
+        .related-posts-section {
+          flex-wrap: wrap;
+        }
+        .related-posts-section > .callout,
+        .related-posts-section > .group {
+          margin-top: 16px;
+          margin-bottom: 16px;
+          flex: 1 1 100%;
+        }
+      }
+      @media (min-width: 481px) and (max-width: 768px) and (max-width: 1264px) {
+        .related-posts-section > .callout,
+        .related-posts-section > .group {
+          margin-top: 8px;
+          margin-bottom: 8px;
+        }
+      }
+      @media (min-width: 481px) and (max-width: 768px) {
+        .related-posts-section > .group {
+          flex: 1 1 40%;
+        }
+      }
+      .related-post-list,
+      .related-post-list > li {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+      .related-post-list {
+        display: flex;
+        margin: -4px;
+        flex-wrap: wrap;
+      }
+      @media (max-width: 768px) {
+        .related-post-list {
+          flex-wrap: wrap;
+        }
+      }
+      .related-post-list > .item {
+        flex: 1 1 auto;
+        margin: 4px;
+      }
+      @media (min-width: 481px) {
+        .related-post-list > .item {
+          flex: 1 1 40%;
+        }
+      }
+      .notice-box {
+        margin-bottom: 24px;
+        color: #567;
+      }
+      @media (max-width: 480px) {
+        .notice-box {
+          margin-bottom: 16px;
+        }
+      }
+      .notice-box:before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(124%2C143%2C162)%22%20d%3D%22M256%2048C141.2%2048%2048%20141.2%2048%20256s93.2%20208%20208%20208%20208-93.2%20208-208S370.8%2048%20256%2048zm21%20312h-42V235h42v125zm0-166h-42v-42h42v42z%22%2F%3E%3C%2Fsvg%3E")
+          center center/24px 24px no-repeat;
+        height: 24px;
+        width: 24px;
+        margin-right: 8px;
+      }
+      .notice-box > a {
+        text-decoration: none;
+      }
+      .MarkdownBody.MarkdownBody a + em {
+        opacity: 0.5;
+      }
+      .MarkdownBody code {
+        color: #567;
+        font-size: 0.96em;
+      }
+      .MarkdownBody pre,
+      .MarkdownBody code {
+        font-family: cousine, SFMono-Regular, Consolas, Menlo, Liberation Mono,
+          Ubuntu Mono, Courier, monospace;
+      }
+      .MarkdownBody pre.-box-chars {
+        line-height: 1.32;
+      }
+      .MarkdownBody pre.-figlet {
+        line-height: 1;
+        font-size: 11px;
+      }
+      .MarkdownBody pre {
+        box-shadow: none;
+        border-left: 0;
+        overflow: hidden;
+        overflow-x: auto;
+        background: #fff;
+        font-size: 0.96em;
+        line-height: 1.5;
+      }
+      .MarkdownBody pre.-wrap {
+        white-space: pre-wrap;
+      }
+      .MarkdownBody pre > code {
+        color: #111;
+        max-height: auto;
+        padding: 0;
+        background: transparent;
+        overflow: visible;
+        font-size: 1em;
+      }
+      .MarkdownBody .line-highlight {
+        transform: translate3d(0, 2px, 0);
+        background: linear-gradient(
+          to right,
+          rgba(20, 175, 131, 0.05) 25%,
+          transparent
+        );
+      }
+      .MarkdownBody .line-highlight[data-end] {
+        margin-top: 0;
+      }
+      .MarkdownBody .line-highlight:before,
+      .MarkdownBody .line-highlight:after {
+        display: none;
+      }
+      .MarkdownBody pre.-setup,
+      .MarkdownBody p.-setup,
+      .MarkdownBody ul.-setup,
+      .MarkdownBody p.-crosslink {
+        background: #f3f5fc;
+      }
+      .token.tag,
+      .token.keyword {
+        color: #26648e;
+      }
+      .token.tag {
+        color: #1d406e;
+      }
+      .token.value,
+      .token.string,
+      .token.number,
+      .token.attr-value,
+      .token.boolean,
+      .token.regex {
+        color: #14af83;
+      }
+      .token.function,
+      .token.attr-name {
+        color: #2e90ae;
+      }
+      .token.punctuation,
+      .token.operator {
+        color: #669;
+      }
+      .token.comment {
+        color: #569;
+      }
+      .MarkdownBody h2 {
+        margin: 0 0 24px;
+        padding: 0;
+        position: relative;
+        font-size: 30px;
+        line-height: 1.2;
+        font-weight: 200;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+      }
+      @media (max-width: 768px) {
+        .MarkdownBody h2 {
+          margin-bottom: 8px;
+          margin-top: 32px;
+        }
+      }
+      @media (max-width: 480px) {
+        .MarkdownBody h2 {
+          margin-bottom: 8px;
+          margin-top: 32px;
+        }
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .MarkdownBody h2 {
+          font-size: calc(30px + 4 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .MarkdownBody h2 {
+          font-size: calc(34px + 2 * (100vw - 768px) / 512);
+        }
+      }
+      @media (min-width: 1280px) {
+        .MarkdownBody h2 {
+          font-size: 36px;
+        }
+      }
+      .MarkdownBody h3 {
+        margin: 0 0 16px;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        font-size: 17px;
+        font-weight: 400;
+        color: #745fb5;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .MarkdownBody h3 {
+          font-size: calc(17px + 2 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .MarkdownBody h3 {
+          font-size: calc(19px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .MarkdownBody h3 {
+          font-size: 19px;
+        }
+      }
+      .MarkdownBody a,
+      .MarkdownBody a:visited {
+        color: #26648e;
+        text-decoration: none;
+      }
+      .MarkdownBody a:hover {
+        text-decoration: underline;
+      }
+      .MarkdownBody em {
+        font-style: normal;
+        color: #567;
+      }
+      .MarkdownBody iframe {
+        border: 0;
+        margin: 0;
+        width: 100%;
+      }
+      .MarkdownBody.MarkdownBody img {
+        max-width: 100%;
+      }
+      .MarkdownBody.MarkdownBody p.-crosslink > a {
+        display: block;
+        text-decoration: none;
+        color: #745fb5;
+        border-bottom: 0;
+        box-shadow: none;
+        margin: -16px;
+        padding: 16px;
+      }
+      .MarkdownBody.MarkdownBody p.-crosslink > a:visited {
+        color: #745fb5;
+      }
+      .MarkdownBody.MarkdownBody p.-crosslink > a:before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(255%2C255%2C255)%22%20d%3D%22M85%20277.375h259.704L225.002%20397.077%20256%20427l171-171L256%2085l-29.922%2029.924%20118.626%20119.7H85v42.75z%22%2F%3E%3C%2Fsvg%3E")
+          center center/16px 16px no-repeat;
+        margin-right: 16px;
+        width: 32px;
+        height: 32px;
+        line-height: 32px;
+        border-radius: 50%;
+      }
+      .MarkdownBody.MarkdownBody p.-crosslink > a:before,
+      .MarkdownBody.MarkdownBody p.-crosslink > a:visited:before {
+        background-color: #745fb5;
+        color: #fff;
+      }
+      .MarkdownBody.MarkdownBody p.-crosslink > a:hover,
+      .MarkdownBody.MarkdownBody p.-crosslink > a:focus {
+        color: #673d85;
+      }
+      .MarkdownBody.MarkdownBody p.-crosslink > a:hover:before,
+      .MarkdownBody.MarkdownBody p.-crosslink > a:focus:before {
+        background-color: #673d85;
+      }
+      .MarkdownBody table {
+        width: 100%;
+      }
+      .MarkdownBody table tr + tr {
+        border-top: solid 1px rgba(85, 102, 119, 0.18);
+      }
+      .MarkdownBody table tbody + tbody {
+        border-top: solid 1px rgba(85, 102, 119, 0.3);
+      }
+      .MarkdownBody table td,
+      .MarkdownBody table th {
+        padding: 8px 16px;
+        vertical-align: top;
+        text-align: left;
+      }
+      .MarkdownBody table td:first-child {
+        white-space: nowrap;
+      }
+      .MarkdownBody table td > code {
+        font-size: 0.96em;
+      }
+      .MarkdownBody table td:first-child > code {
+        color: #35a;
+      }
+      .MarkdownBody table a,
+      .MarkdownBody table a:visited {
+        color: #35a;
+        text-decoration: none;
+      }
+      .MarkdownBody table td:first-child > code ~ em {
+        font-size: 11px;
+        font-style: normal;
+        color: #567;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .MarkdownBody table td:first-child > code ~ em {
+          font-size: calc(11px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .MarkdownBody table td:first-child > code ~ em {
+          font-size: calc(12px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .MarkdownBody table td:first-child > code ~ em {
+          font-size: 12px;
+        }
+      }
+      .MarkdownBody table thead {
+        display: none;
+      }
+      .MarkdownBody table thead th {
+        font-weight: 400;
+        color: #745fb5;
+      }
+      .MarkdownBody table.-shortcuts td:first-child > code {
+        font-size: 1rem;
+        padding: 5px 6px 5px 8px;
+        background: #f3f5fc;
+        border-radius: 3px;
+        margin-right: 2px;
+        color: #345;
+      }
+      .MarkdownBody table.-shortcuts-right td:last-child > code {
+        font-size: 1rem;
+        padding: 5px 6px 5px 8px;
+        background: #f3f5fc;
+        border-radius: 3px;
+        margin-right: 2px;
+        color: #345;
+      }
+      .MarkdownBody table.-left-align tr th,
+      .MarkdownBody table.-left-align tr td,
+      .MarkdownBody table.-left-align tr td:last-child {
+        text-align: left;
+      }
+      .MarkdownBody table.-headers thead {
+        display: table-header-group;
+        border-bottom: solid 1px rgba(85, 102, 119, 0.3);
+      }
+      .MarkdownBody table.-key-values tbody tr td + td code {
+        display: block;
+        text-align: left;
+      }
+      .MarkdownBody table.-css-breakdown tr th,
+      .MarkdownBody table.-css-breakdown tr td,
+      .MarkdownBody table.-css-breakdown tr td:last-child {
+        text-align: left;
+      }
+      .MarkdownBody table.-css-breakdown tr td {
+        font-size: 15px;
+        white-space: nowrap;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .MarkdownBody table.-css-breakdown tr td {
+          font-size: calc(15px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .MarkdownBody table.-css-breakdown tr td {
+          font-size: calc(16px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .MarkdownBody table.-css-breakdown tr td {
+          font-size: 16px;
+        }
+      }
+      .MarkdownBody table.-css-breakdown tr td:not(:last-child) {
+        padding-right: 4px;
+      }
+      .MarkdownBody table.-css-breakdown tr td:not(:first-child) {
+        padding-left: 4px;
+      }
+      .MarkdownBody table.-css-breakdown tr:last-child {
+        background: #f3f5fc;
+      }
+      .MarkdownBody table.-css-breakdown tr:last-child td {
+        font-size: 11px;
+        color: #567;
+        white-space: auto;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .MarkdownBody table.-css-breakdown tr:last-child td {
+          font-size: calc(11px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .MarkdownBody table.-css-breakdown tr:last-child td {
+          font-size: calc(12px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .MarkdownBody table.-css-breakdown tr:last-child td {
+          font-size: 12px;
+        }
+      }
+      .MarkdownBody table.-bold-first tr > td:first-child {
+        font-weight: 700;
+      }
+      .MarkdownBody table.-no-wrap td,
+      .MarkdownBody table.-no-wrap th {
+        white-space: nowrap;
+      }
+      .MarkdownBody table.-mute-em td em,
+      .MarkdownBody table.-mute-em th em {
+        opacity: 0.5;
+      }
+      .MarkdownBody table.-mute-em td em > code,
+      .MarkdownBody table.-mute-em th em > code {
+        margin-right: 0.5em;
+      }
+      .MarkdownBody table tr.separator > td {
+        padding: 0;
+        height: 4px;
+        background: #5566772e;
+        box-shadow: inset 0 1px #5566774d, inset 0 2px 4px #5566772e;
+      }
+      .MarkdownBody ul.-six-column {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .MarkdownBody ul.-six-column > li {
+        flex: 0 0 16.6666666667%;
+      }
+      @media (max-width: 480px) {
+        .MarkdownBody ul.-six-column > li {
+          flex: 0 0 50%;
+        }
+      }
+      @media (max-width: 768px) {
+        .MarkdownBody ul.-six-column > li {
+          flex: 0 0 25%;
+        }
+      }
+      .MarkdownBody ul.-four-column {
+        display: flex;
+        flex-wrap: wrap;
+      }
+      .MarkdownBody ul.-four-column > li {
+        flex: 0 0 25%;
+      }
+      @media (max-width: 480px) {
+        .MarkdownBody ul.-four-column > li {
+          flex: 0 0 50%;
+        }
+      }
+      @media (max-width: 768px) {
+        .MarkdownBody ul.-four-column > li {
+          flex: 0 0 33.3333333333%;
+        }
+      }
+      .h2-section:first-child > h2 {
+        display: none;
+      }
+      @media (min-width: 768px) {
+        .h2-section {
+          margin-top: 4rem;
+        }
+        .h2-section:first-of-type {
+          margin-top: 0;
+        }
+      }
+      .h2-section h2 {
+        font-family: Manrope, ui-sans-serif, system-ui, sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol,
+          "Noto Color Emoji";
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        font-size: 1.875rem;
+        line-height: 2.25rem;
+        --tw-text-opacity: 1;
+        color: rgb(9 9 11 / var(--tw-text-opacity));
+      }
+      .h2-section h2:target {
+        --tw-text-opacity: 1;
+        color: rgb(111 107 183 / var(--tw-text-opacity));
+      }
+      .h2-section h2 {
+        scroll-margin-top: 1.5rem;
+      }
+      a.local-anchor {
+        margin-left: 0.5rem;
+        font-size: 1.5rem;
+        line-height: 2rem;
+        --tw-text-opacity: 1;
+        color: rgb(135 132 195 / var(--tw-text-opacity));
+        opacity: 0;
+      }
+      a.local-anchor:hover {
+        opacity: 1;
+      }
+      a.local-anchor:focus {
+        opacity: 1;
+      }
+      a.local-anchor:hover {
+        text-decoration-line: none;
+      }
+      .h2-section h2:hover a.local-anchor {
+        opacity: 1;
+      }
+      .h3-section > .body {
+        --tw-bg-opacity: 1;
+        background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+        --tw-shadow: 0 0 0 1px rgb(0 0 80 / 0.1), 0 1px 1px rgb(0 0 80 / 0.1),
+          0 1.5px 3px -2px rgb(0 0 80 / 0.3), 0 4px 6px rgb(0 0 80 / 0.04),
+          0 8px 12px -1px rgb(0 0 80 / 0.03);
+        --tw-shadow-colored: 0 0 0 1px var(--tw-shadow-color),
+          0 1px 1px var(--tw-shadow-color),
+          0 1.5px 3px -2px var(--tw-shadow-color),
+          0 4px 6px var(--tw-shadow-color),
+          0 8px 12px -1px var(--tw-shadow-color);
+        box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000),
+          var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+        overflow-x: auto;
+        border-radius: 0.375rem;
+      }
+      .h3-section > .body > *:first-child {
+        border-top-left-radius: 0.375rem;
+        border-top-right-radius: 0.375rem;
+      }
+      .h3-section > .body > *:last-child {
+        border-bottom-right-radius: 0.375rem;
+        border-bottom-left-radius: 0.375rem;
+      }
+      .h3-section > .body > pre {
+        margin: 0;
+        padding: 1rem;
+      }
+      .h3-section > h3 {
+        border-top-width: 2px;
+        --tw-border-opacity: 1;
+        border-top-color: rgb(135 132 195 / var(--tw-border-opacity));
+        --tw-text-opacity: 1;
+        color: rgb(49 47 96 / var(--tw-text-opacity));
+        font-size: 1.25rem;
+        line-height: 1.75rem;
+        padding-top: 1rem;
+        font-family: Manrope, ui-sans-serif, system-ui, sans-serif,
+          "Apple Color Emoji", "Segoe UI Emoji", Segoe UI Symbol,
+          "Noto Color Emoji";
+        font-weight: 800;
+        letter-spacing: -0.02em;
+        margin-top: 0;
+        margin-bottom: 1rem;
+        overflow: hidden;
+        white-space: nowrap;
+      }
+      .h3-section > .body > ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+      }
+      .h3-section > .body > ul > li {
+        padding: 8px 8px 8px 36px;
+        position: relative;
+      }
+      .h3-section > .body > ul > li > p {
+        margin: 0;
+        padding: 0;
+      }
+      .h3-section > .body > ul > li:before {
+        content: "";
+        position: absolute;
+        display: inline-block;
+        width: 4px;
+        height: 4px;
+        background: #567;
+        border-radius: 50%;
+        left: 16px;
+        top: 18px;
+      }
+      .h3-section > .body > ul > li + li {
+        border-top: solid 1px rgba(85, 102, 119, 0.18);
+      }
+      .h3-section > .body > p {
+        padding: 16px;
+        margin: 0;
+      }
+      .h3-section > .body > h4 {
+        font-size: 11px;
+        margin: 0;
+        padding: 4px 16px;
+        font-weight: 400;
+        background: #f3f5fc;
+        color: #567;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .h3-section > .body > h4 {
+          font-size: calc(11px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .h3-section > .body > h4 {
+          font-size: calc(12px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .h3-section > .body > h4 {
+          font-size: 12px;
+        }
+      }
+      .h3-section > .body > h4 + * {
+        border-top: solid 1px rgba(85, 102, 119, 0.18);
+      }
+      .h3-section > .body > p,
+      .h3-section > .body :not(li) > p {
+        background: #f3f5fc;
+        color: #345;
+      }
+      .h3-section > .body > p a,
+      .h3-section > .body > p a:visited,
+      .h3-section > .body :not(li) > p a,
+      .h3-section > .body :not(li) > p a:visited {
+        color: #345;
+        text-decoration: none;
+        border-bottom: solid 1px rgba(85, 102, 119, 0.18);
+      }
+      .h3-section > .body > p a:hover,
+      .h3-section > .body :not(li) > p a:hover {
+        color: #26648e;
+      }
+      .h3-section > .body > *:not(:first-child) {
+        border-top: solid 1px rgba(85, 102, 119, 0.18);
+      }
+      .h3-section > .body > p + p,
+      .h3-section > .body > p + p:not(:first-child) {
+        margin-top: -1.5em;
+        border-top: 0;
+      }
+      ul.-also-see.-also-see.-also-see {
+        display: flex;
+        flex-wrap: wrap;
+        background: #f3f5fc;
+      }
+      ul.-also-see.-also-see.-also-see > li {
+        flex: 1 0 20%;
+        padding: 24px;
+        border-top: solid 1px rgba(85, 102, 119, 0.3);
+      }
+      ul.-also-see.-also-see.-also-see > li + li {
+        border-left: solid 1px rgba(85, 102, 119, 0.3);
+      }
+      ul.-also-see.-also-see.-also-see,
+      ul.-also-see.-also-see.-also-see > li {
+        list-style-type: none;
+      }
+      ul.-also-see.-also-see.-also-see > li:before {
+        display: none;
+      }
+      ul.-also-see.-also-see.-also-see > li > a {
+        font-size: 15px;
+        display: block;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        ul.-also-see.-also-see.-also-see > li > a {
+          font-size: calc(15px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        ul.-also-see.-also-see.-also-see > li > a {
+          font-size: calc(16px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        ul.-also-see.-also-see.-also-see > li > a {
+          font-size: 16px;
+        }
+      }
+      ul.-also-see.-also-see.-also-see > li > em {
+        font-size: 11px;
+        display: block;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        ul.-also-see.-also-see.-also-see > li > em {
+          font-size: calc(11px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        ul.-also-see.-also-see.-also-see > li > em {
+          font-size: calc(12px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        ul.-also-see.-also-see.-also-see > li > em {
+          font-size: 12px;
+        }
+      }
+      .h3-section.-intro > .body > p {
+        font-size: 15px;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .h3-section.-intro > .body > p {
+          font-size: calc(15px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .h3-section.-intro > .body > p {
+          font-size: calc(16px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .h3-section.-intro > .body > p {
+          font-size: 16px;
+        }
+      }
+      .h3-section.-intro > .body > ul > li {
+        padding-left: 16px;
+        position: relative;
+      }
+      .h3-section.-intro > .body > ul > li:before {
+        display: none;
+      }
+      .h3-section.-intro > .body > ul > li > a {
+        font-size: 15px;
+        display: block;
+        font-weight: 700;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .h3-section.-intro > .body > ul > li > a {
+          font-size: calc(15px + 1 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .h3-section.-intro > .body > ul > li > a {
+          font-size: calc(16px + 0 * (100vw - 768px));
+        }
+      }
+      @media (min-width: 1280px) {
+        .h3-section.-intro > .body > ul > li > a {
+          font-size: 16px;
+        }
+      }
+      .h3-section.-intro > .body > ul > li > a:before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(150%2C155%2C207)%22%20d%3D%22M85%20277.375h259.704L225.002%20397.077%20256%20427l171-171L256%2085l-29.922%2029.924%20118.626%20119.7H85v42.75z%22%2F%3E%3C%2Fsvg%3E")
+          center center/24px 24px no-repeat;
+        height: 24px;
+        width: 24px;
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        margin-top: -12px;
+      }
+      .h3-section.-intro > .body > ul > li:hover > a:before {
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(116%2C95%2C181)%22%20d%3D%22M85%20277.375h259.704L225.002%20397.077%20256%20427l171-171L256%2085l-29.922%2029.924%20118.626%20119.7H85v42.75z%22%2F%3E%3C%2Fsvg%3E")
+          center center/24px 24px no-repeat;
+        height: 24px;
+        width: 24px;
+      }
+      .h3-section.-intro > .body > ul > li > a:after {
+        content: "";
+        position: absolute;
+        display: block;
+        inset: 0;
+      }
+      .h3-section.-intro > .body > ul > li em {
+        color: #567;
+      }
+      .h3-section-list {
+        margin-top: 0;
+        margin-bottom: 0;
+        gap: 1.5rem;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      @media (min-width: 1024px) {
+        .h3-section-list {
+          gap: 2rem;
+        }
+      }
+      .h3-section {
+        width: 100%;
+        -moz-column-break-inside: avoid;
+        break-inside: avoid;
+        padding-bottom: 3rem;
+        padding-top: 0;
+      }
+      @media (min-width: 769px) {
+        .h3-section-list,
+        .h3-section-list.-two-column {
+          -moz-columns: 2;
+          columns: 2;
+        }
+      }
+      @media (min-width: 769px) {
+        .h3-section-list.-one-column {
+          -moz-columns: 1;
+          columns: 1;
+        }
+      }
+      .h3-section-list.-one-column > .h3-section + .h3-section {
+        margin-top: 16px;
+      }
+      @media (min-width: 769px) {
+        .h3-section-list.-three-column {
+          -moz-columns: 2;
+          columns: 2;
+        }
+      }
+      @media (min-width: 961px) {
+        .h3-section-list.-three-column {
+          -moz-columns: 3;
+          columns: 3;
+        }
+      }
+      @media (min-width: 769px) {
+        .h3-section-list.-left-reference {
+          -moz-columns: 3;
+          columns: 3;
+        }
+      }
+      .h3-section-list.-left-reference > .h3-section + .h3-section {
+        width: 200%;
+      }
+      .hint-mark {
+        cursor: help;
+      }
+      .hint-mark > i:before {
+        content: "?";
+        font-size: 11px;
+        font-weight: 700;
+        font-style: normal;
+      }
+      .hint-mark > i {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        line-height: 12px;
+        text-align: center;
+        border-radius: 50%;
+        background: #3ac1cb4d;
+        color: #567;
+        margin: 0 0.4em;
+      }
+      .main-heading {
+        margin: 64px 0 24px;
+        padding: 0;
+        position: relative;
+      }
+      @media (max-width: 768px) {
+        .main-heading {
+          margin-bottom: 8px;
+          margin-top: 32px;
+        }
+      }
+      @media (max-width: 480px) {
+        .main-heading {
+          margin-bottom: 8px;
+          margin-top: 32px;
+        }
+      }
+      .main-heading {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      .main-heading > h1 {
+        font-size: 40px;
+        line-height: 1.2;
+        font-weight: 200;
+        font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+          Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+        margin: 0;
+        text-align: center;
+      }
+      @media (min-width: 480px) and (max-width: 768px) {
+        .main-heading > h1 {
+          font-size: calc(40px + 6 * (100vw - 480px) / 288);
+        }
+      }
+      @media (min-width: 768px) and (max-width: 1280px) {
+        .main-heading > h1 {
+          font-size: calc(46px + 3 * (100vw - 768px) / 512);
+        }
+      }
+      @media (min-width: 1280px) {
+        .main-heading > h1 {
+          font-size: 49px;
+        }
+      }
+      .main-heading > h1 > em {
+        font-style: normal;
+        color: #89a;
+      }
+      .main-heading > .pubbox {
+        margin-top: 16px;
+        text-align: center;
+      }
+      @media (min-width: 769px) {
+        .main-heading > .pubbox {
+          margin-top: 24px;
+          margin-bottom: 24px;
+        }
+        .UseCompactHeader .main-heading {
+          display: flex;
+          align-items: flex-end;
+          margin-bottom: 32px;
+        }
+        .UseCompactHeader .main-heading > h1 {
+          flex: 1 0 auto;
+          text-align: left;
+          padding-right: 32px;
+        }
+        .UseCompactHeader .main-heading > .pubbox {
+          flex: 0 0 auto;
+          margin-top: 0;
+          margin-bottom: 0;
+        }
+      }
+      .PreviewMode .main-heading {
+        margin-top: 16px;
+      }
+      .pre-footer {
+        padding: 24px 32px 48px;
+        text-align: center;
+      }
+      .pre-footer > .icon:before {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        background: url("data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22512%22%20height%3D%22512%22%20viewBox%3D%220%200%20512%20512%22%3E%3Cpath%20fill%3D%22rgb(85%2C102%2C119)%22%20d%3D%22M302.7%2064L143%20288h95.8l-29.5%20160L369%20224h-95.8l29.5-160z%22%2F%3E%3C%2Fsvg%3E")
+          center center/32px 32px no-repeat;
+        height: 32px;
+        width: 32px;
+        opacity: 0.25;
+      }
+      .HeadlinePub .carbon-img,
+      .HeadlinePub .carbon-text,
+      .HeadlinePub .carbon-poweredby {
+        text-decoration: none;
+      }
+      .HeadlinePub .carbon-text,
+      .HeadlinePub .carbon-poweredby {
+        padding-top: 4px;
+        padding-bottom: 4px;
+      }
+      .HeadlinePub .carbon-img > img {
+        width: 130px;
+        height: 100px;
+        box-shadow: 0 6px 8px #55667708, 0 1px 1px #5676;
+        border-radius: 3px;
+        background: #5673;
+        color: transparent;
+      }
+      .HeadlinePub .carbon-img:hover img {
+        transform: translate3d(0, -1px, 0);
+        box-shadow: 0 6px 8px #55667708, 0 1px 1px #5676, 0 8px 12px #3ac1cb1a;
+      }
+      .HeadlinePub .carbon-text,
+      .HeadlinePub .carbon-text:visited {
+        color: #345;
+      }
+      .HeadlinePub .carbon-text:after {
+        content: "  ";
+      }
+      .HeadlinePub .carbon-text:hover,
+      .HeadlinePub .carbon-poweredby:hover {
+        color: #26648e;
+      }
+      .HeadlinePub .carbon-poweredby,
+      .HeadlinePub .carbon-poweredby:visited {
+        display: block;
+        margin-top: 8px;
+        white-space: nowrap;
+        color: #567;
+      }
+      .HeadlinePub {
+        position: relative;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      .HeadlinePub #carbonads ~ .placeholder {
+        opacity: 0;
+        transition: opacity 0.25s linear;
+        pointer-events: none;
+      }
+      .HeadlinePub > .placeholder {
+        background-image: linear-gradient(
+          92deg,
+          #5566771a,
+          #5566772b 15%,
+          #5566771a 30%
+        );
+        background-size: 450px 100%;
+        background-repeat: repeat;
+        animation: 2.5s ease-in-out infinite placeholder-swish;
+        border-radius: 3px;
+        position: absolute;
+        display: block;
+      }
+      .HeadlinePub > .placeholder.-one {
+        left: 0;
+        top: 0;
+        width: 130px;
+        height: 100px;
+      }
+      .HeadlinePub > .placeholder.-two,
+      .HeadlinePub > .placeholder.-three,
+      .HeadlinePub > .placeholder.-four {
+        left: 154px;
+        top: 6px;
+        height: 8px;
+        width: 226px;
+      }
+      .HeadlinePub > .placeholder.-three {
+        top: 28px;
+      }
+      .HeadlinePub > .placeholder.-four {
+        top: 50px;
+        width: 63.28px;
+      }
+      .HeadlinePub #carbonads {
+        position: relative;
+        z-index: 1;
+      }
+      .HeadlinePub,
+      .HeadlinePub > div > span {
+        display: block;
+        width: 380px;
+        height: 100px;
+        text-align: left;
+      }
+      .HighlightPubFirstLine .HeadlinePub > div > span:first-line {
+        font-weight: 700;
+      }
+      .HeadlinePub > div > span:after {
+        content: "";
+        display: table;
+        clear: both;
+        zoom: 1;
+      }
+      .HeadlinePub .carbon-img {
+        float: left;
+        margin-right: 24px;
+      }
+      #carbonads {
+        animation: 0.5s ease-out pub-text-enter;
+      }
+      @keyframes placeholder-swish {
+        0% {
+          background-position: -150px 0%;
+        }
+        50% {
+          background-position: 300px 0%;
+        }
+        to {
+          background-position: 300px 0%;
+        }
+      }
+      @keyframes pub-text-enter {
+        0% {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+        to {
+          opacity: 1;
+        }
+      }
+    </style>
+    <script type="module" src="/_astro/hoisted.BZrgkhHw.js"></script>
+    <script type="module" src="/_astro/page.CZ0TFQCk.js"></script>
+    <script>
+      !(function (w, p, f, c) {
+        if (!window.crossOriginIsolated && !navigator.serviceWorker) return;
+        c = w[p] = Object.assign(w[p] || {}, {
+          lib: "/~partytown/",
+          debug: false,
+        });
+        c[f] = (c[f] || []).concat(["dataLayer.push"]);
+      })(window, "partytown", "forward"); /* Partytown 0.8.2 - MIT builder.io */
+      !(function (t, e, n, i, o, r, a, s, d, c, l, p) {
+        function u() {
+          p ||
+            ((p = 1),
+            "/" ==
+              (a = (r.lib || "/~partytown/") + (r.debug ? "debug/" : ""))[0] &&
+              ((d = e.querySelectorAll('script[type="text/partytown"]')),
+              i != t
+                ? i.dispatchEvent(new CustomEvent("pt1", { detail: t }))
+                : ((s = setTimeout(f, 1e4)),
+                  e.addEventListener("pt0", w),
+                  o
+                    ? h(1)
+                    : n.serviceWorker
+                    ? n.serviceWorker
+                        .register(a + (r.swPath || "partytown-sw.js"), {
+                          scope: a,
+                        })
+                        .then(function (t) {
+                          t.active
+                            ? h()
+                            : t.installing &&
+                              t.installing.addEventListener(
+                                "statechange",
+                                function (t) {
+                                  "activated" == t.target.state && h();
+                                }
+                              );
+                        }, console.error)
+                    : f())));
+        }
+        function h(t) {
+          (c = e.createElement(t ? "script" : "iframe")),
+            t ||
+              ((c.style.display = "block"),
+              (c.style.width = "0"),
+              (c.style.height = "0"),
+              (c.style.border = "0"),
+              (c.style.visibility = "hidden"),
+              c.setAttribute("aria-hidden", !0)),
+            (c.src =
+              a +
+              "partytown-" +
+              (t ? "atomics.js?v=0.8.2" : "sandbox-sw.html?" + Date.now())),
+            e.querySelector(r.sandboxParent || "body").appendChild(c);
+        }
+        function f(n, o) {
+          for (
+            w(),
+              i == t &&
+                (r.forward || []).map(function (e) {
+                  delete t[e.split(".")[0]];
+                }),
+              n = 0;
+            n < d.length;
+            n++
+          )
+            ((o = e.createElement("script")).innerHTML = d[n].innerHTML),
+              (o.nonce = r.nonce),
+              e.head.appendChild(o);
+          c && c.parentNode.removeChild(c);
+        }
+        function w() {
+          clearTimeout(s);
+        }
+        (r = t.partytown || {}),
+          i == t &&
+            (r.forward || []).map(function (e) {
+              (l = t),
+                e.split(".").map(function (e, n, i) {
+                  l = l[i[n]] =
+                    n + 1 < i.length
+                      ? "push" == i[n + 1]
+                        ? []
+                        : l[i[n]] || {}
+                      : function () {
+                          (t._ptf = t._ptf || []).push(i, arguments);
+                        };
+                });
+            }),
+          "complete" == e.readyState
+            ? u()
+            : (t.addEventListener("DOMContentLoaded", u),
+              t.addEventListener("load", u));
+      })(window, document, navigator, top, window.crossOriginIsolated);
+      ((d, s) => (
+        (s = d.currentScript),
+        d.addEventListener("astro:before-swap", () => s.remove(), {
+          once: true,
+        })
+      ))(document);
+    </script>
+  </head>
+  <body class="HighlightPubFirstLine">
+    <div class="V2017Sheet__body max-w-content p-6 md:px-8 mx-auto">
+      <header
+        class="MainHeading__root mt-4 md:pt-8 w-full flex flex-col md:flex-row gap-12 items-center md:items-end"
+        role="banner"
+      >
+        <h1
+          class="MainHeading__h1 font-manrope font-extrabold tracking-[-0.02em] text-5xl leading-[1.2] text-zinc-950 text-center md:text-left flex-1"
+        >
+          <span class="MainHeading__title">Xpath</span> <span> cheatsheet</span>
+        </h1>
+      </header>
+      <div class="MainHeading__spacer mt-12"></div>
+      <div class="MainHeading__spacer mt-12"></div>
+      <main
+        class="post-content MarkdownBody"
+        data-js-main-body
+        data-js-anchors
+        role="main"
+      >
+        <section class="h2-section">
+          <h2 id="testing">Testing</h2>
+          <div class="body h3-section-list">
+            <section class="h3-section -intro">
+              <h3 class="-intro" id="xpath-test-bed">Xpath test bed</h3>
+              <div class="body -intro">
+                <p>Test queries in the Xpath test bed:</p>
+
+                <ul>
+                  <li>
+                    <a
+                      href="http://www.whitebeam.org/library/guide/TechNotes/xpathtestbed.rhtm"
+                      >Xpath test bed</a
+                    >
+                    <em>(whitebeam.org)</em>
+                  </li>
+                </ul>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="browser-console">Browser console</h3>
+              <div class="body">
+                <pre
+                  class="language-js"
+                ><code class="language-js"><span class="token function">$x</span><span class="token punctuation">(</span><span class="token string">"//div"</span><span class="token punctuation">)</span>
+</code></pre>
+
+                <p>Works in Firefox and Chrome.</p>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="h2-section">
+          <h2 id="selectors">Selectors</h2>
+          <div class="body h3-section-list">
+            <section class="h3-section">
+              <h3 id="descendant-selectors">Descendant selectors</h3>
+              <div class="body">
+                <table class="xp">
+                  <thead>
+                    <tr>
+                      <th>CSS</th>
+                      <th>Xpath</th>
+                      <th>?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>h1</code></td>
+                      <td><code>//h1</code></td>
+                      <td><a href="#prefixes">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>div p</code></td>
+                      <td><code>//div//p</code></td>
+                      <td><a href="#axes">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>ul > li</code></td>
+                      <td><code>//ul/li</code></td>
+                      <td><a href="#axes">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>ul > li > a</code></td>
+                      <td><code>//ul/li/a</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>div > *</code></td>
+                      <td><code>//div/*</code></td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                  <tbody>
+                    <tr>
+                      <td><code>:root</code></td>
+                      <td><code>/</code></td>
+                      <td><a href="#prefixes">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>:root > body</code></td>
+                      <td><code>/body</code></td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="attribute-selectors">Attribute selectors</h3>
+              <div class="body">
+                <table class="xp">
+                  <thead>
+                    <tr>
+                      <th>CSS</th>
+                      <th>Xpath</th>
+                      <th>?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>#id</code></td>
+                      <td><code>//*[@id="id"]</code></td>
+                      <td><a href="#predicates">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>.class</code></td>
+                      <td>
+                        <code>//*[@class="class"]</code>
+                        <em>…<a href="#class-check">kinda</a></em>
+                      </td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>input[type="submit"]</code></td>
+                      <td><code>//input[@type="submit"]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>a#abc[for="xyz"]</code></td>
+                      <td><code>//a[@id="abc"][@for="xyz"]</code></td>
+                      <td><a href="#chaining-order">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>a[rel]</code></td>
+                      <td><code>//a[@rel]</code></td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                  <tbody>
+                    <tr>
+                      <td><code>a[href^='/']</code></td>
+                      <td><code>//a[starts-with(@href, '/')]</code></td>
+                      <td><a href="#string-functions">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>a[href$='pdf']</code></td>
+                      <td><code>//a[ends-with(@href, '.pdf')]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>a[href*='://']</code></td>
+                      <td><code>//a[contains(@href, '://')]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>a[rel~='help']</code></td>
+                      <td>
+                        <code>//a[contains(@rel, 'help')]</code>
+                        <em>…<a href="#class-check">kinda</a></em>
+                      </td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="order-selectors">Order selectors</h3>
+              <div class="body">
+                <table class="xp">
+                  <thead>
+                    <tr>
+                      <th>CSS</th>
+                      <th>Xpath</th>
+                      <th>?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>ul > li:first-of-type</code></td>
+                      <td><code>//ul/li[1]</code></td>
+                      <td><a href="#indexing">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>ul > li:nth-of-type(2)</code></td>
+                      <td><code>//ul/li[2]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>ul > li:last-of-type</code></td>
+                      <td><code>//ul/li[last()]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>li#id:first-of-type</code></td>
+                      <td><code>//li[1][@id="id"]</code></td>
+                      <td><a href="#chaining-order">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>a:first-child</code></td>
+                      <td><code>//*[1][name()="a"]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>a:last-child</code></td>
+                      <td><code>//*[last()][name()="a"]</code></td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="siblings">Siblings</h3>
+              <div class="body">
+                <table class="xp">
+                  <thead>
+                    <tr>
+                      <th>CSS</th>
+                      <th>Xpath</th>
+                      <th>?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>h1 ~ ul</code></td>
+                      <td><code>//h1/following-sibling::ul</code></td>
+                      <td><a href="#using-axes">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>h1 + ul</code></td>
+                      <td><code>//h1/following-sibling::ul[1]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>h1 ~ #id</code></td>
+                      <td><code>//h1/following-sibling::[@id="id"]</code></td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="jquery">jQuery</h3>
+              <div class="body">
+                <table class="xp">
+                  <thead>
+                    <tr>
+                      <th>CSS</th>
+                      <th>Xpath</th>
+                      <th>?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>$('ul > li').parent()</code></td>
+                      <td><code>//ul/li/..</code></td>
+                      <td><a href="#other-axes">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>$('li').closest('section')</code></td>
+                      <td><code>//li/ancestor-or-self::section</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>$('a').attr('href')</code></td>
+                      <td><code>//a/@href</code></td>
+                      <td><a href="#steps">?</a></td>
+                    </tr>
+                    <tr>
+                      <td><code>$('span').text()</code></td>
+                      <td><code>//span/text()</code></td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="other-things">Other things</h3>
+              <div class="body">
+                <table class="xp">
+                  <thead>
+                    <tr>
+                      <th>CSS</th>
+                      <th>Xpath</th>
+                      <th>?</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>h1:not([id])</code></td>
+                      <td><code>//h1[not(@id)]</code></td>
+                      <td><a href="#boolean-functions">?</a></td>
+                    </tr>
+                    <tr>
+                      <td>Text match</td>
+                      <td><code>//button[text()="Submit"]</code></td>
+                      <td><a href="#operators">?</a></td>
+                    </tr>
+                    <tr>
+                      <td>Text match (substring)</td>
+                      <td><code>//button[contains(text(),"Go")]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td>Arithmetic</td>
+                      <td><code>//product[@price > 2.50]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td>Has children</td>
+                      <td><code>//ul[*]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td>Has children (specific)</td>
+                      <td><code>//ul[li]</code></td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td>Or logic</td>
+                      <td><code>//a[@name or @href]</code></td>
+                      <td><a href="#operators">?</a></td>
+                    </tr>
+                    <tr>
+                      <td>Union (joins results)</td>
+                      <td><code>//a | //div</code></td>
+                      <td><a href="#unions">?</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <style>
+                  /* ensure tables align */
+                  table.xp {
+                    table-layout: fixed;
+                  }
+                  table.xp tr > :nth-child(1) {
+                    width: 35%;
+                  }
+                  table.xp tr > :nth-child(2) {
+                    width: auto;
+                  }
+                  table.xp tr > :nth-child(3) {
+                    width: 10%;
+                    text-align: right;
+                  }
+                </style>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="class-check">Class check</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//div<span class="token punctuation">[</span>contains<span class="token punctuation">(</span>concat<span class="token punctuation">(</span><span class="token string">' '</span>,normalize-space<span class="token punctuation">(</span>@class<span class="token punctuation">)</span>,<span class="token string">' '</span><span class="token punctuation">)</span>,<span class="token string">' foobar '</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+</code></pre>
+
+                <p>
+                  Xpath doesn’t have the “check if part of space-separated list”
+                  operator, so this is the workaround (<a
+                    href="http://pivotallabs.com/xpath-css-class-matching/"
+                    >source</a
+                  >).
+                </p>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="h2-section">
+          <h2 id="expressions">Expressions</h2>
+          <div class="body h3-section-list">
+            <section class="h3-section">
+              <h3 id="steps-and-axes">Steps and axes</h3>
+              <div class="body">
+                <table class="-css-breakdown">
+                  <tbody>
+                    <tr>
+                      <td><code>//</code></td>
+                      <td><code>ul</code></td>
+                      <td><code>/</code></td>
+                      <td><code>a[@id='link']</code></td>
+                    </tr>
+                    <tr>
+                      <td>Axis</td>
+                      <td>Step</td>
+                      <td>Axis</td>
+                      <td>Step</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="prefixes">Prefixes</h3>
+              <div class="body">
+                <table class="-headers">
+                  <thead>
+                    <tr>
+                      <th>Prefix</th>
+                      <th>Example</th>
+                      <th>What</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>//</code></td>
+                      <td><code>//hr[@class='edge']</code></td>
+                      <td>Anywhere</td>
+                    </tr>
+                    <tr>
+                      <td><code>./</code></td>
+                      <td><code>./a</code></td>
+                      <td>Relative</td>
+                    </tr>
+                    <tr>
+                      <td><code>/</code></td>
+                      <td><code>/html/body/div</code></td>
+                      <td>Root</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <p>Begin your expression with any of these.</p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="axes">Axes</h3>
+              <div class="body">
+                <table class="-headers">
+                  <thead>
+                    <tr>
+                      <th>Axis</th>
+                      <th>Example</th>
+                      <th>What</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>/</code></td>
+                      <td><code>//ul/li/a</code></td>
+                      <td>Child</td>
+                    </tr>
+                    <tr>
+                      <td><code>//</code></td>
+                      <td><code>//[@id="list"]//a</code></td>
+                      <td>Descendant</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <p>
+                  Separate your steps with <code>/</code>. Use two
+                  (<code>//</code>) if you don’t want to select direct children.
+                </p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="steps">Steps</h3>
+              <div class="body">
+                <pre class="language-bash"><code class="language-bash">//div
+//div<span class="token punctuation">[</span>@name<span class="token operator">=</span><span class="token string">'box'</span><span class="token punctuation">]</span>
+//<span class="token punctuation">[</span>@id<span class="token operator">=</span><span class="token string">'link'</span><span class="token punctuation">]</span>
+</code></pre>
+
+                <p>
+                  A step may have an element name (<code>div</code>) and
+                  <a href="#predicate">predicates</a> (<code>[...]</code>). Both
+                  are optional. They can also be these other things:
+                </p>
+
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//a/text<span class="token punctuation">(</span><span class="token punctuation">)</span>     <span class="token comment">#=> "Go home"</span>
+//a/@href      <span class="token comment">#=> "index.html"</span>
+//a/*          <span class="token comment">#=> All a's child elements</span>
+</code></pre>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="h2-section">
+          <h2 id="predicates">Predicates</h2>
+          <div class="body h3-section-list">
+            <section class="h3-section">
+              <h3 id="predicates-1">Predicates</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//div<span class="token punctuation">[</span>true<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+//div<span class="token punctuation">[</span>@class<span class="token operator">=</span><span class="token string">"head"</span><span class="token punctuation">]</span>
+//div<span class="token punctuation">[</span>@class<span class="token operator">=</span><span class="token string">"head"</span><span class="token punctuation">]</span><span class="token punctuation">[</span>@id<span class="token operator">=</span><span class="token string">"top"</span><span class="token punctuation">]</span>
+</code></pre>
+
+                <p>
+                  Restricts a nodeset only if some condition is true. They can
+                  be chained.
+                </p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="operators">Operators</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash"><span class="token comment"># Comparison</span>
+//a<span class="token punctuation">[</span>@id <span class="token operator">=</span> <span class="token string">"xyz"</span><span class="token punctuation">]</span>
+//a<span class="token punctuation">[</span>@id <span class="token operator">!=</span> <span class="token string">"xyz"</span><span class="token punctuation">]</span>
+//a<span class="token punctuation">[</span>@price <span class="token operator">></span> <span class="token number">25</span><span class="token punctuation">]</span>
+</code></pre>
+
+                <pre
+                  class="language-bash"
+                ><code class="language-bash"><span class="token comment"># Logic (and/or)</span>
+//div<span class="token punctuation">[</span>@id<span class="token operator">=</span><span class="token string">"head"</span> and position<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">]</span>
+//div<span class="token punctuation">[</span><span class="token punctuation">(</span>x and y<span class="token punctuation">)</span> or not<span class="token punctuation">(</span>z<span class="token punctuation">)</span><span class="token punctuation">]</span>
+</code></pre>
+
+                <p>Use comparison and logic operators to make conditionals.</p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="using-nodes">Using nodes</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash"><span class="token comment"># Use them inside functions</span>
+//ul<span class="token punctuation">[</span>count<span class="token punctuation">(</span>li<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">2</span><span class="token punctuation">]</span>
+//ul<span class="token punctuation">[</span>count<span class="token punctuation">(</span>li<span class="token punctuation">[</span>@class<span class="token operator">=</span><span class="token string">'hide'</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">]</span>
+</code></pre>
+
+                <pre
+                  class="language-bash"
+                ><code class="language-bash"><span class="token comment"># This returns `&#x3C;ul>` that has a `&#x3C;li>` child</span>
+//ul<span class="token punctuation">[</span>li<span class="token punctuation">]</span>
+</code></pre>
+
+                <p>You can use nodes inside predicates.</p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="indexing">Indexing</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//a<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>                  <span class="token comment"># first &#x3C;a></span>
+//a<span class="token punctuation">[</span>last<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>             <span class="token comment"># last &#x3C;a></span>
+//ol/li<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span>              <span class="token comment"># second &#x3C;li></span>
+//ol/li<span class="token punctuation">[</span>position<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">]</span>   <span class="token comment"># same as above</span>
+//ol/li<span class="token punctuation">[</span>position<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">></span><span class="token number">1</span><span class="token punctuation">]</span>   <span class="token comment"># :not(:first-of-type)</span>
+</code></pre>
+
+                <p>
+                  Use <code>[]</code> with a number, or <code>last()</code> or
+                  <code>position()</code>.
+                </p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="chaining-order">Chaining order</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">a<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">[</span>@href<span class="token operator">=</span><span class="token string">'/'</span><span class="token punctuation">]</span>
+a<span class="token punctuation">[</span>@href<span class="token operator">=</span><span class="token string">'/'</span><span class="token punctuation">]</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>
+</code></pre>
+
+                <p>Order is significant, these two are different.</p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="nesting-predicates">Nesting predicates</h3>
+              <div class="body">
+                <pre><code>//section[.//h1[@id='hi']]
+</code></pre>
+
+                <p>
+                  This returns <code>&#x3C;section></code> if it has an
+                  <code>&#x3C;h1></code> descendant with <code>id='hi'</code>.
+                </p>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="h2-section">
+          <h2 id="functions">Functions</h2>
+          <div class="body h3-section-list">
+            <section class="h3-section">
+              <h3 id="node-functions">Node functions</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">name<span class="token punctuation">(</span><span class="token punctuation">)</span>                     <span class="token comment"># //[starts-with(name(), 'h')]</span>
+text<span class="token punctuation">(</span><span class="token punctuation">)</span>                     <span class="token comment"># //button[text()="Submit"]</span>
+                           <span class="token comment"># //button/text()</span>
+lang<span class="token punctuation">(</span>str<span class="token punctuation">)</span>
+namespace-uri<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">count<span class="token punctuation">(</span><span class="token punctuation">)</span>                    <span class="token comment"># //table[count(tr)=1]</span>
+position<span class="token punctuation">(</span><span class="token punctuation">)</span>                 <span class="token comment"># //ol/li[position()=2]</span>
+</code></pre>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="boolean-functions">Boolean functions</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">not<span class="token punctuation">(</span>expr<span class="token punctuation">)</span>                  <span class="token comment"># button[not(starts-with(text(),"Submit"))]</span>
+</code></pre>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="string-functions">String functions</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">contains<span class="token punctuation">(</span><span class="token punctuation">)</span>                 <span class="token comment"># font[contains(@class,"head")]</span>
+starts-with<span class="token punctuation">(</span><span class="token punctuation">)</span>              <span class="token comment"># font[starts-with(@class,"head")]</span>
+ends-with<span class="token punctuation">(</span><span class="token punctuation">)</span>                <span class="token comment"># font[ends-with(@class,"head")]</span>
+</code></pre>
+
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">concat<span class="token punctuation">(</span>x,y<span class="token punctuation">)</span>
+substring<span class="token punctuation">(</span>str, start, len<span class="token punctuation">)</span>
+substring-before<span class="token punctuation">(</span><span class="token string">"01/02"</span>, <span class="token string">"/"</span><span class="token punctuation">)</span>  <span class="token comment">#=> 01</span>
+substring-after<span class="token punctuation">(</span><span class="token string">"01/02"</span>, <span class="token string">"/"</span><span class="token punctuation">)</span>   <span class="token comment">#=> 02</span>
+translate<span class="token punctuation">(</span><span class="token punctuation">)</span>
+normalize-space<span class="token punctuation">(</span><span class="token punctuation">)</span>
+string-length<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="type-conversion">Type conversion</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">string<span class="token punctuation">(</span><span class="token punctuation">)</span>
+number<span class="token punctuation">(</span><span class="token punctuation">)</span>
+boolean<span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="h2-section">
+          <h2 id="axes-1">Axes</h2>
+          <div class="body h3-section-list">
+            <section class="h3-section">
+              <h3 id="using-axes">Using axes</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//ul/li                       <span class="token comment"># ul > li</span>
+//ul/child::li                <span class="token comment"># ul > li (same)</span>
+//ul/following-sibling::li    <span class="token comment"># ul ~ li</span>
+//ul/descendant-or-self::li   <span class="token comment"># ul li</span>
+//ul/ancestor-or-self::li     <span class="token comment"># $('ul').closest('li')</span>
+</code></pre>
+
+                <p>
+                  Steps of an expression are separated by <code>/</code>,
+                  usually used to pick child nodes. That’s not always true: you
+                  can specify a different “axis” with <code>::</code>.
+                </p>
+
+                <table class="-css-breakdown">
+                  <tbody>
+                    <tr>
+                      <td><code>//</code></td>
+                      <td><code>ul</code></td>
+                      <td><code>/child::</code></td>
+                      <td><code>li</code></td>
+                    </tr>
+                    <tr>
+                      <td>Axis</td>
+                      <td>Step</td>
+                      <td>Axis</td>
+                      <td>Step</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="child-axis">Child axis</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash"><span class="token comment"># both the same</span>
+//ul/li/a
+//child::ul/child::li/child::a
+</code></pre>
+
+                <p>
+                  <code>child::</code> is the default axis. This makes
+                  <code>//a/b/c</code> work.
+                </p>
+
+                <pre
+                  class="language-bash"
+                ><code class="language-bash"><span class="token comment"># both the same</span>
+<span class="token comment"># this works because `child::li` is truthy, so the predicate succeeds</span>
+//ul<span class="token punctuation">[</span>li<span class="token punctuation">]</span>
+//ul<span class="token punctuation">[</span>child::li<span class="token punctuation">]</span>
+</code></pre>
+
+                <pre
+                  class="language-bash"
+                ><code class="language-bash"><span class="token comment"># both the same</span>
+//ul<span class="token punctuation">[</span>count<span class="token punctuation">(</span>li<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">2</span><span class="token punctuation">]</span>
+//ul<span class="token punctuation">[</span>count<span class="token punctuation">(</span>child::li<span class="token punctuation">)</span> <span class="token operator">></span> <span class="token number">2</span><span class="token punctuation">]</span>
+</code></pre>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="descendant-or-self-axis">Descendant-or-self axis</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash"><span class="token comment"># both the same</span>
+//div//h4
+//div/descendant-or-self::h4
+</code></pre>
+
+                <p>
+                  <code>//</code> is short for the
+                  <code>descendant-or-self::</code> axis.
+                </p>
+
+                <pre
+                  class="language-bash"
+                ><code class="language-bash"><span class="token comment"># both the same</span>
+//ul//<span class="token punctuation">[</span>last<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+//ul/descendant-or-self::<span class="token punctuation">[</span>last<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">]</span>
+</code></pre>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="other-axes">Other axes</h3>
+              <div class="body">
+                <table class="-headers">
+                  <thead>
+                    <tr>
+                      <th>Axis</th>
+                      <th>Abbrev</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>ancestor</code></td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>ancestor-or-self</code></td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                  <tbody>
+                    <tr>
+                      <td><code>attribute</code></td>
+                      <td><code>@</code></td>
+                      <td>
+                        <code>@href</code> is short for
+                        <code>attribute::href</code>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code>child</code></td>
+                      <td> </td>
+                      <td>
+                        <code>div</code> is short for <code>child::div</code>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code>descendant</code></td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>descendant-or-self</code></td>
+                      <td><code>//</code></td>
+                      <td>
+                        <code>//</code> is short for
+                        <code>/descendant-or-self::node()/</code>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code>namespace</code></td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                  <tbody>
+                    <tr>
+                      <td><code>self</code></td>
+                      <td><code>.</code></td>
+                      <td>
+                        <code>.</code> is short for <code>self::node()</code>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><code>parent</code></td>
+                      <td><code>..</code></td>
+                      <td>
+                        <code>..</code> is short for <code>parent::node()</code>
+                      </td>
+                    </tr>
+                  </tbody>
+                  <tbody>
+                    <tr>
+                      <td><code>following</code></td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>following-sibling</code></td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>preceding</code></td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                    <tr>
+                      <td><code>preceding-sibling</code></td>
+                      <td> </td>
+                      <td> </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <p>There are other axes you can use.</p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="unions">Unions</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//a <span class="token operator">|</span> //span
+</code></pre>
+
+                <p>Use <code>|</code> to join two expressions.</p>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="h2-section">
+          <h2 id="more-examples">More examples</h2>
+          <div class="body h3-section-list">
+            <section class="h3-section">
+              <h3 id="examples">Examples</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//*                 <span class="token comment"># all elements</span>
+count<span class="token punctuation">(</span>//*<span class="token punctuation">)</span>          <span class="token comment"># count all elements</span>
+<span class="token punctuation">(</span>//h1<span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>/text<span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token comment"># text of the first h1 heading</span>
+//li<span class="token punctuation">[</span>span<span class="token punctuation">]</span>          <span class="token comment"># find a &#x3C;li> with an &#x3C;span> inside it</span>
+                    <span class="token comment"># ...expands to //li[child::span]</span>
+//ul/li/<span class="token punctuation">..</span>          <span class="token comment"># use .. to select a parent</span>
+</code></pre>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="find-a-parent">Find a parent</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//section<span class="token punctuation">[</span>h1<span class="token punctuation">[</span>@id<span class="token operator">=</span><span class="token string">'section-name'</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
+</code></pre>
+                <p>
+                  Finds a <code>&#x3C;section></code> that directly contains
+                  <code>h1#section-name</code>
+                </p>
+
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//section<span class="token punctuation">[</span>//h1<span class="token punctuation">[</span>@id<span class="token operator">=</span><span class="token string">'section-name'</span><span class="token punctuation">]</span><span class="token punctuation">]</span>
+</code></pre>
+
+                <p>
+                  Finds a <code>&#x3C;section></code> that contains
+                  <code>h1#section-name</code>. (Same as above, but uses
+                  descendant-or-self instead of child)
+                </p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="closest">Closest</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">./ancestor-or-self::<span class="token punctuation">[</span>@class<span class="token operator">=</span><span class="token string">"box"</span><span class="token punctuation">]</span>
+</code></pre>
+
+                <p>Works like jQuery’s <code>$().closest('.box')</code>.</p>
+              </div>
+            </section>
+            <section class="h3-section">
+              <h3 id="attributes">Attributes</h3>
+              <div class="body">
+                <pre
+                  class="language-bash"
+                ><code class="language-bash">//item<span class="token punctuation">[</span>@price <span class="token operator">></span> <span class="token number">2</span>*@discount<span class="token punctuation">]</span>
+</code></pre>
+
+                <p>Finds <code>&#x3C;item></code> and check its attributes</p>
+              </div>
+            </section>
+          </div>
+        </section>
+        <section class="h2-section -one-column">
+          <h2 class="-one-column" id="references">References</h2>
+          <div class="body h3-section-list -one-column">
+            <section class="h3-section">
+              <div class="body">
+                <ul>
+                  <li>
+                    <a
+                      href="http://www.whitebeam.org/library/guide/TechNotes/xpathtestbed.rhtm"
+                      >Xpath test bed</a
+                    >
+                    <em>(whitebeam.org)</em>
+                  </li>
+                </ul>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>
