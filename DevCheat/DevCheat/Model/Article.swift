@@ -16,15 +16,12 @@ struct Article: Codable, Identifiable {
     
     let category: Category
     enum Category: String, Codable {
-        case swift
-        case iOS
-        case macOS
+        case mobile
         case web
-        case machineLearning
+        case devops
         case dataScience
         case programming
-        case coding
-        case codingTips
+        case utils
     }
     
     let isFavorite: Bool
