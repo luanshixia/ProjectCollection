@@ -15,4 +15,12 @@ class ModelData {
         .init(id: 2, title: "CSS Cheatsheet", fileName: "css", description: "CSS", publishedAt: Date(), category: .web, isFavorite: false),
         .init(id: 3, title: "ES6 Cheatsheet", fileName: "es6", description: "JavaScript", publishedAt: Date(), category: .web, isFavorite: false),
     ]
+    
+    var featured: [Int] = [1, 2, 3]
+    
+    var web: [Int] = [1, 2, 3]
+    
+    func filterArticles(by category: [Int]) -> [Article] {
+        articles.filter({ category.contains($0.id) })
+    }
 }

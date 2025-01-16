@@ -11,8 +11,20 @@ struct ContentView: View {
     @Environment(ModelData.self) var model
     
     var body: some View {
-        NavigationSplitView {
+        NavigationStack {
             List {
+                ArticleItemRow(caption: "Featured", items: model.articles)
+                    .listRowInsets(EdgeInsets())
+                
+                ArticleItemRow(caption: "Web", items: model.articles)
+                    .listRowInsets(EdgeInsets())
+                
+                ArticleItemRow(caption: "Command Line", items: model.articles)
+                    .listRowInsets(EdgeInsets())
+                
+                ArticleItemRow(caption: "Python", items: model.articles)
+                    .listRowInsets(EdgeInsets())
+                
                 ForEach(model.articles) { article in
                     NavigationLink {
                         ArticleView(article: article)
@@ -23,12 +35,6 @@ struct ContentView: View {
             }
             .listStyle(.inset)
             .navigationTitle("Home")
-        } detail: {
-            Image(systemName: "book.pages")
-                .renderingMode(.original)
-                .foregroundStyle(.gray)
-                .imageScale(.large)
-                .font(.title)
         }
     }
 }
