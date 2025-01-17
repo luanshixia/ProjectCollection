@@ -16,7 +16,8 @@ struct ArticleItemRow: View {
             NavigationLink {
                 ArticleListView(caption: caption, items: items)
             } label: {
-                Text(caption + " >")
+                Label(caption, systemImage: "chevron.right")
+                    .labelStyle(CaptionLabelStyle())
                     .font(.headline)
                     .padding(.leading, 15)
                     .padding(.top, 10)
@@ -35,6 +36,15 @@ struct ArticleItemRow: View {
                 .padding(.leading, 10)
             }
             .padding(.bottom, 10)
+        }
+    }
+}
+
+struct CaptionLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(alignment: .center, spacing: 3) {
+            configuration.title
+            configuration.icon.foregroundColor(.accentColor)
         }
     }
 }

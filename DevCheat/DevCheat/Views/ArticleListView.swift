@@ -15,25 +15,21 @@ struct ArticleListView: View {
     ]
     
     var body: some View {
-//        VStack {
-//            Label(caption, systemImage: "list.bullet")
-//                .font(.headline)
-            ScrollView{
-                LazyVGrid(columns: adaptiveColumn, spacing: 10) {
-                    ForEach(items) { article in
-                        NavigationLink {
-                            ArticleView(article: article)
-                        } label: {
-                            ArticleListItem(article: article, height: 120)
-                        }
+        ScrollView{
+            LazyVGrid(columns: adaptiveColumn, spacing: 10) {
+                ForEach(items) { article in
+                    NavigationLink {
+                        ArticleView(article: article)
+                    } label: {
+                        ArticleListItem(article: article, height: 120)
                     }
                 }
             }
-            .navigationTitle(caption)
-            .padding(.top, 10)
-            .padding(.leading, 15)
-            .padding(.trailing, 15)
-//        }
+        }
+        .navigationTitle(caption)
+        .padding(.top, 10)
+        .padding(.leading, 15)
+        .padding(.trailing, 15)
     }
 }
 
