@@ -22,6 +22,7 @@ struct ArticleItemRow: View {
                     .padding(.leading, 15)
                     .padding(.top, 10)
             }
+            .buttonStyle(PlainButtonStyle())
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 0) {
@@ -31,6 +32,7 @@ struct ArticleItemRow: View {
                         } label: {
                             ArticleListItem(article: article)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
                 .padding(.leading, 10)

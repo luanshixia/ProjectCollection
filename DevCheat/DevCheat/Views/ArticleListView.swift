@@ -21,8 +21,9 @@ struct ArticleListView: View {
                     NavigationLink {
                         ArticleView(article: article)
                     } label: {
-                        ArticleListItem(article: article, height: 120)
+                        ArticleListItem(article: article, width: .infinity, height: 120)
                     }
+                    .buttonStyle(PlainButtonStyle())
                 }
             }
         }
