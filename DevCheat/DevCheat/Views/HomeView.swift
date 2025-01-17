@@ -25,7 +25,7 @@ struct HomeView: View {
                 ArticleItemRow(caption: "Others", items: model.filterArticles(by: model.others))
                     .listRowInsets(EdgeInsets())
                 
-                ArticleItemRow(caption: "A-Z", items: model.articles)
+                ArticleItemRow(caption: "A-Z", items: model.articles.sorted(by: { $0.title.uppercased() < $1.title.uppercased() }))
                     .listRowInsets(EdgeInsets())
             }
         }
