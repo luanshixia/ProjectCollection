@@ -13,14 +13,18 @@ struct ArticleItemRow: View {
 
     var body: some View {
         VStack(alignment: .leading) {
-            Text(caption)
-                .font(.headline)
-                .padding(.leading, 15)
-                .padding(.top, 10)
+            NavigationLink {
+                ArticleListView(caption: caption, items: items)
+            } label: {
+                Text(caption + " >")
+                    .font(.headline)
+                    .padding(.leading, 15)
+                    .padding(.top, 10)
+            }
 
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(alignment: .top, spacing: 0) {
-                    ForEach(items) { article in
+                    ForEach(items.prefix(10)) { article in
                         NavigationLink {
                             ArticleView(article: article)
                         } label: {
@@ -28,7 +32,9 @@ struct ArticleItemRow: View {
                         }
                     }
                 }
-            }.padding(.bottom, 10)
+                .padding(.leading, 10)
+            }
+            .padding(.bottom, 10)
         }
     }
 }

@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ArticleListItem: View {
     var article: Article
+    var width: CGFloat = 160
+    var height: CGFloat = 160
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -20,7 +22,7 @@ struct ArticleListItem: View {
                         endPoint: .trailing
                     )
                 )
-                .frame(width: 160, height: 160)
+                .frame(width: width, height: height)
                 .overlay(
                     Text(article.description)
                         .foregroundColor(.white)
@@ -31,7 +33,8 @@ struct ArticleListItem: View {
                 .foregroundStyle(.primary)
                 .font(.caption)
         }
-        .padding(.leading, 15)
+        .padding(.leading, 5)
+        .padding(.trailing, 10)
     }
 }
 
