@@ -21,16 +21,16 @@ struct ArticleListView: View {
                     NavigationLink {
                         ArticleView(article: article)
                     } label: {
-                        ArticleListItem(article: article, width: .infinity, height: 120)
+                        ArticleListItem(article: article, width: nil, height: 120)
                     }
                     .buttonStyle(PlainButtonStyle())
                 }
             }
+            .padding(.top, 10)
+            .padding(.leading, 15)
+            .padding(.trailing, 15)
         }
         .navigationTitle(caption)
-        .padding(.top, 10)
-        .padding(.leading, 15)
-        .padding(.trailing, 15)
     }
 }
 

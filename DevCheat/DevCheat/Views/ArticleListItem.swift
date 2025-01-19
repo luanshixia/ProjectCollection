@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ArticleListItem: View {
     var article: Article
-    var width: CGFloat = 160
-    var height: CGFloat = 160
+    var width: CGFloat? = 160
+    var height: CGFloat? = 160
     
     static var styles: [Article.Category: LinearGradient] = [
         .mobile: LinearGradient(
