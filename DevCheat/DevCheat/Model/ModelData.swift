@@ -65,6 +65,10 @@ class ModelData {
     var others: [Int] = [5, 14, 15, 16, 17, 22, 26, 30, 31, 37, 39, 42]
     
     func filterArticles(by category: [Int]) -> [Article] {
-        articles.filter({ category.contains($0.id) })
+        articles.filter { category.contains($0.id) }
+    }
+    
+    func selectArticles(_ ids: [Int]) -> [Article] {
+        ids.map { id in articles.first(where: { $0.id == id })! }
     }
 }
