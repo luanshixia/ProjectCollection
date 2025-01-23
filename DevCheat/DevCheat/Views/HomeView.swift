@@ -10,20 +10,12 @@ import SwiftUI
 
 struct HomeView: View {
     var model: ModelData
-    @AppStorage("viewHistory") var viewHistory: [Int: Date] = [:]
-    @AppStorage("favorites") var favorites: [Int: Date] = [:]
     
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading) {
                     ArticleItemRow(caption: "Featured", items: model.filterArticles(by: model.featured))
-                        .listRowInsets(EdgeInsets())
-                    
-                    ArticleItemRow(caption: "Recent", items: model.selectArticles(getRecent(viewHistory)))
-                        .listRowInsets(EdgeInsets())
-                    
-                    ArticleItemRow(caption: "Favorites", items: model.selectArticles(getRecent(favorites)))
                         .listRowInsets(EdgeInsets())
                     
                     ArticleItemRow(caption: "Web", items: model.filterArticles(by: model.web))
@@ -41,10 +33,6 @@ struct HomeView: View {
             }
             .navigationTitle("Home")
         }
-    }
-                               
-    func getRecent(_ dict: [Int: Date]) -> [Int] {
-        Array(dict.keys.sorted { dict[$0]! > dict[$1]! })
     }
 }
 

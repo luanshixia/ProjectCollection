@@ -17,7 +17,7 @@ struct ContentView: View {
                 HomeView(model: model)
             }
             Tab("My", systemImage: "person", value: .my) {
-                Text("My")
+                MyView(model: model)
             }
             Tab("Search", systemImage: "magnifyingglass", value: .search, role: .search) {
                 Text("Search")
