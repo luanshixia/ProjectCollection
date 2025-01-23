@@ -25,4 +25,5 @@ struct Article: Codable, Identifiable {
     }
     
     let isFavorite: Bool
+    var viewedAt: Date?
 }

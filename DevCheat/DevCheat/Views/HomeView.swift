@@ -5,15 +5,20 @@
 //  Created by Yang Wang on 1/16/25.
 //
 
+import SwiftData
 import SwiftUI
 
 struct HomeView: View {
     var model: ModelData
+    @AppStorage("viewHistory") var viewHistory: [Int: Date] = [:]
     
     var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 ArticleItemRow(caption: "Featured", items: model.filterArticles(by: model.featured))
+                    .listRowInsets(EdgeInsets())
+                
+                ArticleItemRow(caption: "Recent", items: model.filterArticles(by: getRecent()))
                     .listRowInsets(EdgeInsets())
                 
                 ArticleItemRow(caption: "Web", items: model.filterArticles(by: model.web))
@@ -31,6 +36,10 @@ struct HomeView: View {
         }
         .navigationTitle("Home")
     }
+                               
+   func getRecent() -> [Int] {
+       Array(viewHistory.keys.sorted { viewHistory[$0]! > viewHistory[$1]! }.prefix(10))
+   }
 }
 
 #Preview {
