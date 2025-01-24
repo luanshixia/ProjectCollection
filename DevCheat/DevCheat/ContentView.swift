@@ -20,7 +20,7 @@ struct ContentView: View {
                 MyView(model: model)
             }
             Tab("Search", systemImage: "magnifyingglass", value: .search, role: .search) {
-                Text("Search")
+                SearchView(model: model)
             }
         }
     }
