@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Times Table Grid Quiz</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+        width: 100vw;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      const TimesTableQuiz = () => {
+        const [num1, setNum1] = React.useState(0);
+        const [num2, setNum2] = React.useState(0);
+        const [attempts, setAttempts] = React.useState(0);
+        const [showHint, setShowHint] = React.useState(false);
+        const [stats, setStats] = React.useState({
+          totalQuestions: 0,
+          totalAttempts: 0,
+          correctAnswers: 0,
+        });
+        const [selectedCell, setSelectedCell] = React.useState(null);
+        const [isCorrect, setIsCorrect] = React.useState(null);
+
+        const MAX_ATTEMPTS = 3;
+        const HINT_DURATION = 1000;
+
+        const generateNewQuestion = () => {
+          setNum1(Math.floor(Math.random() * 10) + 1);
+          setNum2(Math.floor(Math.random() * 10) + 1);
+          setAttempts(0);
+          setShowHint(false);
+          setSelectedCell(null);
+          setIsCorrect(null);
+        };
+
+        React.useEffect(() => {
+          generateNewQuestion();
+        }, []);
+
+        const handleAnswer = (answer) => {
+          if (showHint) return;
+
+          setSelectedCell(answer);
+          const correctAnswer = num1 * num2;
+          const isAnswerCorrect = answer === correctAnswer;
+          setIsCorrect(isAnswerCorrect);
+
+          if (isAnswerCorrect) {
+            setStats((prev) => ({
+              totalQuestions: prev.totalQuestions + 1,
+              totalAttempts: prev.totalAttempts + attempts + 1,
+              correctAnswers: prev.correctAnswers + 1,
+            }));
+            setTimeout(generateNewQuestion, 1000);
+          } else {
+            const newAttempts = attempts + 1;
+            setAttempts(newAttempts);
+
+            if (newAttempts >= MAX_ATTEMPTS) {
+              // Update stats when max attempts reached (question is wrong)
+              setStats((prev) => ({
+                totalQuestions: prev.totalQuestions + 1,
+                totalAttempts: prev.totalAttempts + MAX_ATTEMPTS,
+                correctAnswers: prev.correctAnswers,
+              }));
+              setShowHint(true);
+              setTimeout(() => {
+                setShowHint(false);
+                generateNewQuestion();
+              }, HINT_DURATION);
+            }
+          }
+        };
+
+        const getCellColor = (value) => {
+          if (value === selectedCell) {
+            return isCorrect ? "bg-green-500" : "bg-red-500";
+          }
+          if (showHint && value === num1 * num2) {
+            return "bg-yellow-500";
+          }
+          return "bg-white hover:bg-gray-100";
+        };
+
+        const calculateAccuracy = () => {
+          if (stats.totalQuestions === 0) return 0;
+          return (stats.correctAnswers / stats.totalQuestions) * 100;
+        };
+
+        return (
+          <div className="p-4 max-w-2xl mx-auto">
+            <div className="bg-white rounded-lg shadow-lg p-6 mb-4">
+              <div className="text-center mb-6">
+                <h2 className="text-2xl font-bold mb-2">
+                  What is {num1} × {num2}?
+                </h2>
+                <div className="flex justify-center space-x-4">
+                  <div className="flex items-center">
+                    <span>
+                      Attempts: {attempts}/{MAX_ATTEMPTS}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span>
+                      Score: {stats.correctAnswers}/{stats.totalQuestions}
+                    </span>
+                  </div>
+                  <div className="flex items-center">
+                    <span>Accuracy: {calculateAccuracy().toFixed(1)}%</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-10 gap-1">
+                {[...Array(10)].map((_, row) =>
+                  [...Array(10)].map((_, col) => {
+                    const value = (row + 1) * (col + 1);
+                    return (
+                      <button
+                        key={`cell-${row}-${col}`}
+                        onClick={() => handleAnswer(value)}
+                        className={`aspect-square flex items-center justify-center text-sm font-medium
+                          border rounded ${getCellColor(
+                            value
+                          )} transition-colors
+                          ${
+                            showHint ? "cursor-not-allowed" : "cursor-pointer"
+                          }`}
+                        disabled={showHint}
+                      >
+                        {value}
+                      </button>
+                    );
+                  })
+                )}
+              </div>
+            </div>
+          </div>
+        );
+      };
+
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<TimesTableQuiz />);
+    </script>
+  </body>
+</html>
+

@@ -8,14 +8,22 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State var selectedTab: Tabs = .oneTo100
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        TabView(selection: $selectedTab) {
+            Tab("1-100", systemImage: "house", value: .oneTo100) {
+                HTMLView(htmlFileName: "app1")
+            }
+            Tab("Products", systemImage: "person", value: .products) {
+                HTMLView(htmlFileName: "app2")
+            }
         }
-        .padding()
+    }
+    
+    enum Tabs: Equatable, Hashable {
+        case oneTo100
+        case products
     }
 }
 
