@@ -11,11 +11,21 @@ import WebKit
 struct HTMLView: UIViewRepresentable {
     let htmlFileName: String
     
+    func makeCoordinator() -> WebViewMessageHandler {
+        return WebViewMessageHandler()
+    }
+    
     func makeUIView(context: Context) -> WKWebView {
-        let webView = WKWebView()
+        let configuration = WKWebViewConfiguration()
+        configuration.userContentController
+            .add(context.coordinator, name: "quizRecord")
+        
+        let webView = WKWebView(frame: .zero, configuration: configuration)
         webView.isOpaque = false
         webView.backgroundColor = UIColor.clear
         webView.scrollView.backgroundColor = UIColor.clear
+        webView.configuration.preferences.setValue(true, forKey: "developerExtrasEnabled")
+        webView.isInspectable = true
         return webView
     }
     

@@ -53,6 +53,20 @@
           generateNewQuestion();
         }, []);
 
+        const saveRecord = (number, isAnswerCorrect, numAttempts) => {
+          const timeSpent = (Date.now() - startTime) / 1000; // Convert to seconds
+
+          // Send record to native code
+          window.webkit.messageHandlers.quizRecord.postMessage({
+            num1,
+            num2,
+            userAnswer: number,
+            numAttempts,
+            isCorrect: isAnswerCorrect,
+            timeSpent,
+          });
+        };
+
         const handleAnswer = (number) => {
           if (showHint) return;
 
@@ -68,6 +82,7 @@
               correctAnswers: prev.correctAnswers + 1,
               totalTime: prev.totalTime + (Date.now() - startTime),
             }));
+            saveRecord(number, true, attempts + 1);
             setTimeout(generateNewQuestion, 1000);
           } else {
             const newAttempts = attempts + 1;
@@ -81,6 +96,7 @@
                 correctAnswers: prev.correctAnswers,
                 totalTime: prev.totalTime + (Date.now() - startTime),
               }));
+              saveRecord(number, false, MAX_ATTEMPTS);
               setShowHint(true);
               setTimeout(() => {
                 setShowHint(false);
@@ -132,7 +148,9 @@
                     <span>Accuracy: {calculateAccuracy().toFixed(1)}%</span>
                   </div>
                   <div className="flex items-center">
-                    <span>Avg Think: {calculateAvgThinkingTime().toFixed(1)}s</span>
+                    <span>
+                      Avg Think: {calculateAvgThinkingTime().toFixed(1)}s
+                    </span>
                   </div>
                 </div>
               </div>
