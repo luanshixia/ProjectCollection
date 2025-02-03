@@ -26,10 +26,12 @@
         const [num2, setNum2] = React.useState(0);
         const [attempts, setAttempts] = React.useState(0);
         const [showHint, setShowHint] = React.useState(false);
+        const [startTime, setStartTime] = React.useState(Date.now());
         const [stats, setStats] = React.useState({
           totalQuestions: 0,
           totalAttempts: 0,
           correctAnswers: 0,
+          totalTime: 0,
         });
         const [selectedCell, setSelectedCell] = React.useState(null);
         const [isCorrect, setIsCorrect] = React.useState(null);
@@ -38,10 +40,11 @@
         const HINT_DURATION = 1000;
 
         const generateNewQuestion = () => {
-          setNum1(Math.floor(Math.random() * 9) + 1);
-          setNum2(Math.floor(Math.random() * 9) + 1);
+          setNum1(Math.floor(Math.random() * 10) + 1);
+          setNum2(Math.floor(Math.random() * 10) + 1);
           setAttempts(0);
           setShowHint(false);
+          setStartTime(Date.now());
           setSelectedCell(null);
           setIsCorrect(null);
         };
@@ -63,6 +66,7 @@
               totalQuestions: prev.totalQuestions + 1,
               totalAttempts: prev.totalAttempts + attempts + 1,
               correctAnswers: prev.correctAnswers + 1,
+              totalTime: prev.totalTime + (Date.now() - startTime),
             }));
             setTimeout(generateNewQuestion, 1000);
           } else {
@@ -75,6 +79,7 @@
                 totalQuestions: prev.totalQuestions + 1,
                 totalAttempts: prev.totalAttempts + MAX_ATTEMPTS,
                 correctAnswers: prev.correctAnswers,
+                totalTime: prev.totalTime + (Date.now() - startTime),
               }));
               setShowHint(true);
               setTimeout(() => {
@@ -96,8 +101,13 @@
         };
 
         const calculateAccuracy = () => {
+          if (stats.totalAttempts === 0) return 0;
+          return (stats.correctAnswers / stats.totalAttempts) * 100;
+        };
+
+        const calculateAvgThinkingTime = () => {
           if (stats.totalQuestions === 0) return 0;
-          return (stats.correctAnswers / stats.totalQuestions) * 100;
+          return (stats.totalTime / stats.totalQuestions) / 1000;
         };
 
         return (
@@ -107,7 +117,7 @@
                 <h2 className="text-2xl font-bold mb-2">
                   What is {num1} × {num2}?
                 </h2>
-                <div className="flex justify-center space-x-4">
+                <div className="flex justify-center space-x-4 text-sm">
                   <div className="flex items-center">
                     <span>
                       Attempts: {attempts}/{MAX_ATTEMPTS}
@@ -120,6 +130,9 @@
                   </div>
                   <div className="flex items-center">
                     <span>Accuracy: {calculateAccuracy().toFixed(1)}%</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span>Avg Think: {calculateAvgThinkingTime().toFixed(1)}s</span>
                   </div>
                 </div>
               </div>
@@ -148,4 +161,3 @@
     </script>
   </body>
 </html>
-
