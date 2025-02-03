@@ -10,9 +10,10 @@ import WebKit
 
 struct HTMLView: UIViewRepresentable {
     let htmlFileName: String
+    static let messageHandler = WebViewMessageHandler()
     
     func makeCoordinator() -> WebViewMessageHandler {
-        return WebViewMessageHandler()
+        return HTMLView.messageHandler
     }
     
     func makeUIView(context: Context) -> WKWebView {
