@@ -13,12 +13,13 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $selectedTab) {
             Tab("1-100", systemImage: "house", value: .oneTo100) {
-                HTMLView(htmlFileName: "app1")
+                HTMLView(htmlFileName: "app1").background(.blue)
             }
             Tab("Products", systemImage: "person", value: .products) {
-                HTMLView(htmlFileName: "app2")
+                HTMLView(htmlFileName: "app2").background(.green)
             }
         }
+        .accentColor(UIDevice.current.userInterfaceIdiom == .pad ? .black : .white)
     }
     
     enum Tabs: Equatable, Hashable {

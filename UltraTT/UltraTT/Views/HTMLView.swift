@@ -12,7 +12,11 @@ struct HTMLView: UIViewRepresentable {
     let htmlFileName: String
     
     func makeUIView(context: Context) -> WKWebView {
-        return WKWebView()
+        let webView = WKWebView()
+        webView.isOpaque = false
+        webView.backgroundColor = UIColor.clear
+        webView.scrollView.backgroundColor = UIColor.clear
+        return webView
     }
     
     func updateUIView(_ uiView: WKWebView, context: Context) {
