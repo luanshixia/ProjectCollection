@@ -10,7 +10,6 @@ import SwiftUI
 struct ContentView: View {
     @State var selectedTab: Tabs = .oneTo100
     @State var shouldPresentSheet: Bool = false
-    @AppStorage("quizRecords") private var records: [QuizRecord] = []
     
     var body: some View {
         NavigationStack {
@@ -37,7 +36,7 @@ struct ContentView: View {
                 // on dismiss
             } content: {
                 NavigationStack {
-                    HistoryView(records: records)
+                    HistoryView()
                         .toolbar {
                             ToolbarItem(placement: .topBarTrailing) {
                                 Button {
