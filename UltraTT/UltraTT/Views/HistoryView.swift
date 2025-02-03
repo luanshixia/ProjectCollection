@@ -8,22 +8,21 @@
 import SwiftUI
 
 struct HistoryView: View {
-    @AppStorage("quizRecords") private var storedRecords = Data()
+    var records: [QuizRecord]
     
     var body: some View {
         VStack {
-            // Optional: Add a button to view records
-            Button("View Records") {
-                if let records = try? JSONDecoder().decode([QuizRecord].self, from: storedRecords) {
-                    print("Total records:", records.count)
-                    records.forEach { record in
-                        print("""
-                            Question: \(record.question)
-                            Answer: \(record.userAnswer)
-                            Attempts: \(record.numAttempts)
-                            Correct: \(record.isCorrect)
-                            Time: \(record.timeSpent)s
-                            """)
+            List {
+                ForEach(records, id: \.id) { record in
+                    HStack {
+                        Label {
+                            Text("\(record.question)")
+                        } icon: {
+                            Image(systemName: record.correctAnswer == record.userAnswer ? "checkmark.circle.fill" : "xmark.circle.fill")
+                                .foregroundColor(record.correctAnswer == record.userAnswer ? .green : .red)
+                        }
+                        Spacer()
+                        Text("\(record.timeSpent, specifier: "%.1f")s").font(.footnote)
                     }
                 }
             }

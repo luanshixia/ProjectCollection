@@ -36,7 +36,18 @@ struct ContentView: View {
             .sheet(isPresented: $shouldPresentSheet) {
                 // on dismiss
             } content: {
-                HistoryView()
+                NavigationStack {
+                    HistoryView(records: loadRecords())
+                        .toolbar {
+                            ToolbarItem(placement: .topBarTrailing) {
+                                Button {
+                                    shouldPresentSheet.toggle()
+                                } label: {
+                                    Text("Done")
+                                }
+                            }
+                        }
+                }
             }
         }
     }
