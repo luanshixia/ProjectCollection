@@ -22,25 +22,7 @@ struct QuizRecord: Codable, Identifiable {
 
 // Message handler to receive messages from JavaScript
 class WebViewMessageHandler: NSObject, WKScriptMessageHandler {
-    @AppStorage("quizRecords") private var storedRecords = Data()
-    private var records: [QuizRecord] = []
-    
-    override init() {
-        super.init()
-        loadRecords()
-    }
-    
-    private func loadRecords() {
-        if let decoded = try? JSONDecoder().decode([QuizRecord].self, from: storedRecords) {
-            records = decoded
-        }
-    }
-    
-    private func saveRecords() {
-        if let encoded = try? JSONEncoder().encode(records) {
-            storedRecords = encoded
-        }
-    }
+    @AppStorage("quizRecords") private var records: [QuizRecord] = []
     
     func userContentController(
         _ userContentController: WKUserContentController,
@@ -67,7 +49,6 @@ class WebViewMessageHandler: NSObject, WKScriptMessageHandler {
             )
             
             records.append(record)
-            saveRecords()
         }
     }
 }

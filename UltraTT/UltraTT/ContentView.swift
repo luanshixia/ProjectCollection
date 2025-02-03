@@ -10,7 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @State var selectedTab: Tabs = .oneTo100
     @State var shouldPresentSheet: Bool = false
-    @AppStorage("quizRecords") private var storedRecords = Data()
+    @AppStorage("quizRecords") private var records: [QuizRecord] = []
     
     var body: some View {
         NavigationStack {
@@ -37,7 +37,7 @@ struct ContentView: View {
                 // on dismiss
             } content: {
                 NavigationStack {
-                    HistoryView(records: loadRecords())
+                    HistoryView(records: records)
                         .toolbar {
                             ToolbarItem(placement: .topBarTrailing) {
                                 Button {
@@ -50,13 +50,6 @@ struct ContentView: View {
                 }
             }
         }
-    }
-    
-    func loadRecords() -> [QuizRecord] {
-        if let decoded = try? JSONDecoder().decode([QuizRecord].self, from: storedRecords) {
-            return decoded
-        }
-        return []
     }
     
     enum Tabs: Equatable, Hashable {
