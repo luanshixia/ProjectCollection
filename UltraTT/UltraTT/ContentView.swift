@@ -27,7 +27,7 @@ struct ContentView: View {
                     Button {
                         shouldPresentSheet.toggle()
                     } label: {
-                        Image(systemName: "clock")
+                        Image(systemName: "calendar")
                             .foregroundColor(.white)
                     }
                 }
