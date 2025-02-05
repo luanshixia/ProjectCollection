@@ -14,7 +14,7 @@ struct DayRecord: Identifiable {
     
     var totalQuestions: Int { records.count }
     var correctAnswers: Int { records.filter { $0.isCorrect }.count }
-    var totalTimeSpent: Double { records.reduce(0) { $0 + $1.timeSpent } }
+    var totalTimeSpent: Double { records.reduce(0) { $0 + min($1.timeSpent, 300) } }
     var accuracy: Double { Double(correctAnswers) / Double(totalQuestions) * 100 }
 }
 
@@ -30,7 +30,7 @@ struct QuizRecordRow: View {
             
             Spacer()
             
-            Text(timeFormatter.string(from: record.timeSpent) ?? "")
+            Text(record.timeSpent <= 300 ? timeFormatter.string(from: record.timeSpent) ?? "" : "> 5m")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             
