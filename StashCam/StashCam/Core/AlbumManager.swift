@@ -47,6 +47,24 @@ class AlbumManager {
         albums.first { $0.id == id }
     }
     
+    func updatePhotoCount(for album: Album) -> Int {
+        do {
+            let photos = try StorageManager.shared.loadPhotosLocally(for: album.id)
+            return photos.count
+        } catch {
+            print("计算照片数量失败：\(error)")
+            return 0
+        }
+    }
+    
+    func albumsWithPhotoCount() -> [Album] {
+        albums.map { album in
+            var albumWithCount = album
+            albumWithCount.photoCount = updatePhotoCount(for: album)
+            return albumWithCount
+        }
+    }
+    
     // MARK: - Private Methods
     
     private func loadAlbums() {

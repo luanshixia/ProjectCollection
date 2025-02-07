@@ -46,6 +46,9 @@ struct AlbumListView: View {
                 }
             }
             .environment(\.editMode, $editMode)
+            .onAppear {
+                viewModel.onAppear()  // 在视图出现时更新数据
+            }
         }
     }
 }

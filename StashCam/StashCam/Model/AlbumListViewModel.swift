@@ -30,14 +30,17 @@ class AlbumListViewModel: ObservableObject {
     private let albumManager = AlbumManager.shared
     
     init() {
-        // 从 AlbumManager 获取相册列表
-        albums = albumManager.albums
+        updateAlbumsList()
+    }
+    
+    func updateAlbumsList() {
+        albums = albumManager.albumsWithPhotoCount()
     }
     
     func addAlbum() {
         guard !newAlbumName.trimmingCharacters(in: .whitespaces).isEmpty else { return }
         let album = albumManager.createAlbum(name: newAlbumName)
-        albums = albumManager.albums
+        updateAlbumsList()
         newAlbumName = ""
         isAddingNew = false
     }
@@ -47,15 +50,21 @@ class AlbumListViewModel: ObservableObject {
             let album = albums[index]
             albumManager.deleteAlbum(album)
         }
-        albums = albumManager.albums
+        updateAlbumsList()
     }
     
     func moveAlbum(from source: IndexSet, to destination: Int) {
         albums.move(fromOffsets: source, toOffset: destination)
+        updateAlbumsList()
     }
     
     func renameAlbum(_ album: Album, to newName: String) {
         albumManager.updateAlbum(album, newName: newName)
-        albums = albumManager.albums
+        updateAlbumsList()
+    }
+    
+    // 在返回到相册列表时更新照片数量
+    func onAppear() {
+        updateAlbumsList()
     }
 }
