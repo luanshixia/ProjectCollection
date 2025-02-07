@@ -6,7 +6,7 @@
 *.user
 *.sln.docstates
 .vs/
-
+*.scuserstate
 
 # Build results
 [Dd]ebug/
