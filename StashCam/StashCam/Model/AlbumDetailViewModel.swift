@@ -20,6 +20,15 @@ struct Photo: Identifiable, Equatable {
         self.createdAt = Date()
         self.image = image
     }
+    
+    var localURL: URL? {
+        guard let documentsDirectory = try? StorageManager.shared.getDocumentsDirectory() else {
+            return nil
+        }
+        return documentsDirectory
+            .appendingPathComponent(id.uuidString)
+            .appendingPathComponent(fileName)
+    }
 }
 
 class AlbumDetailViewModel: ObservableObject {
@@ -27,25 +36,46 @@ class AlbumDetailViewModel: ObservableObject {
     @Published var isShowingCamera = false
     @Published var selectedPhotos: Set<UUID> = []
     @Published var isMultiSelectMode = false
+    @Published var isLoading = false
+    @Published var error: Error?
+    @Published var selectedPhoto: Photo?
     
     let album: Album
+    private let storageManager = StorageManager.shared
     
     init(album: Album) {
         self.album = album
-        // TODO: 从存储加载照片
         loadPhotos()
     }
     
-    private func loadPhotos() {
-        // 模拟数据
-        photos = [
-            Photo(fileName: "photo1.jpg", image: UIImage(systemName: "photo")),
-            Photo(fileName: "photo2.jpg", image: UIImage(systemName: "photo")),
-            Photo(fileName: "photo3.jpg", image: UIImage(systemName: "photo"))
-        ]
+    func loadPhotos() {
+        isLoading = true
+        
+        storageManager.fetchPhotosFromCloud(albumId: album.id) { [weak self] photos in
+            self?.photos = photos
+            self?.isLoading = false
+        }
+    }
+    
+    func savePhoto(_ photo: Photo) {
+        do {
+            try storageManager.savePhotoLocally(photo, in: album.id)
+            storageManager.syncPhotoToCloud(photo, in: album.id)
+            photos.append(photo)
+        } catch {
+            self.error = error
+        }
     }
     
     func deleteSelectedPhotos() {
+        for photoId in selectedPhotos {
+            guard let photo = photos.first(where: { $0.id == photoId }) else { continue }
+            
+            try? storageManager.deletePhotoLocally(photo, in: album.id)
+            storageManager.deletePhotoFromCloud(photo, in: album.id)
+        }
+        
+        // update view
         photos.removeAll { selectedPhotos.contains($0.id) }
         selectedPhotos.removeAll()
         isMultiSelectMode = false

@@ -28,7 +28,6 @@ class AlbumListViewModel: ObservableObject {
     @Published var newAlbumName = ""
     
     init() {
-        // 初始化默认相册
         albums = [
             Album(name: "学习资料"),
             Album(name: "文档记录"),
