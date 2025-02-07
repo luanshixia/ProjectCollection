@@ -13,17 +13,30 @@ struct DigitalClockView: View {
     var body: some View {
         HStack {
             Picker("Hour", selection: $viewModel.hour) {
-                ForEach(1...12, id: \ .self) { Text("\($0)") }
+                ForEach(1...12, id: \ .self) { h in
+                    HStack {
+                        Text("\(h, specifier: "%02d")")
+                    }
+                }
             }
             .pickerStyle(WheelPickerStyle())
+            .scaleEffect(2)
+            .frame(width: 80, height: 60)
             
             Text(":")
                 .font(.largeTitle)
+                .frame(width: 60, height: 60)
             
             Picker("Minute", selection: $viewModel.minute) {
-                ForEach(0...59, id: \ .self) { Text(String(format: "%02d", $0)) }
+                ForEach(0...59, id: \ .self) { m in
+                    HStack {
+                        Text(String(format: "%02d", m))
+                    }
+                }
             }
             .pickerStyle(WheelPickerStyle())
+            .scaleEffect(2)
+            .frame(width: 80, height: 60)
         }
         .font(.largeTitle)
     }

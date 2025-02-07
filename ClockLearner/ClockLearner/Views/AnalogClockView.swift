@@ -27,13 +27,14 @@ struct AnalogClockView: View {
     var body: some View {
         ZStack {
             Circle()
-                .stroke(Color.black, lineWidth: 2)
+                .stroke(Color.gray, lineWidth: 2)
             ForEach(0..<12) { tick in
                 Text("\(tick == 0 ? 12 : tick)")
+                    .font(.title)
                     .position(circlePosition(tick: tick))
             }
             
-            ClockHand(angle: hourAngle(), length: 50, color: .black)
+            ClockHand(angle: hourAngle(), length: 50, color: .gray)
             ClockHand(angle: minuteAngle(), length: 90, color: .blue)
         }
     }
