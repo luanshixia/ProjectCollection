@@ -31,54 +31,79 @@ struct Photo: Identifiable, Equatable {
     }
 }
 
+@MainActor
 class AlbumDetailViewModel: ObservableObject {
+    // MARK: - Published Properties
+    
     @Published var photos: [Photo] = []
-    @Published var isShowingCamera = false
     @Published var selectedPhotos: Set<UUID> = []
     @Published var isMultiSelectMode = false
+    @Published var isShowingCamera = false
+    @Published var selectedPhoto: Photo?
     @Published var isLoading = false
     @Published var error: Error?
-    @Published var selectedPhoto: Photo?
+    
+    // MARK: - Properties
     
     let album: Album
     private let storageManager = StorageManager.shared
+    
+    // MARK: - Initialization
     
     init(album: Album) {
         self.album = album
         loadPhotos()
     }
     
+    // MARK: - Public Methods
+    
     func loadPhotos() {
-        isLoading = true
-        
-        storageManager.fetchPhotosFromCloud(albumId: album.id) { [weak self] photos in
-            self?.photos = photos
-            self?.isLoading = false
+        Task {
+            isLoading = true
+            defer { isLoading = false }
+            
+            do {
+                photos = try await loadLocalPhotos()
+            } catch {
+                self.error = error
+            }
         }
     }
     
     func savePhoto(_ photo: Photo) {
-        do {
-            try storageManager.savePhotoLocally(photo, in: album.id)
-            storageManager.syncPhotoToCloud(photo, in: album.id)
-            photos.append(photo)
-        } catch {
-            self.error = error
+        Task {
+            do {
+                try await savePhotoLocally(photo)
+                await MainActor.run {
+                    photos.append(photo)
+                }
+            } catch {
+                await MainActor.run {
+                    self.error = error
+                }
+            }
         }
     }
     
     func deleteSelectedPhotos() {
-        for photoId in selectedPhotos {
-            guard let photo = photos.first(where: { $0.id == photoId }) else { continue }
-            
-            try? storageManager.deletePhotoLocally(photo, in: album.id)
-            storageManager.deletePhotoFromCloud(photo, in: album.id)
+        Task {
+            do {
+                for photoId in selectedPhotos {
+                    guard let photo = photos.first(where: { $0.id == photoId }) else { continue }
+                    try await deletePhotoLocally(photo)
+                }
+                
+                await MainActor.run {
+                    photos.removeAll { selectedPhotos.contains($0.id) }
+                    selectedPhotos.removeAll()
+                    isMultiSelectMode = false
+                }
+            } catch {
+                await MainActor.run {
+                    self.error = error
+                }
+            }
         }
-        
-        // update view
-        photos.removeAll { selectedPhotos.contains($0.id) }
-        selectedPhotos.removeAll()
-        isMultiSelectMode = false
     }
     
     func togglePhotoSelection(_ photo: Photo) {
@@ -86,6 +111,62 @@ class AlbumDetailViewModel: ObservableObject {
             selectedPhotos.remove(photo.id)
         } else {
             selectedPhotos.insert(photo.id)
+        }
+    }
+    
+    // MARK: - Private Storage Methods
+    
+    private func loadLocalPhotos() async throws -> [Photo] {
+        try await withCheckedThrowingContinuation { continuation in
+            do {
+                let photos = try storageManager.loadPhotosLocally(for: album.id)
+                continuation.resume(returning: photos)
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+    
+    private func savePhotoLocally(_ photo: Photo) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            do {
+                _ = try storageManager.savePhotoLocally(photo, in: album.id)
+                continuation.resume()
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+    
+    private func deletePhotoLocally(_ photo: Photo) async throws {
+        try await withCheckedThrowingContinuation { continuation in
+            do {
+                try storageManager.deletePhotoLocally(photo, in: album.id)
+                continuation.resume()
+            } catch {
+                continuation.resume(throwing: error)
+            }
+        }
+    }
+}
+
+// MARK: - Error Types
+
+extension AlbumDetailViewModel {
+    enum PhotoError: LocalizedError {
+        case saveFailed
+        case deleteFailed
+        case loadFailed
+        
+        var errorDescription: String? {
+            switch self {
+            case .saveFailed:
+                return "保存照片失败"
+            case .deleteFailed:
+                return "删除照片失败"
+            case .loadFailed:
+                return "加载照片失败"
+            }
         }
     }
 }
