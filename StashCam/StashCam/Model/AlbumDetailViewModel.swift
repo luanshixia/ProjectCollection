@@ -12,22 +12,18 @@ struct Photo: Identifiable, Equatable {
     let id: UUID
     let fileName: String
     let createdAt: Date
-    var image: UIImage?
+    let image: UIImage?
     
-    init(id: UUID = UUID(), fileName: String, image: UIImage? = nil) {
+    init(id: UUID = UUID(), fileName: String? = nil, image: UIImage?) {
         self.id = id
-        self.fileName = fileName
+        // 如果没有提供文件名，使用 UUID 生成一个
+        self.fileName = fileName ?? "\(id.uuidString).jpg"
         self.createdAt = Date()
         self.image = image
     }
     
-    var localURL: URL? {
-        guard let documentsDirectory = try? StorageManager.shared.getDocumentsDirectory() else {
-            return nil
-        }
-        return documentsDirectory
-            .appendingPathComponent(id.uuidString)
-            .appendingPathComponent(fileName)
+    static func == (lhs: Photo, rhs: Photo) -> Bool {
+        lhs.id == rhs.id
     }
 }
 

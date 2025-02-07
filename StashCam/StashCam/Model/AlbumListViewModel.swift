@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct Album: Identifiable, Hashable {
+struct Album: Identifiable, Codable, Hashable {
     let id: UUID
     var name: String
     var photoCount: Int
@@ -27,28 +27,35 @@ class AlbumListViewModel: ObservableObject {
     @Published var isAddingNew = false
     @Published var newAlbumName = ""
     
+    private let albumManager = AlbumManager.shared
+    
     init() {
-        albums = [
-            Album(name: "学习资料"),
-            Album(name: "文档记录"),
-            Album(name: "参考信息"),
-            Album(name: "临时记录")
-        ]
+        // 从 AlbumManager 获取相册列表
+        albums = albumManager.albums
     }
     
     func addAlbum() {
         guard !newAlbumName.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-        let album = Album(name: newAlbumName)
-        albums.append(album)
+        let album = albumManager.createAlbum(name: newAlbumName)
+        albums = albumManager.albums
         newAlbumName = ""
         isAddingNew = false
     }
     
     func deleteAlbum(at offsets: IndexSet) {
-        albums.remove(atOffsets: offsets)
+        offsets.forEach { index in
+            let album = albums[index]
+            albumManager.deleteAlbum(album)
+        }
+        albums = albumManager.albums
     }
     
     func moveAlbum(from source: IndexSet, to destination: Int) {
         albums.move(fromOffsets: source, toOffset: destination)
+    }
+    
+    func renameAlbum(_ album: Album, to newName: String) {
+        albumManager.updateAlbum(album, newName: newName)
+        albums = albumManager.albums
     }
 }
