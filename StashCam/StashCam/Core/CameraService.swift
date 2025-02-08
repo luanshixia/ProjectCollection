@@ -135,7 +135,7 @@ extension CameraService: AVCapturePhotoCaptureDelegate {
         }
         
         photoProcessing.async { [weak self] in
-            let newPhoto = Photo(fileName: UUID().uuidString + ".jpg", image: image)
+            let newPhoto = Photo(image: image)
             DispatchQueue.main.async {
                 self?.photo = newPhoto
                 self?.shouldShowSpinner = false

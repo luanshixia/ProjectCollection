@@ -16,9 +16,17 @@ struct Photo: Identifiable, Equatable {
     
     init(id: UUID = UUID(), fileName: String? = nil, image: UIImage?) {
         self.id = id
-        // 如果没有提供文件名，使用 UUID 生成一个
-        self.fileName = fileName ?? "\(id.uuidString).jpg"
         self.createdAt = Date()
+        
+        // If fileName is not provided, generate one based on timestamp
+        if let fileName = fileName {
+            self.fileName = fileName
+        } else {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyyMMdd_HHmmss_SSS"
+            self.fileName = "IMG_\(dateFormatter.string(from: self.createdAt)).jpg"
+        }
+        
         self.image = image
     }
     
