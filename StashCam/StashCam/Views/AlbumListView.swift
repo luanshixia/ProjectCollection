@@ -20,7 +20,7 @@ struct AlbumListView: View {
                         AlbumRow(album: album)
                     }
                 }
-                .onDelete(perform: viewModel.deleteAlbum)
+                .onDelete(perform: viewModel.handleDeleteAlbum)
                 .onMove(perform: viewModel.moveAlbum)
             }
             .navigationTitle("杂物相机")
@@ -40,6 +40,11 @@ struct AlbumListView: View {
                     }
                 }
             }
+            .alert("无法删除相册", isPresented: $viewModel.showDeletionAlert, presenting: viewModel.albumToDelete) { album in
+                Button("好的", role: .cancel) {}
+            } message: { album in
+                Text("\(album.name) 中包含 \(album.photoCount) 张照片，请先删除照片后再删除相册。")
+            }
             .sheet(isPresented: $viewModel.isAddingNew) {
                 NavigationStack {
                     AddAlbumView(viewModel: viewModel)
@@ -47,7 +52,7 @@ struct AlbumListView: View {
             }
             .environment(\.editMode, $editMode)
             .onAppear {
-                viewModel.onAppear()  // 在视图出现时更新数据
+                viewModel.onAppear()
             }
         }
     }

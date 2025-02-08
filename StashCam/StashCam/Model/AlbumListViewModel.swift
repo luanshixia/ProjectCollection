@@ -8,24 +8,12 @@
 import Foundation
 import SwiftUI
 
-struct Album: Identifiable, Codable, Hashable {
-    let id: UUID
-    var name: String
-    var photoCount: Int
-    var createdAt: Date
-    
-    init(id: UUID = UUID(), name: String, photoCount: Int = 0) {
-        self.id = id
-        self.name = name
-        self.photoCount = photoCount
-        self.createdAt = Date()
-    }
-}
-
 class AlbumListViewModel: ObservableObject {
     @Published var albums: [Album] = []
     @Published var isAddingNew = false
     @Published var newAlbumName = ""
+    @Published var showDeletionAlert = false
+    @Published var albumToDelete: Album?
     
     private let albumManager = AlbumManager.shared
     
@@ -37,9 +25,21 @@ class AlbumListViewModel: ObservableObject {
         albums = albumManager.albumsWithPhotoCount()
     }
     
+    func handleDeleteAlbum(at offsets: IndexSet) {
+        guard let index = offsets.first else { return }
+        let album = albums[index]
+        if album.photoCount > 0 {
+            albumToDelete = album
+            showDeletionAlert = true
+        } else {
+            albumManager.deleteAlbum(album)
+            updateAlbumsList()
+        }
+    }
+    
     func addAlbum() {
         guard !newAlbumName.trimmingCharacters(in: .whitespaces).isEmpty else { return }
-        let album = albumManager.createAlbum(name: newAlbumName)
+        let _ = albumManager.createAlbum(name: newAlbumName)
         updateAlbumsList()
         newAlbumName = ""
         isAddingNew = false
@@ -63,7 +63,6 @@ class AlbumListViewModel: ObservableObject {
         updateAlbumsList()
     }
     
-    // 在返回到相册列表时更新照片数量
     func onAppear() {
         updateAlbumsList()
     }
