@@ -1,44 +1,9 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
-    "app" : {
-      "comment" : "App level strings",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stash Cam"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "杂物相机"
-          }
-        }
-      }
-    },
-
-    "album.list.title" : {
-      "comment" : "Navigation title for album list",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Stash Cam"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "杂物相机"
-          }
-        }
-      }
-    },
-
     "album.add" : {
       "comment" : "Add new album button",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -54,61 +19,6 @@
         }
       }
     },
-
-    "album.name.placeholder" : {
-      "comment" : "Placeholder text for album name input",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Album Name"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "相册名称"
-          }
-        }
-      }
-    },
-
-    "album.empty" : {
-      "comment" : "Message shown when album has no photos",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "No Photos"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "没有照片"
-          }
-        }
-      }
-    },
-
-    "album.delete.warning" : {
-      "comment" : "Title for album deletion warning",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cannot Delete Album"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无法删除相册"
-          }
-        }
-      }
-    },
-
     "album.delete.message" : {
       "comment" : "Message shown when trying to delete non-empty album. Parameters: %1$@ is album name, %2$d is photo count",
       "localizations" : {
@@ -126,7 +36,77 @@
         }
       }
     },
-
+    "album.delete.warning" : {
+      "comment" : "Title for album deletion warning",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cannot Delete Album"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法删除相册"
+          }
+        }
+      }
+    },
+    "album.empty" : {
+      "comment" : "Message shown when album has no photos",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No Photos"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "没有照片"
+          }
+        }
+      }
+    },
+    "album.list.title" : {
+      "comment" : "Navigation title for album list",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stash Cam"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "杂物相机"
+          }
+        }
+      }
+    },
+    "album.name.placeholder" : {
+      "comment" : "Placeholder text for album name input",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Album Name"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "相册名称"
+          }
+        }
+      }
+    },
     "album.photos.count" : {
       "comment" : "Photo count in album list. Parameter: %d is the number of photos",
       "localizations" : {
@@ -156,7 +136,23 @@
         }
       }
     },
-
+    "app.name" : {
+      "comment" : "App level strings",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stash Cam"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "杂物相机"
+          }
+        }
+      }
+    },
     "button.cancel" : {
       "comment" : "Cancel button text",
       "localizations" : {
@@ -174,7 +170,6 @@
         }
       }
     },
-
     "button.done" : {
       "comment" : "Done button text",
       "localizations" : {
@@ -192,9 +187,9 @@
         }
       }
     },
-
     "button.take.photo" : {
       "comment" : "Take photo button text",
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -210,25 +205,8 @@
         }
       }
     },
-
-    "default.album.study" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Study Materials"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "学习资料"
-          }
-        }
-      }
-    },
-
     "default.album.documents" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -244,8 +222,8 @@
         }
       }
     },
-
     "default.album.references" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -261,8 +239,25 @@
         }
       }
     },
-
+    "default.album.study" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Study Materials"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "学习资料"
+          }
+        }
+      }
+    },
     "default.album.temporary" : {
+      "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -274,6 +269,23 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "临时记录"
+          }
+        }
+      }
+    },
+    "test" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Test"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "测试"
           }
         }
       }

@@ -23,7 +23,7 @@ struct AlbumListView: View {
                 .onDelete(perform: viewModel.handleDeleteAlbum)
                 .onMove(perform: viewModel.moveAlbum)
             }
-            .navigationTitle("杂物相机")
+            .navigationTitle(LocalizedString.appName)
             .navigationDestination(for: Album.self) { album in
                 AlbumDetailView(album: album)
             }
@@ -40,10 +40,10 @@ struct AlbumListView: View {
                     }
                 }
             }
-            .alert("无法删除相册", isPresented: $viewModel.showDeletionAlert, presenting: viewModel.albumToDelete) { album in
-                Button("好的", role: .cancel) {}
+            .alert(LocalizedString.deleteWarning, isPresented: $viewModel.showDeletionAlert, presenting: viewModel.albumToDelete) { album in
+                Button(LocalizedString.buttonCancel, role: .cancel) {}
             } message: { album in
-                Text("\(album.name) 中包含 \(album.photoCount) 张照片，请先删除照片后再删除相册。")
+                Text(LocalizedString.deleteMessage(albumName: album.name, photoCount: album.photoCount))
             }
             .sheet(isPresented: $viewModel.isAddingNew) {
                 NavigationStack {
@@ -70,7 +70,7 @@ struct AlbumRow: View {
             VStack(alignment: .leading) {
                 Text(album.name)
                     .font(.headline)
-                Text("\(album.photoCount) 张照片")
+                Text(LocalizedString.photoCount(album.photoCount))
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
