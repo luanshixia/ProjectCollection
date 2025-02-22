@@ -53,7 +53,7 @@ struct LookupView: View {
     }
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 // Search bar with suggestions
                 VStack {
@@ -124,21 +124,16 @@ struct LookupView: View {
         suggestions = suggestionManager.getSuggestions(for: text)
         
         // Filter to ensure we only suggest words that exist in the dictionary
-        // Note: This could be moved to background task if it's too slow
         suggestions = suggestions.filter {
             UIReferenceLibraryViewController.dictionaryHasDefinition(forTerm: $0)
         }
     }
     
-    private func showDictionary(for word: String) {
-        let dictionary = UIReferenceLibraryViewController(term: word)
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let viewController = windowScene.windows.first?.rootViewController {
-            viewController.present(dictionary, animated: true)
-        }
-    }
-    
     private func lookupWord(_ word: String) {
+        // Always show dictionary view
+        showDictionary(for: word)
+        
+        // Only save word if it exists in dictionary
         if UIReferenceLibraryViewController.dictionaryHasDefinition(forTerm: word) {
             // Check if word already exists
             let existingWord = words.first { $0.text.lowercased() == word.lowercased() }
@@ -151,10 +146,17 @@ struct LookupView: View {
                 let newWord = Word(text: word)
                 modelContext.insert(newWord)
             }
-            
-            showDictionary(for: word)
-            searchText = ""
-            suggestions = []
+        }
+        
+        searchText = ""
+        suggestions = []
+    }
+    
+    private func showDictionary(for word: String) {
+        let dictionary = UIReferenceLibraryViewController(term: word)
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let viewController = windowScene.windows.first?.rootViewController {
+            viewController.present(dictionary, animated: true)
         }
     }
     
