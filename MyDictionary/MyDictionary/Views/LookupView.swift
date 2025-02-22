@@ -13,6 +13,7 @@ struct LookupView: View {
     @Query(sort: \Word.dateAdded, order: .reverse) private var words: [Word]
     @State private var searchText = ""
     @State private var suggestions: [String] = []
+    @State private var suggestionManager = WordSuggestionsManager.shared
     
     var groupedWords: [(String, [Word])] {
         let calendar = Calendar.current
@@ -119,17 +120,13 @@ struct LookupView: View {
             return
         }
         
-        // Use UITextChecker for word suggestions
-        let checker = UITextChecker()
-        let range = NSRange(location: 0, length: text.utf16.count)
-        let completions = checker.completions(forPartialWordRange: range,
-                                              in: text,
-                                              language: "en") ?? []
-        suggestions = completions.prefix(5).map { text + $0 }
+        // Get suggestions from our manager
+        suggestions = suggestionManager.getSuggestions(for: text)
         
-        // Add dictionary validations
-        suggestions = suggestions.filter { suggestion in
-            UIReferenceLibraryViewController.dictionaryHasDefinition(forTerm: suggestion)
+        // Filter to ensure we only suggest words that exist in the dictionary
+        // Note: This could be moved to background task if it's too slow
+        suggestions = suggestions.filter {
+            UIReferenceLibraryViewController.dictionaryHasDefinition(forTerm: $0)
         }
     }
     
