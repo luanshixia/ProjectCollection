@@ -6,12 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct LookupView: View {
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \Word.dateAdded, order: .reverse) private var words: [Word]
     @State private var searchText = ""
-    @State private var showDictionary = false
-    @State private var savedWords: [WordEntry] = []
-    @Environment(\.managedObjectContext) private var viewContext
     
     var body: some View {
         NavigationView {
@@ -30,13 +30,12 @@ struct LookupView: View {
                 }
                 .padding()
                 
-                // Recently looked up words
+                // Word list
                 List {
-                    Section(header: Text("Recent Lookups")) {
-                        ForEach(savedWords) { word in
-                            WordRow(word: word)
-                        }
+                    ForEach(words) { word in
+                        WordRow(word: word)
                     }
+                    .onDelete(perform: deleteWords)
                 }
             }
             .navigationTitle("Dictionary")
@@ -47,15 +46,9 @@ struct LookupView: View {
         guard !searchText.isEmpty else { return }
         
         if UIReferenceLibraryViewController.dictionaryHasDefinition(forTerm: searchText) {
-            // Save word to history
-            let newWord = WordEntry(
-                word: searchText,
-                dateAdded: Date(),
-                lastReviewed: nil,
-                reviewCount: 0,
-                confidence: 1
-            )
-            savedWords.insert(newWord, at: 0)
+            let newWord = Word(text: searchText)
+            modelContext.insert(newWord)
+            searchText = ""
             
             // Show system dictionary
             let dictionary = UIReferenceLibraryViewController(term: searchText)
@@ -65,15 +58,21 @@ struct LookupView: View {
             }
         }
     }
+    
+    func deleteWords(_ indexSet: IndexSet) {
+        for index in indexSet {
+            modelContext.delete(words[index])
+        }
+    }
 }
 
 struct WordRow: View {
-    let word: WordEntry
+    let word: Word
     
     var body: some View {
         HStack {
             VStack(alignment: .leading) {
-                Text(word.word)
+                Text(word.text)
                     .font(.headline)
                 Text("Added \(word.dateAdded, style: .date)")
                     .font(.caption)

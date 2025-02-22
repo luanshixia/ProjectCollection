@@ -6,17 +6,30 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct StatsView: View {
-    @State private var totalWords = 0
-    @State private var averageConfidence = 0.0
-    @State private var wordsLearned = 0
+    @Query private var words: [Word]
+    
+    var totalWords: Int {
+        words.count
+    }
+    
+    var averageConfidence: Double {
+        guard totalWords > 0 else { return 0 }
+        let sum = words.reduce(0) { $0 + Double($1.confidence) }
+        return sum / Double(totalWords)
+    }
+    
+    var masteredWords: Int {
+        words.filter { $0.confidence >= 4 }.count
+    }
     
     var body: some View {
         NavigationView {
             List {
                 StatRow(title: "Total Words", value: "\(totalWords)")
-                StatRow(title: "Words Mastered", value: "\(wordsLearned)")
+                StatRow(title: "Words Mastered", value: "\(masteredWords)")
                 StatRow(title: "Average Confidence", value: String(format: "%.1f", averageConfidence))
             }
             .navigationTitle("Statistics")

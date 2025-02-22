@@ -13,5 +13,6 @@ struct MyDictionaryApp: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: Word.self)
     }
 }
