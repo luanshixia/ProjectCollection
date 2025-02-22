@@ -140,8 +140,17 @@ struct LookupView: View {
     
     private func lookupWord(_ word: String) {
         if UIReferenceLibraryViewController.dictionaryHasDefinition(forTerm: word) {
-            let newWord = Word(text: word)
-            modelContext.insert(newWord)
+            // Check if word already exists
+            let existingWord = words.first { $0.text.lowercased() == word.lowercased() }
+            
+            if let existingWord = existingWord {
+                // Update existing word's timestamp
+                existingWord.dateAdded = Date()
+            } else {
+                // Create new word
+                let newWord = Word(text: word)
+                modelContext.insert(newWord)
+            }
             
             showDictionary(for: word)
             searchText = ""
