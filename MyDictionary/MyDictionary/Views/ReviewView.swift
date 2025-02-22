@@ -12,7 +12,6 @@ struct ReviewView: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var words: [Word]
     @State private var currentWord: Word?
-    @State private var showingDefinition = false
     
     var body: some View {
         NavigationView {
@@ -20,7 +19,6 @@ struct ReviewView: View {
                 if let word = currentWord {
                     ReviewCard(
                         word: word,
-                        showDefinition: $showingDefinition,
                         onConfidence: recordConfidence)
                 } else {
                     Text("No words to review!")
@@ -63,7 +61,6 @@ struct ReviewView: View {
         )
         
         // Reset for next word
-        showingDefinition = false
         fetchNextWordToReview()
     }
     
@@ -104,43 +101,34 @@ struct ReviewView: View {
 
 struct ReviewCard: View {
     let word: Word
-    @Binding var showDefinition: Bool
     let onConfidence: (Int) -> Void
     
     var body: some View {
-        VStack(spacing: 20) {
+        VStack(spacing: 24) {
             Text(word.text)
                 .font(.largeTitle)
-                .padding()
             
-            Button(action: { showDefinition.toggle() }) {
-                Text(showDefinition ? "Hide Definition" : "Show Definition")
+            Button(action: {
+                let dictionary = UIReferenceLibraryViewController(term: word.text)
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let viewController = windowScene.windows.first?.rootViewController {
+                    viewController.present(dictionary, animated: true)
+                }
+            }) {
+                Text("Show Definition")
                     .foregroundColor(.blue)
             }
             
-            if showDefinition {
-                Button(action: {
-                    let dictionary = UIReferenceLibraryViewController(term: word.text)
-                    if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                       let viewController = windowScene.windows.first?.rootViewController {
-                        viewController.present(dictionary, animated: true)
-                    }
-                }) {
-                    Text("View in Dictionary")
-                        .foregroundColor(.blue)
-                }
-                
-                HStack(spacing: 12) {
-                    ForEach(1...5, id: \.self) { level in
-                        ConfidenceButton(level: level) {
-                            onConfidence(level)
-                        }
+            HStack(spacing: 12) {
+                ForEach(1...5, id: \.self) { level in
+                    ConfidenceButton(level: level) {
+                        onConfidence(level)
                     }
                 }
-                .padding(.top)
             }
         }
-        .frame(maxWidth: .infinity, maxHeight: 300)
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 32)
         .background(Color(.systemBackground))
         .cornerRadius(12)
         .shadow(radius: 5)

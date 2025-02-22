@@ -160,21 +160,14 @@ struct WordRow: View {
     let word: Word
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        HStack {
             Text(word.text)
-                .font(.headline)
+                .font(.body)
             
-            Text("Added: \(word.formattedDateAdded)")
-                .font(.caption)
-                .foregroundColor(.secondary)
+            Spacer()
             
             ConfidenceBadge(level: word.confidence)
-            
-            Text("Next review: \(word.formattedNextReview)")
-                .font(.caption)
-                .foregroundColor(.secondary)
         }
-        .padding(.vertical, 4)
     }
 }
 
