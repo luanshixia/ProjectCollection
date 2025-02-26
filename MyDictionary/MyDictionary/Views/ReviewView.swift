@@ -185,10 +185,20 @@ struct ReviewCard: View {
     let word: Word
     let onConfidence: (Int) -> Void
     
+    @State private var dragOffset = CGSize.zero
+    @State private var draggedDirection: DragDirection = .none
+    
+    private enum DragDirection {
+        case none, up, down
+    }
+    
     var body: some View {
         VStack(spacing: 24) {
             Text(word.text)
                 .font(.largeTitle)
+                .padding(.top, 8)
+            // Apply a slight rotation based on drag offset for a more dynamic feel
+                .rotationEffect(Angle(degrees: -dragOffset.height * 0.05))
             
             Button(action: {
                 let dictionary = UIReferenceLibraryViewController(term: word.text)
@@ -208,12 +218,56 @@ struct ReviewCard: View {
                     }
                 }
             }
+            .padding(.bottom, 8)
         }
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 32)
-        .background(Color(.systemBackground))
-        .cornerRadius(12)
-        .shadow(radius: 5)
-        .padding()
+        .padding(.vertical, 16)
+        .background(
+            RoundedRectangle(cornerRadius: 12)
+                .fill(Color(.systemBackground))
+                .shadow(color: Color.primary.opacity(0.3), radius: 8, x: 0, y: 2)
+        )
+        .offset(y: dragOffset.height)
+        .rotation3DEffect(
+            Angle(degrees: Double(dragOffset.height) * 0.1),
+            axis: (x: 1.0, y: 0.0, z: 0.0)
+        )
+        .gesture(
+            DragGesture()
+                .onChanged { gesture in
+                    // Limit drag to vertical axis and restrict the range
+                    let newHeight = gesture.translation.height
+                    let clampedHeight = min(max(newHeight, -60), 60)
+                    dragOffset = CGSize(width: 0, height: clampedHeight)
+                    
+                    // Update drag direction for visual feedback
+                    draggedDirection = dragOffset.height < 0 ? .up : .down
+                }
+                .onEnded { _ in
+                    // Reset with spring animation for a bounce effect
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+                        dragOffset = .zero
+                        draggedDirection = .none
+                    }
+                }
+        )
+        .overlay(
+            // Visual indicator based on drag direction
+            Group {
+                if draggedDirection == .up {
+                    Image(systemName: "arrow.up.circle")
+                        .font(.system(size: 28))
+                        .foregroundColor(.blue)
+                        .opacity(min(abs(dragOffset.height) / CGFloat(60), 1.0))
+                        .offset(y: -80)
+                } else if draggedDirection == .down {
+                    Image(systemName: "arrow.down.circle")
+                        .font(.system(size: 28))
+                        .foregroundColor(.orange)
+                        .opacity(min(dragOffset.height / CGFloat(60), 1.0))
+                        .offset(y: 80)
+                }
+            }
+        )
     }
 }
