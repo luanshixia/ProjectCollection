@@ -100,6 +100,12 @@ struct LookupView: View {
                                 WordRow(word: word)
                                     .contentShape(Rectangle())
                                     .swipeActions {
+                                        Button(role: .destructive) {
+                                            delete(word: word)
+                                        } label: {
+                                            Label("Delete", systemImage: "trash")
+                                        }
+                                        
                                         Button {
                                             scheduleForImmediateReview(word)
                                         } label: {
@@ -166,6 +172,10 @@ struct LookupView: View {
            let viewController = windowScene.windows.first?.rootViewController {
             viewController.present(dictionary, animated: true)
         }
+    }
+    
+    private func delete(word: Word) {
+        modelContext.delete(word)
     }
     
     private func delete(words: [Word], at indexes: IndexSet) {
