@@ -62,6 +62,12 @@ struct LookupView: View {
                             .textFieldStyle(RoundedBorderTextFieldStyle())
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled(true)
+                            .submitLabel(.search)
+                            .onSubmit {
+                                if !searchText.isEmpty {
+                                    lookupWord(searchText)
+                                }
+                            }
                             .onChange(of: searchText) { oldValue, newValue in
                                 // Autocomplete disabled for now
                                 // updateSuggestions(for: newValue)
