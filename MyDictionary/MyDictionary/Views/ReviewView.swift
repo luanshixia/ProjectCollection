@@ -10,39 +10,124 @@ import SwiftData
 
 struct ReviewView: View {
     @Environment(\.modelContext) private var modelContext
-    @Query private var words: [Word]
-    @State private var currentWord: Word?
+    @Query private var allWords: [Word]
+    @State private var wordsToReview: [Word] = []
+    @State private var currentIndex = 0
+    @State private var offset = CGSize.zero
+    @State private var isRemovingCard = false
     
     var body: some View {
-        NavigationView {
-            VStack {
-                if let word = currentWord {
-                    ReviewCard(
-                        word: word,
-                        onConfidence: recordConfidence)
+        NavigationStack {
+            ZStack {
+                if wordsToReview.isEmpty {
+                    ContentUnavailableView("No Words to Review",
+                                           systemImage: "book.closed",
+                                           description: Text("Look up some words first"))
                 } else {
-                    Text("No words to review!")
-                        .font(.title)
+                    // Stack of review cards
+                    ForEach(Array(wordsToReview.enumerated().prefix(3)), id: \.element.id) { index, word in
+                        let isTopCard = index == currentIndex
+                        let offset = isTopCard ? self.offset : CGSize.zero
+                        
+                        cardView(for: word, at: index)
+                            .zIndex(Double(wordsToReview.count - index))
+                            .offset(
+                                x: isTopCard ? offset.width : 0,
+                                y: isTopCard ? offset.height : 0
+                            )
+                            .scaleEffect(calculateScale(for: index))
+                            .offset(y: calculateYOffset(for: index))
+                            .opacity(isRemovingCard && isTopCard ? 0 : 1)
+                    }
                 }
             }
             .navigationTitle("Review")
             .onAppear {
-                fetchNextWordToReview()
+                fetchWordsToReview()
             }
         }
     }
     
-    private func fetchNextWordToReview() {
-        let now = Date()
-        currentWord = words.first { word in
-            guard let nextReview = word.nextReviewDate else { return true }
-            return nextReview <= now
+    private func cardView(for word: Word, at index: Int) -> some View {
+        ReviewCard(word: word, onConfidence: { confidence in
+            withAnimation(.spring()) {
+                isRemovingCard = true
+            }
+            
+            // Short delay to allow animation to complete
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                recordConfidence(confidence, for: word)
+                moveToNextCard()
+            }
+        })
+        .shadow(radius: calculateShadow(for: index))
+    }
+    
+    private func calculateScale(for index: Int) -> CGFloat {
+        let diff = CGFloat(index - currentIndex)
+        if diff <= 0 {
+            return 1.0 // Current card is full size
+        } else {
+            return 1.0 - diff * 0.05 // Each card behind is 5% smaller
         }
     }
     
-    private func recordConfidence(_ level: Int) {
-        guard let word = currentWord else { return }
+    private func calculateYOffset(for index: Int) -> CGFloat {
+        let diff = CGFloat(index - currentIndex)
+        if diff <= 0 {
+            return 0 // Current card is at default position
+        } else {
+            return diff * 10 // Stack cards with increasing offset
+        }
+    }
+    
+    private func calculateShadow(for index: Int) -> CGFloat {
+        let diff = CGFloat(index - currentIndex)
+        if diff <= 0 {
+            return 5 // Current card has normal shadow
+        } else {
+            return max(1, 5 - diff * 2) // Decreasing shadow for cards behind
+        }
+    }
+    
+    private func moveToNextCard() {
+        // Remove the current card
+        if !wordsToReview.isEmpty {
+            wordsToReview.remove(at: currentIndex)
+        }
         
+        // Reset animation state
+        offset = .zero
+        isRemovingCard = false
+        
+        // If we're out of cards, fetch more
+        if wordsToReview.isEmpty {
+            fetchWordsToReview()
+        }
+    }
+    
+    private func fetchWordsToReview() {
+        let now = Date()
+        // Get all words that are due for review
+        wordsToReview = allWords.filter { word in
+            guard let nextReview = word.nextReviewDate else { return true }
+            return nextReview <= now
+        }
+        
+        // Limit to 10 words at a time to keep it manageable
+        if wordsToReview.count > 10 {
+            wordsToReview = Array(wordsToReview.prefix(10))
+        }
+        
+        // Sort by review date (oldest first)
+        wordsToReview.sort { (word1, word2) -> Bool in
+            let date1 = word1.nextReviewDate ?? .distantPast
+            let date2 = word2.nextReviewDate ?? .distantPast
+            return date1 < date2
+        }
+    }
+    
+    private func recordConfidence(_ level: Int, for word: Word) {
         // Calculate next review interval using SM-2
         let (interval, _) = calculateNextReview(
             quality: level,
@@ -59,9 +144,6 @@ struct ReviewView: View {
             value: Int(interval),
             to: Date()
         )
-        
-        // Reset for next word
-        fetchNextWordToReview()
     }
     
     private func calculateNextReview(
