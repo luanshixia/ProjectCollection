@@ -124,7 +124,7 @@ struct LookupView: View {
                     }
                 }
             }
-            .navigationTitle("Dictionary")
+            .navigationTitle("Look up")
         }
     }
     

@@ -60,7 +60,7 @@ struct ReviewView: View {
                 moveToNextCard()
             }
         })
-        .shadow(radius: calculateShadow(for: index))
+        .shadow(color: Color.primary.opacity(0.2), radius: calculateShadow(for: index), x: 0, y: 2)
     }
     
     private func calculateScale(for index: Int) -> CGFloat {
