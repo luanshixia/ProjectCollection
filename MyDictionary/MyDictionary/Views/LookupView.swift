@@ -63,7 +63,9 @@ struct LookupView: View {
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled(true)
                             .onChange(of: searchText) { oldValue, newValue in
-                                updateSuggestions(for: newValue)
+                                // Autocomplete disabled for now
+                                // updateSuggestions(for: newValue)
+                                suggestions = []
                             }
                         
                         Button(action: {
