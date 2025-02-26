@@ -125,6 +125,9 @@ struct LookupView: View {
                 }
             }
             .navigationTitle("Look up")
+            .onTapGesture {
+                hideKeyboard()
+            }
         }
     }
     
@@ -174,14 +177,14 @@ struct LookupView: View {
         }
     }
     
-    private func delete(word: Word) {
-        modelContext.delete(word)
-    }
-    
     private func delete(words: [Word], at indexes: IndexSet) {
         for index in indexes {
             modelContext.delete(words[index])
         }
+    }
+    
+    private func delete(word: Word) {
+        modelContext.delete(word)
     }
     
     private func scheduleForImmediateReview(_ word: Word) {
@@ -191,6 +194,10 @@ struct LookupView: View {
         // Show confirmation
         let haptic = UINotificationFeedbackGenerator()
         haptic.notificationOccurred(.success)
+    }
+    
+    private func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
 }
 
