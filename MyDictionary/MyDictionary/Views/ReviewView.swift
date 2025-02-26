@@ -38,6 +38,7 @@ struct ReviewView: View {
                             .scaleEffect(calculateScale(for: index))
                             .offset(y: calculateYOffset(for: index))
                             .opacity(isRemovingCard && isTopCard ? 0 : 1)
+                            .padding(.horizontal, 20) // Add horizontal padding
                     }
                 }
             }
@@ -60,7 +61,7 @@ struct ReviewView: View {
                 moveToNextCard()
             }
         })
-        .shadow(color: Color.primary.opacity(0.2), radius: calculateShadow(for: index), x: 0, y: 2)
+        .shadow(color: Color.primary.opacity(0.3), radius: calculateShadow(for: index), x: 0, y: 2)
     }
     
     private func calculateScale(for index: Int) -> CGFloat {
