@@ -99,6 +99,14 @@ struct LookupView: View {
                             ForEach(group.1) { word in
                                 WordRow(word: word)
                                     .contentShape(Rectangle())
+                                    .swipeActions {
+                                        Button {
+                                            scheduleForImmediateReview(word)
+                                        } label: {
+                                            Label("Review Now", systemImage: "clock.arrow.circlepath")
+                                        }
+                                        .tint(.blue)
+                                    }
                                     .onTapGesture {
                                         showDictionary(for: word.text)
                                     }
@@ -164,6 +172,15 @@ struct LookupView: View {
         for index in indexes {
             modelContext.delete(words[index])
         }
+    }
+    
+    private func scheduleForImmediateReview(_ word: Word) {
+        // Set next review date to now so it appears in review immediately
+        word.nextReviewDate = Date()
+        
+        // Show confirmation
+        let haptic = UINotificationFeedbackGenerator()
+        haptic.notificationOccurred(.success)
     }
 }
 
