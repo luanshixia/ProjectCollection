@@ -70,7 +70,6 @@ struct LookupView: View {
                             }
                             .onChange(of: searchText) { oldValue, newValue in
                                 // Autocomplete disabled for now
-                                // updateSuggestions(for: newValue)
                                 suggestions = []
                             }
                         

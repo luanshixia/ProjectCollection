@@ -223,6 +223,7 @@ struct ReviewCard: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, 16)
+        .padding(.horizontal, 24)  // Added horizontal padding
         .background(
             RoundedRectangle(cornerRadius: 12)
                 .fill(Color(.systemBackground))
@@ -252,23 +253,6 @@ struct ReviewCard: View {
                     }
                 }
         )
-        .overlay(
-            // Visual indicator based on drag direction
-            Group {
-                if draggedDirection == .up {
-                    Image(systemName: "arrow.up.circle")
-                        .font(.system(size: 28))
-                        .foregroundColor(.blue)
-                        .opacity(min(abs(dragOffset.height) / CGFloat(60), 1.0))
-                        .offset(y: -80)
-                } else if draggedDirection == .down {
-                    Image(systemName: "arrow.down.circle")
-                        .font(.system(size: 28))
-                        .foregroundColor(.orange)
-                        .opacity(min(dragOffset.height / CGFloat(60), 1.0))
-                        .offset(y: 80)
-                }
-            }
-        )
+        // Removed the arrow overlays
     }
 }
