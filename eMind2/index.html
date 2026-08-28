@@ -78,6 +78,7 @@
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
     color:var(--muted); font-size:14px; pointer-events:none;
   }
+  .emptyHint[hidden]{ display:none; }
 </style>
 </head>
 <body>
@@ -401,8 +402,9 @@ function drawAll(){
 
   function draw(n, isRoot){
     makeNode(n, isRoot);
+    if (n.collapsed) return;
     for (const k of n.children){
-      if (!n.collapsed) makeEdge(n, k);
+      makeEdge(n, k);
       draw(k, false);
     }
   }
@@ -410,7 +412,7 @@ function drawAll(){
 
   const visible = nodeById.size;
   statusEl.textContent = visible + (visible === 1 ? ' node' : ' nodes');
-  emptyHint.hidden = visible > 0;
+  emptyHint.hidden = root.children.length > 0 || root.text !== 'Mind Map';
   applyView();
 }
 
