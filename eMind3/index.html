@@ -87,6 +87,7 @@
     <div class="spacer"></div>
     <span class="hint">scroll to zoom &middot; drag to pan &middot; click a node to collapse</span>
     <button id="fitBtn">Fit to screen</button>
+    <button id="exportBtn">Export SVG</button>
   </header>
   <main>
     <div id="editorPane">
@@ -126,6 +127,7 @@
   var canvasPane = document.getElementById("canvasPane");
   var emptyState = document.getElementById("emptyState");
   var fitBtn = document.getElementById("fitBtn");
+  var exportBtn = document.getElementById("exportBtn");
 
   // ---------- Markdown -> tree ----------
 
@@ -364,7 +366,7 @@
       if (n.children.length > 0) {
         var cx = n.x + n.boxWidth, cy = n.y + NODE_H / 2;
         var toggle = el("g", { class: "toggle" });
-        var tCircle = el("circle", { cx: cx, cy: cy, r: 8, fill: color, stroke: "var(--bg)", "stroke-width": 1.5 });
+        var tCircle = el("circle", { cx: cx, cy: cy, r: 8, fill: color, stroke: "#1e2128", "stroke-width": 1.5 });
         var tText = el("text", { x: cx, y: cy + 3.5, "text-anchor": "middle" });
         tText.textContent = n.collapsed ? "+" : "−";
         toggle.appendChild(tCircle);
@@ -389,8 +391,7 @@
 
   // ---------- Pan & zoom ----------
 
-  function fitToScreen() {
-    if (!currentNodes.length) return;
+  function contentBounds() {
     var minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
     for (var i = 0; i < currentNodes.length; i++) {
       var n = currentNodes[i];
@@ -399,15 +400,61 @@
       maxX = Math.max(maxX, n.x + n.boxWidth + 20);
       maxY = Math.max(maxY, n.y + NODE_H);
     }
-    var w = Math.max(1, maxX - minX);
-    var h = Math.max(1, maxY - minY);
+    return { minX: minX, minY: minY, maxX: maxX, maxY: maxY };
+  }
+
+  function fitToScreen() {
+    if (!currentNodes.length) return;
+    var b = contentBounds();
+    var w = Math.max(1, b.maxX - b.minX);
+    var h = Math.max(1, b.maxY - b.minY);
     var rect = canvasPane.getBoundingClientRect();
     var scale = Math.min(rect.width / w, rect.height / h) * 0.92;
     scale = Math.max(0.15, Math.min(scale, 1.6));
     view.scale = scale;
-    view.x = (rect.width - w * scale) / 2 - minX * scale;
-    view.y = (rect.height - h * scale) / 2 - minY * scale;
+    view.x = (rect.width - w * scale) / 2 - b.minX * scale;
+    view.y = (rect.height - h * scale) / 2 - b.minY * scale;
     updateTransform();
+  }
+
+  // ---------- Export ----------
+
+  function exportSVG() {
+    if (!currentNodes.length) return;
+    var b = contentBounds();
+    var pad = 20;
+    var w = (b.maxX - b.minX) + pad * 2;
+    var h = (b.maxY - b.minY) + pad * 2;
+
+    var content = viewport.cloneNode(true);
+    content.setAttribute("transform", "translate(" + (pad - b.minX) + "," + (pad - b.minY) + ")");
+
+    var out = el("svg", {
+      xmlns: svgNS, width: w, height: h, viewBox: "0 0 " + w + " " + h
+    });
+    var style = document.createElementNS(svgNS, "style");
+    style.textContent =
+      ".node text{font:13px -apple-system,BlinkMacSystemFont,Helvetica,Arial,sans-serif;fill:#0d0f13;}" +
+      ".node.root text{font-weight:700;font-size:14.5px;}" +
+      ".link{fill:none;stroke-width:2;opacity:0.75;}" +
+      ".toggle text{font:11px monospace;fill:#fff;}";
+    out.appendChild(style);
+    out.appendChild(el("rect", { x: 0, y: 0, width: w, height: h, fill: "#1e2128" }));
+    out.appendChild(content);
+
+    var svgText = "<?xml version=\"1.0\" standalone=\"no\"?>\n" + new XMLSerializer().serializeToString(out);
+    var blob = new Blob([svgText], { type: "image/svg+xml;charset=utf-8" });
+    var url = URL.createObjectURL(blob);
+    var name = (currentRoot && currentRoot.label ? currentRoot.label : "mindmap")
+      .toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "mindmap";
+
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = name + ".svg";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
   }
 
   svg.addEventListener("wheel", function (e) {
@@ -442,6 +489,7 @@
   });
 
   fitBtn.addEventListener("click", fitToScreen);
+  exportBtn.addEventListener("click", exportSVG);
 
   // ---------- Wiring ----------
 
