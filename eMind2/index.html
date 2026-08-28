@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>eMind2 — Markdown Mind Map</title>
+<style>
+  :root{
+    --bg:#0e1320;
+    --panel:#151c2c;
+    --panel-2:#1a2234;
+    --line:#283450;
+    --text:#e8ecf3;
+    --muted:#8b95ab;
+    --accent:#4f8cff;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; }
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    display:flex; flex-direction:column; overflow:hidden;
+  }
+  header{
+    display:flex; align-items:center; gap:8px; padding:10px 14px;
+    background:var(--panel); border-bottom:1px solid var(--line); flex-wrap:wrap;
+  }
+  .logo{ font-size:15px; font-weight:700; letter-spacing:.4px; margin-right:6px; }
+  .logo b{ color:var(--accent); }
+  .spacer{ flex:1; }
+  button{
+    background:var(--panel-2); color:var(--text); border:1px solid var(--line);
+    border-radius:8px; padding:6px 12px; font-size:12.5px; cursor:pointer;
+    transition:background .15s,border-color .15s;
+  }
+  button:hover{ background:#223050; border-color:#3a4b75; }
+  button:active{ transform:translateY(1px); }
+  .seg{ display:flex; border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+  .seg button{ border:none; border-radius:0; background:transparent; }
+  .seg button.active{ background:var(--accent); color:#fff; }
+  .seg button:hover{ background:#223050; }
+  .seg button.active:hover{ background:#5b96ff; }
+  #status{ font-size:12px; color:var(--muted); min-width:64px; text-align:center; }
+
+  main{ flex:1; display:flex; min-height:0; }
+
+  #editorPane{
+    width:380px; min-width:260px; max-width:55vw; display:flex; flex-direction:column;
+    background:var(--panel); border-right:1px solid var(--line);
+  }
+  .paneHead{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:10px 14px 8px; font-size:12px; color:var(--muted); letter-spacing:.6px;
+    text-transform:uppercase;
+  }
+  #editor{
+    flex:1; resize:none; border:none; outline:none; background:transparent; color:var(--text);
+    font:13px/1.65 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+    padding:4px 14px 12px; tab-size:2;
+  }
+  .hint{
+    padding:8px 14px 12px; font-size:11.5px; color:var(--muted); line-height:1.5;
+    border-top:1px solid var(--line);
+  }
+  .hint code{ color:#b9c6e2; background:var(--panel-2); border-radius:4px; padding:1px 4px; }
+
+  #canvasWrap{ flex:1; position:relative; min-width:0; }
+  #svg{
+    position:absolute; inset:0; width:100%; height:100%; display:block;
+    touch-action:none; cursor:grab;
+  }
+  #svg.panning{ cursor:grabbing; }
+  #svg text, #svg tspan{ user-select:none; pointer-events:none; }
+  .node{ cursor:pointer; }
+  .node rect{ transition:filter .15s; }
+  .node:hover rect{ filter:brightness(1.3); }
+  .emptyHint{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    color:var(--muted); font-size:14px; pointer-events:none;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">e<b>Mind</b>2</div>
+  <div class="seg" id="layoutSeg">
+    <button data-mode="mind" class="active">Mind Map</button>
+    <button data-mode="tree">Tree</button>
+  </div>
+  <div class="spacer"></div>
+  <span id="status"></span>
+  <button id="btnExpand" title="Expand every node">Expand all</button>
+  <button id="btnCollapse" title="Collapse every branch">Collapse all</button>
+  <button id="btnFit" title="Fit the whole map in view (F)">Fit</button>
+  <button id="btnSvg" title="Download the current map as SVG">Download SVG</button>
+  <button id="btnSample" title="Restore the sample document">Sample</button>
+</header>
+
+<main>
+  <aside id="editorPane">
+    <div class="paneHead"><span>Markdown</span><span id="charCount"></span></div>
+    <textarea id="editor" spellcheck="false" placeholder="Paste or type a markdown bullet list…"></textarea>
+    <div class="hint">
+      Bullets: <code>-</code> <code>*</code> <code>+</code> or <code>1.</code> — nest with 2+ spaces (or a tab).<br/>
+      Supports <code>**bold**</code>, <code>`code`</code>, links and <code>[x]</code> checkboxes.
+      Click a node to collapse / expand it. Scroll to zoom, drag to pan.
+    </div>
+  </aside>
+  <div id="canvasWrap">
+    <svg id="svg">
+      <defs>
+        <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+          <circle cx="1.5" cy="1.5" r="1.4" fill="rgba(255,255,255,.055)"></circle>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#dots)"></rect>
+      <g id="viewport"></g>
+    </svg>
+    <div class="emptyHint" id="emptyHint" hidden>Paste a markdown bullet list on the left to see your mind map</div>
+  </div>
+</main>
+
+<script>
+'use strict';
+
+/* ---------------- sample document ---------------- */
+const SAMPLE = `# 2026 Roadmap
+
+- Product
+  - Web
+    - Redesign onboarding
+    - [x] SSO & SAML
+    - [ ] Offline mode
+    - Performance
+      - TTI under 2s
+      - Bundle size audit
+  - Mobile
+    - iOS 1.0 launch
+    - [ ] Android beta
+- AI
+  - Smart search
+    - RAG over documents
+    - Citation tracking
+  - Summaries
+    - PDF parsing
+    - [ ] Weekly digests
+- Growth
+  - Referral program
+  - Pricing page A/B test
+  - Product Hunt launch
+- Infrastructure
+  - Multi-region failover
+  - Cost audit
+  - [ ] SOC 2 evidence automation
+`;
+
+/* ---------------- dom ---------------- */
+const $ = s => document.querySelector(s);
+const editor = $('#editor');
+const svg = $('#svg');
+const viewport = $('#viewport');
+const emptyHint = $('#emptyHint');
+const statusEl = $('#status');
+const charCountEl = $('#charCount');
+const NS = 'http://www.w3.org/2000/svg';
+
+editor.value = SAMPLE;
+
+/* ---------------- state ---------------- */
+let root = null;
+let layoutMode = 'mind';      // 'mind' | 'tree'
+let idSeq = 0;
+const nodeById = new Map();
+const collapseMap = new Map(); // node path -> collapsed
+
+const view = { x: 0, y: 0, k: 1 };
+
+/* ---------------- constants ---------------- */
+const FONT = '500 13px system-ui,-apple-system,"Segoe UI",sans-serif';
+const PADX = 12, PADY = 8, LINE_H = 17;
+const MAX_W = 250, MAX_LINES = 6;
+const H_GAP = 38, V_GAP = 13;
+const PALETTE = [212, 348, 165, 48, 275, 195, 15, 320, 120, 255, 85, 290];
+
+/* ---------------- markdown parsing ---------------- */
+function stripInline(s){
+  s = s.replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1');
+  s = s.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1');
+  s = s.replace(/\*\*([^*]+)\*\*/g, '$1');
+  s = s.replace(/__([^_]+)__/g, '$1');
+  s = s.replace(/(^|[\s(])\*([^*]+)\*/g, '$1$2');
+  s = s.replace(/(^|[\s(])_([^_]+)_/g, '$1$2');
+  s = s.replace(/`([^`]+)`/g, '$1');
+  s = s.replace(/~~([^~]+)~~/g, '$1');
+  return s.trim();
+}
+
+function parseMarkdown(src){
+  const root = { text: 'Mind Map', children: [] };
+  const stack = [];                 // { indent, node }
+  let lastBullet = null;            // { indent, node }
+  const bulletRe = /^(\s*)(?:[-*+]|\d+[.)])\s+(.*)$/;
+  const lines = src.replace(/\r\n?/g, '\n').split('\n');
+
+  for (let raw of lines){
+    const line = raw.replace(/\t/g, '    ');
+    const m = line.match(bulletRe);
+
+    if (m){
+      const indent = m[1].length;
+      while (stack.length && stack[stack.length - 1].indent >= indent) stack.pop();
+      const parent = stack.length ? stack[stack.length - 1].node : root;
+
+      let text = stripInline(m[2]);
+      const cb = text.match(/^\[( |x|X)\]\s*/);
+      const task = cb ? (/x/i.test(cb[1]) ? 1 : 0) : null;
+      if (cb) text = stripInline(text.slice(cb[0].length));
+
+      const node = { text: text || (cb ? '' : '•'), task, children: [] };
+      parent.children.push(node);
+      stack.push({ indent, node });
+      lastBullet = { indent, node };
+
+    } else {
+      const trimmed = line.trim();
+      if (!trimmed || /^[-*_]{3,}$/.test(trimmed)){ lastBullet = null; continue; }
+      const indent = line.match(/^\s*/)[0].length;
+      if (lastBullet && indent > lastBullet.indent){
+        // lazy continuation line — fold into previous item
+        const add = stripInline(trimmed);
+        if (add) lastBullet.node.text = (lastBullet.node.text ? lastBullet.node.text + ' ' : '') + add;
+      } else if (!lastBullet && /^#\s+/.test(trimmed)){
+        root.text = stripInline(trimmed.replace(/^#+\s*/, '')) || root.text;
+      }
+    }
+  }
+  return root;
+}
+
+/* ---------------- text measurement / layout ---------------- */
+const meas = document.createElement('canvas').getContext('2d');
+meas.font = FONT;
+
+function measureAll(n){
+  // wrap text
+  const words = (n.text || ' ').split(/\s+/);
+  const lines = [];
+  let cur = '';
+  for (const w of words){
+    const t = cur ? cur + ' ' + w : w;
+    if (!cur || meas.measureText(t).width <= MAX_W) cur = t;
+    else { lines.push(cur); cur = w; }
+  }
+  if (cur) lines.push(cur);
+  if (!lines.length) lines.push('•');
+  if (n.task != null) lines[0] = (n.task ? '☑ ' : '☐ ') + lines[0];
+  if (lines.length > MAX_LINES){ lines.length = MAX_LINES; lines[MAX_LINES - 1] += '…'; }
+  n.lines = lines;
+  n.w = Math.max(...lines.map(l => meas.measureText(l).width)) + PADX * 2;
+  n.h = lines.length * LINE_H + PADY * 2;
+
+  const kids = n.collapsed ? [] : n.children;
+  for (const k of kids) measureAll(k);
+  const total = kids.reduce((s, k) => s + k.subH, 0) + V_GAP * Math.max(0, kids.length - 1);
+  n.subH = Math.max(n.h, total);
+}
+
+function place(n, dir){
+  n._dir = dir;
+  const kids = n.collapsed ? [] : n.children;
+  if (!kids.length) return;
+  const total = kids.reduce((s, k) => s + k.subH, 0) + V_GAP * (kids.length - 1);
+  let y = n.cy - total / 2;
+  for (const k of kids){
+    k._dir = dir;
+    k.cx = n.cx + dir * (n.w / 2 + H_GAP + k.w / 2);
+    k.cy = y + k.subH / 2;
+    y += k.subH + V_GAP;
+    place(k, dir);
+  }
+}
+
+function layoutTree(){
+  root.cx = 0; root.cy = 0; root._dir = 1;
+  const kids = root.collapsed ? [] : root.children;
+
+  let groups;
+  if (layoutMode === 'tree'){
+    groups = [ { dir: 1, items: kids } ];
+  } else {
+    // balance top-level branches across both sides (greedy by subtree height)
+    const order = kids.map((k, i) => i).sort((a, b) => kids[b].subH - kids[a].subH);
+    const left = [], right = [];
+    let lH = 0, rH = 0;
+    for (const i of order){
+      if (lH <= rH){ left.push(i); lH += kids[i].subH + V_GAP; }
+      else { right.push(i); rH += kids[i].subH + V_GAP; }
+    }
+    groups = [
+      { dir: -1, items: left.map(i => kids[i]) },
+      { dir: 1,  items: right.map(i => kids[i]) },
+    ];
+  }
+
+  for (const g of groups){
+    if (!g.items.length) continue;
+    const total = g.items.reduce((s, k) => s + k.subH, 0) + V_GAP * (g.items.length - 1);
+    let y = -total / 2;
+    for (const k of g.items){
+      k._dir = g.dir;
+      k.cx = g.dir * (root.w / 2 + H_GAP + k.w / 2);
+      k.cy = y + k.subH / 2;
+      y += k.subH + V_GAP;
+      place(k, g.dir);
+    }
+  }
+}
+
+/* ---------------- paths / hues ---------------- */
+function assignPaths(n, prefix){
+  n._path = prefix;
+  n.children.forEach((k, i) => assignPaths(k, prefix ? prefix + '/' + i : String(i)));
+}
+function assignHues(n, hue){
+  n._hue = hue;
+  for (const k of n.children) assignHues(k, hue);
+}
+
+/* ---------------- rendering ---------------- */
+function el(tag, attrs, parent){
+  const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]);
+  if (parent) parent.appendChild(e);
+  return e;
+}
+
+function countDesc(n){
+  let c = 0;
+  for (const k of n.children){ c += 1 + countDesc(k); }
+  return c;
+}
+
+function drawAll(){
+  viewport.innerHTML = '';
+  nodeById.clear();
+  idSeq = 0;
+
+  // branch hues (by top-level branch index)
+  root.children.forEach((k, i) => assignHues(k, PALETTE[i % PALETTE.length]));
+
+  const edgesG = el('g', {}, viewport);
+  const nodesG = el('g', {}, viewport);
+
+  function makeEdge(n, k){
+    const dir = Math.sign(k.cx - n.cx) || 1;
+    const x1 = n.cx + dir * n.w / 2, y1 = n.cy;
+    const x2 = k.cx - dir * k.w / 2, y2 = k.cy;
+    const mx = (x1 + x2) / 2;
+    el('path', {
+      d: `M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`,
+      fill: 'none',
+      stroke: `hsl(${k._hue} 65% 55% / .45)`,
+      'stroke-width': 2,
+      'stroke-linecap': 'round',
+    }, edgesG);
+  }
+
+  function makeNode(n, isRoot){
+    const hue = isRoot ? 222 : n._hue;
+    const g = el('g', { class: 'node' + (n.collapsed ? ' collapsed' : '') }, nodesG);
+    n._id = ++idSeq;
+    g.dataset.id = n._id;
+    g.setAttribute('transform', `translate(${n.cx} ${n.cy})`);
+
+    const fill = isRoot ? '#283554' : `hsl(${hue} 55% 20%)`;
+    const stroke = isRoot ? '#6d86c4' : `hsl(${hue} 62% 52%)`;
+    el('rect', {
+      x: -n.w / 2, y: -n.h / 2, width: n.w, height: n.h, rx: 9,
+      fill, stroke, 'stroke-width': 1.5,
+    }, g);
+
+    const t = el('text', { 'font-family': 'system-ui,-apple-system,"Segoe UI",sans-serif', 'font-size': 13, 'font-weight': 500, fill: isRoot ? '#e3eaf8' : '#dde5f2' }, g);
+    const startY = -(n.lines.length - 1) * LINE_H / 2 + 5;
+    n.lines.forEach((ln, i) => {
+      const ts = el('tspan', {
+        x: isRoot ? 0 : -n.w / 2 + PADX,
+        y: startY + i * LINE_H,
+        'text-anchor': isRoot ? 'middle' : 'start',
+      }, t);
+      ts.textContent = ln;
+    });
+
+    if (n.collapsed && n.children.length){
+      const bx = n._dir * (n.w / 2 + 11);
+      el('circle', { cx: bx, cy: 0, r: 9, fill: '#223049', stroke, 'stroke-width': 1.5 }, g);
+      const bt = el('text', { x: bx, y: 4, 'text-anchor': 'middle', 'font-size': 10.5, 'font-weight': 600, fill: `hsl(${hue} 60% 75%)` }, g);
+      bt.textContent = countDesc(n);
+    }
+    nodeById.set(n._id, n);
+  }
+
+  function draw(n, isRoot){
+    makeNode(n, isRoot);
+    for (const k of n.children){
+      if (!n.collapsed) makeEdge(n, k);
+      draw(k, false);
+    }
+  }
+  draw(root, true);
+
+  const visible = nodeById.size;
+  statusEl.textContent = visible + (visible === 1 ? ' node' : ' nodes');
+  emptyHint.hidden = visible > 0;
+  applyView();
+}
+
+/* ---------------- view (pan / zoom / fit) ---------------- */
+function applyView(){
+  viewport.setAttribute('transform', `translate(${view.x} ${view.y}) scale(${view.k})`);
+}
+
+function fitView(){
+  if (!nodeById.size) return;
+  let minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+  for (const n of nodeById.values()){
+    minX = Math.min(minX, n.cx - n.w / 2);
+    maxX = Math.max(maxX, n.cx + n.w / 2);
+    minY = Math.min(minY, n.cy - n.h / 2);
+    maxY = Math.max(maxY, n.cy + n.h / 2);
+  }
+  const r = svg.getBoundingClientRect();
+  const pad = 50;
+  const bw = Math.max(1, maxX - minX), bh = Math.max(1, maxY - minY);
+  const k = Math.min((r.width - pad * 2) / bw, (r.height - pad * 2) / bh, 1.6);
+  view.k = Math.max(0.08, k);
+  view.x = (r.width - bw * view.k) / 2 - minX * view.k;
+  view.y = (r.height - bh * view.k) / 2 - minY * view.k;
+  applyView();
+}
+
+/* ---------------- rebuild pipeline ---------------- */
+function applyCollapseStates(n){
+  if (n === root){ n.collapsed = false; }
+  else { n.collapsed = !!collapseMap.get(n._path); }
+  for (const k of n.children) applyCollapseStates(k);
+}
+
+function setAllCollapsed(n, v){
+  if (n !== root) n.collapsed = v;
+  for (const k of n.children) setAllCollapsed(k, v);
+}
+
+let buildQueued = false;
+function rebuild(){
+  root = parseMarkdown(editor.value);
+  assignPaths(root, '');
+  applyCollapseStates(root);
+  measureAll(root);
+  layoutTree();
+  drawAll();
+  charCountEl.textContent = editor.value.length + ' chars';
+}
+
+/* ---------------- events ---------------- */
+editor.addEventListener('input', () => {
+  charCountEl.textContent = editor.value.length + ' chars';
+  if (buildQueued) return;
+  buildQueued = true;
+  setTimeout(() => { buildQueued = false; rebuild(); }, 280);
+});
+
+$('#layoutSeg').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-mode]');
+  if (!btn || btn.classList.contains('active')) return;
+  layoutMode = btn.dataset.mode;
+  for (const b of $('#layoutSeg').children) b.classList.toggle('active', b === btn);
+  if (root){ measureAll(root); layoutTree(); drawAll(); fitView(); }
+});
+
+$('#btnFit').addEventListener('click', fitView);
+$('#btnSample').addEventListener('click', () => {
+  editor.value = SAMPLE;
+  rebuild(); fitView();
+});
+$('#btnExpand').addEventListener('click', () => {
+  collapseMap.clear();
+  if (root){ setAllCollapsed(root, false); measureAll(root); layoutTree(); drawAll(); }
+});
+$('#btnCollapse').addEventListener('click', () => {
+  if (!root) return;
+  collapseMap.clear();
+  setAllCollapsed(root, true);
+  // remember for persistence
+  (function walk(n){ if (n.collapsed && n !== root) collapseMap.set(n._path, true); for (const k of n.children) walk(k); })(root);
+  measureAll(root); layoutTree(); drawAll();
+});
+
+svg.addEventListener('wheel', e => {
+  e.preventDefault();
+  const factor = Math.exp(-e.deltaY * 0.0016);
+  const nk = Math.min(4, Math.max(0.08, view.k * factor));
+  const r = svg.getBoundingClientRect();
+  const mx = e.clientX - r.left, my = e.clientY - r.top;
+  view.x = mx - (mx - view.x) * nk / view.k;
+  view.y = my - (my - view.y) * nk / view.k;
+  view.k = nk;
+  applyView();
+}, { passive: false });
+
+let panning = false, moved = 0, sx = 0, sy = 0, ox = 0, oy = 0;
+svg.addEventListener('pointerdown', e => {
+  panning = true; moved = 0;
+  sx = e.clientX; sy = e.clientY; ox = view.x; oy = view.y;
+  svg.classList.add('panning');
+  svg.setPointerCapture(e.pointerId);
+});
+svg.addEventListener('pointermove', e => {
+  if (!panning) return;
+  const dx = e.clientX - sx, dy = e.clientY - sy;
+  moved = Math.max(moved, Math.abs(dx) + Math.abs(dy));
+  view.x = ox + dx; view.y = oy + dy;
+  applyView();
+});
+svg.addEventListener('pointerup', e => {
+  panning = false;
+  svg.classList.remove('panning');
+  if (moved < 5){
+    const g = e.target.closest ? e.target.closest('g.node') : null;
+    if (g){
+      const n = nodeById.get(+g.dataset.id);
+      if (n && n !== root && n.children.length){
+        n.collapsed = !n.collapsed;
+        collapseMap.set(n._path, n.collapsed);
+        if (n.collapsed) collapseMap.delete(n._path);
+        measureAll(root); layoutTree(); drawAll();
+      }
+    }
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if ((e.key === 'f' || e.key === 'F') && !e.metaKey && !e.ctrlKey && e.target.tagName !== 'TEXTAREA'){
+    fitView();
+  }
+});
+
+/* ---------------- download svg ---------------- */
+$('#btnSvg').addEventListener('click', () => {
+  const r = svg.getBoundingClientRect();
+  const clone = svg.cloneNode(true);
+  clone.setAttribute('xmlns', NS);
+  clone.setAttribute('width', r.width);
+  clone.setAttribute('height', r.height);
+  const bg = document.createElementNS(NS, 'rect');
+  bg.setAttribute('width', '100%');
+  bg.setAttribute('height', '100%');
+  bg.setAttribute('fill', '#0e1320');
+  clone.insertBefore(bg, clone.firstChild);
+  const blob = new Blob([clone.outerHTML], { type: 'image/svg+xml' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'emind-map.svg';
+  a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+});
+
+/* ---------------- init ---------------- */
+rebuild();
+requestAnimationFrame(() => fitView());
+window.addEventListener('resize', () => applyView());
+</script>
+</body>
+</html>
