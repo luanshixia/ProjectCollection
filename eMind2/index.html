@@ -74,6 +74,9 @@
   .node{ cursor:pointer; }
   .node rect{ transition:filter .15s; }
   .node:hover rect{ filter:brightness(1.3); }
+  .node .toggle{ cursor:pointer; }
+  .node .toggle rect{ transition:filter .15s; }
+  .node .toggle:hover rect{ filter:brightness(1.45); }
   .emptyHint{
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
     color:var(--muted); font-size:14px; pointer-events:none;
@@ -104,7 +107,7 @@
     <div class="hint">
       Bullets: <code>-</code> <code>*</code> <code>+</code> or <code>1.</code> — nest with 2+ spaces (or a tab).<br/>
       Supports <code>**bold**</code>, <code>`code`</code>, links and <code>[x]</code> checkboxes.
-      Click a node to collapse / expand it. Scroll to zoom, drag to pan.
+      Click a node or its −/+ pill to collapse / expand it. Scroll to zoom, drag to pan.
     </div>
   </aside>
   <div id="canvasWrap">
@@ -241,6 +244,8 @@ function parseMarkdown(src){
 /* ---------------- text measurement / layout ---------------- */
 const meas = document.createElement('canvas').getContext('2d');
 meas.font = FONT;
+const measSmall = document.createElement('canvas').getContext('2d');
+measSmall.font = '600 11.5px system-ui,-apple-system,"Segoe UI",sans-serif';
 
 function measureAll(n){
   // wrap text
@@ -391,11 +396,26 @@ function drawAll(){
       ts.textContent = ln;
     });
 
-    if (n.collapsed && n.children.length){
-      const bx = n._dir * (n.w / 2 + 11);
-      el('circle', { cx: bx, cy: 0, r: 9, fill: '#223049', stroke, 'stroke-width': 1.5 }, g);
-      const bt = el('text', { x: bx, y: 4, 'text-anchor': 'middle', 'font-size': 10.5, 'font-weight': 600, fill: `hsl(${hue} 60% 75%)` }, g);
-      bt.textContent = countDesc(n);
+    if (n.children.length && !isRoot){
+      // per-node collapse/expand control on the outer edge
+      const cnt = countDesc(n);
+      const label = n.collapsed ? '+ ' + cnt : '\u2212';
+      const pw = Math.max(20, measSmall.measureText(label).width + 18);
+      const ph = 18, gap = 7;
+      const x0 = n._dir === 1 ? n.w / 2 + gap : -(n.w / 2 + gap + pw);
+      const pg = el('g', { class: 'toggle' }, g);
+      el('rect', {
+        x: x0, y: -ph / 2, width: pw, height: ph, rx: ph / 2,
+        fill: n.collapsed ? `hsl(${hue} 50% 32%)` : `hsl(${hue} 45% 15%)`,
+        stroke, 'stroke-width': 1.2,
+      }, pg);
+      const pt = el('text', {
+        x: x0 + pw / 2, y: 4, 'text-anchor': 'middle',
+        'font-size': 11.5, 'font-weight': 600,
+        fill: `hsl(${hue} 65% 80%)`,
+        'font-family': 'system-ui,-apple-system,"Segoe UI",sans-serif',
+      }, pg);
+      pt.textContent = label;
     }
     nodeById.set(n._id, n);
   }
@@ -509,12 +529,16 @@ svg.addEventListener('wheel', e => {
   applyView();
 }, { passive: false });
 
-let panning = false, moved = 0, sx = 0, sy = 0, ox = 0, oy = 0;
+let panning = false, moved = 0, sx = 0, sy = 0, ox = 0, oy = 0, downNodeId = null;
 svg.addEventListener('pointerdown', e => {
   panning = true; moved = 0;
   sx = e.clientX; sy = e.clientY; ox = view.x; oy = view.y;
+  // record the hit node BEFORE taking pointer capture (capture retargets
+  // later events to the svg, which would hide the node from e.target)
+  const g = e.target.closest ? e.target.closest('g.node') : null;
+  downNodeId = g ? +g.dataset.id : null;
   svg.classList.add('panning');
-  svg.setPointerCapture(e.pointerId);
+  try { svg.setPointerCapture(e.pointerId); } catch (_) {}
 });
 svg.addEventListener('pointermove', e => {
   if (!panning) return;
@@ -526,18 +550,16 @@ svg.addEventListener('pointermove', e => {
 svg.addEventListener('pointerup', e => {
   panning = false;
   svg.classList.remove('panning');
-  if (moved < 5){
-    const g = e.target.closest ? e.target.closest('g.node') : null;
-    if (g){
-      const n = nodeById.get(+g.dataset.id);
-      if (n && n !== root && n.children.length){
-        n.collapsed = !n.collapsed;
-        collapseMap.set(n._path, n.collapsed);
-        if (n.collapsed) collapseMap.delete(n._path);
-        measureAll(root); layoutTree(); drawAll();
-      }
+  if (moved < 5 && downNodeId != null){
+    const n = nodeById.get(downNodeId);
+    if (n && n !== root && n.children.length){
+      n.collapsed = !n.collapsed;
+      if (n.collapsed) collapseMap.set(n._path, true);
+      else collapseMap.delete(n._path);
+      measureAll(root); layoutTree(); drawAll();
     }
   }
+  downNodeId = null;
 });
 
 document.addEventListener('keydown', e => {
