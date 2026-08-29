@@ -77,19 +77,57 @@
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
     color: var(--muted); font-size: 13px; pointer-events: none;
   }
+
+  #libraryView { display: none; flex: 1; overflow-y: auto; padding: 22px 26px; }
+  main.library-mode #editorPane,
+  main.library-mode #canvasPane { display: none; }
+  main.library-mode #libraryView { display: block; }
+
+  #libraryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+  }
+  .doc-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    overflow: hidden; cursor: pointer; display: flex; flex-direction: column;
+  }
+  .doc-card:hover { border-color: var(--accent); }
+  .doc-thumb {
+    height: 140px; background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); font-size: 12px;
+  }
+  .doc-thumb svg { width: 100%; height: 100%; }
+  .doc-info { padding: 10px 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 8px; }
+  .doc-title { font-size: 13px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .doc-meta { font-size: 11px; color: var(--muted); margin-top: 3px; }
+  .doc-delete {
+    background: none; border: none; color: var(--muted); cursor: pointer;
+    font-size: 14px; line-height: 1; padding: 3px 6px; border-radius: 4px; flex: none;
+  }
+  .doc-delete:hover { background: #3d4351; color: #e5678f; }
+  .doc-delete.confirming { background: #e5678f; color: #fff; font-size: 11px; padding: 3px 8px; }
+  .doc-delete.confirming:hover { background: #d1516f; }
+  .doc-card.new-card {
+    align-items: center; justify-content: center; border-style: dashed;
+    color: var(--muted); font-size: 14px; min-height: 190px;
+  }
+  .doc-card.new-card:hover { color: var(--text); border-color: var(--accent); }
 </style>
 </head>
 <body>
 <div id="app">
   <header>
     <h1>eMind3</h1>
-    <span class="hint">markdown bullet list &rarr; mind map</span>
+    <span class="hint" id="hintText">markdown bullet list &rarr; mind map</span>
     <div class="spacer"></div>
-    <span class="hint">scroll to zoom &middot; drag to pan &middot; click a node to collapse</span>
+    <span class="hint" id="canvasHint">scroll to zoom &middot; drag to pan &middot; click a node to collapse</span>
     <button id="fitBtn">Fit to screen</button>
     <button id="exportBtn">Export SVG</button>
+    <button id="libraryBtn">All Mind Maps</button>
   </header>
-  <main>
+  <main id="mainEl">
     <div id="editorPane">
       <textarea id="editor" spellcheck="false"></textarea>
     </div>
@@ -99,11 +137,13 @@
       </svg>
       <div id="emptyState">Type a markdown bullet list on the left to see the mind map.</div>
     </div>
+    <div id="libraryView">
+      <div id="libraryGrid"></div>
+    </div>
   </main>
 </div>
 
 <script type="module">
-  const STORAGE_KEY = "emind3.source";
   const DEFAULT_SOURCE = `# 🧠 eMind3
 - 🚀 Getting Started
   - Write a **markdown** bullet list on the left
@@ -118,6 +158,26 @@
   - Use **bold**, *italic*, and emoji 🎉 in your bullets
 `;
 
+  // Falls back to an in-memory store when localStorage is unavailable
+  // (private browsing, sandboxed/opaque origins, restrictive browser settings)
+  // so the app still works for the current session instead of silently losing data.
+  function createSafeStorage() {
+    try {
+      const probeKey = "__emind3_probe__";
+      window.localStorage.setItem(probeKey, "1");
+      window.localStorage.removeItem(probeKey);
+      return window.localStorage;
+    } catch {
+      const mem = new Map();
+      return {
+        getItem: (k) => (mem.has(k) ? mem.get(k) : null),
+        setItem: (k, v) => { mem.set(k, String(v)); },
+        removeItem: (k) => { mem.delete(k); }
+      };
+    }
+  }
+  const storage = createSafeStorage();
+
   const editor = document.getElementById("editor");
   const svg = document.getElementById("map");
   const viewport = document.getElementById("viewport");
@@ -125,6 +185,11 @@
   const emptyState = document.getElementById("emptyState");
   const fitBtn = document.getElementById("fitBtn");
   const exportBtn = document.getElementById("exportBtn");
+  const libraryBtn = document.getElementById("libraryBtn");
+  const mainEl = document.getElementById("mainEl");
+  const libraryGrid = document.getElementById("libraryGrid");
+  const hintText = document.getElementById("hintText");
+  const canvasHint = document.getElementById("canvasHint");
 
   // ---------- Markdown -> tree ----------
 
@@ -506,9 +571,9 @@
 
   // ---------- Pan & zoom ----------
 
-  function contentBounds() {
+  function contentBounds(nodes) {
     let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    for (const node of currentNodes) {
+    for (const node of nodes) {
       minX = Math.min(minX, node.x);
       minY = Math.min(minY, node.y);
       maxX = Math.max(maxX, node.x + node.boxWidth + 20);
@@ -519,7 +584,7 @@
 
   function fitToScreen() {
     if (!currentNodes.length) return;
-    const { minX, minY, maxX, maxY } = contentBounds();
+    const { minX, minY, maxX, maxY } = contentBounds(currentNodes);
     const w = Math.max(1, maxX - minX);
     const h = Math.max(1, maxY - minY);
     const rect = canvasPane.getBoundingClientRect();
@@ -534,7 +599,7 @@
 
   function exportSVG() {
     if (!currentNodes.length) return;
-    const { minX, minY, maxX, maxY } = contentBounds();
+    const { minX, minY, maxX, maxY } = contentBounds(currentNodes);
     const pad = 20;
     const w = (maxX - minX) + pad * 2;
     const h = (maxY - minY) + pad * 2;
@@ -602,6 +667,263 @@
   fitBtn.addEventListener("click", fitToScreen);
   exportBtn.addEventListener("click", exportSVG);
 
+  // ---------- Documents ----------
+
+  const LEGACY_KEY = "emind3.source";
+  const DOCS_INDEX_KEY = "emind3.docs";
+  const ACTIVE_ID_KEY = "emind3.activeId";
+  const docContentKey = (id) => `emind3.doc.${id}`;
+
+  const newDocId = () =>
+    (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(36).slice(2)}`);
+
+  function loadDocsIndex() {
+    const raw = storage.getItem(DOCS_INDEX_KEY);
+    if (!raw) return [];
+    try { return JSON.parse(raw); } catch { return []; }
+  }
+  function saveDocsIndex(list) {
+    storage.setItem(DOCS_INDEX_KEY, JSON.stringify(list));
+  }
+  function loadDocContent(id) {
+    return storage.getItem(docContentKey(id));
+  }
+  function saveDocContent(id, content) {
+    storage.setItem(docContentKey(id), content);
+  }
+  function deleteDocContent(id) {
+    storage.removeItem(docContentKey(id));
+  }
+
+  function plainTitle(root) {
+    const plain = root?.label ? parseInline(root.label).map((s) => s.text).join("") : "";
+    return plain.trim() || "Untitled";
+  }
+
+  function migrateLegacyIfNeeded() {
+    const docs = loadDocsIndex();
+    if (docs.length > 0) return docs;
+    const legacy = storage.getItem(LEGACY_KEY);
+    const id = newDocId();
+    const content = legacy ?? DEFAULT_SOURCE;
+    saveDocContent(id, content);
+    const list = [{ id, title: plainTitle(parseMarkdown(content)), updatedAt: Date.now() }];
+    saveDocsIndex(list);
+    storage.removeItem(LEGACY_KEY);
+    return list;
+  }
+
+  function persistActiveDoc() {
+    if (!activeDocId) return;
+    saveDocContent(activeDocId, editor.value);
+    const docs = loadDocsIndex();
+    const idx = docs.findIndex((d) => d.id === activeDocId);
+    const entry = { id: activeDocId, title: plainTitle(currentRoot), updatedAt: Date.now() };
+    if (idx >= 0) docs[idx] = entry; else docs.push(entry);
+    saveDocsIndex(docs);
+  }
+
+  function flushActiveDoc() {
+    if (debounceTimer) {
+      clearTimeout(debounceTimer);
+      debounceTimer = null;
+      render();
+    }
+    persistActiveDoc();
+  }
+
+  function openDoc(id) {
+    activeDocId = id;
+    storage.setItem(ACTIVE_ID_KEY, id);
+    editor.value = loadDocContent(id) ?? DEFAULT_SOURCE;
+    render();
+    fitToScreen();
+  }
+
+  function createNewDoc() {
+    const id = newDocId();
+    saveDocContent(id, DEFAULT_SOURCE);
+    const docs = loadDocsIndex();
+    docs.push({ id, title: plainTitle(parseMarkdown(DEFAULT_SOURCE)), updatedAt: Date.now() });
+    saveDocsIndex(docs);
+    return id;
+  }
+
+  function deleteDoc(id) {
+    deleteDocContent(id);
+    const docs = loadDocsIndex().filter((d) => d.id !== id);
+    saveDocsIndex(docs);
+    return docs;
+  }
+
+  // ---------- Library (all mind maps grid) ----------
+
+  let activeDocId = null;
+  let libraryMode = false;
+
+  function buildThumbnailSVG(source) {
+    const root = parseMarkdown(source);
+    if (!root) return null;
+    assignBranchIndex(root);
+    const nodes = layout(root);
+    const { minX, minY, maxX, maxY } = contentBounds(nodes);
+    const pad = 16;
+    const w = (maxX - minX) + pad * 2;
+    const h = (maxY - minY) + pad * 2;
+
+    const svgEl = el("svg", { viewBox: `0 0 ${w} ${h}`, preserveAspectRatio: "xMidYMid meet" });
+    const g = el("g", { transform: `translate(${pad - minX},${pad - minY})` });
+    svgEl.append(g);
+
+    for (const node of nodes) {
+      if (!node.parent) continue;
+      const x0 = node.parent.x + node.parent.boxWidth, y0 = node.parent.y + NODE_H / 2;
+      const x1 = node.x, y1 = node.y + NODE_H / 2;
+      g.append(el("path", {
+        d: pathD(x0, y0, x1, y1), fill: "none", stroke: colorFor(node),
+        "stroke-width": 2, opacity: 0.75
+      }));
+    }
+    for (const node of nodes) {
+      const color = colorFor(node);
+      const nodeG = el("g", { transform: `translate(${node.x},${node.y})` });
+      nodeG.append(el("rect", {
+        x: 0, y: 0, width: node.boxWidth, height: NODE_H, rx: NODE_H / 2, ry: NODE_H / 2,
+        fill: color, "fill-opacity": node.depth === 0 ? 0.9 : 0.85
+      }));
+      const text = el("text", {
+        x: node.boxWidth / 2, y: NODE_H / 2 + 4.5, "text-anchor": "middle",
+        fill: "#0d0f13", "font-family": FONT_FAMILY,
+        "font-size": node.depth === 0 ? ROOT_FONT_SIZE : NODE_FONT_SIZE
+      });
+      for (const seg of node.segments) {
+        const tspan = document.createElementNS(svgNS, "tspan");
+        if (seg.bold) tspan.setAttribute("font-weight", "700");
+        if (seg.italic) tspan.setAttribute("font-style", "italic");
+        tspan.textContent = seg.text;
+        text.append(tspan);
+      }
+      nodeG.append(text);
+      g.append(nodeG);
+    }
+    return svgEl;
+  }
+
+  function formatRelativeTime(ts) {
+    const diff = Date.now() - ts;
+    const min = 60000, hour = 3600000, day = 86400000;
+    if (diff < min) return "just now";
+    if (diff < hour) return `${Math.floor(diff / min)}m ago`;
+    if (diff < day) return `${Math.floor(diff / hour)}h ago`;
+    if (diff < day * 7) return `${Math.floor(diff / day)}d ago`;
+    return new Date(ts).toLocaleDateString();
+  }
+
+  function handleDeleteDoc(id) {
+    let docs = deleteDoc(id);
+    if (docs.length === 0) {
+      openDoc(createNewDoc());
+    } else if (id === activeDocId) {
+      openDoc(docs[0].id);
+    }
+    renderLibrary();
+  }
+
+  function renderLibrary() {
+    const docs = loadDocsIndex().slice().sort((a, b) => b.updatedAt - a.updatedAt);
+    libraryGrid.replaceChildren();
+
+    const newCardEl = document.createElement("div");
+    newCardEl.className = "doc-card new-card";
+    newCardEl.textContent = "+ New Mind Map";
+    newCardEl.addEventListener("click", () => {
+      openDoc(createNewDoc());
+      setLibraryMode(false);
+    });
+    libraryGrid.append(newCardEl);
+
+    for (const doc of docs) {
+      const card = document.createElement("div");
+      card.className = "doc-card";
+
+      const thumb = document.createElement("div");
+      thumb.className = "doc-thumb";
+      const content = loadDocContent(doc.id) ?? "";
+      const thumbSvg = buildThumbnailSVG(content);
+      if (thumbSvg) thumb.append(thumbSvg);
+      else thumb.textContent = "Empty";
+      card.append(thumb);
+
+      const info = document.createElement("div");
+      info.className = "doc-info";
+
+      const textWrap = document.createElement("div");
+      const titleEl = document.createElement("div");
+      titleEl.className = "doc-title";
+      titleEl.textContent = doc.title || "Untitled";
+      const metaEl = document.createElement("div");
+      metaEl.className = "doc-meta";
+      metaEl.textContent = formatRelativeTime(doc.updatedAt);
+      textWrap.append(titleEl, metaEl);
+
+      const delBtn = document.createElement("button");
+      delBtn.className = "doc-delete";
+      delBtn.textContent = "✕";
+      delBtn.title = "Delete";
+      let confirmingDelete = false;
+      let confirmTimer = null;
+      delBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        if (!confirmingDelete) {
+          confirmingDelete = true;
+          delBtn.textContent = "Delete?";
+          delBtn.classList.add("confirming");
+          confirmTimer = setTimeout(() => {
+            confirmingDelete = false;
+            delBtn.textContent = "✕";
+            delBtn.classList.remove("confirming");
+          }, 2500);
+          return;
+        }
+        clearTimeout(confirmTimer);
+        handleDeleteDoc(doc.id);
+      });
+
+      info.append(textWrap, delBtn);
+      card.append(info);
+
+      card.addEventListener("click", () => {
+        openDoc(doc.id);
+        setLibraryMode(false);
+      });
+
+      libraryGrid.append(card);
+    }
+  }
+
+  function setLibraryMode(active) {
+    libraryMode = active;
+    mainEl.classList.toggle("library-mode", active);
+    fitBtn.style.display = active ? "none" : "";
+    exportBtn.style.display = active ? "none" : "";
+    canvasHint.style.display = active ? "none" : "";
+    libraryBtn.textContent = active ? "← Back to Map" : "All Mind Maps";
+    hintText.textContent = active
+      ? "your mind maps, stored locally in this browser"
+      : "markdown bullet list → mind map";
+    if (active) renderLibrary();
+    else fitToScreen();
+  }
+
+  libraryBtn.addEventListener("click", () => {
+    if (libraryMode) {
+      setLibraryMode(false);
+    } else {
+      flushActiveDoc();
+      setLibraryMode(true);
+    }
+  });
+
   // ---------- Wiring ----------
 
   let debounceTimer = null;
@@ -611,7 +933,7 @@
     debounceTimer = setTimeout(() => {
       render();
       if (fit) fitToScreen();
-      try { localStorage.setItem(STORAGE_KEY, editor.value); } catch {}
+      persistActiveDoc();
     }, firstRenderAfterLoad ? 0 : 150);
     firstRenderAfterLoad = false;
   }
@@ -626,13 +948,14 @@
     scheduleRender(false);
   });
 
-  window.addEventListener("resize", () => fitToScreen());
+  window.addEventListener("resize", () => { if (!libraryMode) fitToScreen(); });
 
-  let saved = null;
-  try { saved = localStorage.getItem(STORAGE_KEY); } catch {}
-  editor.value = saved ?? DEFAULT_SOURCE;
-  render();
-  fitToScreen();
+  const initialDocs = migrateLegacyIfNeeded();
+  let initialActiveId = storage.getItem(ACTIVE_ID_KEY);
+  if (!initialActiveId || !initialDocs.some((d) => d.id === initialActiveId)) {
+    initialActiveId = initialDocs[0].id;
+  }
+  openDoc(initialActiveId);
 </script>
 </body>
 </html>
