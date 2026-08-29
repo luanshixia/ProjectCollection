@@ -45,12 +45,21 @@
     text-shadow: 0 1px 4px rgba(0,0,0,0.6);
   }
 
-  #controls {
+  #bottom-bar {
     position: fixed;
     bottom: 16px;
     left: 16px;
+    right: 16px;
     z-index: 10;
     display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  #controls {
+    display: flex;
+    flex-wrap: wrap;
     gap: 8px;
   }
   #controls button {
@@ -70,6 +79,60 @@
   #controls button.active {
     background: rgba(70, 130, 220, 0.85);
     border-color: rgba(150, 190, 255, 0.6);
+  }
+
+  #time-panel {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: rgba(20, 30, 50, 0.65);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 8px 14px;
+    backdrop-filter: blur(6px);
+    color: #e8f0ff;
+    font-size: 12px;
+    width: min(420px, 100%);
+    box-sizing: border-box;
+  }
+  #time-panel button {
+    background: rgba(70, 130, 220, 0.35);
+    border: 1px solid rgba(150, 190, 255, 0.4);
+    color: #e8f0ff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s ease;
+  }
+  #time-panel button:hover {
+    background: rgba(70, 130, 220, 0.6);
+  }
+  #time-panel button.active {
+    background: rgba(70, 130, 220, 0.85);
+  }
+  #time-panel .time-readout {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  #time-panel .time-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    opacity: 0.85;
+    white-space: nowrap;
+  }
+  #time-panel .time-labels span:last-child {
+    color: #9fc4ff;
+  }
+  #time-panel input[type="range"] {
+    width: 100%;
+    accent-color: #5b9df0;
+    cursor: pointer;
   }
 
   #loading {
@@ -94,12 +157,26 @@
 <div id="ui">
   <h1>Earth</h1>
   <p>Drag to rotate &bull; Scroll or pinch to zoom</p>
+  <p>Sun orbits as the year plays, tilting day/night with the seasons</p>
 </div>
 
-<div id="controls">
-  <button id="btn-rotate">Pause Auto-Spin</button>
-  <button id="btn-reset">Reset View</button>
-  <button id="btn-clouds" class="active">Clouds: On</button>
+<div id="bottom-bar">
+  <div id="time-panel">
+    <button id="btn-year" class="active">Pause Year</button>
+    <div class="time-readout">
+      <div class="time-labels">
+        <span id="date-label">Jun 21</span>
+        <span id="season-label">Summer (N) &middot; Winter (S)</span>
+      </div>
+      <input type="range" id="day-slider" min="0" max="365" step="1" value="172">
+    </div>
+  </div>
+
+  <div id="controls">
+    <button id="btn-rotate">Pause Auto-Spin</button>
+    <button id="btn-reset">Reset View</button>
+    <button id="btn-clouds" class="active">Clouds: On</button>
+  </div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -156,12 +233,15 @@
   renderer.toneMappingExposure = 1.1;
   container.appendChild(renderer.domElement);
 
-  // Lighting
-  const ambientLight = new THREE.AmbientLight(0x556677, 0.7);
+  // Lighting. Ambient is kept low so the night hemisphere reads as genuinely
+  // dark (lit mainly by the night-lights layer below) rather than washed out.
+  const ambientLight = new THREE.AmbientLight(0x556677, 0.35);
   scene.add(ambientLight);
 
-  const sunLight = new THREE.DirectionalLight(0xffffff, 1.6);
-  sunLight.position.set(5, 3, 5);
+  // The sun: a real DirectionalLight whose position is recomputed every
+  // frame from the current day-of-year (see the year/season simulation
+  // below), plus a small glowing mesh so you can actually see it orbit.
+  const sunLight = new THREE.DirectionalLight(0xffffff, 1.8);
   scene.add(sunLight);
 
   // Starfield background
@@ -204,26 +284,80 @@
   };
   const textureLoader = new THREE.TextureLoader(loadingManager);
 
-  // Earth: real NASA Blue Marble color, normal, and specular (ocean mask) maps
+  // Axial tilt: Earth's real ~23.4° tilt, fixed in world space (it does not
+  // change as the "year" progresses — only the sun's position around the
+  // ecliptic does). Everything that spins daily lives inside this group, so
+  // rotating it around its local Y axis spins around the *tilted* axis,
+  // exactly like the real planet.
+  const AXIAL_TILT = THREE.MathUtils.degToRad(23.44);
+  const earthTiltGroup = new THREE.Group();
+  // Negative so the north pole (+Y) leans toward +X, the same side the sun
+  // sits on at day 172 (see updateSunForDay) — that pairing is what makes
+  // day 172 land on the real Northern Hemisphere summer solstice.
+  earthTiltGroup.rotation.z = -AXIAL_TILT;
+  scene.add(earthTiltGroup);
+
+  // Earth: real NASA Blue Marble color and normal (relief) maps. No specular
+  // map — a shiny ocean highlight fights for attention with the day/night
+  // terminator, so specular is disabled outright (see `specular` below).
   const earthRadius = 2;
   const earthTexture = textureLoader.load(TEXTURE_BASE + "earth_atmos_2048.jpg");
   earthTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
   earthTexture.encoding = THREE.sRGBEncoding;
 
   const earthNormalTexture = textureLoader.load(TEXTURE_BASE + "earth_normal_2048.jpg");
-  const earthSpecularTexture = textureLoader.load(TEXTURE_BASE + "earth_specular_2048.jpg");
 
   const earthGeometry = new THREE.SphereGeometry(earthRadius, 96, 96);
   const earthMaterial = new THREE.MeshPhongMaterial({
     map: earthTexture,
     normalMap: earthNormalTexture,
     normalScale: new THREE.Vector2(0.85, 0.85),
-    specularMap: earthSpecularTexture,
-    specular: new THREE.Color(0x222222),
-    shininess: 30,
+    specular: new THREE.Color(0x000000),
+    shininess: 0,
   });
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
-  scene.add(earth);
+  earthTiltGroup.add(earth);
+
+  // Night lights: real city-light imagery, shown only on the hemisphere
+  // currently facing away from the sun. A tiny custom shader blends the
+  // lights in as each point's normal crosses the terminator, fading out
+  // smoothly rather than snapping on.
+  const earthNightTexture = textureLoader.load(TEXTURE_BASE + "earth_lights_2048.png");
+  earthNightTexture.encoding = THREE.sRGBEncoding;
+  const nightLightsGeometry = new THREE.SphereGeometry(earthRadius * 1.003, 96, 96);
+  const nightLightsMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      nightTexture: { value: earthNightTexture },
+      sunDirection: { value: new THREE.Vector3(1, 0, 0) },
+    },
+    vertexShader: `
+      varying vec2 vUv;
+      varying vec3 vWorldNormal;
+      void main() {
+        vUv = uv;
+        vWorldNormal = normalize(mat3(modelMatrix) * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      uniform sampler2D nightTexture;
+      uniform vec3 sunDirection;
+      varying vec2 vUv;
+      varying vec3 vWorldNormal;
+      void main() {
+        float sunFacing = dot(normalize(vWorldNormal), normalize(sunDirection));
+        float nightFactor = smoothstep(0.05, -0.25, sunFacing);
+        vec3 lights = texture2D(nightTexture, vUv).rgb;
+        float brightness = max(lights.r, max(lights.g, lights.b));
+        gl_FragColor = vec4(lights * nightFactor * 1.4, nightFactor * brightness);
+      }
+    `,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false,
+  });
+  const nightLights = new THREE.Mesh(nightLightsGeometry, nightLightsMaterial);
+  earth.add(nightLights);
 
   // Cloud layer: real satellite cloud cover map
   const cloudTexture = textureLoader.load(TEXTURE_BASE + "earth_clouds_1024.png");
@@ -236,7 +370,7 @@
     depthWrite: false,
   });
   const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
-  scene.add(clouds);
+  earthTiltGroup.add(clouds);
 
   // Atmosphere glow (simple additive backside sphere)
   const atmosphereGeometry = new THREE.SphereGeometry(earthRadius * 1.06, 64, 64);
@@ -261,7 +395,58 @@
     transparent: true,
   });
   const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
-  scene.add(atmosphere);
+  earthTiltGroup.add(atmosphere);
+
+  // ---------------------------------------------------------------------
+  // The sun: a visible glowing marker plus a faint ecliptic ring, so the
+  // sun's motion around Earth over the course of a "year" is something you
+  // can actually see, not just infer from the lighting.
+  // ---------------------------------------------------------------------
+
+  const SUN_DISTANCE = 12;
+
+  const sunGeometry = new THREE.SphereGeometry(0.35, 32, 32);
+  const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xfff2c8 });
+  const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial);
+  scene.add(sunMesh);
+
+  function createGlowTexture() {
+    const size = 256;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
+    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, "rgba(255,247,214,0.9)");
+    grad.addColorStop(0.25, "rgba(255,220,140,0.45)");
+    grad.addColorStop(1, "rgba(255,200,100,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+    return canvas;
+  }
+  const sunGlowTexture = new THREE.CanvasTexture(createGlowTexture());
+  const sunGlowMaterial = new THREE.SpriteMaterial({
+    map: sunGlowTexture,
+    transparent: true,
+    depthWrite: false,
+    blending: THREE.AdditiveBlending,
+  });
+  const sunGlow = new THREE.Sprite(sunGlowMaterial);
+  sunGlow.scale.set(3.2, 3.2, 1);
+  sunMesh.add(sunGlow);
+
+  // A thin, faint ring in the ecliptic (orbital) plane marking the sun's path
+  const eclipticGeometry = new THREE.RingGeometry(SUN_DISTANCE - 0.01, SUN_DISTANCE + 0.01, 128);
+  const eclipticMaterial = new THREE.MeshBasicMaterial({
+    color: 0x5b9df0,
+    transparent: true,
+    opacity: 0.18,
+    side: THREE.DoubleSide,
+    depthWrite: false,
+  });
+  const eclipticRing = new THREE.Mesh(eclipticGeometry, eclipticMaterial);
+  eclipticRing.rotation.x = Math.PI / 2;
+  scene.add(eclipticRing);
 
   // ---------------------------------------------------------------------
   // Controls: free rotation via drag, zoom via scroll/pinch
@@ -271,14 +456,68 @@
   controls.enableDamping = true;
   controls.dampingFactor = 0.08;
   controls.minDistance = 3.2;
-  controls.maxDistance = 20;
+  controls.maxDistance = 34;
   controls.enablePan = false;
   controls.rotateSpeed = 0.6;
   controls.zoomSpeed = 0.8;
 
   let autoRotate = true;
   let cloudsVisible = true;
-  const autoRotateSpeed = 0.15; // radians per second
+  const autoRotateSpeed = 0.35; // radians per second — one simulated "day"
+
+  // ---------------------------------------------------------------------
+  // Year / season simulation
+  // ---------------------------------------------------------------------
+  // dayOfYear (0-365) drives the sun's position around the fixed ecliptic
+  // ring. Day 172 (~Jun 21) is defined to line up with the sun sitting over
+  // the tilted hemisphere's "high" side, i.e. the real Northern Hemisphere
+  // summer solstice; day ~355 is the opposite solstice, and the two
+  // equinoxes fall ~91 days either side of those, matching the real calendar.
+  let dayOfYear = 172;
+  let playingYear = true;
+  const YEAR_DAYS_PER_SECOND = 365 / 50; // one full simulated year every 50s
+
+  function dayOfYearToDateLabel(day) {
+    const d = new Date(Date.UTC(2001, 0, 1)); // 2001: not a leap year
+    d.setUTCDate(d.getUTCDate() + Math.round(day));
+    return d.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+  }
+
+  function seasonLabel(day) {
+    if (day < 79 || day >= 355) return "Winter (N) · Summer (S)";
+    if (day < 172) return "Spring (N) · Autumn (S)";
+    if (day < 265) return "Summer (N) · Winter (S)";
+    return "Autumn (N) · Spring (S)";
+  }
+
+  const dateLabelEl = document.getElementById("date-label");
+  const seasonLabelEl = document.getElementById("season-label");
+  const daySliderEl = document.getElementById("day-slider");
+
+  function updateSunForDay(day) {
+    const yearAngle = ((day - 172) / 365) * Math.PI * 2;
+    sunLight.position.set(
+      Math.cos(yearAngle) * SUN_DISTANCE,
+      0,
+      Math.sin(yearAngle) * SUN_DISTANCE
+    );
+    sunMesh.position.copy(sunLight.position);
+    nightLightsMaterial.uniforms.sunDirection.value.copy(sunLight.position).normalize();
+  }
+
+  function updateTimeUI() {
+    if (dateLabelEl) dateLabelEl.textContent = dayOfYearToDateLabel(dayOfYear);
+    if (seasonLabelEl) seasonLabelEl.textContent = seasonLabel(dayOfYear);
+    if (daySliderEl) daySliderEl.value = String(Math.round(dayOfYear));
+  }
+
+  function setDayOfYear(day) {
+    dayOfYear = ((day % 365) + 365) % 365;
+    updateSunForDay(dayOfYear);
+    updateTimeUI();
+  }
+
+  setDayOfYear(dayOfYear);
 
   // ---------------------------------------------------------------------
   // UI wiring
@@ -287,8 +526,10 @@
   const btnRotate = document.getElementById("btn-rotate");
   const btnReset = document.getElementById("btn-reset");
   const btnClouds = document.getElementById("btn-clouds");
+  const btnYear = document.getElementById("btn-year");
 
   btnRotate.classList.add("active");
+  btnYear.classList.add("active");
 
   btnRotate.addEventListener("click", function () {
     autoRotate = !autoRotate;
@@ -302,6 +543,21 @@
     earth.rotation.set(0, 0, 0);
     clouds.rotation.set(0, 0, 0);
   });
+
+  btnYear.addEventListener("click", function () {
+    playingYear = !playingYear;
+    btnYear.textContent = playingYear ? "Pause Year" : "Play Year";
+    btnYear.classList.toggle("active", playingYear);
+  });
+
+  if (daySliderEl) {
+    daySliderEl.addEventListener("input", function () {
+      playingYear = false;
+      btnYear.textContent = "Play Year";
+      btnYear.classList.remove("active");
+      setDayOfYear(Number(daySliderEl.value));
+    });
+  }
 
   btnClouds.addEventListener("click", function () {
     cloudsVisible = !cloudsVisible;
@@ -331,6 +587,10 @@
       clouds.rotation.y += autoRotateSpeed * delta;
     }
     clouds.rotation.y += 0.01 * delta;
+
+    if (playingYear) {
+      setDayOfYear(dayOfYear + YEAR_DAYS_PER_SECOND * delta);
+    }
 
     controls.update();
     renderer.render(scene, camera);
