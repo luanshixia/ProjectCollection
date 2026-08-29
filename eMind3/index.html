@@ -145,18 +145,30 @@
     }
 
     const topLevel = [];
-    const stack = [{ indent: -1, children: topLevel }];
+    const virtualTop = { children: topLevel };
+    const stack = [{ indent: -1, node: virtualTop }];
     for (const item of bulletLines) {
       const node = { label: item.text, children: [] };
       while (stack.length > 1 && item.indent <= stack.at(-1).indent) stack.pop();
-      stack.at(-1).children.push(node);
-      stack.push({ indent: item.indent, children: node.children });
+      const parent = stack.at(-1).node;
+      node.parent = parent === virtualTop ? null : parent;
+      parent.children.push(node);
+      stack.push({ indent: item.indent, node });
     }
 
-    if (titleLine) return { label: titleLine, children: topLevel };
-    if (topLevel.length === 1) return topLevel[0];
+    if (titleLine) {
+      const root = { label: titleLine, children: topLevel, parent: null };
+      for (const child of topLevel) child.parent = root;
+      return root;
+    }
+    if (topLevel.length === 1) {
+      topLevel[0].parent = null;
+      return topLevel[0];
+    }
     if (topLevel.length === 0) return null;
-    return { label: "Mind Map", children: topLevel };
+    const root = { label: "Mind Map", children: topLevel, parent: null };
+    for (const child of topLevel) child.parent = root;
+    return root;
   }
 
   // ---------- Layout ----------
@@ -249,6 +261,10 @@
   };
 
   const colorFor = (node) => (node.depth === 0 ? ROOT_COLOR : PALETTE[node.branchIndex % PALETTE.length]);
+  const pathD = (x0, y0, x1, y1) => {
+    const mx = (x0 + x1) / 2;
+    return `M${x0},${y0} C${mx},${y0} ${mx},${y1} ${x1},${y1}`;
+  };
 
   const view = { x: 0, y: 0, scale: 1 };
   const updateTransform = () => {
@@ -257,15 +273,50 @@
 
   let currentRoot = null;
   let currentNodes = [];
+  let nodeLayer = null;
+  let linkLayer = null;
+  const nodeEls = new Map(); // node -> { g, rect, text, toggleG, tCircle, tText, x, y, opacity }
+  const linkEls = new Map(); // child node -> { path, opacity }
+
+  function buildNodeEl(node) {
+    const color = colorFor(node);
+    const g = el("g", { class: node.depth === 0 ? "node root" : "node" });
+    const rect = el("rect", {
+      x: 0, y: 0, width: node.boxWidth, height: NODE_H,
+      rx: NODE_H / 2, ry: NODE_H / 2,
+      fill: color, stroke: color,
+      "fill-opacity": node.depth === 0 ? 0.9 : 0.85
+    });
+    const text = el("text", { x: node.boxWidth / 2, y: NODE_H / 2 + 4.5, "text-anchor": "middle" });
+    text.textContent = node.label;
+    g.append(rect, text);
+
+    let toggleG = null, tCircle = null, tText = null;
+    if (node.children.length > 0) {
+      const cx = node.boxWidth, cy = NODE_H / 2;
+      toggleG = el("g", { class: "toggle" });
+      tCircle = el("circle", { cx, cy, r: 8, fill: color, stroke: "#1e2128", "stroke-width": 1.5 });
+      tText = el("text", { x: cx, y: cy + 3.5, "text-anchor": "middle" });
+      tText.textContent = node.collapsed ? "+" : "−";
+      toggleG.append(tCircle, tText);
+      toggleG.addEventListener("click", makeToggleHandler(node));
+      g.append(toggleG);
+    }
+
+    g.addEventListener("click", makeToggleHandler(node));
+    return { g, rect, text, toggleG, tCircle, tText };
+  }
 
   function render() {
     currentRoot = parseMarkdown(editor.value);
-    draw();
+    drawInstant();
   }
 
-  function draw() {
+  function drawInstant() {
     const root = currentRoot;
     viewport.replaceChildren();
+    nodeEls.clear();
+    linkEls.clear();
 
     if (!root) {
       currentNodes = [];
@@ -277,60 +328,146 @@
     assignBranchIndex(root);
     currentNodes = layout(root);
 
-    const linkLayer = el("g", { class: "links" });
-    viewport.append(linkLayer);
-    const drawLinks = (node) => {
-      if (node.collapsed) return;
-      for (const child of node.children) {
-        const x0 = node.x + node.boxWidth, y0 = node.y + NODE_H / 2;
-        const x1 = child.x, y1 = child.y + NODE_H / 2;
-        const mx = (x0 + x1) / 2;
-        const d = `M${x0},${y0} C${mx},${y0} ${mx},${y1} ${x1},${y1}`;
-        linkLayer.append(el("path", { class: "link", d, stroke: colorFor(child) }));
-        drawLinks(child);
-      }
-    };
-    drawLinks(root);
+    linkLayer = el("g", { class: "links" });
+    nodeLayer = el("g", { class: "nodes" });
+    viewport.append(linkLayer, nodeLayer);
 
-    const nodeLayer = el("g", { class: "nodes" });
-    viewport.append(nodeLayer);
     for (const node of currentNodes) {
-      const color = colorFor(node);
-      const g = el("g", { class: node.depth === 0 ? "node root" : "node" });
-      const rect = el("rect", {
-        x: node.x, y: node.y, width: node.boxWidth, height: NODE_H,
-        rx: NODE_H / 2, ry: NODE_H / 2,
-        fill: color, stroke: color,
-        "fill-opacity": node.depth === 0 ? 0.9 : 0.85
-      });
-      const text = el("text", {
-        x: node.x + node.boxWidth / 2, y: node.y + NODE_H / 2 + 4.5,
-        "text-anchor": "middle"
-      });
-      text.textContent = node.label;
-      g.append(rect, text);
-
-      if (node.children.length > 0) {
-        const cx = node.x + node.boxWidth, cy = node.y + NODE_H / 2;
-        const toggle = el("g", { class: "toggle" });
-        const tCircle = el("circle", { cx, cy, r: 8, fill: color, stroke: "#1e2128", "stroke-width": 1.5 });
-        const tText = el("text", { x: cx, y: cy + 3.5, "text-anchor": "middle" });
-        tText.textContent = node.collapsed ? "+" : "−";
-        toggle.append(tCircle, tText);
-        toggle.addEventListener("click", makeToggleHandler(node));
-        g.append(toggle);
+      if (node.parent) {
+        const x0 = node.parent.x + node.parent.boxWidth, y0 = node.parent.y + NODE_H / 2;
+        const x1 = node.x, y1 = node.y + NODE_H / 2;
+        const path = el("path", { class: "link", d: pathD(x0, y0, x1, y1), stroke: colorFor(node) });
+        linkLayer.append(path);
+        linkEls.set(node, { path, opacity: 1 });
       }
 
-      g.addEventListener("click", makeToggleHandler(node));
-      nodeLayer.append(g);
+      const built = buildNodeEl(node);
+      built.g.setAttribute("transform", `translate(${node.x},${node.y})`);
+      nodeLayer.append(built.g);
+      nodeEls.set(node, { ...built, x: node.x, y: node.y, opacity: 1 });
     }
+  }
+
+  function nearestVisibleAncestor(node, visibleSet) {
+    let p = node.parent;
+    while (p && !visibleSet.has(p)) p = p.parent;
+    return p;
+  }
+
+  const ANIM_MS = 300;
+  const easeInOutCubic = (p) => (p < 0.5 ? 4 * p * p * p : 1 - (-2 * p + 2) ** 3 / 2);
+  let animSeq = 0;
+
+  function drawAnimated() {
+    const root = currentRoot;
+    if (!root || !nodeLayer) {
+      drawInstant();
+      return;
+    }
+
+    assignBranchIndex(root);
+    const newNodes = layout(root);
+    const newNodeSet = new Set(newNodes);
+
+    // Nodes: enter + update
+    const moves = [];
+    for (const node of newNodes) {
+      const entry = nodeEls.get(node);
+      if (entry) {
+        if (entry.tText) entry.tText.textContent = node.collapsed ? "+" : "−";
+        moves.push({ entry, fromX: entry.x, fromY: entry.y, toX: node.x, toY: node.y, fromOp: entry.opacity, toOp: 1, remove: false });
+      } else {
+        const parentEntry = nodeEls.get(node.parent);
+        const startX = parentEntry ? parentEntry.x : node.x;
+        const startY = parentEntry ? parentEntry.y : node.y;
+        const built = buildNodeEl(node);
+        built.g.setAttribute("transform", `translate(${startX},${startY})`);
+        built.g.style.opacity = "0";
+        nodeLayer.append(built.g);
+        const newEntry = { ...built, x: startX, y: startY, opacity: 0 };
+        nodeEls.set(node, newEntry);
+        moves.push({ entry: newEntry, fromX: startX, fromY: startY, toX: node.x, toY: node.y, fromOp: 0, toOp: 1, remove: false });
+      }
+    }
+    // Nodes: exit
+    for (const [node, entry] of [...nodeEls]) {
+      if (newNodeSet.has(node)) continue;
+      const target = nearestVisibleAncestor(node, newNodeSet);
+      const targetEntry = target ? nodeEls.get(target) : null;
+      const toX = targetEntry ? targetEntry.x : entry.x;
+      const toY = targetEntry ? targetEntry.y : entry.y;
+      moves.push({ entry, fromX: entry.x, fromY: entry.y, toX, toY, fromOp: entry.opacity, toOp: 0, remove: true });
+    }
+
+    // Links: enter + update + exit (endpoints are re-derived live from node positions each frame)
+    const linkMoves = [];
+    for (const node of newNodes) {
+      if (!node.parent) continue;
+      const entry = linkEls.get(node);
+      if (entry) {
+        linkMoves.push({ node, entry, fromOp: entry.opacity, toOp: 1, remove: false });
+      } else {
+        const path = el("path", { class: "link", stroke: colorFor(node) });
+        linkLayer.append(path);
+        const newEntry = { path, opacity: 0 };
+        linkEls.set(node, newEntry);
+        linkMoves.push({ node, entry: newEntry, fromOp: 0, toOp: 1, remove: false });
+      }
+    }
+    for (const [node, entry] of [...linkEls]) {
+      if (newNodeSet.has(node)) continue;
+      linkMoves.push({ node, entry, fromOp: entry.opacity, toOp: 0, remove: true });
+    }
+
+    currentNodes = newNodes;
+
+    const myToken = ++animSeq;
+    const t0 = performance.now();
+
+    function frame(now) {
+      if (myToken !== animSeq) return;
+      const p = Math.min(1, (now - t0) / ANIM_MS);
+      const e = easeInOutCubic(p);
+
+      for (const m of moves) {
+        const x = m.fromX + (m.toX - m.fromX) * e;
+        const y = m.fromY + (m.toY - m.fromY) * e;
+        const op = m.fromOp + (m.toOp - m.fromOp) * e;
+        m.entry.x = x; m.entry.y = y; m.entry.opacity = op;
+        m.entry.g.setAttribute("transform", `translate(${x},${y})`);
+        m.entry.g.style.opacity = String(op);
+      }
+
+      for (const lm of linkMoves) {
+        const parentEntry = nodeEls.get(lm.node.parent);
+        const childEntry = nodeEls.get(lm.node);
+        if (parentEntry && childEntry) {
+          const x0 = parentEntry.x + lm.node.parent.boxWidth, y0 = parentEntry.y + NODE_H / 2;
+          const x1 = childEntry.x, y1 = childEntry.y + NODE_H / 2;
+          lm.entry.path.setAttribute("d", pathD(x0, y0, x1, y1));
+        }
+        const op = lm.fromOp + (lm.toOp - lm.fromOp) * e;
+        lm.entry.opacity = op;
+        lm.entry.path.style.opacity = String(op);
+      }
+
+      if (p < 1) {
+        requestAnimationFrame(frame);
+        return;
+      }
+
+      for (const m of moves) if (m.remove) m.entry.g.remove();
+      for (const [node] of [...nodeEls]) if (!newNodeSet.has(node)) nodeEls.delete(node);
+      for (const lm of linkMoves) if (lm.remove) { lm.entry.path.remove(); linkEls.delete(lm.node); }
+    }
+    requestAnimationFrame(frame);
   }
 
   const makeToggleHandler = (node) => (e) => {
     e.stopPropagation();
     if (node.children.length === 0) return;
     node.collapsed = !node.collapsed;
-    draw();
+    drawAnimated();
   };
 
   // ---------- Pan & zoom ----------

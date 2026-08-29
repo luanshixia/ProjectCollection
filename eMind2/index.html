@@ -173,6 +173,7 @@ editor.value = SAMPLE;
 /* ---------------- state ---------------- */
 let root = null;
 let layoutMode = 'mind';      // 'mind' | 'tree'
+const branchSide = new Map(); // top-level branch path -> -1 (left) | 1 (right); never re-balanced
 let idSeq = 0;
 const nodeById = new Map();
 const collapseMap = new Map(); // node path -> collapsed
@@ -294,17 +295,24 @@ function layoutTree(){
   if (layoutMode === 'tree'){
     groups = [ { dir: 1, items: kids } ];
   } else {
-    // balance top-level branches across both sides (greedy by subtree height)
-    const order = kids.map((k, i) => i).sort((a, b) => kids[b].subH - kids[a].subH);
+    // Assign each top-level branch a permanent side: existing branches keep
+    // the side they were first given, so collapsing/expanding/typing can
+    // never flip a branch across the root. Only brand-new branches are
+    // balanced onto the currently lighter side. Order within a side follows
+    // document order, so vertical positions stay stable too.
     const left = [], right = [];
     let lH = 0, rH = 0;
-    for (const i of order){
-      if (lH <= rH){ left.push(i); lH += kids[i].subH + V_GAP; }
-      else { right.push(i); rH += kids[i].subH + V_GAP; }
+    for (const k of kids){
+      if (!branchSide.has(k._path)){
+        branchSide.set(k._path, lH <= rH ? -1 : 1);
+      }
+      const dir = branchSide.get(k._path);
+      (dir < 0 ? left : right).push(k);
+      (dir < 0 ? () => lH += k.subH + V_GAP : () => rH += k.subH + V_GAP)();
     }
     groups = [
-      { dir: -1, items: left.map(i => kids[i]) },
-      { dir: 1,  items: right.map(i => kids[i]) },
+      { dir: -1, items: left },
+      { dir: 1,  items: right },
     ];
   }
 
