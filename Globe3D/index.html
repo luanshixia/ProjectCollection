@@ -109,199 +109,13 @@
   "use strict";
 
   // ---------------------------------------------------------------------
-  // Procedural texture generation (no external image assets needed)
+  // Real Earth imagery (NASA Blue Marble derivatives), hotlinked from
+  // three.js's own MIT-licensed examples repo. Only the twinkling star
+  // sprite below is procedurally drawn.
   // ---------------------------------------------------------------------
 
-  // Simple seeded pseudo-random generator (used to build noise permutation tables)
-  function makeRandom(seed) {
-    let s = seed % 2147483647;
-    if (s <= 0) s += 2147483646;
-    return function () {
-      s = (s * 16807) % 2147483647;
-      return (s - 1) / 2147483646;
-    };
-  }
-
-  // Classic 3D Perlin noise (Ken Perlin's reference implementation), seeded.
-  // Sampling in 3D on the unit sphere (instead of 2D across the flat texture)
-  // means the generated map wraps seamlessly at the left/right edge and at
-  // the poles, so continents don't show any seams.
-  function makePerlin3(seed) {
-    const rand = makeRandom(seed);
-    const p = new Uint8Array(256);
-    for (let i = 0; i < 256; i++) p[i] = i;
-    for (let i = 255; i > 0; i--) {
-      const j = Math.floor(rand() * (i + 1));
-      const tmp = p[i]; p[i] = p[j]; p[j] = tmp;
-    }
-    const perm = new Uint8Array(512);
-    for (let i = 0; i < 512; i++) perm[i] = p[i & 255];
-
-    function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
-    function lerp(t, a, b) { return a + t * (b - a); }
-    function grad(hash, x, y, z) {
-      const h = hash & 15;
-      const u = h < 8 ? x : y;
-      const v = h < 4 ? y : (h === 12 || h === 14 ? x : z);
-      return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
-    }
-
-    return function perlin3(x, y, z) {
-      const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
-      x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
-      const u = fade(x), v = fade(y), w = fade(z);
-      const A = perm[X] + Y, AA = perm[A] + Z, AB = perm[A + 1] + Z;
-      const B = perm[X + 1] + Y, BA = perm[B] + Z, BB = perm[B + 1] + Z;
-      return lerp(w,
-        lerp(v, lerp(u, grad(perm[AA], x, y, z), grad(perm[BA], x - 1, y, z)),
-                lerp(u, grad(perm[AB], x, y - 1, z), grad(perm[BB], x - 1, y - 1, z))),
-        lerp(v, lerp(u, grad(perm[AA + 1], x, y, z - 1), grad(perm[BA + 1], x - 1, y, z - 1)),
-                lerp(u, grad(perm[AB + 1], x, y - 1, z - 1), grad(perm[BB + 1], x - 1, y - 1, z - 1))));
-    };
-  }
-
-  // Fractal Brownian motion: several octaves of noise summed together for
-  // natural-looking, multi-scale detail (continents + coastline wiggles).
-  function fbm3(noiseFn, x, y, z, octaves, persistence, lacunarity) {
-    let amplitude = 1, frequency = 1, sum = 0, maxAmp = 0;
-    for (let i = 0; i < octaves; i++) {
-      sum += noiseFn(x * frequency, y * frequency, z * frequency) * amplitude;
-      maxAmp += amplitude;
-      amplitude *= persistence;
-      frequency *= lacunarity;
-    }
-    return sum / maxAmp;
-  }
-
-  function lerpColor(c1, c2, t) {
-    t = Math.max(0, Math.min(1, t));
-    return [
-      c1[0] + (c2[0] - c1[0]) * t,
-      c1[1] + (c2[1] - c1[1]) * t,
-      c1[2] + (c2[2] - c1[2]) * t,
-    ];
-  }
-
-  function createEarthTexture() {
-    const width = 1600, height = 800;
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    const imageData = ctx.createImageData(width, height);
-    const data = imageData.data;
-
-    const elevationNoise = makePerlin3(101);
-    const moistureNoise = makePerlin3(202);
-    const detailNoise = makePerlin3(303);
-
-    // Color palette (deep water -> shore -> land -> peaks)
-    const deepOcean = [8, 34, 74];
-    const shallowOcean = [22, 84, 140];
-    const beach = [206, 190, 140];
-    const desert = [186, 168, 105];
-    const plains = [92, 140, 68];
-    const forest = [48, 96, 52];
-    const hills = [96, 90, 58];
-    const mountain = [110, 104, 98];
-    const snow = [246, 248, 250];
-    const ice = [232, 240, 248];
-
-    for (let py = 0; py < height; py++) {
-      const lat = Math.PI / 2 - (py / height) * Math.PI; // +90deg .. -90deg
-      const cosLat = Math.cos(lat), sinLat = Math.sin(lat);
-      const absLatDeg = Math.abs(lat) * (180 / Math.PI);
-
-      for (let px = 0; px < width; px++) {
-        const lon = (px / width) * Math.PI * 2 - Math.PI;
-        const x = cosLat * Math.cos(lon);
-        const y = sinLat;
-        const z = cosLat * Math.sin(lon);
-
-        const scale = 2.1;
-        let elevation = fbm3(elevationNoise, x * scale, y * scale, z * scale, 5, 0.5, 2.0);
-        elevation += fbm3(detailNoise, x * scale * 9, y * scale * 9, z * scale * 9, 2, 0.5, 2.0) * 0.06;
-        const moisture = fbm3(moistureNoise, x * scale * 1.4 + 11, y * scale * 1.4 + 11, z * scale * 1.4 + 11, 4, 0.5, 2.0);
-
-        const seaLevel = 0.03;
-        let color;
-
-        if (elevation < seaLevel) {
-          const depth = Math.min(1, (seaLevel - elevation) / 0.35);
-          color = lerpColor(shallowOcean, deepOcean, depth);
-        } else {
-          const h = elevation - seaLevel;
-          if (h < 0.015) {
-            color = beach;
-          } else if (h < 0.16) {
-            const dry = moisture < 0 ? Math.min(1, -moisture * 1.6) : 0;
-            color = lerpColor(plains, desert, dry);
-            color = lerpColor(color, forest, moisture > 0 ? Math.min(1, moisture * 1.2) : 0);
-          } else if (h < 0.27) {
-            color = lerpColor(forest, hills, (h - 0.16) / 0.11);
-          } else if (h < 0.4) {
-            color = lerpColor(hills, mountain, (h - 0.27) / 0.13);
-          } else {
-            color = lerpColor(mountain, snow, Math.min(1, (h - 0.4) / 0.12));
-          }
-        }
-
-        // Polar ice: blends toward ice/snow near the poles regardless of terrain
-        if (absLatDeg > 62) {
-          const t = Math.min(1, (absLatDeg - 62) / 16);
-          color = lerpColor(color, elevation < seaLevel ? ice : snow, t);
-        }
-
-        const idx = (py * width + px) * 4;
-        data[idx] = color[0];
-        data[idx + 1] = color[1];
-        data[idx + 2] = color[2];
-        data[idx + 3] = 255;
-      }
-    }
-
-    ctx.putImageData(imageData, 0, 0);
-    return canvas;
-  }
-
-  function createCloudTexture() {
-    const width = 1600, height = 800;
-    const canvas = document.createElement("canvas");
-    canvas.width = width;
-    canvas.height = height;
-    const ctx = canvas.getContext("2d");
-    const imageData = ctx.createImageData(width, height);
-    const data = imageData.data;
-
-    const cloudNoise = makePerlin3(404);
-
-    for (let py = 0; py < height; py++) {
-      const lat = Math.PI / 2 - (py / height) * Math.PI;
-      const cosLat = Math.cos(lat), sinLat = Math.sin(lat);
-
-      for (let px = 0; px < width; px++) {
-        const lon = (px / width) * Math.PI * 2 - Math.PI;
-        const x = cosLat * Math.cos(lon);
-        const y = sinLat;
-        const z = cosLat * Math.sin(lon);
-
-        const scale = 2.6;
-        const n = fbm3(cloudNoise, x * scale, y * scale, z * scale, 5, 0.55, 2.1);
-        // Soft threshold so clouds form wispy patches rather than hard blobs
-        let alpha = (n - 0.08) * 2.4;
-        alpha = Math.max(0, Math.min(1, alpha));
-
-        const idx = (py * width + px) * 4;
-        data[idx] = 255;
-        data[idx + 1] = 255;
-        data[idx + 2] = 255;
-        data[idx + 3] = Math.round(alpha * 235);
-      }
-    }
-
-    ctx.putImageData(imageData, 0, 0);
-    return canvas;
-  }
+  const TEXTURE_BASE =
+    "https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/textures/planets/";
 
   function createStarTexture() {
     const size = 64;
@@ -375,29 +189,50 @@
   const stars = new THREE.Points(starGeometry, starMaterial);
   scene.add(stars);
 
-  // Earth
+  // Loading manager: tracks the real-imagery downloads (color, normal,
+  // specular, and cloud maps) and hides the overlay once they've all
+  // arrived, or reports a network problem if one fails.
+  const loadingEl = document.getElementById("loading");
+  const loadingManager = new THREE.LoadingManager();
+  loadingManager.onLoad = function () {
+    if (loadingEl) loadingEl.style.display = "none";
+  };
+  loadingManager.onError = function () {
+    if (loadingEl) {
+      loadingEl.textContent = "Couldn't load Earth imagery — check your internet connection and reload.";
+    }
+  };
+  const textureLoader = new THREE.TextureLoader(loadingManager);
+
+  // Earth: real NASA Blue Marble color, normal, and specular (ocean mask) maps
   const earthRadius = 2;
-  const earthTexture = new THREE.CanvasTexture(createEarthTexture());
+  const earthTexture = textureLoader.load(TEXTURE_BASE + "earth_atmos_2048.jpg");
   earthTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
   earthTexture.encoding = THREE.sRGBEncoding;
+
+  const earthNormalTexture = textureLoader.load(TEXTURE_BASE + "earth_normal_2048.jpg");
+  const earthSpecularTexture = textureLoader.load(TEXTURE_BASE + "earth_specular_2048.jpg");
 
   const earthGeometry = new THREE.SphereGeometry(earthRadius, 96, 96);
   const earthMaterial = new THREE.MeshPhongMaterial({
     map: earthTexture,
-    specular: new THREE.Color(0x223344),
-    shininess: 45,
+    normalMap: earthNormalTexture,
+    normalScale: new THREE.Vector2(0.85, 0.85),
+    specularMap: earthSpecularTexture,
+    specular: new THREE.Color(0x222222),
+    shininess: 30,
   });
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
   scene.add(earth);
 
-  // Cloud layer
-  const cloudTexture = new THREE.CanvasTexture(createCloudTexture());
+  // Cloud layer: real satellite cloud cover map
+  const cloudTexture = textureLoader.load(TEXTURE_BASE + "earth_clouds_1024.png");
   cloudTexture.encoding = THREE.sRGBEncoding;
   const cloudGeometry = new THREE.SphereGeometry(earthRadius * 1.01, 96, 96);
   const cloudMaterial = new THREE.MeshLambertMaterial({
     map: cloudTexture,
     transparent: true,
-    opacity: 0.85,
+    opacity: 0.9,
     depthWrite: false,
   });
   const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
@@ -500,9 +335,6 @@
     controls.update();
     renderer.render(scene, camera);
   }
-
-  const loadingEl = document.getElementById("loading");
-  if (loadingEl) loadingEl.style.display = "none";
 
   animate();
 })();
