@@ -297,23 +297,23 @@
   earthTiltGroup.rotation.z = -AXIAL_TILT;
   scene.add(earthTiltGroup);
 
-  // Earth: real NASA Blue Marble color, normal, and specular (ocean mask) maps
+  // Earth: real NASA Blue Marble color and normal (relief) maps. No specular
+  // map — a shiny ocean highlight fights for attention with the day/night
+  // terminator, so specular is disabled outright (see `specular` below).
   const earthRadius = 2;
   const earthTexture = textureLoader.load(TEXTURE_BASE + "earth_atmos_2048.jpg");
   earthTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
   earthTexture.encoding = THREE.sRGBEncoding;
 
   const earthNormalTexture = textureLoader.load(TEXTURE_BASE + "earth_normal_2048.jpg");
-  const earthSpecularTexture = textureLoader.load(TEXTURE_BASE + "earth_specular_2048.jpg");
 
   const earthGeometry = new THREE.SphereGeometry(earthRadius, 96, 96);
   const earthMaterial = new THREE.MeshPhongMaterial({
     map: earthTexture,
     normalMap: earthNormalTexture,
     normalScale: new THREE.Vector2(0.85, 0.85),
-    specularMap: earthSpecularTexture,
-    specular: new THREE.Color(0x222222),
-    shininess: 30,
+    specular: new THREE.Color(0x000000),
+    shininess: 0,
   });
   const earth = new THREE.Mesh(earthGeometry, earthMaterial);
   earthTiltGroup.add(earth);
