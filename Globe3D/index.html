@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Earth Globe</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  #canvas-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+  canvas { display: block; }
+
+  #ui {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    color: #e8f0ff;
+    z-index: 10;
+    user-select: none;
+    pointer-events: none;
+  }
+  #ui h1 {
+    margin: 0 0 4px 0;
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+  #ui p {
+    margin: 0;
+    font-size: 12px;
+    opacity: 0.75;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.6);
+  }
+
+  #controls {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    z-index: 10;
+    display: flex;
+    gap: 8px;
+  }
+  #controls button {
+    background: rgba(20, 30, 50, 0.65);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #e8f0ff;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    transition: background 0.15s ease;
+  }
+  #controls button:hover {
+    background: rgba(40, 60, 100, 0.8);
+  }
+  #controls button.active {
+    background: rgba(70, 130, 220, 0.85);
+    border-color: rgba(150, 190, 255, 0.6);
+  }
+
+  #loading {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #cfe0ff;
+    font-size: 14px;
+    background: #000;
+    z-index: 20;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div id="loading">Loading globe…</div>
+<div id="canvas-container"></div>
+
+<div id="ui">
+  <h1>Earth</h1>
+  <p>Drag to rotate &bull; Scroll or pinch to zoom</p>
+</div>
+
+<div id="controls">
+  <button id="btn-rotate">Pause Auto-Spin</button>
+  <button id="btn-reset">Reset View</button>
+  <button id="btn-clouds" class="active">Clouds: On</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  // ---------------------------------------------------------------------
+  // Procedural texture generation (no external image assets needed)
+  // ---------------------------------------------------------------------
+
+  // Simple seeded pseudo-random generator (used to build noise permutation tables)
+  function makeRandom(seed) {
+    let s = seed % 2147483647;
+    if (s <= 0) s += 2147483646;
+    return function () {
+      s = (s * 16807) % 2147483647;
+      return (s - 1) / 2147483646;
+    };
+  }
+
+  // Classic 3D Perlin noise (Ken Perlin's reference implementation), seeded.
+  // Sampling in 3D on the unit sphere (instead of 2D across the flat texture)
+  // means the generated map wraps seamlessly at the left/right edge and at
+  // the poles, so continents don't show any seams.
+  function makePerlin3(seed) {
+    const rand = makeRandom(seed);
+    const p = new Uint8Array(256);
+    for (let i = 0; i < 256; i++) p[i] = i;
+    for (let i = 255; i > 0; i--) {
+      const j = Math.floor(rand() * (i + 1));
+      const tmp = p[i]; p[i] = p[j]; p[j] = tmp;
+    }
+    const perm = new Uint8Array(512);
+    for (let i = 0; i < 512; i++) perm[i] = p[i & 255];
+
+    function fade(t) { return t * t * t * (t * (t * 6 - 15) + 10); }
+    function lerp(t, a, b) { return a + t * (b - a); }
+    function grad(hash, x, y, z) {
+      const h = hash & 15;
+      const u = h < 8 ? x : y;
+      const v = h < 4 ? y : (h === 12 || h === 14 ? x : z);
+      return ((h & 1) === 0 ? u : -u) + ((h & 2) === 0 ? v : -v);
+    }
+
+    return function perlin3(x, y, z) {
+      const X = Math.floor(x) & 255, Y = Math.floor(y) & 255, Z = Math.floor(z) & 255;
+      x -= Math.floor(x); y -= Math.floor(y); z -= Math.floor(z);
+      const u = fade(x), v = fade(y), w = fade(z);
+      const A = perm[X] + Y, AA = perm[A] + Z, AB = perm[A + 1] + Z;
+      const B = perm[X + 1] + Y, BA = perm[B] + Z, BB = perm[B + 1] + Z;
+      return lerp(w,
+        lerp(v, lerp(u, grad(perm[AA], x, y, z), grad(perm[BA], x - 1, y, z)),
+                lerp(u, grad(perm[AB], x, y - 1, z), grad(perm[BB], x - 1, y - 1, z))),
+        lerp(v, lerp(u, grad(perm[AA + 1], x, y, z - 1), grad(perm[BA + 1], x - 1, y, z - 1)),
+                lerp(u, grad(perm[AB + 1], x, y - 1, z - 1), grad(perm[BB + 1], x - 1, y - 1, z - 1))));
+    };
+  }
+
+  // Fractal Brownian motion: several octaves of noise summed together for
+  // natural-looking, multi-scale detail (continents + coastline wiggles).
+  function fbm3(noiseFn, x, y, z, octaves, persistence, lacunarity) {
+    let amplitude = 1, frequency = 1, sum = 0, maxAmp = 0;
+    for (let i = 0; i < octaves; i++) {
+      sum += noiseFn(x * frequency, y * frequency, z * frequency) * amplitude;
+      maxAmp += amplitude;
+      amplitude *= persistence;
+      frequency *= lacunarity;
+    }
+    return sum / maxAmp;
+  }
+
+  function lerpColor(c1, c2, t) {
+    t = Math.max(0, Math.min(1, t));
+    return [
+      c1[0] + (c2[0] - c1[0]) * t,
+      c1[1] + (c2[1] - c1[1]) * t,
+      c1[2] + (c2[2] - c1[2]) * t,
+    ];
+  }
+
+  function createEarthTexture() {
+    const width = 1600, height = 800;
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.createImageData(width, height);
+    const data = imageData.data;
+
+    const elevationNoise = makePerlin3(101);
+    const moistureNoise = makePerlin3(202);
+    const detailNoise = makePerlin3(303);
+
+    // Color palette (deep water -> shore -> land -> peaks)
+    const deepOcean = [8, 34, 74];
+    const shallowOcean = [22, 84, 140];
+    const beach = [206, 190, 140];
+    const desert = [186, 168, 105];
+    const plains = [92, 140, 68];
+    const forest = [48, 96, 52];
+    const hills = [96, 90, 58];
+    const mountain = [110, 104, 98];
+    const snow = [246, 248, 250];
+    const ice = [232, 240, 248];
+
+    for (let py = 0; py < height; py++) {
+      const lat = Math.PI / 2 - (py / height) * Math.PI; // +90deg .. -90deg
+      const cosLat = Math.cos(lat), sinLat = Math.sin(lat);
+      const absLatDeg = Math.abs(lat) * (180 / Math.PI);
+
+      for (let px = 0; px < width; px++) {
+        const lon = (px / width) * Math.PI * 2 - Math.PI;
+        const x = cosLat * Math.cos(lon);
+        const y = sinLat;
+        const z = cosLat * Math.sin(lon);
+
+        const scale = 2.1;
+        let elevation = fbm3(elevationNoise, x * scale, y * scale, z * scale, 5, 0.5, 2.0);
+        elevation += fbm3(detailNoise, x * scale * 9, y * scale * 9, z * scale * 9, 2, 0.5, 2.0) * 0.06;
+        const moisture = fbm3(moistureNoise, x * scale * 1.4 + 11, y * scale * 1.4 + 11, z * scale * 1.4 + 11, 4, 0.5, 2.0);
+
+        const seaLevel = 0.03;
+        let color;
+
+        if (elevation < seaLevel) {
+          const depth = Math.min(1, (seaLevel - elevation) / 0.35);
+          color = lerpColor(shallowOcean, deepOcean, depth);
+        } else {
+          const h = elevation - seaLevel;
+          if (h < 0.015) {
+            color = beach;
+          } else if (h < 0.16) {
+            const dry = moisture < 0 ? Math.min(1, -moisture * 1.6) : 0;
+            color = lerpColor(plains, desert, dry);
+            color = lerpColor(color, forest, moisture > 0 ? Math.min(1, moisture * 1.2) : 0);
+          } else if (h < 0.27) {
+            color = lerpColor(forest, hills, (h - 0.16) / 0.11);
+          } else if (h < 0.4) {
+            color = lerpColor(hills, mountain, (h - 0.27) / 0.13);
+          } else {
+            color = lerpColor(mountain, snow, Math.min(1, (h - 0.4) / 0.12));
+          }
+        }
+
+        // Polar ice: blends toward ice/snow near the poles regardless of terrain
+        if (absLatDeg > 62) {
+          const t = Math.min(1, (absLatDeg - 62) / 16);
+          color = lerpColor(color, elevation < seaLevel ? ice : snow, t);
+        }
+
+        const idx = (py * width + px) * 4;
+        data[idx] = color[0];
+        data[idx + 1] = color[1];
+        data[idx + 2] = color[2];
+        data[idx + 3] = 255;
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    return canvas;
+  }
+
+  function createCloudTexture() {
+    const width = 1600, height = 800;
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    const imageData = ctx.createImageData(width, height);
+    const data = imageData.data;
+
+    const cloudNoise = makePerlin3(404);
+
+    for (let py = 0; py < height; py++) {
+      const lat = Math.PI / 2 - (py / height) * Math.PI;
+      const cosLat = Math.cos(lat), sinLat = Math.sin(lat);
+
+      for (let px = 0; px < width; px++) {
+        const lon = (px / width) * Math.PI * 2 - Math.PI;
+        const x = cosLat * Math.cos(lon);
+        const y = sinLat;
+        const z = cosLat * Math.sin(lon);
+
+        const scale = 2.6;
+        const n = fbm3(cloudNoise, x * scale, y * scale, z * scale, 5, 0.55, 2.1);
+        // Soft threshold so clouds form wispy patches rather than hard blobs
+        let alpha = (n - 0.08) * 2.4;
+        alpha = Math.max(0, Math.min(1, alpha));
+
+        const idx = (py * width + px) * 4;
+        data[idx] = 255;
+        data[idx + 1] = 255;
+        data[idx + 2] = 255;
+        data[idx + 3] = Math.round(alpha * 235);
+      }
+    }
+
+    ctx.putImageData(imageData, 0, 0);
+    return canvas;
+  }
+
+  function createStarTexture() {
+    const size = 64;
+    const canvas = document.createElement("canvas");
+    canvas.width = size;
+    canvas.height = size;
+    const ctx = canvas.getContext("2d");
+    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, "rgba(255,255,255,1)");
+    grad.addColorStop(0.4, "rgba(255,255,255,0.6)");
+    grad.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+    return canvas;
+  }
+
+  // ---------------------------------------------------------------------
+  // Scene setup
+  // ---------------------------------------------------------------------
+
+  const container = document.getElementById("canvas-container");
+
+  const scene = new THREE.Scene();
+
+  const camera = new THREE.PerspectiveCamera(
+    45,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(0, 0, 8);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.outputEncoding = THREE.sRGBEncoding;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.1;
+  container.appendChild(renderer.domElement);
+
+  // Lighting
+  const ambientLight = new THREE.AmbientLight(0x556677, 0.7);
+  scene.add(ambientLight);
+
+  const sunLight = new THREE.DirectionalLight(0xffffff, 1.6);
+  sunLight.position.set(5, 3, 5);
+  scene.add(sunLight);
+
+  // Starfield background
+  const starGeometry = new THREE.BufferGeometry();
+  const starCount = 3000;
+  const starPositions = new Float32Array(starCount * 3);
+  for (let i = 0; i < starCount; i++) {
+    const radius = 60 + Math.random() * 400;
+    const theta = Math.random() * Math.PI * 2;
+    const phi = Math.acos(2 * Math.random() - 1);
+    starPositions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
+    starPositions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
+    starPositions[i * 3 + 2] = radius * Math.cos(phi);
+  }
+  starGeometry.setAttribute("position", new THREE.BufferAttribute(starPositions, 3));
+
+  const starTexture = new THREE.CanvasTexture(createStarTexture());
+  const starMaterial = new THREE.PointsMaterial({
+    size: 1.6,
+    map: starTexture,
+    transparent: true,
+    depthWrite: false,
+    sizeAttenuation: true,
+  });
+  const stars = new THREE.Points(starGeometry, starMaterial);
+  scene.add(stars);
+
+  // Earth
+  const earthRadius = 2;
+  const earthTexture = new THREE.CanvasTexture(createEarthTexture());
+  earthTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+  earthTexture.encoding = THREE.sRGBEncoding;
+
+  const earthGeometry = new THREE.SphereGeometry(earthRadius, 96, 96);
+  const earthMaterial = new THREE.MeshPhongMaterial({
+    map: earthTexture,
+    specular: new THREE.Color(0x223344),
+    shininess: 45,
+  });
+  const earth = new THREE.Mesh(earthGeometry, earthMaterial);
+  scene.add(earth);
+
+  // Cloud layer
+  const cloudTexture = new THREE.CanvasTexture(createCloudTexture());
+  cloudTexture.encoding = THREE.sRGBEncoding;
+  const cloudGeometry = new THREE.SphereGeometry(earthRadius * 1.01, 96, 96);
+  const cloudMaterial = new THREE.MeshLambertMaterial({
+    map: cloudTexture,
+    transparent: true,
+    opacity: 0.85,
+    depthWrite: false,
+  });
+  const clouds = new THREE.Mesh(cloudGeometry, cloudMaterial);
+  scene.add(clouds);
+
+  // Atmosphere glow (simple additive backside sphere)
+  const atmosphereGeometry = new THREE.SphereGeometry(earthRadius * 1.06, 64, 64);
+  const atmosphereMaterial = new THREE.ShaderMaterial({
+    uniforms: {},
+    vertexShader: `
+      varying vec3 vNormal;
+      void main() {
+        vNormal = normalize(normalMatrix * normal);
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }
+    `,
+    fragmentShader: `
+      varying vec3 vNormal;
+      void main() {
+        float intensity = pow(0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 3.0);
+        gl_FragColor = vec4(0.35, 0.6, 1.0, 1.0) * intensity;
+      }
+    `,
+    blending: THREE.AdditiveBlending,
+    side: THREE.BackSide,
+    transparent: true,
+  });
+  const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+  scene.add(atmosphere);
+
+  // ---------------------------------------------------------------------
+  // Controls: free rotation via drag, zoom via scroll/pinch
+  // ---------------------------------------------------------------------
+
+  const controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.minDistance = 3.2;
+  controls.maxDistance = 20;
+  controls.enablePan = false;
+  controls.rotateSpeed = 0.6;
+  controls.zoomSpeed = 0.8;
+
+  let autoRotate = true;
+  let cloudsVisible = true;
+  const autoRotateSpeed = 0.15; // radians per second
+
+  // ---------------------------------------------------------------------
+  // UI wiring
+  // ---------------------------------------------------------------------
+
+  const btnRotate = document.getElementById("btn-rotate");
+  const btnReset = document.getElementById("btn-reset");
+  const btnClouds = document.getElementById("btn-clouds");
+
+  btnRotate.classList.add("active");
+
+  btnRotate.addEventListener("click", function () {
+    autoRotate = !autoRotate;
+    btnRotate.textContent = autoRotate ? "Pause Auto-Spin" : "Resume Auto-Spin";
+    btnRotate.classList.toggle("active", autoRotate);
+  });
+
+  btnReset.addEventListener("click", function () {
+    controls.reset();
+    camera.position.set(0, 0, 8);
+    earth.rotation.set(0, 0, 0);
+    clouds.rotation.set(0, 0, 0);
+  });
+
+  btnClouds.addEventListener("click", function () {
+    cloudsVisible = !cloudsVisible;
+    clouds.visible = cloudsVisible;
+    btnClouds.textContent = "Clouds: " + (cloudsVisible ? "On" : "Off");
+    btnClouds.classList.toggle("active", cloudsVisible);
+  });
+
+  window.addEventListener("resize", function () {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // ---------------------------------------------------------------------
+  // Animation loop
+  // ---------------------------------------------------------------------
+
+  const clock = new THREE.Clock();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const delta = clock.getDelta();
+
+    if (autoRotate) {
+      earth.rotation.y += autoRotateSpeed * delta;
+      clouds.rotation.y += autoRotateSpeed * delta;
+    }
+    clouds.rotation.y += 0.01 * delta;
+
+    controls.update();
+    renderer.render(scene, camera);
+  }
+
+  const loadingEl = document.getElementById("loading");
+  if (loadingEl) loadingEl.style.display = "none";
+
+  animate();
+})();
+</script>
+
+</body>
+</html>
