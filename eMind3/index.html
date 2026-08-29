@@ -104,18 +104,18 @@
 
 <script type="module">
   const STORAGE_KEY = "emind3.source";
-  const DEFAULT_SOURCE = `# eMind3
-- Getting Started
-  - Write a markdown bullet list on the left
-  - Nested bullets become child nodes
+  const DEFAULT_SOURCE = `# 🧠 eMind3
+- 🚀 Getting Started
+  - Write a **markdown** bullet list on the left
+  - *Nested* bullets become child nodes
   - Click any node to collapse or expand it
-- Features
-  - Live preview as you type
-  - Pan and zoom the canvas
-  - Single HTML file, no dependencies
-- Tips
+- ✨ Features
+  - **Live preview** as you type
+  - Pan and zoom the canvas 🔍
+  - Single HTML file, *no dependencies*
+- 💡 Tips
   - Indent with spaces to create sub-branches
-  - Use -, * or + as bullet markers
+  - Use **bold**, *italic*, and emoji 🎉 in your bullets
 `;
 
   const editor = document.getElementById("editor");
@@ -171,11 +171,39 @@
     return root;
   }
 
+  // ---------- Inline markdown (bold / italic) ----------
+
+  const INLINE_RE = /\*\*\*(.+?)\*\*\*|\*\*(.+?)\*\*|\*(.+?)\*/g;
+
+  function parseInline(text) {
+    const segments = [];
+    let last = 0, m;
+    INLINE_RE.lastIndex = 0;
+    while ((m = INLINE_RE.exec(text))) {
+      if (m.index > last) segments.push({ text: text.slice(last, m.index) });
+      if (m[1] !== undefined) segments.push({ text: m[1], bold: true, italic: true });
+      else if (m[2] !== undefined) segments.push({ text: m[2], bold: true });
+      else segments.push({ text: m[3], italic: true });
+      last = INLINE_RE.lastIndex;
+    }
+    if (last < text.length) segments.push({ text: text.slice(last) });
+    if (segments.length === 0) segments.push({ text: "" });
+    return segments;
+  }
+
   // ---------- Layout ----------
 
-  const FONT = "13px -apple-system, sans-serif";
-  const ROOT_FONT = "700 14.5px -apple-system, sans-serif";
+  const FONT_FAMILY = "-apple-system, sans-serif";
+  const NODE_FONT_SIZE = 13;
+  const ROOT_FONT_SIZE = 14.5;
   const PAD_X = 14, NODE_H = 30, LEAF_PITCH = 42, COL_GAP = 70, MARGIN = 40;
+
+  const segmentFont = (depth, seg) => {
+    const size = depth === 0 ? ROOT_FONT_SIZE : NODE_FONT_SIZE;
+    const weight = depth === 0 || seg.bold ? 700 : 400;
+    const style = seg.italic ? "italic" : "normal";
+    return `${style} ${weight} ${size}px ${FONT_FAMILY}`;
+  };
 
   const measureCtx = document.createElement("canvas").getContext("2d");
   const textWidth = (text, font) => {
@@ -185,8 +213,8 @@
 
   function assignDepthAndSize(node, depth, maxWidths) {
     node.depth = depth;
-    const font = depth === 0 ? ROOT_FONT : FONT;
-    node.boxWidth = textWidth(node.label, font) + PAD_X * 2;
+    node.segments = parseInline(node.label);
+    node.boxWidth = node.segments.reduce((sum, seg) => sum + textWidth(seg.text, segmentFont(depth, seg)), 0) + PAD_X * 2;
     maxWidths[depth] = Math.max(maxWidths[depth] ?? 0, node.boxWidth);
     if (!node.collapsed) {
       for (const child of node.children) assignDepthAndSize(child, depth + 1, maxWidths);
@@ -288,7 +316,13 @@
       "fill-opacity": node.depth === 0 ? 0.9 : 0.85
     });
     const text = el("text", { x: node.boxWidth / 2, y: NODE_H / 2 + 4.5, "text-anchor": "middle" });
-    text.textContent = node.label;
+    for (const seg of node.segments) {
+      const tspan = document.createElementNS(svgNS, "tspan");
+      if (seg.bold) tspan.setAttribute("font-weight", "700");
+      if (seg.italic) tspan.setAttribute("font-style", "italic");
+      tspan.textContent = seg.text;
+      text.append(tspan);
+    }
     g.append(rect, text);
 
     let toggleG = null, tCircle = null, tText = null;
